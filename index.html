@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard báo cáo tuần W29 — EVCS & BSS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --surface:#fcfcfb; --page:#f9f9f7; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#1baf7a; --s3:#eda100; --s4:#008300; --s5:#4a3aa7;
+  --s6:#e34948; --s7:#e87ba4; --s8:#eb6834;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);
+  font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--grid);
+  padding:10px 18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+header h1{font-size:17px;margin:0 14px 0 0}
+.seg{display:inline-flex;border:1px solid var(--axis);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:6px 16px;cursor:pointer;font-weight:600;color:var(--ink2)}
+.seg button.on{background:var(--s1);color:#fff}
+nav.toc{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
+nav.toc a{color:var(--ink2);text-decoration:none;padding:4px 8px;border-radius:6px;font-size:12.5px}
+nav.toc a:hover{background:var(--page)}
+main{max-width:1360px;margin:0 auto;padding:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:12px 14px}
+.kpi .lbl{font-size:12px;color:var(--muted)}
+.kpi .val{font-size:26px;font-weight:700;margin-top:2px}
+.kpi .sub{font-size:12px;color:var(--ink2)}
+section{margin:22px 0}
+h2{font-size:15.5px;border-left:4px solid var(--s1);padding-left:8px;margin:0 0 10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:12px 14px;min-width:0}
+.card h3{margin:0 0 8px;font-size:13.5px;color:var(--ink2)}
+.cv{position:relative;height:240px}
+.cv.tall{height:280px}.cv.short{height:210px}
+table{border-collapse:collapse;width:100%;font-size:12.8px}
+th,td{padding:5px 8px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
+th:first-child,td:first-child{text-align:left}
+td.l{text-align:left;white-space:normal}
+tr.total td{font-weight:700;border-top:2px solid var(--axis)}
+.tblwrap{overflow-x:auto}
+.badge{display:inline-block;min-width:52px;text-align:center;padding:1px 8px;border-radius:99px;
+  font-weight:700;font-size:12px;color:#fff}
+.b-good{background:var(--good)}.b-warn{background:var(--warn);color:#3a2c00}
+.b-serious{background:var(--serious);color:#4b1a05}.b-crit{background:var(--crit)}
+.spark{vertical-align:middle}
+.note{background:#fff8e6;border:1px solid #f0dfa8;border-radius:10px;padding:10px 14px;font-size:13px;margin:10px 0}
+.fixlist{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:6px 18px}
+.fixlist li{margin:8px 0}
+.fixlist .was{color:var(--crit);text-decoration:line-through}
+.fixlist .now{color:var(--good);font-weight:700}
+textarea{width:100%;min-height:56px;border:1px solid var(--axis);border-radius:8px;padding:7px 9px;
+  font:13px/1.4 inherit;background:var(--surface);resize:vertical}
+textarea:focus{outline:2px solid var(--s1);border-color:transparent}
+.gt-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+.btn{border:1px solid var(--axis);background:var(--surface);border-radius:8px;padding:6px 14px;
+  cursor:pointer;font-weight:600;font-size:13px;color:var(--ink)}
+.btn.primary{background:var(--s1);border-color:var(--s1);color:#fff}
+.btn:hover{filter:brightness(.96)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.toolbar input[type=text]{border:1px solid var(--axis);border-radius:8px;padding:6px 9px;font:13px inherit}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:9px 18px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:99}
+dialog{border:1px solid var(--ring);border-radius:14px;padding:18px;max-width:520px;font:inherit}
+dialog::backdrop{background:rgba(0,0,0,.35)}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 Báo cáo tuần <span id="hdW">W29</span> — EVCS &amp; BSS</h1>
+  <div class="seg" id="modeSeg">
+    <button data-m="w" class="on">Tuần (W29)</button>
+    <button data-m="m">Tháng (M6)</button>
+  </div>
+  <nav class="toc">
+    <a href="#sec-cls">Phân loại</a><a href="#sec-dis">Disclaim</a><a href="#sec-fail">Theo model</a>
+    <a href="#sec-trend">Xu hướng</a><a href="#sec-alarm">Alarm</a><a href="#sec-sla">SLA</a>
+    <a href="#sec-asp">ASP</a><a href="#sec-cse">CSE &amp; Giải trình</a><a href="#sec-parts">Vật tư</a>
+    <a href="#sec-cost">Chi phí</a><a href="#sec-fix">Hiệu chỉnh</a>
+  </nav>
+</header>
+<main>
+
+<div class="kpis" id="kpis"></div>
+
+<section id="sec-cls">
+  <h2>Phân loại ticket (<span class="modeLbl"></span>)</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS — <span id="clsEvcsSub"></span></h3>
+      <div class="cv"><canvas id="c_cls_evcs"></canvas></div><div class="tblwrap" id="t_cls_evcs"></div></div>
+    <div class="card"><h3>BSS — <span id="clsBssSub"></span></h3>
+      <div class="cv"><canvas id="c_cls_bss"></canvas></div><div class="tblwrap" id="t_cls_bss"></div></div>
+  </div>
+</section>
+
+<section id="sec-dis">
+  <h2>Chi tiết Disclaim (không do ChargeCore) (<span class="modeLbl"></span>)</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS</h3><div class="cv"><canvas id="c_dis_evcs"></canvas></div></div>
+    <div class="card"><h3>BSS</h3><div class="cv"><canvas id="c_dis_bss"></canvas></div></div>
+  </div>
+</section>
+
+<section id="sec-fail">
+  <h2>Tình trạng lỗi theo model — loại trừ Disclaim (<span class="modeLbl"></span>)</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS</h3><div class="cv short"><canvas id="c_fail_evcs"></canvas></div>
+      <div class="tblwrap" id="t_fail_evcs"></div></div>
+    <div class="card"><h3>BSS</h3><div class="cv short"><canvas id="c_fail_bss"></canvas></div>
+      <div class="tblwrap" id="t_fail_bss"></div></div>
+  </div>
+</section>
+
+<section id="sec-trend">
+  <h2>Xu hướng theo tuần W23 → W29 (loại trừ Disclaim)</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS — Số ticket</h3><div class="cv"><canvas id="c_tr_evcs_t"></canvas></div></div>
+    <div class="card"><h3>EVCS — Failure rate</h3><div class="cv"><canvas id="c_tr_evcs_r"></canvas></div></div>
+    <div class="card"><h3>BSS — Số ticket</h3><div class="cv"><canvas id="c_tr_bss_t"></canvas></div></div>
+    <div class="card"><h3>BSS — Failure rate</h3><div class="cv"><canvas id="c_tr_bss_r"></canvas></div></div>
+  </div>
+  <div class="note">⚠ <b>W29 BSS tăng đột biến</b> (BSS-06: 830 → 2.422 ticket; BSS-12: 26 → 591) — trùng với đợt xử lý/thay khóa hàng loạt (190 E Lock Module ZZ dùng trong tuần, alarm khóa B6029/C6030/A0112 chiếm tỷ trọng lớn). Cần bóc tách ticket chiến dịch khỏi ticket hỏng hóc tự nhiên khi đánh giá.</div>
+</section>
+
+<section id="sec-alarm">
+  <h2>Top alarm (<span class="modeLbl"></span>)</h2>
+  <div class="grid4" id="alarmCards"></div>
+</section>
+
+<section id="sec-sla">
+  <h2>SLA Overdue theo trạng thái ticket (<span class="modeLbl"></span>)</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS — <span id="slaEvcsSub"></span></h3>
+      <div class="cv tall"><canvas id="c_sla_evcs"></canvas></div></div>
+    <div class="card"><h3>BSS — <span id="slaBssSub"></span></h3>
+      <div class="cv tall"><canvas id="c_sla_bss"></canvas></div></div>
+  </div>
+  <h2 style="margin-top:16px">SLA Overdue theo nguồn lực (<span class="modeLbl"></span>)</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS</h3><div class="tblwrap" id="t_res_evcs"></div></div>
+    <div class="card"><h3>BSS</h3><div class="tblwrap" id="t_res_bss"></div></div>
+  </div>
+</section>
+
+<section id="sec-asp">
+  <h2>Overdue rate theo ASP — theo tuần</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS</h3><div class="cv"><canvas id="c_asp_evcs"></canvas></div></div>
+    <div class="card"><h3>BSS</h3><div class="cv"><canvas id="c_asp_bss"></canvas></div></div>
+  </div>
+</section>
+
+<section id="sec-cse">
+  <h2>Hiệu suất CSE &amp; Giải trình tuần W29</h2>
+  <div class="toolbar">
+    <label>Người nhập: <input type="text" id="gtUser" placeholder="tên của bạn" size="14"></label>
+    <button class="btn primary" id="gtSave">💾 Lưu giải trình (máy này)</button>
+    <button class="btn" id="gtPush">☁ Đẩy online</button>
+    <button class="btn" id="gtPull">⬇ Tải online về</button>
+    <button class="btn" id="gtCfg">⚙ URL đồng bộ</button>
+    <button class="btn" id="gtCopy">📋 Sao chép toàn bộ</button>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>EVCS — Overdue rate W29 theo CSE</h3><div class="cv short"><canvas id="c_cse_evcs"></canvas></div></div>
+    <div class="card"><h3>BSS — Overdue rate W29 theo CSE</h3><div class="cv short"><canvas id="c_cse_bss"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:12px"><h3>EVCS — bảng chi tiết + giải trình</h3>
+    <div class="tblwrap" id="t_cse_evcs"></div></div>
+  <div class="card" style="margin-top:12px"><h3>BSS — bảng chi tiết + giải trình</h3>
+    <div class="tblwrap" id="t_cse_bss"></div></div>
+  <div class="card" style="margin-top:12px"><h3>Nhận xét chung tuần W29</h3>
+    <textarea id="gtGeneral" placeholder="Đánh giá chung, nguyên nhân chính, hành động tuần tới…"></textarea>
+    <div class="gt-meta" id="gtGeneralMeta"></div></div>
+</section>
+
+<section id="sec-parts">
+  <h2>Top vật tư sử dụng (<span class="modeLbl"></span>)</h2>
+  <div class="grid2">
+    <div class="card"><h3>EVCS — <span id="pEvcsSub"></span></h3><div class="tblwrap" id="t_parts_evcs"></div></div>
+    <div class="card"><h3>BSS — <span id="pBssSub"></span></h3><div class="tblwrap" id="t_parts_bss"></div></div>
+  </div>
+  <div class="note">ℹ 3 mã chưa có giá trong sheet Part Price nên để trống cột giá/chi phí:
+    <b>19140000023</b> (E Lock Module ZZ — 190 chiếc/tuần), <b>13030000393</b> (DC Charging Cable Core mini),
+    <b>14020100101</b> (Battery Compartment Lock gen2). Tổng chi phí đang tính trên phần có giá — cần bổ sung giá để tổng đúng.</div>
+</section>
+
+<section id="sec-cost">
+  <h2>Chi phí dịch vụ theo tháng (USD)</h2>
+  <div class="grid2">
+    <div class="card"><h3>Cơ cấu chi phí M1 → M6</h3><div class="cv"><canvas id="c_cost"></canvas></div></div>
+    <div class="card"><h3>Chi phí / thiết bị ($)</h3><div class="cv"><canvas id="c_cpe"></canvas></div></div>
+  </div>
+</section>
+
+<section id="sec-fix">
+  <h2>Dữ liệu đã hiệu chỉnh (bản V3 so với V2)</h2>
+  <ol class="fixlist">
+    <li><b>Phân loại tháng BSS:</b> nhãn ô Y27 ghi <span class="was">"Undefined"</span> trong khi dữ liệu gốc là "Undefined yet" → nhóm Undefined tháng bị đếm <span class="was">0</span>, sửa thành <span class="now">402 ticket</span>; tổng tháng BSS <span class="was">3.132</span> → <span class="now">3.534</span> (khớp bảng SLA).</li>
+    <li><b>CSE BSS (W26–W29):</b> cột overdue trong bảng trình bày là số dán tay cũ, lệch số đếm thật — ví dụ dinhnguyen W27 <span class="was">57/14 = 407%</span> (overdue &gt; tổng, vô lý) → <span class="now">10/14 = 71,4%</span>; dinhnguyen W29 <span class="was">3</span> → <span class="now">425</span>; chuongpham W29 <span class="was">37</span> → <span class="now">278</span>. Đã nối công thức về dữ liệu gốc như phía EVCS.</li>
+    <li><b>Bảng SLA Overdue BSS:</b> cột tỷ lệ chia nhầm cho <span class="was">tổng EVCS (2.119 / 15.002)</span> → chia đúng tổng BSS (3.556 / 3.534): tổng tuần <span class="was">67,5%</span> → <span class="now">40,2%</span>.</li>
+    <li><b>6 ô #DIV/0!</b> (SUM các tháng M1–M4 chưa có dữ liệu) → bọc IFERROR, hiển thị 0.</li>
+    <li><b>Giá vật tư #N/A:</b> mã đuôi <b>-RP</b> (12070000153-RP, 12030000054-RP, 12030000064-RP) tra theo giá mã gốc; ô công thức chứa <span class="was">#REF!</span> đã sửa; tổng chi phí không còn #N/A. 3 mã chưa có giá — xem ghi chú mục Vật tư.</li>
+    <li><b>Nhãn:</b> thống nhất "Total (Tổng)"/"Grand total (Tổng)" → "Total"/"Grand total"; header "Overdue Rate" của bảng theo trạng thái đổi thành "Overdue share" (đúng bản chất: tử số chia tổng toàn bộ ticket).</li>
+  </ol>
+</section>
+
+</main>
+<footer>Nguồn: 260717 Report W29 V3.xlsx (đã hiệu chỉnh) · Dashboard tạo tự động · Giải trình đồng bộ qua Google Sheet</footer>
+<div id="toast"></div>
+
+<dialog id="dlgCfg">
+  <h3 style="margin-top:0">⚙ URL đồng bộ giải trình</h3>
+  <p style="font-size:13px;color:var(--ink2)">Dán URL Apps Script <code>/exec</code> (cùng URL nhóm đang dùng cho card Giải trình trên dashboard điều hành). Giải trình sẽ được upsert vào sheet <b>GiaiTrinh</b> với Ticket ID dạng <code>RPT-W29-…</code>.</p>
+  <input type="text" id="cfgUrl" style="width:100%;padding:7px 9px;border:1px solid var(--axis);border-radius:8px" placeholder="https://script.google.com/macros/s/…/exec">
+  <div style="margin-top:12px;text-align:right">
+    <button class="btn" onclick="dlgCfg.close()">Đóng</button>
+    <button class="btn primary" id="cfgSave">Lưu</button>
+  </div>
+</dialog>
+
+<script src="data_latest.js"></script>
+<script>
+/* ================= helpers ================= */
+const D = REPORT_DATA;
+const S = ['#2a78d6','#1baf7a','#eda100','#008300','#4a3aa7','#e34948','#e87ba4','#eb6834'];
+const INK2 = '#52514e', MUTED = '#898781', GRID = '#e1e0d9';
+const nf = new Intl.NumberFormat('vi-VN');
+const n0 = v => v==null ? '—' : nf.format(Math.round(v));
+const n2 = v => v==null ? '—' : nf.format(Math.round(v*100)/100);
+const pc = (v,d=1) => v==null ? '—' : (v*100).toFixed(d).replace('.',',') + '%';
+const usd = v => v==null ? '—' : '$' + nf.format(Math.round(v));
+Chart.defaults.font.family = 'system-ui,-apple-system,"Segoe UI",sans-serif';
+Chart.defaults.color = INK2;
+Chart.defaults.borderColor = GRID;
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+Chart.defaults.plugins.legend.labels.boxHeight = 12;
+Chart.defaults.animation = false;
+const charts = {};
+function mk(id, cfg){ if(charts[id]) charts[id].destroy(); charts[id] = new Chart(document.getElementById(id), cfg); }
+const pctTick = { callback: v => (v*100).toFixed(0) + '%' };
+const pctTip = ctx => ` ${ctx.dataset.label ?? ctx.label}: ${pc(ctx.parsed.x ?? ctx.parsed.y ?? ctx.parsed)}`;
+
+let MODE = 'w'; // 'w' tuần | 'm' tháng
+const mLbl = () => MODE==='w' ? 'tuần W29' : 'tháng M6';
+
+/* ================= KPI ================= */
+function kpis(){
+  const cw = D.clsEvcsW_total, cm = D.clsEvcsM_total, bw = D.clsBssW_total, bm = D.clsBssM_total;
+  const se = MODE==='w' ? D.slaEvcsW : D.slaEvcsM, sb = MODE==='w' ? D.slaBssW : D.slaBssM;
+  const gse = se[se.length-1], gsb = sb[sb.length-1];
+  const c = MODE==='w' ? cw : cm, b = MODE==='w' ? bw : bm;
+  const cost = D.cost, i = 5; // M6
+  const items = [
+    ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate)],
+    ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate)],
+    ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket'],
+    ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket'],
+    ['Chi phí M6 (est.)', usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị'],
+  ];
+  document.getElementById('kpis').innerHTML = items.map(x =>
+    `<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join('');
+}
+
+/* ================= phân loại ================= */
+function clsBlock(canvas, tbl, rows, total, subId){
+  document.getElementById(subId).textContent = n0(total.qty) + ' ticket, ticket rate ' + pc(total.rate);
+  mk(canvas, {type:'doughnut',
+    data:{labels: rows.map(r=>r.name),
+      datasets:[{data: rows.map(r=>r.qty), backgroundColor:[S[5],S[0],S[1],'#c3c2b7'], borderColor:'#fcfcfb', borderWidth:2}]},
+    options:{maintainAspectRatio:false, cutout:'55%',
+      plugins:{legend:{position:'right'},
+        tooltip:{callbacks:{label: c => ` ${c.label}: ${n0(c.parsed)} (${pc(c.parsed/total.qty)})`}}}}});
+  document.getElementById(tbl).innerHTML = '<table><tr><th>Nhóm</th><th>Phân loại</th><th>Ticket</th><th>Tỷ trọng</th><th>Ticket rate</th></tr>' +
+    rows.map(r=>`<tr><td>${r.name}</td><td>${r.name==='Disclaim'?'Not by ChargeCore':(r.name==='Undefined yet'?'Undefined':'By ChargeCore')}</td><td>${n0(r.qty)}</td><td>${pc(r.share)}</td><td>${pc(r.rate,2)}</td></tr>`).join('') +
+    `<tr class="total"><td>Grand total</td><td></td><td>${n0(total.qty)}</td><td>100%</td><td>${pc(total.rate,2)}</td></tr></table>`;
+}
+
+/* ================= disclaim ================= */
+function disBlock(canvas, rows){
+  const sorted = [...rows].sort((a,b)=>b.qty-a.qty);
+  mk(canvas, {type:'bar',
+    data:{labels: sorted.map(r=>r.name),
+      datasets:[{label:'Ticket', data: sorted.map(r=>r.qty), backgroundColor:S[0], borderRadius:4, maxBarThickness:18}]},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>` ${n0(c.parsed.x)} ticket (${pc(sorted[c.dataIndex].share)})`}}},
+      scales:{x:{grid:{color:GRID}}, y:{grid:{display:false}}}}});
+}
+
+/* ================= failure theo model ================= */
+function failBlock(canvas, tbl, rows){
+  const data = rows.filter(r=>!/^Total/i.test(r.model)), tot = rows.find(r=>/^Total/i.test(r.model));
+  mk(canvas, {type:'bar',
+    data:{labels:data.map(r=>r.model),
+      datasets:[{label:'Failure rate', data:data.map(r=>r.failRate), backgroundColor:S[0], borderRadius:4, maxBarThickness:34}]},
+    options:{maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:pctTip}}},
+      scales:{y:{ticks:pctTick, grid:{color:GRID}}, x:{grid:{display:false}}}}});
+  const row = r => `<tr><td>${r.model}</td><td>${n0(r.onService)}</td><td>${n0(r.failed)}</td><td>${pc(r.failRate)}</td><td>${n0(r.tickets)}</td><td>${n2(r.freq)}</td></tr>`;
+  document.getElementById(tbl).innerHTML = '<table><tr><th>Model</th><th>Đang vận hành</th><th>Bị lỗi</th><th>Fail. rate</th><th>Ticket lỗi</th><th>Freq.</th></tr>' +
+    data.map(row).join('') + (tot?`<tr class="total"><td>Total</td><td>${n0(tot.onService)}</td><td>${n0(tot.failed)}</td><td>${pc(tot.failRate)}</td><td>${n0(tot.tickets)}</td><td>${n2(tot.freq)}</td></tr>`:'') + '</table>';
+}
+
+/* ================= trends ================= */
+function lineChart(canvas, labels, seriesNames, seriesData, isPct){
+  mk(canvas, {type:'line',
+    data:{labels, datasets: seriesNames.map((nm,i)=>({label:nm, data:seriesData[i], borderColor:S[i], backgroundColor:S[i],
+      borderWidth:2, pointRadius:2.5, pointHoverRadius:5, tension:.25}))},
+    options:{maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
+      plugins:{legend:{position:'bottom'}, tooltip:{callbacks: isPct?{label:c=>` ${c.dataset.label}: ${pc(c.parsed.y)}`}:{}}},
+      scales:{y:{grid:{color:GRID}, ...(isPct?{ticks:pctTick}:{})}, x:{grid:{display:false}}}}});
+}
+
+/* ================= alarms ================= */
+function alarms(){
+  const wrap = document.getElementById('alarmCards');
+  wrap.innerHTML = '';
+  Object.entries(D.alarms).forEach(([grp, obj], gi)=>{
+    const rows = (MODE==='w'?obj.w:obj.m).slice(0,10);
+    const id = 'c_al_' + gi;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<h3>${grp}</h3><div class="cv tall"><canvas id="${id}"></canvas></div>`;
+    wrap.appendChild(card);
+    mk(id, {type:'bar',
+      data:{labels: rows.map(r=> r.name.length>32 ? r.name.slice(0,30)+'…' : r.name),
+        datasets:[{data: rows.map(r=>r.qty), backgroundColor:S[gi%4], borderRadius:4, maxBarThickness:14}]},
+      options:{indexAxis:'y', maintainAspectRatio:false,
+        plugins:{legend:{display:false},
+          tooltip:{callbacks:{title:t=>rows[t[0].dataIndex].name, label:c=>` ${n0(c.parsed.x)} (${pc(rows[c.dataIndex].share)})`}}},
+        scales:{x:{grid:{color:GRID}}, y:{grid:{display:false}, ticks:{font:{size:10.5}, autoSkip:false}}}}});
+  });
+}
+
+/* ================= SLA ================= */
+function slaBlock(canvas, rows, subId){
+  const g = rows[rows.length-1];
+  document.getElementById(subId).textContent =
+    `overdue ${n0(g.overdue)}/${n0(g.total)} = ${pc(g.overdue/g.total)}`;
+  const data = rows.slice(0,-1).filter(r=>r.total>0);
+  mk(canvas, {type:'bar',
+    data:{labels:data.map(r=>r.status),
+      datasets:[
+        {label:'Ontime', data:data.map(r=>r.ontime), backgroundColor:'#0ca30c', borderRadius:4, maxBarThickness:16},
+        {label:'Overdue', data:data.map(r=>r.overdue), backgroundColor:'#d03b3b', borderRadius:4, maxBarThickness:16}]},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'}},
+      scales:{x:{stacked:true, grid:{color:GRID}}, y:{stacked:true, grid:{display:false}}}}});
+}
+function resBlock(tbl, rows){
+  const data = rows.filter(r=>r.res);
+  document.getElementById(tbl).innerHTML = '<table><tr><th>Nguồn lực</th><th>Tổng</th><th>Ontime</th><th>Overdue</th><th>Overdue rate</th><th>Share/tổng</th></tr>' +
+    data.map((r,i)=>{
+      const last = i===data.length-1;
+      const rate = r.total ? r.overdue/r.total : null;
+      return `<tr${last?' class="total"':''}><td>${r.res}</td><td>${n0(r.total)}</td><td>${n0(r.ontime)}</td><td>${n0(r.overdue)}</td><td>${rate==null?'—':pc(rate)}</td><td>${pc(r.share)}</td></tr>`;
+    }).join('') + '</table>';
+}
+
+/* ================= CSE + giải trình ================= */
+const GT_KEY = 'rpt_gt_W29', GT_URL_KEY = 'rpt_gt_url';
+let GT = JSON.parse(localStorage.getItem(GT_KEY) || '{}');
+const cseKey = (sys,cse) => `RPT-${D.week}-${sys}-${cse.replace(/[^a-z0-9]+/gi,'_')}`;
+const badge = r => r==null ? '' :
+  r < .05 ? `<span class="badge b-good">${pc(r)}</span>` :
+  r < .12 ? `<span class="badge b-warn">${pc(r)}</span>` :
+  r < .25 ? `<span class="badge b-serious">${pc(r)}</span>` :
+            `<span class="badge b-crit">${pc(r)}</span>`;
+function spark(tot, ovd){
+  const rates = tot.map((t,i)=> t ? ovd[i]/t : 0);
+  const mx = Math.max(...rates, .0001), W=90, H=22;
+  const pts = rates.map((v,i)=>`${(i/(rates.length-1)*W).toFixed(1)},${(H-2-(v/mx)*(H-5)).toFixed(1)}`).join(' ');
+  return `<svg class="spark" width="${W}" height="${H}"><polyline points="${pts}" fill="none" stroke="#2a78d6" stroke-width="1.6"/><circle cx="${W}" cy="${(H-2-(rates[6]/mx)*(H-5)).toFixed(1)}" r="2.4" fill="#d03b3b"/></svg>`;
+}
+function cseBlock(sys, cd, tblId, cvId){
+  const rows = cd.cse.map((c,i)=>({cse:c, tot:cd.total[i], ovd:cd.overdue[i],
+    t29: cd.total[i][6], o29: cd.overdue[i][6]}));
+  rows.forEach(r=> r.rate = r.t29 ? r.o29/r.t29 : null);
+  // chart
+  mk(cvId, {type:'bar',
+    data:{labels: rows.map(r=>r.cse.split(';')[0] + (r.cse.includes(';')?' +':'')),
+      datasets:[{data: rows.map(r=>r.rate), borderRadius:4, maxBarThickness:34,
+        backgroundColor: rows.map(r=> r.rate<.05?'#0ca30c':r.rate<.12?'#fab219':r.rate<.25?'#ec835a':'#d03b3b')}]},
+    options:{maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{
+        title:t=>rows[t[0].dataIndex].cse,
+        label:c=>` ${pc(c.parsed.y)} (${n0(rows[c.dataIndex].o29)}/${n0(rows[c.dataIndex].t29)})`}}},
+      scales:{y:{ticks:pctTick, grid:{color:GRID}}, x:{grid:{display:false}}}}});
+  // table
+  document.getElementById(tblId).innerHTML =
+    `<table><tr><th>CSE</th><th>Ticket ${D.week}</th><th>Overdue ${D.week}</th><th>Rate</th><th>Xu hướng ${D.weeks[0]}→${D.weeks[D.weeks.length-1]}</th><th style="width:42%;text-align:left">Giải trình của CSE</th></tr>` +
+    rows.map(r=>{
+      const k = cseKey(sys, r.cse), e = GT[k] || {};
+      return `<tr><td>${r.cse}</td><td>${n0(r.t29)}</td><td>${n0(r.o29)}</td><td>${badge(r.rate)}</td>
+        <td>${spark(r.tot, r.ovd)}</td>
+        <td class="l"><textarea data-k="${k}" placeholder="Nguyên nhân overdue + hướng khắc phục…">${e.text||''}</textarea>
+        <div class="gt-meta" id="meta_${k}">${e.user? '✍ '+e.user+' · '+(e.ts||'') : 'chưa có giải trình'}</div></td></tr>`;
+    }).join('') + '</table>';
+}
+function renderCse(){
+  cseBlock('EVCS', D.cseEvcs, 't_cse_evcs', 'c_cse_evcs');
+  cseBlock('BSS',  D.cseBss,  't_cse_bss',  'c_cse_bss');
+  const gg = GT['RPT-'+D.week+'-GENERAL'] || {};
+  document.getElementById('gtGeneral').value = gg.text || '';
+  document.getElementById('gtGeneralMeta').textContent = gg.user ? `✍ ${gg.user} · ${gg.ts||''}` : '';
+  document.getElementById('gtUser').value = localStorage.getItem('rpt_gt_user') || '';
+}
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity=1; setTimeout(()=>t.style.opacity=0, 2600); }
+function collectGt(){
+  const user = document.getElementById('gtUser').value.trim();
+  const ts = new Date().toLocaleString('vi-VN');
+  document.querySelectorAll('textarea[data-k]').forEach(ta=>{
+    const k = ta.dataset.k, old = GT[k] || {};
+    if(ta.value.trim() !== (old.text||'')){ GT[k] = {text: ta.value.trim(), user, ts}; }
+  });
+  const gv = document.getElementById('gtGeneral').value.trim();
+  if(gv !== ((GT['RPT-'+D.week+'-GENERAL']||{}).text||'')) GT['RPT-'+D.week+'-GENERAL'] = {text:gv, user, ts};
+  localStorage.setItem(GT_KEY, JSON.stringify(GT));
+  localStorage.setItem('rpt_gt_user', user);
+}
+document.getElementById('gtSave').onclick = ()=>{ collectGt(); renderCse(); toast('Đã lưu giải trình trên máy này ✓'); };
+document.getElementById('gtCfg').onclick = ()=>{ document.getElementById('cfgUrl').value = localStorage.getItem(GT_URL_KEY)||''; dlgCfg.showModal(); };
+document.getElementById('cfgSave').onclick = ()=>{ localStorage.setItem(GT_URL_KEY, document.getElementById('cfgUrl').value.trim()); dlgCfg.close(); toast('Đã lưu URL ✓'); };
+function gtRows(){
+  return Object.entries(GT).filter(([k,v])=>v.text).map(([k,v])=>{
+    const m = k.match(new RegExp('^RPT-'+D.week+'-(EVCS|BSS)-(.+)$'));
+    return {tid:k, name: m? `${m[2].replace(/_/g,';')} (${m[1]})` : 'Nhận xét chung '+D.week,
+      day:D.week, cat:'Giải trình báo cáo tuần', text:v.text, user:v.user||'', status:D.week};
+  });
+}
+document.getElementById('gtPush').onclick = async ()=>{
+  const url = localStorage.getItem(GT_URL_KEY);
+  if(!url) return toast('Chưa có URL đồng bộ — bấm ⚙ trước');
+  collectGt();
+  const rows = gtRows();
+  if(!rows.length) return toast('Chưa có giải trình nào để đẩy');
+  try{
+    await fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({mode:'merge', rows})});
+    toast(`Đã gửi ${rows.length} giải trình lên sheet online ✓`);
+  }catch(e){ toast('Lỗi gửi: ' + e.message); }
+};
+document.getElementById('gtPull').onclick = ()=>{
+  const url = localStorage.getItem(GT_URL_KEY);
+  if(!url) return toast('Chưa có URL đồng bộ — bấm ⚙ trước');
+  const cb = 'gtcb_' + Date.now();
+  window[cb] = resp => {
+    delete window[cb];
+    if(!resp || !resp.ok) return toast('Không đọc được sheet online');
+    let cnt = 0;
+    (resp.rows||[]).forEach(r=>{
+      const tid = String(r[0]||'');
+      if(!tid.startsWith('RPT-'+D.week)) return;
+      GT[tid] = {text: r[4]||'', user: r[5]||'', ts: r[6]||''}; cnt++;
+    });
+    localStorage.setItem(GT_KEY, JSON.stringify(GT));
+    renderCse(); toast(`Đã tải ${cnt} giải trình từ sheet online ✓`);
+  };
+  const s = document.createElement('script');
+  s.src = url + (url.includes('?')?'&':'?') + 'callback=' + cb;
+  s.onerror = ()=> toast('Lỗi kết nối sheet online');
+  document.body.appendChild(s);
+};
+document.getElementById('gtCopy').onclick = ()=>{
+  collectGt();
+  const lines = ['GIẢI TRÌNH BÁO CÁO TUẦN W29', ''];
+  gtRows().forEach(r=> lines.push(`• ${r.name} — ${r.user||'?'}:\n  ${r.text}`));
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>toast('Đã sao chép ✓'));
+};
+
+/* ================= parts ================= */
+function partsBlock(tbl, rows, total, subId){
+  document.getElementById(subId).textContent = 'tổng chi phí ' + usd(total) + ' (phần có giá)';
+  const mx = Math.max(...rows.map(r=>r.cost||0), 1);
+  document.getElementById(tbl).innerHTML = '<table><tr><th>#</th><th style="text-align:left">Vật tư</th><th>SL</th><th>Đơn giá</th><th>Chi phí</th><th style="width:90px"></th></tr>' +
+    rows.map((r,i)=>`<tr><td>${i+1}</td><td class="l" title="${r.code}">${r.name??r.code}</td><td>${n0(r.qty)}</td>
+      <td>${r.price==null?'<span style="color:#d03b3b">chưa có giá</span>':'$'+n2(r.price)}</td><td>${r.cost==null?'—':usd(r.cost)}</td>
+      <td style="padding:0 4px"><div style="height:8px;border-radius:4px;background:#2a78d6;width:${((r.cost||0)/mx*100).toFixed(0)}%"></div></td></tr>`).join('') +
+    `<tr class="total"><td></td><td class="l">Grand total</td><td></td><td></td><td>${usd(total)}</td><td></td></tr></table>`;
+}
+
+/* ================= cost ================= */
+function costCharts(){
+  const c = D.cost;
+  mk('c_cost', {type:'bar',
+    data:{labels:c.months, datasets:[
+      {label:'Spare parts', data:c.spareParts, backgroundColor:S[0], borderRadius:4, maxBarThickness:30},
+      {label:'Cost for ASP', data:c.asp, backgroundColor:S[1], borderRadius:4, maxBarThickness:30},
+      {label:'Salary for SE', data:c.seSalary, backgroundColor:S[2], borderRadius:4, maxBarThickness:30}]},
+    options:{maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${usd(ctx.parsed.y)}`,
+        footer: items => 'Tổng: ' + usd(items.reduce((s,it)=>s+it.parsed.y,0))}}},
+      scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:GRID}, ticks:{callback:v=>'$'+nf.format(v/1000)+'k'}}}}});
+  mk('c_cpe', {type:'line',
+    data:{labels:c.months, datasets:[
+      {label:'Tổng thể', data:c.costPerEquip, borderColor:S[0], backgroundColor:S[0], borderWidth:2, pointRadius:3},
+      {label:'ASP', data:c.aspCostPerEquip.map(v=>v||null), borderColor:S[5], backgroundColor:S[5], borderWidth:2, pointRadius:3},
+      {label:'In-house (SE)', data:c.inhouseCostPerEquip.map(v=>v||null), borderColor:S[1], backgroundColor:S[1], borderWidth:2, pointRadius:3}]},
+    options:{maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
+      plugins:{legend:{position:'bottom'}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: $${n2(ctx.parsed.y)}`}}},
+      scales:{y:{grid:{color:GRID}, ticks:{callback:v=>'$'+v}}, x:{grid:{display:false}}}}});
+}
+
+/* ================= render theo mode ================= */
+function render(){
+  document.querySelectorAll('.modeLbl').forEach(e=> e.textContent = mLbl());
+  kpis();
+  clsBlock('c_cls_evcs','t_cls_evcs', MODE==='w'?D.clsEvcsW:D.clsEvcsM, MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total, 'clsEvcsSub');
+  clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
+  disBlock('c_dis_evcs', MODE==='w'?D.disEvcsW:D.disEvcsM);
+  disBlock('c_dis_bss',  MODE==='w'?D.disBssW:D.disBssM);
+  failBlock('c_fail_evcs','t_fail_evcs', MODE==='w'?D.failEvcsW:D.failEvcsM);
+  failBlock('c_fail_bss','t_fail_bss', MODE==='w'?D.failBssW:D.failBssM);
+  alarms();
+  slaBlock('c_sla_evcs', MODE==='w'?D.slaEvcsW:D.slaEvcsM, 'slaEvcsSub');
+  slaBlock('c_sla_bss',  MODE==='w'?D.slaBssW:D.slaBssM,  'slaBssSub');
+  resBlock('t_res_evcs', MODE==='w'?D.resEvcsW:D.resEvcsM);
+  resBlock('t_res_bss',  MODE==='w'?D.resBssW:D.resBssM);
+  partsBlock('t_parts_evcs', MODE==='w'?D.partsEvcsW:D.partsEvcsM, MODE==='w'?D.partsTotal.evcsW:D.partsTotal.evcsM, 'pEvcsSub');
+  partsBlock('t_parts_bss',  MODE==='w'?D.partsBssW:D.partsBssM,  MODE==='w'?D.partsTotal.bssW:D.partsTotal.bssM, 'pBssSub');
+}
+document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
+  MODE = b.dataset.m;
+  document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on', x===b));
+  collectGt();       // không mất giải trình đang gõ
+  render(); renderCse();
+});
+
+/* charts chỉ vẽ 1 lần (tuần) */
+lineChart('c_tr_evcs_t', D.weeks, D.trendEvcs.models, D.trendEvcs.tickets, false);
+lineChart('c_tr_evcs_r', D.weeks, D.trendEvcs.models, D.trendEvcs.failRate, true);
+lineChart('c_tr_bss_t', D.weeks, D.trendBss.models, D.trendBss.tickets, false);
+lineChart('c_tr_bss_r', D.weeks, D.trendBss.models, D.trendBss.failRate, true);
+lineChart('c_asp_evcs', D.weeks, D.aspEvcs.asps, D.aspEvcs.rate, true);
+lineChart('c_asp_bss', D.weeks, D.aspBss.asps, D.aspBss.rate, true);
+costCharts();
+/* nhãn động theo dữ liệu (báo cáo chạy hằng ngày -> tuần/tháng thay đổi) */
+(function(){
+  document.title = document.title.replace(/W\d+/, D.week);
+  const hd = document.getElementById('hdW'); if(hd) hd.textContent = D.week;
+  const segs = document.querySelectorAll('#modeSeg button');
+  if(segs[0]) segs[0].textContent = 'Tuần ('+D.week+')';
+  if(segs[1]) segs[1].textContent = 'Tháng ('+D.month+')';
+})();
+render();
+renderCse();
+/* đồng bộ nhãn tuần trong các tiêu đề TĨNH của HTML shell (KPI, tên section) theo D.week.
+   Chỉ sửa text-node hiển thị, không đụng script/thuộc tính. Mục "Chi phí M6" giữ nguyên
+   vì là dữ liệu tháng carry baseline. */
+(function(){
+  const reps = [[/tuần W\d+/g, 'tuần '+D.week],
+                [/W\d+\s*→\s*W\d+/g, D.weeks[0]+'→'+D.week]];
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const ns = []; let n; while(n = w.nextNode()) ns.push(n);
+  ns.forEach(t => { let s = t.nodeValue;
+    reps.forEach(([rx, v]) => s = s.replace(rx, v));
+    if(s !== t.nodeValue) t.nodeValue = s; });
+})();
+// một số canvas có thể bị đo width=0 trong lần layout đầu — ép resize lại
+function fixSizes(){ Object.values(charts).forEach(c=>{ if(c.canvas.width===0) c.resize(); }); }
+window.addEventListener('load', ()=>{ fixSizes(); setTimeout(fixSizes, 250); setTimeout(fixSizes, 1000); });
+setTimeout(fixSizes, 100);
+</script>
+</body>
+</html>
