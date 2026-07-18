@@ -61,6 +61,12 @@ textarea{width:100%;min-height:56px;border:1px solid var(--axis);border-radius:8
   font:13px/1.4 inherit;background:var(--surface);resize:vertical}
 textarea:focus{outline:2px solid var(--s1);border-color:transparent}
 .gt-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+table.ovd td{text-align:left;white-space:normal;vertical-align:top}
+table.ovd th{text-align:left}
+table.ovd select,table.ovd input{width:100%;font:12px system-ui;padding:3px 4px;border:1px solid var(--grid);border-radius:5px;background:var(--surface)}
+.staticTag{display:inline-block;font-size:10.5px;font-weight:600;color:#8a6d00;background:#fff4d1;border:1px solid #f0d98a;border-radius:4px;padding:1px 6px;margin-left:6px;text-transform:none;letter-spacing:0}
+.partialWarn{background:#fff4d1;border:1px solid #f0d98a;color:#7a5c00;border-radius:6px;padding:3px 10px;font-size:12px}
+.freshTag{font-size:11.5px;color:var(--muted)}
 .btn{border:1px solid var(--axis);background:var(--surface);border-radius:8px;padding:6px 14px;
   cursor:pointer;font-weight:600;font-size:13px;color:var(--ink)}
 .btn.primary{background:var(--s1);border-color:var(--s1);color:#fff}
@@ -84,9 +90,13 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <nav class="toc">
     <a href="#sec-cls">Phân loại</a><a href="#sec-dis">Disclaim</a><a href="#sec-fail">Theo model</a>
     <a href="#sec-trend">Xu hướng</a><a href="#sec-alarm">Alarm</a><a href="#sec-sla">SLA</a>
-    <a href="#sec-asp">ASP</a><a href="#sec-cse">CSE &amp; Giải trình</a><a href="#sec-parts">Vật tư</a>
+    <a href="#sec-overdue">Giải trình</a><a href="#sec-asp">ASP</a><a href="#sec-cse">CSE</a><a href="#sec-parts">Vật tư</a>
     <a href="#sec-cost">Chi phí</a><a href="#sec-fix">Hiệu chỉnh</a>
   </nav>
+  <div style="flex-basis:100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <span class="freshTag" id="freshTag"></span>
+    <span class="partialWarn" id="partialWarn" style="display:none"></span>
+  </div>
 </header>
 <main>
 
@@ -148,6 +158,27 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <div class="grid2">
     <div class="card"><h3>EVCS</h3><div class="tblwrap" id="t_res_evcs"></div></div>
     <div class="card"><h3>BSS</h3><div class="tblwrap" id="t_res_bss"></div></div>
+  </div>
+</section>
+
+<section id="sec-overdue">
+  <h2>Giải trình ticket Overdue — Hà Nội, luồng API (tuần <span class="hdW2"></span>)</h2>
+  <div class="toolbar">
+    <label>Người nhập: <input type="text" id="ovdUser" placeholder="tên của bạn" size="14"></label>
+    <span id="ovdSync" class="gt-meta">⚪ đang kết nối đồng bộ…</span>
+  </div>
+  <p style="font-size:13px;color:var(--ink2);margin:2px 0 10px">
+    Chỉ ticket <b>HNO + API creation</b> (điền tay). Giải trình dùng chung realtime với
+    <b>dashboard điều hành</b> — gõ ở đây hiện luôn bên kia và ngược lại. Cột “gợi ý” là
+    nhãn tự đoán từ dữ liệu; sửa lại nếu chưa đúng.
+  </p>
+  <div class="card"><div class="tblwrap" id="t_overdue"></div></div>
+  <div class="card" style="margin-top:12px">
+    <h3>Overdue ngoài Hà Nội (luồng API) — tự phân loại, không điền tay</h3>
+    <p style="font-size:13px;color:var(--ink2);margin:2px 0 8px">
+      Số lượng lớn (~1,5k/tuần) nên hệ thống tự gán nhãn theo dữ liệu; phần quá hạn không
+      rõ lý do khách quan quy về <b>① Xử lý muộn</b>.</p>
+    <div class="tblwrap" id="t_overdue_auto"></div>
   </div>
 </section>
 
@@ -228,6 +259,21 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 </dialog>
 
 <script src="data_latest.js"></script>
+<!-- Firebase (giải trình dùng chung node /dashboard/explain với dashboard điều hành) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script>
+// Cùng project Firebase với dashboard điều hành (mappingslahno). Config web KHÔNG bí mật
+// (bảo vệ bằng rule phía server) — để công khai như dashboard. Node /dashboard/explain
+// dùng CHUNG: giải trình gõ ở báo cáo = giải trình trên dashboard, realtime.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAyWWhY2Bh-Irw7mbHh-nz3DZN4O3lupTE",
+  authDomain: "mappingslahno.firebaseapp.com",
+  databaseURL: "https://mappingslahno-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mappingslahno",
+};
+</script>
 <script>
 /* ================= helpers ================= */
 const D = REPORT_DATA;
@@ -535,6 +581,82 @@ document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   render(); renderCse();
 });
 
+/* ============ Giải trình ticket Overdue (per-ticket, sync Firebase /dashboard/explain) ============
+   Dùng CHUNG node + ĐÚNG shape với dashboard/app.js: explainMap[tid]={c,t}; child(expKey(tid))
+   .set({id,c,t,user,up}). Nhờ vậy giải trình gõ ở đây hiện trên dashboard và ngược lại. */
+const EXPLAIN_CATS = [
+  "① Xử lý muộn (lỗi KTV)","② KTV đến, trụ bình thường / không tồn lỗi",
+  "③ Chờ vật tư / thiếu linh kiện","④ Thời tiết / thiên tai",
+  "⑤ Không tiếp cận / không có quyền vào trạm","⑥ Yêu cầu / lỗi từ khách hàng",
+  "⑦ Hạ tầng điện / mạng của khách","⑧ VOMS reject dù xử lý đạt",
+  "⑨ Lỗi hệ thống VOMS / CCTS treo","⑩ Trùng ticket / tạo lô theo phase","⑪ Khách quan khác",
+];
+let explainMap = {}, fbExpRef = null;
+let ovdUser = localStorage.getItem('rpt_ovd_user') || '';
+const expKey = tid => String(tid).replace(/[.#$/\[\]]/g, c => '%'+c.charCodeAt(0).toString(16).toUpperCase());
+const expOf = tid => { const v = explainMap[tid]; return v ? {c:v.c||'',t:v.t||''} : {c:'',t:''}; };
+function saveExplain(tid, c, t){
+  c=(c||'').trim(); t=(t||'').trim();
+  if(c||t) explainMap[tid]={c,t}; else delete explainMap[tid];
+  if(fbExpRef){
+    if(c||t) fbExpRef.child(expKey(tid)).set({id:tid,c,t,user:ovdUser||'',up:Date.now()}).catch(()=>{});
+    else fbExpRef.child(expKey(tid)).remove().catch(()=>{});
+  }
+}
+function ovdSyncStat(ok,msg){ const e=document.getElementById('ovdSync'); if(e){ e.textContent=(ok?'🟢 ':'⚪ ')+msg; } }
+function renderOverdue(){
+  const wl = document.querySelectorAll('.hdW2'); wl.forEach(e=> e.textContent = D.week);
+  const ov = D.overdue || {manual:[],auto:[]};
+  const opts = tid => { const c=expOf(tid).c;
+    return '<option value="">— chọn —</option>' +
+      EXPLAIN_CATS.map(x=>`<option${x===c?' selected':''}>${x}</option>`).join(''); };
+  const esc = s => String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  let h = `<table class="ovd"><tr><th>#</th><th>Ticket / Trụ</th><th>Lỗi</th><th>Trạng thái</th><th>CSE</th><th>Ngày</th><th>Gợi ý</th><th style="width:22%">Phân loại</th><th style="width:26%">Chi tiết</th></tr>`;
+  ov.manual.forEach((r,i)=>{ const e=expOf(r.id);
+    h += `<tr><td>${i+1}</td><td><b>${esc(r.id)}</b><br><span class="muted">${esc(r.cpid)}</span></td>`+
+      `<td>${esc(r.err)}</td><td>${esc(r.status)}</td><td>${esc(r.cse)}</td><td>${esc(r.date)}</td>`+
+      `<td class="muted" style="font-size:12px">${esc(r.auto||'—')}</td>`+
+      `<td><select class="exp-cat" data-id="${esc(r.id)}">${opts(r.id)}</select></td>`+
+      `<td><input class="exp-txt" data-id="${esc(r.id)}" value="${esc(e.t)}" placeholder="ghi chú thêm…"></td></tr>`; });
+  if(!ov.manual.length) h += `<tr><td colspan="9" class="muted">Không có ticket HNO/API quá hạn trong tuần.</td></tr>`;
+  h += `</table>`;
+  document.getElementById('t_overdue').innerHTML = h;
+  // auto breakdown non-HNO
+  const tot = ov.auto.reduce((a,r)=>a+r.qty,0);
+  let a = `<table class="ovd"><tr><th>Nhãn tự phân loại</th><th>Số ticket</th><th>Tỷ trọng</th></tr>`;
+  ov.auto.forEach(r=> a += `<tr><td>${esc(r.cat)}</td><td>${n0(r.qty)}</td><td>${pc(tot?r.qty/tot:0)}</td></tr>`);
+  a += `<tr><td><b>Tổng</b></td><td><b>${n0(tot)}</b></td><td></td></tr></table>`;
+  document.getElementById('t_overdue_auto').innerHTML = a;
+  // gắn sự kiện
+  document.querySelectorAll('#t_overdue .exp-cat').forEach(s=> s.onchange = ()=>{
+    const id=s.dataset.id; saveExplain(id, s.value, expOf(id).t); });
+  document.querySelectorAll('#t_overdue .exp-txt').forEach(inp=> inp.onchange = ()=>{
+    const id=inp.dataset.id; saveExplain(id, expOf(id).c, inp.value); });
+}
+function applyExplainRemote(all){
+  const ae=document.activeElement;
+  if(ae && (ae.classList.contains('exp-cat')||ae.classList.contains('exp-txt'))) return; // đang gõ dở
+  explainMap={};
+  for(const k in all){ const v=all[k]||{}; const id=v.id||k; if(v.c||v.t) explainMap[id]={c:v.c||'',t:v.t||''}; }
+  renderOverdue();
+}
+const ovdUserInp = document.getElementById('ovdUser');
+ovdUserInp.value = ovdUser;
+ovdUserInp.onchange = ()=>{ ovdUser = ovdUserInp.value.trim(); localStorage.setItem('rpt_ovd_user', ovdUser); };
+(function initFirebase(){
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    const db = firebase.database();
+    firebase.auth().signInAnonymously().catch(e=> ovdSyncStat(false,'lỗi đăng nhập: '+e.message));
+    firebase.auth().onAuthStateChanged(u=>{
+      if(!u) return;
+      fbExpRef = db.ref('dashboard/explain');
+      fbExpRef.on('value', snap=>{ applyExplainRemote(snap.val()||{}); ovdSyncStat(true,'đồng bộ realtime với dashboard'); },
+        ()=> ovdSyncStat(false,'không đọc được node giải trình'));
+    });
+  }catch(e){ ovdSyncStat(false,'Firebase chưa sẵn sàng'); }
+})();
+
 /* charts chỉ vẽ 1 lần (tuần) */
 lineChart('c_tr_evcs_t', D.weeks, D.trendEvcs.models, D.trendEvcs.tickets, false);
 lineChart('c_tr_evcs_r', D.weeks, D.trendEvcs.models, D.trendEvcs.failRate, true);
@@ -553,6 +675,29 @@ costCharts();
 })();
 render();
 renderCse();
+renderOverdue();
+/* Ngày làm mới + cảnh báo tuần chưa đủ 7 ngày (báo cáo chạy giữa tuần) */
+(function(){
+  const ft=document.getElementById('freshTag');
+  if(ft && D.generatedAt) ft.textContent = '🕒 Số liệu cập nhật: '+D.generatedAt;
+  const cov=D.coverage||{};
+  if(cov.partial){
+    const pw=document.getElementById('partialWarn');
+    if(pw){ pw.style.display=''; pw.textContent = `⚠ Tuần ${D.week} mới có ${cov.days}/7 ngày (${cov.from}→${cov.to}) — số tuần hiện tại chưa đủ, đừng so trực tiếp với các tuần đã trọn.`; }
+  }
+})();
+/* Nhãn "số tĩnh W29" cho các khối KHÔNG tính được từ export (cost/alarm/parts giá) */
+(function(){
+  (D.staticKeys||[]).length;  // chỉ để rõ nguồn: xem build STATIC_KEYS
+  const cost=document.getElementById('sec-cost');
+  if(cost){ const h=cost.querySelector('h2');
+    if(h && !h.querySelector('.staticTag')) h.insertAdjacentHTML('beforeend','<span class="staticTag">số tĩnh W29 — chưa tính live (cần bảng giá vật tư + fleet q\'ty)</span>'); }
+  // KPI "Chi phí M6" cũng là số tĩnh
+  document.querySelectorAll('#sec-kpi .kpi, .kpi').forEach(k=>{
+    if(/Chi phí M6/i.test(k.textContent) && !k.querySelector('.staticTag'))
+      k.insertAdjacentHTML('beforeend','<span class="staticTag">tĩnh</span>');
+  });
+})();
 /* đồng bộ nhãn tuần trong các tiêu đề TĨNH của HTML shell (KPI, tên section) theo D.week.
    Chỉ sửa text-node hiển thị, không đụng script/thuộc tính. Mục "Chi phí M6" giữ nguyên
    vì là dữ liệu tháng carry baseline. */
