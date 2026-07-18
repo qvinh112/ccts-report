@@ -9220,6 +9220,2044 @@ const REPORT_DATA = {
   ]
  },
  "overdueMonth": 8753,
+ "ovdByWeek": [
+  {
+   "week": "W24",
+   "total": 3442,
+   "sys": 318,
+   "breach": 287,
+   "open": 3,
+   "rate": 0.09238814642649622
+  },
+  {
+   "week": "W25",
+   "total": 2484,
+   "sys": 228,
+   "breach": 185,
+   "open": 0,
+   "rate": 0.09178743961352658
+  },
+  {
+   "week": "W26",
+   "total": 2758,
+   "sys": 241,
+   "breach": 189,
+   "open": 2,
+   "rate": 0.0873821609862219
+  },
+  {
+   "week": "W27",
+   "total": 2869,
+   "sys": 301,
+   "breach": 217,
+   "open": 6,
+   "rate": 0.10491460439177414
+  },
+  {
+   "week": "W28",
+   "total": 2096,
+   "sys": 246,
+   "breach": 143,
+   "open": 1,
+   "rate": 0.11736641221374046
+  },
+  {
+   "week": "W29",
+   "total": 4925,
+   "sys": 1514,
+   "breach": 787,
+   "open": 221,
+   "rate": 0.3074111675126904
+  },
+  {
+   "week": "W30",
+   "total": 8025,
+   "sys": 1650,
+   "breach": 597,
+   "open": 680,
+   "rate": 0.205607476635514
+  }
+ ],
+ "scenario": [
+  {
+   "name": "Chưa resolve (còn Open)",
+   "qty": 679
+  },
+  {
+   "name": "Xử lý muộn",
+   "qty": 489
+  },
+  {
+   "name": "Resolve muộn",
+   "qty": 418
+  },
+  {
+   "name": "Lỗi hệ thống",
+   "qty": 47
+  },
+  {
+   "name": "VOMS reject",
+   "qty": 17
+  }
+ ],
+ "lateTickets": [
+  {
+   "id": "8L4M8JQHZRPC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L4M80EH7I0W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L3WV7BEFE9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L1KD3N3XMO0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L1FUZBP3KLC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0VC6936ZGG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0PEZV9AY2O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NF3AGDH4W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NF1PI4074",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NCXOVFJLS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NCX35QI9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NCUP08KXS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NCQBOPM2O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NCP4EGYDC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0NCNBC464G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0N73KFF6YO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0N6SE8RQPS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MMKAB9Q80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MMGUHQ41S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MMFGHC3Y8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MME8PM5TS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MM6IWBW8W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MM4XY81KW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MM4CQ0AO0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MM2UC7VNK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MLYLLFEGW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MLRJNBU2O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MLAE7UK1S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0ML6LAEXOG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0ML12U25TS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0MKRH912IO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0LO54TJI80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0HZRTQHQTC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L0E323I5GCG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04Q8B37474",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04PNM8JXFK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04PD96PUDC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04P50S6S5C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04P35PHR0G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04OY6O9QTC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04OUHK6JGG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04OOCHL8N4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04M1HGEQ68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8L04KZOCQJ9C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZXM0XYZ30G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZX4Q1UKVSW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZX4P8KOWSG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZX4I7O1TKW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZWWSTFZG8W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZWWPCSJV28",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZWWMD7CHS0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZWWFEIJCHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZWWBBXZU2O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZW4XPXEA68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZVVEF3P43K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZV0GYKLYWW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZHE6OEFDHC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZ6FDD2TAF4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZ6EY3CQK1S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZ6E1UKX7GG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZ50K88J3EO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KZ45CLBC4CG",
+   "cat": "③ Chờ vật tư / thiếu linh kiện"
+  },
+  {
+   "id": "8KZ0FDZP7FNK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KYGC1L140E8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXZA25SAMF4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXZ79HEP9TS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXXNVG7Q7LS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXSHQLM3ZEO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXSFAM7V30G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXSF02ZS16O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS3IPT416O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS35HEH728",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS348NSO3K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS2OG9WFLS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS2N85RSW0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS2JH66J28",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS1XKRB37K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS1OFH454W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS1LYTSOHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS1DTM4Y68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS1CM6WHS0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS13OR1P1C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS132WCV0G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS0Z4Z4JR4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS0EXY6GOW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS0CH0VEO0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS09V3OUM8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXS080XAVPC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZQAJR2F4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZMTYTDKW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZLGIEK8W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZHP3TWCG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZCJ9VU9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZAOJOAV4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZ6BZGLJ4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRZ542TNUO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRYYABBB40",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRYS4OQTJ4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRYLAXB9XC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRYKNYO2DC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRYDTZO0LC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRYBQ3TVK0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRY3ZT54OW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRY09V0C1S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRXLPSW1KW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRXF7EU8E8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRXAO6Z30G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRX9TVS934",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRX1WFVYM8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRWZFUZL6O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRWXLJLTKW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRWRHSM7LS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRWHTX6GW0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRWGE8UWHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRWDRK7GN4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRW98TTLOG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRW8NBP2IO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRW3IVM680",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRVU8VOXS0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRVTLAQ9DS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRVOFJ7AIO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRVMISHVY8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRVKO4S8W0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRVGZPL7UO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRV4IPCA9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRV110G7WG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRUAO5IRCW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRU893MYO0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRU700E4U8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRU3EPNCHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRTY34IIV4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRTW7U66F4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRTNN5SPA8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRTGLF40SG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRT2Q4BVGG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRSYSONNR4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRSLP4QWOW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXRSAQ3DT6O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXNFKZMAVI8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXI4XSDCE80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXFCCW904JK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXEIC4Q5DZ4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KXEG3D3UC5C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX5SZBI91XC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX5SY2U2FB4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX5SXFXZX8G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX5SV6FT728",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4Y9K5TGXS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4Y7DUI2O0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4SHUP9TS0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4S7VSV18G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4RYYWWM4G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4RV2V3K74",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4RPWR5WQO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4ROZY2QDC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4RGHYXOG0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4RFW1WKCG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4RDEN1ERK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4R3YEDB7K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4R37OVKZK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4QS10QUBK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4QHCBDT6O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4QGMDIL1C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4QDQLNMRK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX4QD4YM41S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX3327AR6KG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX32W9UXIWW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX32TZV9IBK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX32OHRE874",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX32NV0BITC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2V3QZG074",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2V1IIPR7K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2URKXTUDC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2UNAGJ3EO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2UKUI6M80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2UJ1X8B9C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2UFWICA2O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2UE3ZYOLC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX2ONNMNV9C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX1Y72TN8JK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KX1XY7VLZ40",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWZFH74SCU8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWZF8Y3V0N4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWZF6SP3400",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWZF4CLL7UO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWYWCZAHM2O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWWIDVDQ77K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRYLKJ90XS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRYKSZVBPC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRYJ34DVCW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRY8ECIXVK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRXWJQV7Y8",
+   "cat": "③ Chờ vật tư / thiếu linh kiện"
+  },
+  {
+   "id": "8KWRXUG2FYTC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRXMO1BRB4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRXK6YY3GG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWRXGQXZLDS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWPASPK8NB4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWIC9PCJHMO",
+   "cat": "③ Chờ vật tư / thiếu linh kiện"
+  },
+  {
+   "id": "8KWI5Z1466TC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWI5JH70DMO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWI47TU8LC0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWI3ZZ8NBWG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWI2K9QBF9C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWETCQ6OOHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWECYIFTDDS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWECXU3DT6O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWECWGUDVR4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWECTLMI48W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWECQ7R1A0W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE943BDKHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1N74Y5FK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1LMY8DFK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1KBKNPC0",
+   "cat": "③ Chờ vật tư / thiếu linh kiện"
+  },
+  {
+   "id": "8KWE1JPPYVB4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1J3LD91C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1H3DVQBK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1GHLRLS0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1FUPMAKG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE1F861A80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE19KUVM68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE172C2328",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE13BOYAYO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWE0ZOXRNCW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KWDW5Y20WSG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KW943EG2I2O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KW7FF4DX43K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KW5DKQ8NM68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KW3SBF77G1S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KW2Z2LCBEV4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KW2C2P7WY68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KW04VM91U68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZQ0VMNLS0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZPY7CHOU8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZPH9MCRGG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZPBFPT4AO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZP3ZHAGOW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZP0D00LC0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZOZQVHS74",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZOGS3QXOG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZLJMXM2O0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZL9UMFMYO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZJSZWP7UO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZGQBL8LJ4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVZGJGI7D34",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVX869R41KW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVVREANZTOG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVVOMKYU3NK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVTGR8C543K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVQRA8NJPQ8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVQJQSWRH8G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVDRV1C775S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KVBKROGDVCW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KV3HHDVB1MO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUVFTQSH3I8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUPOHAJ7U9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUFG6H3W3CW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUEY9S6ED4W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUDPW549VK0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUDPAA0UI9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUDM8G82EWW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KUBFQ3ALNGG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTZTUVUFNR4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTX5BZE3ZEO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTW10CMBK00",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTVTQCKB1FK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTUJ4DPB5Z4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTUIPMHTPMO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTSOPLLXEDC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTSFDTBB5KW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTSF9IHIWW0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTPJ45IRCW0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTIZH4T7KE8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTIR8CWFD34",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI80SZFITC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI7SEJQ3NK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI7JP0JQBK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI7HFUUHVK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI716YMF40",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI70FK5PFK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI6P2AVF28",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTI6HX88SU8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTGKXL2CYKG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEZLL1UP6O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEPSRZ2DJ4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEPQGY0OW0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEPJQNAGAO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEPGRW7HFK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEPCM27XMO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEPC0Z2SJK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEPA936A68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEP7XAKWLC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEP65H6AKG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEP1EK77Y8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOZLRU134",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOW2CFOXS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEORXZ1MO0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOKWDCQV4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOJHIUCCG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOIVTAXA8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOIA16SQO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOD7949VK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOBEY5KAO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEOAT3MCJK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEO9JBEJ9C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEO4LGMSXS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEO3ZJLOU8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENUZT9FK0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENU66VYTC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENNBNWQ9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENMC7ULMO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENLGQ7HTS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENJS8O0E8",
+   "cat": "③ Chờ vật tư / thiếu linh kiện"
+  },
+  {
+   "id": "8KTENGPT2SXS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENFVUDGQO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENF2RZ6RK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENBF1WRGG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTENANAYK1S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEN80HE4N4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEN6JCJVUO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEN5T4M96O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEN1NX3SHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMZWQ69KW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMZ2TW0LC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMY0TIGAO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMU79LQTC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMTGHM48W",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMPNP6AKG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMMZCLAF4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEML94P5HC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMKF0UEBK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMJM3IQ68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMIVO3EGW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMI12WZ5S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMGDZBGN4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMFKKFOXS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEMBA0PURK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEM7WHQI9S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEM712FOJK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEM3FMRWN4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEM2SLPLVK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEM26H3ZLS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELYA0BJLS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELXHZDQTC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELVY08GZK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELV4SUEBK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELU4NTA80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELQD1WJK0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELPJS0KJK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELOSNP2IO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELO2N6BR4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELJWGUWHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELILZO3R4",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELHYOM7LS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELHAH6G3K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELG2HYSXS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELESAUEPS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELDTW8R9C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELBZFV6YO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTELBABYQYO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEL8483QBK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEL5IPWKCG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEL3EMF400",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEL2RDXXC0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEL0WDL69S",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKZMO0VLS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKYYQHWCG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKYA8WX6O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKX13BTA8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKWD384JK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKV1X55HC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKRQ4IGHS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEKPTISUM8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJPQFOPVK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJP4DKZY8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJOI3WRUO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJB79VHMO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ9OW32M8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ904LB7K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ8A97ZEO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ6SPBJEO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ609JYTC",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ4HY9G5C",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ3N2XT6O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ2VC2EWW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ1ZPCPA8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ1COAEIO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEJ04A3DA8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEIZIKJY80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEIYWNG0ZK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEIXNU6SJK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEIW80VFGG",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEIVA1962O",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEITTBBI80",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEISJBRM68",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTEBYS8E9KW",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KTCWT9PNGG0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KT9H5OH0IRK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KT6WGSPPREO",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KT6GLN7G83K",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSYROX9JLDS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSUWQP76YO0",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSUSIQS29DS",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSUHWC13F28",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSSRRFG4268",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSRBYUYOM4G",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSQLZMQ76RK",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "8KSKPCMAYKU8",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988184007016448",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988180283785216",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988163921805312",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988148619673600",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988146624495616",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988143255158784",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988141204144128",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988135622836224",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988102164873216",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988099514073088",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988079628877824",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988078096646144",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988072501444608",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988068555915264",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988062792941568",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988060901310464",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988058929987584",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988054482714624",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988052368785408",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988033246953472",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988031648923648",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988024598298624",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128988009663692800",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986543392423936",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986538431873024",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986531351887872",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986529787412480",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986528155828224",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986510388756480",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986502279856128",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986500895735808",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986495124373504",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986491866710016",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986482656018432",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986476459720704",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986458282917888",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986447821012992",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986445908410368",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986430913773568",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986424028037120",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986411334762496",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986401865334784",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986399004819456",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986394612072448",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986393099239424",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986389801205760",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986386543542272",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986384910647296",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128986378405281792",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985246334582784",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985241741819904",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985230973730816",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985223400128512",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985219200319488",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985216893452288",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985202722209792",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985198602092544",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985187220062208",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985182210752512",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985176914657280",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985172837793792",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985156650663936",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985132639584256",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985111461232640",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985087500484608",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985081796231168",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128985078733078528",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984967038763008",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984961516175360",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984956108406784",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984948903903232",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984932892934144",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984931333963776",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984914514804736",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984910537293824",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984902652002304",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984892648587264",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984868636196864",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984843819810816",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984830964269056",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128984770033614848",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  },
+  {
+   "id": "1128876368572579840",
+   "cat": "① Xử lý muộn (lỗi KTV)"
+  }
+ ],
  "srcStats": {
   "week": [
    {
@@ -9277,5 +11315,5 @@ const REPORT_DATA = {
   "partsBssM",
   "partsTotal"
  ],
- "generatedAt": "2026-07-18 08:21"
+ "generatedAt": "2026-07-18 18:40"
 };

@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <nav class="toc">
     <a href="#sec-cls">Phân loại</a><a href="#sec-dis">Disclaim</a><a href="#sec-fail">Theo model</a>
     <a href="#sec-trend">Xu hướng</a><a href="#sec-alarm">Alarm</a><a href="#sec-sla">SLA</a>
-    <a href="#sec-overdue">Giải trình</a><a href="#sec-asp">ASP</a><a href="#sec-cse">CSE</a><a href="#sec-parts">Vật tư</a>
+    <a href="#sec-overdue">Giải trình</a><a href="#sec-ovdana">Phân tích OVD</a><a href="#sec-asp">ASP</a><a href="#sec-cse">CSE</a><a href="#sec-parts">Vật tư</a>
     <a href="#sec-cost">Chi phí</a><a href="#sec-fix">Hiệu chỉnh</a>
   </nav>
   <div style="flex-basis:100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -187,6 +187,24 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   </div>
 </section>
 
+<section id="sec-ovdana">
+  <h2>Phân tích Overdue — hệ thống vs thực tế (luồng API)</h2>
+  <div class="card">
+    <h3>So sánh theo tuần: hệ thống gắn overdue vs thực sự trễ (đã resolve mà vượt giờ)</h3>
+    <div class="cv tall"><canvas id="c_ovdweek"></canvas></div>
+    <p style="font-size:13px;color:var(--ink2);margin:8px 0 0">
+      Khoảng cách giữa 2 cột = ticket <b>chưa xử lý xong</b> (hệ thống vẫn gắn overdue vì quá
+      deadline) + ca resolve trong hạn xử lý nhưng CCTS vẫn tính. Tuần gần nhất luôn nhiều
+      “chưa xong” hơn vì còn đang chạy.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Thành phần overdue tuần <span class="hdW2"></span></h3>
+      <div class="cv"><canvas id="c_scenario"></canvas></div></div>
+    <div class="card"><h3>Lý do nhóm “Xử lý muộn” <span class="freshTag" id="lrNote"></span></h3>
+      <div class="cv"><canvas id="c_latereason"></canvas></div></div>
+  </div>
+</section>
+
 <section id="sec-asp">
   <h2>Overdue rate theo ASP — theo tuần</h2>
   <div class="grid2">
@@ -213,6 +231,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <div class="tblwrap" id="t_cse_evcs"></div></div>
   <div class="card" style="margin-top:12px"><h3>BSS — bảng chi tiết + giải trình</h3>
     <div class="tblwrap" id="t_cse_bss"></div></div>
+  <div class="card" style="margin-top:12px"><h3>Overdue rate từng CSE qua các tuần (đỏ = cao)</h3>
+    <div class="tblwrap" id="t_cse_heat"></div></div>
   <div class="card" style="margin-top:12px"><h3>Nhận xét chung tuần W29</h3>
     <textarea id="gtGeneral" placeholder="Đánh giá chung, nguyên nhân chính, hành động tuần tới…"></textarea>
     <div class="gt-meta" id="gtGeneralMeta"></div></div>
@@ -457,9 +477,29 @@ function cseBlock(sys, cd, tblId, cvId){
         <div class="gt-meta" id="meta_${k}">${e.user? '✍ '+e.user+' · '+(e.ts||'') : 'chưa có giải trình'}</div></td></tr>`;
     }).join('') + '</table>';
 }
+function heatCol(r){ // rate -> màu nền (xanh->vàng->đỏ)
+  if(r==null) return '#f4f3ef';
+  if(r<.05) return '#dff3df'; if(r<.12) return '#fdf3cf'; if(r<.25) return '#fbdcc0'; return '#f6c2c2';
+}
+function renderCseHeat(){
+  const ce=D.cseEvcs, cb=D.cseBss, wk=D.weeks;
+  let h = `<table><tr><th style="text-align:left">CSE</th>`+ wk.map(w=>`<th>${w}</th>`).join('') +`</tr>`;
+  ce.cse.forEach((c,i)=>{
+    h += `<tr><td style="text-align:left">${c.split(';')[0]}${c.includes(';')?' +':''}</td>`;
+    wk.forEach((w,j)=>{
+      const tot=(ce.total[i][j]||0)+(cb.total[i][j]||0), ovd=(ce.overdue[i][j]||0)+(cb.overdue[i][j]||0);
+      const rate = tot? ovd/tot : null;
+      h += `<td style="background:${heatCol(rate)}" title="${ovd}/${tot}">${rate==null?'—':pc(rate,0)}</td>`;
+    });
+    h += `</tr>`;
+  });
+  h += `</table>`;
+  document.getElementById('t_cse_heat').innerHTML = h;
+}
 function renderCse(){
   cseBlock('EVCS', D.cseEvcs, 't_cse_evcs', 'c_cse_evcs');
   cseBlock('BSS',  D.cseBss,  't_cse_bss',  'c_cse_bss');
+  renderCseHeat();
   const gg = GT['RPT-'+D.week+'-GENERAL'] || {};
   document.getElementById('gtGeneral').value = gg.text || '';
   document.getElementById('gtGeneralMeta').textContent = gg.user ? `✍ ${gg.user} · ${gg.ts||''}` : '';
@@ -644,6 +684,60 @@ function applyExplainRemote(all){
   explainMap={};
   for(const k in all){ const v=all[k]||{}; const id=v.id||k; if(v.c||v.t) explainMap[id]={c:v.c||'',t:v.t||''}; }
   renderOverdue();
+  renderLateReason();  // pie lý do Xử lý muộn tự đầy khi có giải trình mới
+}
+
+/* ===== (A)+(B) So sánh overdue theo tuần: hệ thống vs thực sự trễ + rate ===== */
+function renderOvdWeek(){
+  const w = D.ovdByWeek||[];
+  mk('c_ovdweek', {type:'bar',
+    data:{labels:w.map(r=>r.week), datasets:[
+      {label:'Hệ thống gắn overdue', data:w.map(r=>r.sys), backgroundColor:'#e0a13a', borderRadius:4, maxBarThickness:26, order:2},
+      {label:'Thực sự trễ (đã resolve, vượt giờ)', data:w.map(r=>r.breach), backgroundColor:'#d03b3b', borderRadius:4, maxBarThickness:26, order:2},
+      {label:'Overdue rate (%)', data:w.map(r=>r.rate*100), type:'line', yAxisID:'y1', borderColor:'#2a78d6', backgroundColor:'#2a78d6', tension:.3, order:1, pointRadius:3}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom'},
+      tooltip:{callbacks:{afterBody:it=>{ const r=w[it[0].dataIndex]; return `Chưa xử lý xong: ${n0(r.open)} ca`; }}}},
+      scales:{y:{grid:{color:GRID}, title:{display:true,text:'số ticket'}},
+        y1:{position:'right', grid:{display:false}, ticks:{callback:v=>v+'%'}, title:{display:true,text:'rate'}},
+        x:{grid:{display:false}}}}});
+}
+/* ===== (C) Thành phần overdue (doughnut 5 nhóm) ===== */
+const SCN_COL = {'Chưa resolve (còn Open)':'#8894a6','Xử lý muộn':'#d03b3b','Resolve muộn':'#eda100','Lỗi hệ thống':'#8e44ad','VOMS reject':'#16a085'};
+function renderScenario(){
+  const s = D.scenario||[];
+  const tot = s.reduce((a,r)=>a+r.qty,0)||1;
+  mk('c_scenario', {type:'doughnut',
+    data:{labels:s.map(r=>`${r.name} (${(r.qty/tot*100).toFixed(0)}%)`),
+      datasets:[{data:s.map(r=>r.qty), backgroundColor:s.map(r=>SCN_COL[r.name]||'#999'), borderWidth:1, borderColor:'#fff'}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{boxWidth:12,font:{size:11}}},
+      tooltip:{callbacks:{label:c=>` ${c.label}: ${n0(c.parsed)} ca`}}}}});
+}
+/* ===== (D) Lý do "Xử lý muộn": nhãn auto + phủ giải trình Firebase; phần trống = chưa giải trình ===== */
+const CAT_COL = ['#d03b3b','#1baf7a','#eda100','#4a3aa7','#008300','#e34948','#e87ba4','#eb6834','#8e44ad','#16a085','#898781'];
+function renderLateReason(){
+  const lt = D.lateTickets||[];
+  const cnt = {};
+  // ① Xử lý muộn (lỗi KTV) từ AUTO = phần dư "chưa rõ nguyên nhân khách quan" -> gộp
+  // 'Chưa giải trình'. Chỉ nhãn khách quan cụ thể (②–⑪) do auto suy được, HOẶC giải trình
+  // Firebase (CSE tự chọn, kể cả ①) mới tính là "đã rõ lý do".
+  lt.forEach(r=>{
+    const fb = explainMap[r.id] && explainMap[r.id].c;
+    let g;
+    if(fb) g = fb;
+    else if(r.cat && r.cat !== EXPLAIN_CATS[0]) g = r.cat;
+    else g = 'Chưa giải trình';
+    cnt[g]=(cnt[g]||0)+1;
+  });
+  const labels = Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
+  const tot = lt.length||1;
+  const filled = lt.length - (cnt['Chưa giải trình']||0);
+  const note=document.getElementById('lrNote'); if(note) note.textContent = `${filled}/${lt.length} đã rõ lý do`;
+  mk('c_latereason', {type:'doughnut',
+    data:{labels:labels.map(l=>`${l} (${(cnt[l]/tot*100).toFixed(0)}%)`),
+      datasets:[{data:labels.map(l=>cnt[l]),
+        backgroundColor:labels.map(l=> l==='Chưa giải trình'?'#d9d7cf': CAT_COL[EXPLAIN_CATS.indexOf(l)]||'#999'), borderWidth:1, borderColor:'#fff'}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{boxWidth:12,font:{size:10.5}}},
+      tooltip:{callbacks:{label:c=>` ${n0(c.parsed)} ca`}}}}});
 }
 const ovdUserInp = document.getElementById('ovdUser');
 ovdUserInp.value = ovdUser;
@@ -694,6 +788,9 @@ document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
 render();
 renderCse();
 renderOverdue();
+renderOvdWeek();
+renderScenario();
+renderLateReason();
 /* Ngày làm mới + cảnh báo tuần chưa đủ 7 ngày (báo cáo chạy giữa tuần) */
 (function(){
   const ft=document.getElementById('freshTag');
