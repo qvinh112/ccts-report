@@ -87,6 +87,11 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <button data-m="w" class="on">Tuần (W29)</button>
     <button data-m="m">Tháng (M6)</button>
   </div>
+  <div class="seg" id="srcSeg" title="Lọc theo luồng tạo ticket">
+    <button data-s="api" class="on">API creation</button>
+    <button data-s="other">Nguồn khác</button>
+    <button data-s="all">Tất cả</button>
+  </div>
   <nav class="toc">
     <a href="#sec-cls">Phân loại</a><a href="#sec-dis">Disclaim</a><a href="#sec-fail">Theo model</a>
     <a href="#sec-trend">Xu hướng</a><a href="#sec-alarm">Alarm</a><a href="#sec-sla">SLA</a>
@@ -657,14 +662,27 @@ ovdUserInp.onchange = ()=>{ ovdUser = ovdUserInp.value.trim(); localStorage.setI
   }catch(e){ ovdSyncStat(false,'Firebase chưa sẵn sàng'); }
 })();
 
-/* charts chỉ vẽ 1 lần (tuần) */
-lineChart('c_tr_evcs_t', D.weeks, D.trendEvcs.models, D.trendEvcs.tickets, false);
-lineChart('c_tr_evcs_r', D.weeks, D.trendEvcs.models, D.trendEvcs.failRate, true);
-lineChart('c_tr_bss_t', D.weeks, D.trendBss.models, D.trendBss.tickets, false);
-lineChart('c_tr_bss_r', D.weeks, D.trendBss.models, D.trendBss.failRate, true);
-lineChart('c_asp_evcs', D.weeks, D.aspEvcs.asps, D.aspEvcs.rate, true);
-lineChart('c_asp_bss', D.weeks, D.aspBss.asps, D.aspBss.rate, true);
+/* charts trend + ASP: phụ thuộc nguồn -> vẽ lại khi đổi nguồn */
+function drawSourceCharts(){
+  lineChart('c_tr_evcs_t', D.weeks, D.trendEvcs.models, D.trendEvcs.tickets, false);
+  lineChart('c_tr_evcs_r', D.weeks, D.trendEvcs.models, D.trendEvcs.failRate, true);
+  lineChart('c_tr_bss_t', D.weeks, D.trendBss.models, D.trendBss.tickets, false);
+  lineChart('c_tr_bss_r', D.weeks, D.trendBss.models, D.trendBss.failRate, true);
+  lineChart('c_asp_evcs', D.weeks, D.aspEvcs.asps, D.aspEvcs.rate, true);
+  lineChart('c_asp_bss', D.weeks, D.aspBss.asps, D.aspBss.rate, true);
+}
+drawSourceCharts();
 costCharts();
+/* Đổi nguồn (API / khác / tất cả): ghi đè các khối live trên D bằng variant tương ứng
+   rồi vẽ lại. List giải trình GIỮ NGUYÊN (luôn HNO+API) — nó là công cụ điền tay riêng. */
+let SRC = 'api';
+document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
+  SRC = b.dataset.s;
+  document.querySelectorAll('#srcSeg button').forEach(x=>x.classList.toggle('on', x===b));
+  Object.assign(D, D.variants[SRC]);
+  render(); renderCse(); drawSourceCharts();
+  setTimeout(fixSizes, 60);
+});
 /* nhãn động theo dữ liệu (báo cáo chạy hằng ngày -> tuần/tháng thay đổi) */
 (function(){
   document.title = document.title.replace(/W\d+/, D.week);
