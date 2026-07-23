@@ -96,6 +96,18 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 .watchcard .wa{color:var(--muted)}
 .watchcard .wvol{font-size:11.5px;color:var(--muted);margin-top:2px}
 .okbar{background:#eaf7ea;border:1px solid #bfe3bf;color:#1c6b1c;border-radius:10px;padding:9px 14px;font-size:13px}
+/* Kiểm chứng Disclaim */
+#disAuditSeg{margin:6px 0 10px}
+.da-btn{padding:3px 10px;font-size:12px}
+.da-samples{background:var(--page);border:1px solid var(--grid);border-radius:8px;padding:8px 10px;margin:4px 0 8px}
+.da-s{padding:6px 0;border-bottom:1px dashed var(--grid)}
+.da-s:last-child{border-bottom:0}
+.da-h{font-size:12.5px;margin-bottom:2px}
+.da-bc{font-size:12.5px;color:var(--ink2);line-height:1.5;white-space:normal}
+.da-bc mark{background:#ffe08a;color:#3a2c00;padding:0 2px;border-radius:3px;font-weight:600}
+.kwtag{display:inline-block;font-size:11px;font-weight:600;background:#e8f0fb;color:#245ba8;border:1px solid #c5d9f2;border-radius:5px;padding:0 6px;margin-left:4px}
+.kwtag.be{background:#eef7ee;color:#2a7a2a;border-color:#c7e5c7}
+.muted{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -145,6 +157,17 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <div class="grid2">
     <div class="card"><h3>EVCS</h3><div class="cv"><canvas id="c_dis_evcs"></canvas></div></div>
     <div class="card"><h3>BSS</h3><div class="cv"><canvas id="c_dis_bss"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>🔍 Kiểm chứng — vì sao ticket được xếp loại Disclaim (ticket mẫu, mọi nguồn)</h3>
+    <p style="font-size:12.5px;color:var(--ink2);margin:2px 0 6px">
+      Chọn nhóm lý do để xem ticket mẫu và <b>từ khóa</b> đã kích hoạt phân loại (tô vàng
+      trong mô tả). Từ khóa dựa trên mô tả Reason/Solution; vài ca từ khóa nằm ở phần
+      thông tin thêm nên có thể không tô được.</p>
+    <div class="seg" id="disAuditSeg">
+      <button data-s="EVCS" class="on">EVCS</button><button data-s="BSS">BSS</button>
+    </div>
+    <div class="tblwrap" id="disAuditBody"></div>
   </div>
 </section>
 
@@ -383,6 +406,47 @@ function renderWatch(){
       ${w.vol!=null?`<div class="wvol">${n0(w.vol)} ticket tuần này</div>`:''}
     </div>`;
   }).join('')+'</div>';
+}
+
+/* ================= Kiểm chứng Disclaim ================= */
+const escH = s => String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+let DIS_AUDIT_SEG = 'EVCS';
+function hlKw(text, kws){
+  let out = escH(text);
+  [...new Set(kws.filter(Boolean))].forEach(kw=>{
+    const rx = new RegExp('('+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+    out = out.replace(rx,'<mark>$1</mark>');
+  });
+  return out;
+}
+function daSamples(samples){
+  if(!samples.length) return '<div class="muted">Không có mẫu.</div>';
+  return samples.map(s=>{
+    const meta = [s.cpid, s.station, s.date].filter(Boolean).join(' · ');
+    const t1 = s.bdkw ? `<span class="kwtag">BD: ${escH(s.bdkw)}</span>` : '';
+    const t2 = s.bekw ? `<span class="kwtag be">BE: ${escH(s.bekw)}</span>` : '';
+    return `<div class="da-s"><div class="da-h"><b>${escH(s.id)}</b> <span class="muted">${escH(meta)}</span> ${t1}${t2}</div>
+      <div class="da-bc">${hlKw(s.bc || '(không có mô tả trích được)', [s.bdkw, s.bekw])}</div></div>`;
+  }).join('');
+}
+function renderDisclaimAudit(){
+  const key = DIS_AUDIT_SEG + (MODE==='w' ? 'W' : 'M');
+  const data = (D.disclaimAudit || {})[key] || {};
+  let h = '<table class="ovd"><tr><th>Nhóm lý do (BE)</th><th>Số ticket</th><th></th></tr>';
+  Object.entries(data).forEach(([reason, info], i)=>{
+    h += `<tr><td><b>${reason}</b></td><td>${n0(info.total)}</td>
+      <td>${info.total ? `<button class="btn da-btn" data-i="${i}">xem ${Math.min(info.samples.length, info.total)} mẫu ▾</button>` : '<span class="muted">—</span>'}</td></tr>
+      <tr id="da_${i}" style="display:none"><td colspan="3"><div class="da-samples">${daSamples(info.samples)}</div></td></tr>`;
+  });
+  h += '</table>';
+  const body = document.getElementById('disAuditBody');
+  body.innerHTML = h;
+  body.querySelectorAll('.da-btn').forEach(b=> b.onclick = ()=>{
+    const d = document.getElementById('da_'+b.dataset.i);
+    const open = d.style.display==='none';
+    d.style.display = open ? '' : 'none';
+    b.textContent = b.textContent.replace(open?'▾':'▴', open?'▴':'▾');
+  });
 }
 
 /* ================= KPI ================= */
@@ -673,6 +737,7 @@ function render(){
   clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
   disBlock('c_dis_evcs', MODE==='w'?D.disEvcsW:D.disEvcsM);
   disBlock('c_dis_bss',  MODE==='w'?D.disBssW:D.disBssM);
+  renderDisclaimAudit();
   failBlock('c_fail_evcs','t_fail_evcs', MODE==='w'?D.failEvcsW:D.failEvcsM);
   failBlock('c_fail_bss','t_fail_bss', MODE==='w'?D.failBssW:D.failBssM);
   alarms();
@@ -688,6 +753,11 @@ document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on', x===b));
   collectGt();       // không mất giải trình đang gõ
   render(); renderCse();
+});
+document.querySelectorAll('#disAuditSeg button').forEach(b=> b.onclick = ()=>{
+  DIS_AUDIT_SEG = b.dataset.s;
+  document.querySelectorAll('#disAuditSeg button').forEach(x=>x.classList.toggle('on', x===b));
+  renderDisclaimAudit();
 });
 
 /* ============ Giải trình ticket Overdue (per-ticket, sync Firebase /dashboard/explain) ============
