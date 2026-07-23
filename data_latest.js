@@ -138,8 +138,8 @@ const REPORT_DATA = {
  "disEvcsW": [
   {
    "name": "Hạ tầng điện/mạng internet",
-   "qty": 53,
-   "share": 0.19133574007220217
+   "qty": 57,
+   "share": 0.20577617328519857
   },
   {
    "name": "Vệ sinh/bảo dưỡng",
@@ -152,9 +152,19 @@ const REPORT_DATA = {
    "share": 0.02527075812274368
   },
   {
+   "name": "Chưa lắp đặt/nghiệm thu",
+   "qty": 0,
+   "share": 0.0
+  },
+  {
+   "name": "Tắt nguồn/ngắt CB",
+   "qty": 3,
+   "share": 0.010830324909747292
+  },
+  {
    "name": "Lỗi thao tác người dùng",
-   "qty": 26,
-   "share": 0.09386281588447654
+   "qty": 25,
+   "share": 0.09025270758122744
   },
   {
    "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -163,40 +173,50 @@ const REPORT_DATA = {
   },
   {
    "name": "Không phát hiện lỗi",
-   "qty": 33,
-   "share": 0.11913357400722022
+   "qty": 28,
+   "share": 0.10108303249097472
   },
   {
    "name": "Trùng lặp/sai thông tin",
-   "qty": 110,
-   "share": 0.3971119133574007
+   "qty": 112,
+   "share": 0.4043321299638989
   },
   {
    "name": "Lý do khác",
-   "qty": 21,
-   "share": 0.07581227436823104
+   "qty": 18,
+   "share": 0.06498194945848375
   }
  ],
  "disEvcsM": [
   {
    "name": "Hạ tầng điện/mạng internet",
-   "qty": 251,
-   "share": 0.13113897596656218
+   "qty": 290,
+   "share": 0.15151515151515152
   },
   {
    "name": "Vệ sinh/bảo dưỡng",
-   "qty": 218,
-   "share": 0.11389759665621735
+   "qty": 217,
+   "share": 0.11337513061650993
   },
   {
    "name": "Nhả nút dừng khẩn cấp",
-   "qty": 59,
-   "share": 0.03082549634273772
+   "qty": 58,
+   "share": 0.030303030303030304
+  },
+  {
+   "name": "Chưa lắp đặt/nghiệm thu",
+   "qty": 5,
+   "share": 0.002612330198537095
+  },
+  {
+   "name": "Tắt nguồn/ngắt CB",
+   "qty": 15,
+   "share": 0.007836990595611285
   },
   {
    "name": "Lỗi thao tác người dùng",
-   "qty": 313,
-   "share": 0.16353187042842215
+   "qty": 293,
+   "share": 0.15308254963427378
   },
   {
    "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -205,25 +225,25 @@ const REPORT_DATA = {
   },
   {
    "name": "Không phát hiện lỗi",
-   "qty": 237,
-   "share": 0.1238244514106583
+   "qty": 219,
+   "share": 0.11442006269592477
   },
   {
    "name": "Trùng lặp/sai thông tin",
-   "qty": 696,
-   "share": 0.36363636363636365
+   "qty": 704,
+   "share": 0.367816091954023
   },
   {
    "name": "Lý do khác",
-   "qty": 139,
-   "share": 0.07262277951933124
+   "qty": 112,
+   "share": 0.05851619644723093
   }
  ],
  "disBssW": [
   {
    "name": "Hạ tầng điện/mạng internet",
-   "qty": 50,
-   "share": 0.07451564828614009
+   "qty": 92,
+   "share": 0.13710879284649777
   },
   {
    "name": "Vệ sinh/bảo dưỡng",
@@ -236,9 +256,19 @@ const REPORT_DATA = {
    "share": 0.0
   },
   {
+   "name": "Chưa lắp đặt/nghiệm thu",
+   "qty": 29,
+   "share": 0.043219076005961254
+  },
+  {
+   "name": "Tắt nguồn/ngắt CB",
+   "qty": 18,
+   "share": 0.026825633383010434
+  },
+  {
    "name": "Lỗi thao tác người dùng",
-   "qty": 196,
-   "share": 0.29210134128166915
+   "qty": 170,
+   "share": 0.2533532041728763
   },
   {
    "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -252,25 +282,25 @@ const REPORT_DATA = {
   },
   {
    "name": "Trùng lặp/sai thông tin",
-   "qty": 121,
-   "share": 0.18032786885245902
+   "qty": 108,
+   "share": 0.16095380029806258
   },
   {
    "name": "Lý do khác",
-   "qty": 103,
-   "share": 0.15350223546944858
+   "qty": 53,
+   "share": 0.07898658718330849
   }
  ],
  "disBssM": [
   {
    "name": "Hạ tầng điện/mạng internet",
-   "qty": 121,
-   "share": 0.0982940698619009
+   "qty": 184,
+   "share": 0.14947197400487408
   },
   {
    "name": "Vệ sinh/bảo dưỡng",
-   "qty": 157,
-   "share": 0.12753858651502845
+   "qty": 156,
+   "share": 0.12672623883021933
   },
   {
    "name": "Nhả nút dừng khẩn cấp",
@@ -278,9 +308,19 @@ const REPORT_DATA = {
    "share": 0.0
   },
   {
+   "name": "Chưa lắp đặt/nghiệm thu",
+   "qty": 54,
+   "share": 0.043866774979691305
+  },
+  {
+   "name": "Tắt nguồn/ngắt CB",
+   "qty": 82,
+   "share": 0.06661251015434606
+  },
+  {
    "name": "Lỗi thao tác người dùng",
-   "qty": 336,
-   "share": 0.272948822095857
+   "qty": 295,
+   "share": 0.239642567018684
   },
   {
    "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -289,18 +329,18 @@ const REPORT_DATA = {
   },
   {
    "name": "Không phát hiện lỗi",
-   "qty": 111,
-   "share": 0.0901705930138099
+   "qty": 108,
+   "share": 0.08773354995938261
   },
   {
    "name": "Trùng lặp/sai thông tin",
-   "qty": 259,
-   "share": 0.21039805036555645
+   "qty": 243,
+   "share": 0.19740048740861088
   },
   {
    "name": "Lý do khác",
-   "qty": 246,
-   "share": 0.19983753046303818
+   "qty": 108,
+   "share": 0.08773354995938261
   }
  ],
  "failEvcsW": [
@@ -3027,8 +3067,8 @@ const REPORT_DATA = {
    "disEvcsW": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 53,
-     "share": 0.19133574007220217
+     "qty": 57,
+     "share": 0.20577617328519857
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -3041,9 +3081,19 @@ const REPORT_DATA = {
      "share": 0.02527075812274368
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 0,
+     "share": 0.0
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 3,
+     "share": 0.010830324909747292
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 26,
-     "share": 0.09386281588447654
+     "qty": 25,
+     "share": 0.09025270758122744
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -3052,40 +3102,50 @@ const REPORT_DATA = {
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 33,
-     "share": 0.11913357400722022
+     "qty": 28,
+     "share": 0.10108303249097472
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 110,
-     "share": 0.3971119133574007
+     "qty": 112,
+     "share": 0.4043321299638989
     },
     {
      "name": "Lý do khác",
-     "qty": 21,
-     "share": 0.07581227436823104
+     "qty": 18,
+     "share": 0.06498194945848375
     }
    ],
    "disEvcsM": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 251,
-     "share": 0.13113897596656218
+     "qty": 290,
+     "share": 0.15151515151515152
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
-     "qty": 218,
-     "share": 0.11389759665621735
+     "qty": 217,
+     "share": 0.11337513061650993
     },
     {
      "name": "Nhả nút dừng khẩn cấp",
-     "qty": 59,
-     "share": 0.03082549634273772
+     "qty": 58,
+     "share": 0.030303030303030304
+    },
+    {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 5,
+     "share": 0.002612330198537095
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 15,
+     "share": 0.007836990595611285
     },
     {
      "name": "Lỗi thao tác người dùng",
-     "qty": 313,
-     "share": 0.16353187042842215
+     "qty": 293,
+     "share": 0.15308254963427378
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -3094,25 +3154,25 @@ const REPORT_DATA = {
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 237,
-     "share": 0.1238244514106583
+     "qty": 219,
+     "share": 0.11442006269592477
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 696,
-     "share": 0.36363636363636365
+     "qty": 704,
+     "share": 0.367816091954023
     },
     {
      "name": "Lý do khác",
-     "qty": 139,
-     "share": 0.07262277951933124
+     "qty": 112,
+     "share": 0.05851619644723093
     }
    ],
    "disBssW": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 50,
-     "share": 0.07451564828614009
+     "qty": 92,
+     "share": 0.13710879284649777
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -3125,9 +3185,19 @@ const REPORT_DATA = {
      "share": 0.0
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 29,
+     "share": 0.043219076005961254
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 18,
+     "share": 0.026825633383010434
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 196,
-     "share": 0.29210134128166915
+     "qty": 170,
+     "share": 0.2533532041728763
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -3141,25 +3211,25 @@ const REPORT_DATA = {
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 121,
-     "share": 0.18032786885245902
+     "qty": 108,
+     "share": 0.16095380029806258
     },
     {
      "name": "Lý do khác",
-     "qty": 103,
-     "share": 0.15350223546944858
+     "qty": 53,
+     "share": 0.07898658718330849
     }
    ],
    "disBssM": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 121,
-     "share": 0.0982940698619009
+     "qty": 184,
+     "share": 0.14947197400487408
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
-     "qty": 157,
-     "share": 0.12753858651502845
+     "qty": 156,
+     "share": 0.12672623883021933
     },
     {
      "name": "Nhả nút dừng khẩn cấp",
@@ -3167,9 +3237,19 @@ const REPORT_DATA = {
      "share": 0.0
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 54,
+     "share": 0.043866774979691305
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 82,
+     "share": 0.06661251015434606
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 336,
-     "share": 0.272948822095857
+     "qty": 295,
+     "share": 0.239642567018684
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -3178,18 +3258,18 @@ const REPORT_DATA = {
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 111,
-     "share": 0.0901705930138099
+     "qty": 108,
+     "share": 0.08773354995938261
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 259,
-     "share": 0.21039805036555645
+     "qty": 243,
+     "share": 0.19740048740861088
     },
     {
      "name": "Lý do khác",
-     "qty": 246,
-     "share": 0.19983753046303818
+     "qty": 108,
+     "share": 0.08773354995938261
     }
    ],
    "failEvcsW": [
@@ -4896,8 +4976,8 @@ const REPORT_DATA = {
    "disEvcsW": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 4,
-     "share": 0.16
+     "qty": 5,
+     "share": 0.2
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -4908,6 +4988,16 @@ const REPORT_DATA = {
      "name": "Nhả nút dừng khẩn cấp",
      "qty": 1,
      "share": 0.04
+    },
+    {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 0,
+     "share": 0.0
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 0,
+     "share": 0.0
     },
     {
      "name": "Lỗi thao tác người dùng",
@@ -4921,8 +5011,8 @@ const REPORT_DATA = {
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 4,
-     "share": 0.16
+     "qty": 3,
+     "share": 0.12
     },
     {
      "name": "Trùng lặp/sai thông tin",
@@ -4938,8 +5028,8 @@ const REPORT_DATA = {
    "disEvcsM": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 34,
-     "share": 0.10029498525073746
+     "qty": 41,
+     "share": 0.12094395280235988
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -4952,9 +5042,19 @@ const REPORT_DATA = {
      "share": 0.008849557522123894
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 1,
+     "share": 0.0029498525073746312
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 1,
+     "share": 0.0029498525073746312
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 17,
-     "share": 0.05014749262536873
+     "qty": 15,
+     "share": 0.04424778761061947
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -4963,25 +5063,25 @@ const REPORT_DATA = {
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 48,
-     "share": 0.1415929203539823
+     "qty": 43,
+     "share": 0.12684365781710916
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 78,
-     "share": 0.23008849557522124
+     "qty": 79,
+     "share": 0.23303834808259588
     },
     {
      "name": "Lý do khác",
-     "qty": 148,
-     "share": 0.4365781710914454
+     "qty": 145,
+     "share": 0.4277286135693215
     }
    ],
    "disBssW": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 6,
-     "share": 0.0160857908847185
+     "qty": 28,
+     "share": 0.07506702412868632
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -4994,9 +5094,19 @@ const REPORT_DATA = {
      "share": 0.0
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 40,
+     "share": 0.10723860589812333
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 3,
+     "share": 0.00804289544235925
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 9,
-     "share": 0.024128686327077747
+     "qty": 3,
+     "share": 0.00804289544235925
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -5010,20 +5120,20 @@ const REPORT_DATA = {
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 290,
-     "share": 0.7774798927613941
+     "qty": 281,
+     "share": 0.7533512064343163
     },
     {
      "name": "Lý do khác",
-     "qty": 58,
-     "share": 0.1554959785522788
+     "qty": 8,
+     "share": 0.021447721179624665
     }
    ],
    "disBssM": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 151,
-     "share": 0.07751540041067762
+     "qty": 335,
+     "share": 0.17197125256673512
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -5036,29 +5146,39 @@ const REPORT_DATA = {
      "share": 0.0
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 198,
+     "share": 0.10164271047227925
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 51,
+     "share": 0.026180698151950718
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 97,
-     "share": 0.049794661190965095
+     "qty": 55,
+     "share": 0.028234086242299793
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
-     "qty": 1,
-     "share": 0.000513347022587269
+     "qty": 0,
+     "share": 0.0
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 48,
-     "share": 0.024640657084188913
+     "qty": 44,
+     "share": 0.022587268993839837
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 1094,
-     "share": 0.5616016427104723
+     "qty": 1014,
+     "share": 0.5205338809034907
     },
     {
      "name": "Lý do khác",
-     "qty": 472,
-     "share": 0.24229979466119098
+     "qty": 166,
+     "share": 0.08521560574948665
     }
    ],
    "failEvcsW": [
@@ -6765,8 +6885,8 @@ const REPORT_DATA = {
    "disEvcsW": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 57,
-     "share": 0.18874172185430463
+     "qty": 62,
+     "share": 0.2052980132450331
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -6779,9 +6899,19 @@ const REPORT_DATA = {
      "share": 0.026490066225165563
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 0,
+     "share": 0.0
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 3,
+     "share": 0.009933774834437087
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 30,
-     "share": 0.09933774834437085
+     "qty": 29,
+     "share": 0.09602649006622517
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -6790,40 +6920,50 @@ const REPORT_DATA = {
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 37,
-     "share": 0.12251655629139073
+     "qty": 31,
+     "share": 0.10264900662251655
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 117,
-     "share": 0.38741721854304634
+     "qty": 119,
+     "share": 0.39403973509933776
     },
     {
      "name": "Lý do khác",
-     "qty": 25,
-     "share": 0.08278145695364239
+     "qty": 22,
+     "share": 0.0728476821192053
     }
    ],
    "disEvcsM": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 285,
-     "share": 0.12649800266311584
+     "qty": 331,
+     "share": 0.14691522414558367
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
-     "qty": 229,
-     "share": 0.10164225477141589
+     "qty": 228,
+     "share": 0.10119840213049268
     },
     {
      "name": "Nhả nút dừng khẩn cấp",
-     "qty": 62,
-     "share": 0.027518863737239236
+     "qty": 61,
+     "share": 0.027075011096316024
+    },
+    {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 6,
+     "share": 0.002663115845539281
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 16,
+     "share": 0.007101642254771416
     },
     {
      "name": "Lỗi thao tác người dùng",
-     "qty": 330,
-     "share": 0.14647137150466044
+     "qty": 308,
+     "share": 0.13670661340434975
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -6832,25 +6972,25 @@ const REPORT_DATA = {
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 285,
-     "share": 0.12649800266311584
+     "qty": 262,
+     "share": 0.11628939192188194
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 774,
-     "share": 0.34354194407456723
+     "qty": 783,
+     "share": 0.34753661784287615
     },
     {
      "name": "Lý do khác",
-     "qty": 287,
-     "share": 0.12738570794496226
+     "qty": 257,
+     "share": 0.11407012871726586
     }
    ],
    "disBssW": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 56,
-     "share": 0.05363984674329502
+     "qty": 120,
+     "share": 0.11494252873563218
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
@@ -6863,9 +7003,19 @@ const REPORT_DATA = {
      "share": 0.0
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 69,
+     "share": 0.06609195402298851
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 21,
+     "share": 0.020114942528735632
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 205,
-     "share": 0.19636015325670497
+     "qty": 173,
+     "share": 0.1657088122605364
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
@@ -6879,25 +7029,25 @@ const REPORT_DATA = {
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 411,
-     "share": 0.3936781609195402
+     "qty": 389,
+     "share": 0.3726053639846743
     },
     {
      "name": "Lý do khác",
-     "qty": 161,
-     "share": 0.15421455938697318
+     "qty": 61,
+     "share": 0.05842911877394636
     }
    ],
    "disBssM": [
     {
      "name": "Hạ tầng điện/mạng internet",
-     "qty": 272,
-     "share": 0.0855614973262032
+     "qty": 519,
+     "share": 0.16325888644227746
     },
     {
      "name": "Vệ sinh/bảo dưỡng",
-     "qty": 242,
-     "share": 0.07612456747404844
+     "qty": 241,
+     "share": 0.07581000314564329
     },
     {
      "name": "Nhả nút dừng khẩn cấp",
@@ -6905,29 +7055,39 @@ const REPORT_DATA = {
      "share": 0.0
     },
     {
+     "name": "Chưa lắp đặt/nghiệm thu",
+     "qty": 252,
+     "share": 0.07927021075810003
+    },
+    {
+     "name": "Tắt nguồn/ngắt CB",
+     "qty": 133,
+     "share": 0.04183705567788613
+    },
+    {
      "name": "Lỗi thao tác người dùng",
-     "qty": 433,
-     "share": 0.13620635419943378
+     "qty": 350,
+     "share": 0.1100975149418056
     },
     {
      "name": "Móp, vỡ, trày xước, đâm đụng",
-     "qty": 2,
-     "share": 0.0006291286568103177
+     "qty": 1,
+     "share": 0.00031456432840515884
     },
     {
      "name": "Không phát hiện lỗi",
-     "qty": 159,
-     "share": 0.05001572821642026
+     "qty": 152,
+     "share": 0.04781377791758415
     },
     {
      "name": "Trùng lặp/sai thông tin",
-     "qty": 1353,
-     "share": 0.42560553633217996
+     "qty": 1257,
+     "share": 0.39540736080528466
     },
     {
      "name": "Lý do khác",
-     "qty": 718,
-     "share": 0.22585718779490405
+     "qty": 274,
+     "share": 0.08619062598301352
     }
    ],
    "failEvcsW": [
@@ -11613,7 +11773,7 @@ const REPORT_DATA = {
  "disclaimAudit": {
   "EVCSW": {
    "Hạ tầng điện/mạng internet": {
-    "total": 57,
+    "total": 62,
     "samples": [
      {
       "id": "8L8L3245IUIO",
@@ -11789,8 +11949,44 @@ const REPORT_DATA = {
      }
     ]
    },
+   "Chưa lắp đặt/nghiệm thu": {
+    "total": 0,
+    "samples": []
+   },
+   "Tắt nguồn/ngắt CB": {
+    "total": 3,
+    "samples": [
+     {
+      "id": "8L8IPQAVR01S",
+      "cpid": "253001004523",
+      "station": "C.HYE0410",
+      "date": "2026-07-17",
+      "bdkw": "off",
+      "bekw": "đang off",
+      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
+     },
+     {
+      "id": "8L4M85I0TPTS",
+      "cpid": "251231000066",
+      "station": "C.HNO0907",
+      "date": "2026-07-16",
+      "bdkw": "không tồn lỗi",
+      "bekw": "đang off",
+      "bc": "---- - PA:  - OS: ktv kiểm tra, cổng sas đang off, tiến hành xét về lại server vinfast ok, cổng sas xanh không tồn lỗi"
+     },
+     {
+      "id": "8L0SBYL0M0HS",
+      "cpid": "243902001305",
+      "station": "C.HCM0798",
+      "date": "2026-07-15",
+      "bdkw": "off",
+      "bekw": "off nguồn",
+      "bc": "---- - PA:  - OS: 243902001305 ktta theo ticket, trụ bị off nguồn, hỏng rec 02, đã thay thế, hoạt động bình thường"
+     }
+    ]
+   },
    "Lỗi thao tác người dùng": {
-    "total": 30,
+    "total": 29,
     "samples": [
      {
       "id": "8L7T5TAE2FB4",
@@ -11838,13 +12034,13 @@ const REPORT_DATA = {
       "bc": "Sử dụng sai hướng dẫn - PA:  - OS: kỹ thuật đến trạm kiểm tra do khách tắt trụ nên socket báo mất kêt nối. bật trụ socketkeet nối lại bth"
      },
      {
-      "id": "8L4M8MR203K0",
-      "cpid": "252731002020",
-      "station": "C.HNO1063",
+      "id": "8L4BBXWO51Q8",
+      "cpid": "252231000171",
+      "station": "C.HCM0884",
       "date": "2026-07-16",
-      "bdkw": "nguồn điện",
-      "bekw": "tắt",
-      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Trạm dừng hoạt động, chủ trạm tắt nguồn điện trạm, ngừng sử dụng. "
+      "bdkw": "lấy log",
+      "bekw": "socket",
+      "bc": "---- - PA:  - OS: Socket 252231000171 lỗi A0101 reset board socket đèn xanh hoạt động bình thường, lấy log"
      }
     ]
    },
@@ -11853,7 +12049,7 @@ const REPORT_DATA = {
     "samples": []
    },
    "Không phát hiện lỗi": {
-    "total": 37,
+    "total": 31,
     "samples": [
      {
       "id": "8L7KPBTHRSW0",
@@ -11901,18 +12097,18 @@ const REPORT_DATA = {
       "bc": "---- - PA:  - OS: kĩ thuật đã đến trụ kiểm tra, thay board ethernet, trụ xanh không tồn lỗi hoạt động bình thường "
      },
      {
-      "id": "8L4M85I0TPTS",
-      "cpid": "251231000066",
-      "station": "C.HNO0907",
+      "id": "8L46W1W5SI68",
+      "cpid": "251201000296",
+      "station": "C.DLA0063",
       "date": "2026-07-16",
-      "bdkw": "không tồn lỗi",
-      "bekw": "không tồn lỗi",
-      "bc": "---- - PA:  - OS: ktv kiểm tra, cổng sas đang off, tiến hành xét về lại server vinfast ok, cổng sas xanh không tồn lỗi"
+      "bdkw": "lấy log",
+      "bekw": "bình thường",
+      "bc": "---- - PA:  - OS: kỹ thuật đến kiểm tra lỗi màn hình ,reset clear lỗi lấy log trụ xanh hoạt động bình thường"
      }
     ]
    },
    "Trùng lặp/sai thông tin": {
-    "total": 117,
+    "total": 119,
     "samples": [
      {
       "id": "8L84T22RLKW0",
@@ -11971,17 +12167,8 @@ const REPORT_DATA = {
     ]
    },
    "Lý do khác": {
-    "total": 25,
+    "total": 22,
     "samples": [
-     {
-      "id": "8L8IPQAVR01S",
-      "cpid": "253001004523",
-      "station": "C.HYE0410",
-      "date": "2026-07-17",
-      "bdkw": "off",
-      "bekw": "",
-      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
-     },
      {
       "id": "8L42PVE1MRY8",
       "cpid": "243902000404",
@@ -12026,13 +12213,22 @@ const REPORT_DATA = {
       "bdkw": "lấy log",
       "bekw": "",
       "bc": "Bị can thiệp bên ngoài - PA:  - OS: kiểm tra cảm biến cửa , reset trụ , lấy log . "
+     },
+     {
+      "id": "8L0JDYP1XON4",
+      "cpid": "251601000161",
+      "station": "C.AGI0094",
+      "date": "2026-07-15",
+      "bdkw": "tác động",
+      "bekw": "",
+      "bc": "---- - PA:  - OS: Do kỹ thuật có xư lý trụ ở ticket khác, có tác động để xư lý link. Hiên tại thì trụ đã không còn lỗi."
      }
     ]
    }
   },
   "BSSW": {
    "Hạ tầng điện/mạng internet": {
-    "total": 56,
+    "total": 120,
     "samples": [
      {
       "id": "8L6TY0B1JF28",
@@ -12044,6 +12240,15 @@ const REPORT_DATA = {
       "bc": "---- - PA:  - OS: Kĩ thuật đến kiểm tra tủ BSS hoạt động bình thường, sử dụng wifi cây xăng dầu nên không ổn định"
      },
      {
+      "id": "8L6QBJK7QH34",
+      "cpid": "BSS-26022441000181",
+      "station": "B.HYE11931",
+      "date": "2026-07-17",
+      "bdkw": "nguồn điện",
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+     },
+     {
       "id": "8L6QBJGVVCHS",
       "cpid": "BSS-26011541000271",
       "station": "B.HYE12183",
@@ -12053,40 +12258,31 @@ const REPORT_DATA = {
       "bc": " - PA:  - OS: Thay 12 cảm biến, lỗi thẻ nhớ và điện áp yếu không đủ tải\n"
      },
      {
-      "id": "8L61LZ491VR4",
-      "cpid": "BSS-254841000123",
-      "station": "B.DNI10016",
-      "date": "2026-07-17",
-      "bdkw": "nhảy cb",
-      "bekw": "nhảy cb",
-      "bc": "---- - PA:  - OS: bị nhảy CB C40, tiến hành đo kiểm thông mạch trong tủ, đều bình thường, mở lại CB. tủ đã không còn lỗi, đã hoạt động bình thường"
-     },
-     {
-      "id": "8L5IAY459D6O",
-      "cpid": "BSS-255341000228",
-      "station": "B.HNO14158",
-      "date": "2026-07-17",
-      "bdkw": "chưa có",
-      "bekw": "điện áp",
-      "bc": "---- - PA:  - OS: ktv đến kiểm tra, tủ chưa có firm mới. up firm xong tủ chạy thì điện áp đầu vào tủ giảm về 200v, tủ tự động đóng. điện hiện tại đang lấy từ nhà dân, k đảm bảo cơ sở hạ tầng điện"
-     },
-     {
-      "id": "8L5FPBPRICQO",
-      "cpid": "BSS-260141000099",
-      "station": "B.THO10388",
+      "id": "8L6QBJ719REO",
+      "cpid": "BSS-26031941000467",
+      "station": "B.HYE10881",
       "date": "2026-07-17",
       "bdkw": "nguồn điện",
-      "bekw": "nhảy mcb",
-      "bc": "---- - PA:  - OS: Kỹ thuật đến kiểm tra thực tế tủ k cấp nguồn điện.Lý do chủ trạm xăng k cho cấp vì khi cấp nguồn cho tủ nhảy MCB tổng của tram xăng ảnh hưởng đến việc kinh doanh của trạm"
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
      },
      {
-      "id": "8L5FPAHZSEM8",
-      "cpid": "BSS-254841000931",
-      "station": "B.THO10388",
+      "id": "8L6QBJ3KEU4G",
+      "cpid": "BSS-26031941000108",
+      "station": "B.HYE10881",
       "date": "2026-07-17",
       "bdkw": "nguồn điện",
-      "bekw": "nhảy mcb",
-      "bc": "---- - PA:  - OS: Kỹ thuật đến kiểm tra thực tế tủ k cấp nguồn điện.Lý do chủ trạm xăng k cho cấp vì khi cấp nguồn cho tủ nhảy MCB tổng của tram xăng ảnh hưởng đến việc kinh doanh của trạm"
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+     },
+     {
+      "id": "8L6QBITPT91C",
+      "cpid": "BSS-26013141000123",
+      "station": "B.HYE11931",
+      "date": "2026-07-17",
+      "bdkw": "nguồn điện",
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
      }
     ]
    },
@@ -12153,8 +12349,126 @@ const REPORT_DATA = {
     "total": 0,
     "samples": []
    },
+   "Chưa lắp đặt/nghiệm thu": {
+    "total": 69,
+    "samples": [
+     {
+      "id": "8L4NS6UM6F40",
+      "cpid": "BSS-255341000575",
+      "station": "B.HNO12166",
+      "date": "2026-07-16",
+      "bdkw": "chưa hoạt động",
+      "bekw": "chưa hoạt động",
+      "bc": "---- - PA:  - OS: ktv onsite, tủ chưa được cấp điện, chưa hoạt động"
+     },
+     {
+      "id": "8L4001JOX91C",
+      "cpid": "BSS-26011641000066",
+      "station": "B.VLO11142",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - chưa lắp pin + lỗi thẽ\n"
+     },
+     {
+      "id": "8L4001GI1X4W",
+      "cpid": "BSS-26011641000538",
+      "station": "B.VLO11142",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - Tủ 12 SK chưa lắp pin + lỗi thẽ \n"
+     },
+     {
+      "id": "8L4000TVZ0G0",
+      "cpid": "BSS-260241000332",
+      "station": "B.VLO11147",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - chưa lắp pin\n"
+     },
+     {
+      "id": "8L4000QMLS74",
+      "cpid": "BSS-255241003472",
+      "station": "B.VLO11147",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - Tủ 12 SK chưa lắp pin , thay 12 khóa SK, điện trở thấp, chưa update fw\n"
+     },
+     {
+      "id": "8L3ZZZQ536DC",
+      "cpid": "BSS-26013041000261",
+      "station": "B.VLO00014",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - Chưa lắp pin, chưa up fw\n"
+     }
+    ]
+   },
+   "Tắt nguồn/ngắt CB": {
+    "total": 21,
+    "samples": [
+     {
+      "id": "8L7GCM0IY51C",
+      "cpid": "BSS-254841000776",
+      "station": "B.HCM11359",
+      "date": "2026-07-17",
+      "bdkw": "off",
+      "bekw": "off cb",
+      "bc": "---- - PA:  - OS: báo với Vận hành, OFF CB tủ"
+     },
+     {
+      "id": "8L0TB93KSCU8",
+      "cpid": "BSS-26031641020780",
+      "station": "B.HYE10865",
+      "date": "2026-07-15",
+      "bdkw": "off",
+      "bekw": "đang off",
+      "bc": "---- - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
+     },
+     {
+      "id": "8L0NB5BU1FR4",
+      "cpid": "BSS-254841000723",
+      "station": "B.TNG10386",
+      "date": "2026-07-15",
+      "bdkw": "off",
+      "bekw": "đang off",
+      "bc": "---- - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
+     },
+     {
+      "id": "8KXS33023XTS",
+      "cpid": "BSS-254641001327",
+      "station": "B.DLA00017",
+      "date": "2026-07-14",
+      "bdkw": "lấy log",
+      "bekw": "tắt cb",
+      "bc": "---- - PA:  - OS: kỹ thuật đến kiểm tra bị tắt cb, bật cb check lỗi khoá pin, xử lý xong reset trụ hết lỗi, lấy log,trụ hoạt động bình thường\n"
+     },
+     {
+      "id": "8KXCBX7YK45C",
+      "cpid": "BSS-26032241000585",
+      "station": "B.HCM17192",
+      "date": "2026-07-14",
+      "bdkw": "off",
+      "bekw": "off cb",
+      "bc": "---- - PA:  - OS: vị trí có 5 tủ kể cả tủ trên ticket đều bị đấu nguồn 3 pha tạm và gần như dây đã sút ra, đã off cb tủ và cb tổng"
+     },
+     {
+      "id": "8KXCBWKNL14W",
+      "cpid": "BSS-26032241000586",
+      "station": "B.HCM17192",
+      "date": "2026-07-14",
+      "bdkw": "off",
+      "bekw": "off cb",
+      "bc": "---- - PA:  - OS: vị trí có 5 tủ kể cả tủ trên ticket đều bị đấu nguồn 3 pha tạm và gần như dây đã sút ra, đã off cb tủ và cb tổng"
+     }
+    ]
+   },
    "Lỗi thao tác người dùng": {
-    "total": 205,
+    "total": 173,
     "samples": [
      {
       "id": "8L88RDTEMJUO",
@@ -12286,7 +12600,7 @@ const REPORT_DATA = {
     ]
    },
    "Trùng lặp/sai thông tin": {
-    "total": 411,
+    "total": 389,
     "samples": [
      {
       "id": "8L8EMXP2PIIO",
@@ -12345,17 +12659,8 @@ const REPORT_DATA = {
     ]
    },
    "Lý do khác": {
-    "total": 161,
+    "total": 61,
     "samples": [
-     {
-      "id": "8L7GCM0IY51C",
-      "cpid": "BSS-254841000776",
-      "station": "B.HCM11359",
-      "date": "2026-07-17",
-      "bdkw": "off",
-      "bekw": "",
-      "bc": "---- - PA:  - OS: báo với Vận hành, OFF CB tủ"
-     },
      {
       "id": "8L723NFM1X4W",
       "cpid": "BSS-254441000312",
@@ -12366,47 +12671,56 @@ const REPORT_DATA = {
       "bc": "---- - PA:  - OS: kiểm tra ghi nhận sai vị trí mã trạm, mã SN đã báo vận hành"
      },
      {
-      "id": "8L6QBJK7QH34",
-      "cpid": "BSS-26022441000181",
-      "station": "B.HYE11931",
+      "id": "8L5IBNO2V5KW",
+      "cpid": "BSS-254641024810",
+      "station": "B.HNO10956",
       "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "bdkw": "sai",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: ktv đến trạm kiểm tra lỗi B6029 tủ chưa đi vào hoạt động sn sai so với thực tế"
      },
      {
-      "id": "8L6QBJ719REO",
-      "cpid": "BSS-26031941000467",
-      "station": "B.HYE10881",
-      "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "id": "8L4W4IDI8QV4",
+      "cpid": "BSS-255141001414",
+      "station": "B.THO10392",
+      "date": "2026-07-16",
+      "bdkw": "sai",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: sai toạ độ"
      },
      {
-      "id": "8L6QBJ3KEU4G",
-      "cpid": "BSS-26031941000108",
-      "station": "B.HYE10881",
-      "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "id": "8L4W3PR07KLC",
+      "cpid": "BSS-254741000533",
+      "station": "B.TNI10009",
+      "date": "2026-07-16",
+      "bdkw": "lấy log",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: Kiểm tra tủ pin ,\nTủ pin hoạt động tốt.\nDây  USB TYPE-C bị lỗi nên không lấy log được"
      },
      {
-      "id": "8L6QBITPT91C",
-      "cpid": "BSS-26013141000123",
-      "station": "B.HYE11931",
-      "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "id": "8L4LYCX2ABR4",
+      "cpid": "BSS-254641000251",
+      "station": "B.HTI00014",
+      "date": "2026-07-16",
+      "bdkw": "lấy log",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: kiểm tra tủ, reset lỗi tủ, lấy log, viết checklist"
+     },
+     {
+      "id": "8L44Z0SGIM0W",
+      "cpid": "BSS-260141000162",
+      "station": "B.QBI00054",
+      "date": "2026-07-16",
+      "bdkw": "lấy log",
+      "bekw": "",
+      "bc": "---- - PA:  - OS: kiểm tra trụ, test đóng nhả pin ok, rs lỗi, lấy log, viết checklist"
      }
     ]
    }
   },
   "EVCSM": {
    "Hạ tầng điện/mạng internet": {
-    "total": 285,
+    "total": 331,
     "samples": [
      {
       "id": "8L8L3245IUIO",
@@ -12465,7 +12779,7 @@ const REPORT_DATA = {
     ]
    },
    "Vệ sinh/bảo dưỡng": {
-    "total": 229,
+    "total": 228,
     "samples": [
      {
       "id": "8L6QHC014QGW",
@@ -12524,7 +12838,7 @@ const REPORT_DATA = {
     ]
    },
    "Nhả nút dừng khẩn cấp": {
-    "total": 62,
+    "total": 61,
     "samples": [
      {
       "id": "8L6C3WQTD534",
@@ -12582,8 +12896,126 @@ const REPORT_DATA = {
      }
     ]
    },
+   "Chưa lắp đặt/nghiệm thu": {
+    "total": 6,
+    "samples": [
+     {
+      "id": "1127715664855040000",
+      "cpid": "252101000180",
+      "station": "C.LDO0130",
+      "date": "2026-07-09",
+      "bdkw": "chưa cấp",
+      "bekw": "chưa cấp",
+      "bc": "---- - PA: Khách hàng tự di dời qua chỗ mới và chưa cấp điện - OS: Trụ đã off. CCS di dời trụ qua vị trí khác"
+     },
+     {
+      "id": "1124664510977933312",
+      "cpid": "253001001951",
+      "station": "C.HNO16523",
+      "date": "2026-07-01",
+      "bdkw": "chưa cấp",
+      "bekw": "chưa cấp",
+      "bc": "Lắp đặt sai tiêu chuẩn - PA:  - OS: Kỹ thuật liên hệ khách hàng. Khách hàng xác nhận trụ đang không hoạt động, khách hàng chưa cấp điện cho trụ sạc. Trụ sạc đã chuyển đi tỉnh thành khác."
+     },
+     {
+      "id": "1124394670657241088",
+      "cpid": "253001001951",
+      "station": "C.HNO16523",
+      "date": "2026-06-30",
+      "bdkw": "chưa cấp",
+      "bekw": "chưa cấp",
+      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Kỹ thuật liên hệ khách hàng. Khách hàng xác nhận trụ sạc không hoạt động, Khách hàng chưa cấp điện cho trụ sạc. Trụ sạc đã chuyển đi tỉnh thành khác"
+     },
+     {
+      "id": "1123152229631131648",
+      "cpid": "253001001951",
+      "station": "C.HNO16523",
+      "date": "2026-06-27",
+      "bdkw": "chưa hoạt động",
+      "bekw": "chưa hoạt động",
+      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Kỹ thuật liên hệ khách hàng. Khách hàng xác nhận trụ chưa được cấp điện đầu vào, trụ chưa hoạt động."
+     },
+     {
+      "id": "1122643795985694720",
+      "cpid": "244500009495",
+      "station": "C.PTH5278",
+      "date": "2026-06-25",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: khách hàng báo do đang chuyển nhà nên chưa lắp đặt lại trụ "
+     },
+     {
+      "id": "1121473157302190080",
+      "cpid": "244500000345",
+      "station": "C.LCA0119",
+      "date": "2026-06-22",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA: KTV kiểm tra, trụ xanh hoạt động bình thường - OS: Khách hàng báo trụ chưa lắp đặt\n"
+     }
+    ]
+   },
+   "Tắt nguồn/ngắt CB": {
+    "total": 16,
+    "samples": [
+     {
+      "id": "8L8IPQAVR01S",
+      "cpid": "253001004523",
+      "station": "C.HYE0410",
+      "date": "2026-07-17",
+      "bdkw": "off",
+      "bekw": "đang off",
+      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
+     },
+     {
+      "id": "8L4M85I0TPTS",
+      "cpid": "251231000066",
+      "station": "C.HNO0907",
+      "date": "2026-07-16",
+      "bdkw": "không tồn lỗi",
+      "bekw": "đang off",
+      "bc": "---- - PA:  - OS: ktv kiểm tra, cổng sas đang off, tiến hành xét về lại server vinfast ok, cổng sas xanh không tồn lỗi"
+     },
+     {
+      "id": "8L0SBYL0M0HS",
+      "cpid": "243902001305",
+      "station": "C.HCM0798",
+      "date": "2026-07-15",
+      "bdkw": "off",
+      "bekw": "off nguồn",
+      "bc": "---- - PA:  - OS: 243902001305 ktta theo ticket, trụ bị off nguồn, hỏng rec 02, đã thay thế, hoạt động bình thường"
+     },
+     {
+      "id": "1128412062630019072",
+      "cpid": "252301000251",
+      "station": "C.HCM0834",
+      "date": "2026-07-11",
+      "bdkw": "tắt",
+      "bekw": "tắt cb",
+      "bc": "---- - PA: chủ tắt CB, mở lại trụ hoạt động bình thường - OS: đã kiểm tra, chủ tắt cb nên mdl không hoạt động. đã bật cb trụ xanh bình thường"
+     },
+     {
+      "id": "1128349188188536832",
+      "cpid": "253001004807",
+      "station": "C.TNI0142",
+      "date": "2026-07-11",
+      "bdkw": "tắt",
+      "bekw": "tắt cb",
+      "bc": "---- - PA:  - OS: ktv đến kiểm tra trụ tắt CB. đã kiểm tra trụ ticket 1127118389330444288 lỗi AC contactor, đang chờ thiết bị thay thế, có báo chủ trạm tình trạng lỗi, chủ trạm tắt trụ"
+     },
+     {
+      "id": "1128330701932068864",
+      "cpid": "243902001305",
+      "station": "C.HCM0798",
+      "date": "2026-07-11",
+      "bdkw": "không đủ",
+      "bekw": "tắt cb",
+      "bc": "---- - PA: Kỹ thuật đã kiểm tra trụ xanh hoạt động bình thường, do trạm không đủ công suất nên CCS tạm thời tắt CB trụ này - OS: đã xử lý trong hạn do chuyển trạng thái lỗi\n"
+     }
+    ]
+   },
    "Lỗi thao tác người dùng": {
-    "total": 330,
+    "total": 308,
     "samples": [
      {
       "id": "8L7T5TAE2FB4",
@@ -12631,13 +13063,13 @@ const REPORT_DATA = {
       "bc": "Sử dụng sai hướng dẫn - PA:  - OS: kỹ thuật đến trạm kiểm tra do khách tắt trụ nên socket báo mất kêt nối. bật trụ socketkeet nối lại bth"
      },
      {
-      "id": "8L4M8MR203K0",
-      "cpid": "252731002020",
-      "station": "C.HNO1063",
+      "id": "8L4BBXWO51Q8",
+      "cpid": "252231000171",
+      "station": "C.HCM0884",
       "date": "2026-07-16",
-      "bdkw": "nguồn điện",
-      "bekw": "tắt",
-      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Trạm dừng hoạt động, chủ trạm tắt nguồn điện trạm, ngừng sử dụng. "
+      "bdkw": "lấy log",
+      "bekw": "socket",
+      "bc": "---- - PA:  - OS: Socket 252231000171 lỗi A0101 reset board socket đèn xanh hoạt động bình thường, lấy log"
      }
     ]
    },
@@ -12656,7 +13088,7 @@ const REPORT_DATA = {
     ]
    },
    "Không phát hiện lỗi": {
-    "total": 285,
+    "total": 262,
     "samples": [
      {
       "id": "8L7KPBTHRSW0",
@@ -12704,18 +13136,18 @@ const REPORT_DATA = {
       "bc": "---- - PA:  - OS: kĩ thuật đã đến trụ kiểm tra, thay board ethernet, trụ xanh không tồn lỗi hoạt động bình thường "
      },
      {
-      "id": "8L4M85I0TPTS",
-      "cpid": "251231000066",
-      "station": "C.HNO0907",
+      "id": "8L46W1W5SI68",
+      "cpid": "251201000296",
+      "station": "C.DLA0063",
       "date": "2026-07-16",
-      "bdkw": "không tồn lỗi",
-      "bekw": "không tồn lỗi",
-      "bc": "---- - PA:  - OS: ktv kiểm tra, cổng sas đang off, tiến hành xét về lại server vinfast ok, cổng sas xanh không tồn lỗi"
+      "bdkw": "lấy log",
+      "bekw": "bình thường",
+      "bc": "---- - PA:  - OS: kỹ thuật đến kiểm tra lỗi màn hình ,reset clear lỗi lấy log trụ xanh hoạt động bình thường"
      }
     ]
    },
    "Trùng lặp/sai thông tin": {
-    "total": 774,
+    "total": 783,
     "samples": [
      {
       "id": "8L84T22RLKW0",
@@ -12774,17 +13206,8 @@ const REPORT_DATA = {
     ]
    },
    "Lý do khác": {
-    "total": 287,
+    "total": 257,
     "samples": [
-     {
-      "id": "8L8IPQAVR01S",
-      "cpid": "253001004523",
-      "station": "C.HYE0410",
-      "date": "2026-07-17",
-      "bdkw": "off",
-      "bekw": "",
-      "bc": "Bị can thiệp bên ngoài - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
-     },
      {
       "id": "8L42PVE1MRY8",
       "cpid": "243902000404",
@@ -12829,13 +13252,22 @@ const REPORT_DATA = {
       "bdkw": "lấy log",
       "bekw": "",
       "bc": "Bị can thiệp bên ngoài - PA:  - OS: kiểm tra cảm biến cửa , reset trụ , lấy log . "
+     },
+     {
+      "id": "8L0JDYP1XON4",
+      "cpid": "251601000161",
+      "station": "C.AGI0094",
+      "date": "2026-07-15",
+      "bdkw": "tác động",
+      "bekw": "",
+      "bc": "---- - PA:  - OS: Do kỹ thuật có xư lý trụ ở ticket khác, có tác động để xư lý link. Hiên tại thì trụ đã không còn lỗi."
      }
     ]
    }
   },
   "BSSM": {
    "Hạ tầng điện/mạng internet": {
-    "total": 272,
+    "total": 519,
     "samples": [
      {
       "id": "8L6TY0B1JF28",
@@ -12847,6 +13279,15 @@ const REPORT_DATA = {
       "bc": "---- - PA:  - OS: Kĩ thuật đến kiểm tra tủ BSS hoạt động bình thường, sử dụng wifi cây xăng dầu nên không ổn định"
      },
      {
+      "id": "8L6QBJK7QH34",
+      "cpid": "BSS-26022441000181",
+      "station": "B.HYE11931",
+      "date": "2026-07-17",
+      "bdkw": "nguồn điện",
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+     },
+     {
       "id": "8L6QBJGVVCHS",
       "cpid": "BSS-26011541000271",
       "station": "B.HYE12183",
@@ -12856,45 +13297,36 @@ const REPORT_DATA = {
       "bc": " - PA:  - OS: Thay 12 cảm biến, lỗi thẻ nhớ và điện áp yếu không đủ tải\n"
      },
      {
-      "id": "8L61LZ491VR4",
-      "cpid": "BSS-254841000123",
-      "station": "B.DNI10016",
-      "date": "2026-07-17",
-      "bdkw": "nhảy cb",
-      "bekw": "nhảy cb",
-      "bc": "---- - PA:  - OS: bị nhảy CB C40, tiến hành đo kiểm thông mạch trong tủ, đều bình thường, mở lại CB. tủ đã không còn lỗi, đã hoạt động bình thường"
-     },
-     {
-      "id": "8L5IAY459D6O",
-      "cpid": "BSS-255341000228",
-      "station": "B.HNO14158",
-      "date": "2026-07-17",
-      "bdkw": "chưa có",
-      "bekw": "điện áp",
-      "bc": "---- - PA:  - OS: ktv đến kiểm tra, tủ chưa có firm mới. up firm xong tủ chạy thì điện áp đầu vào tủ giảm về 200v, tủ tự động đóng. điện hiện tại đang lấy từ nhà dân, k đảm bảo cơ sở hạ tầng điện"
-     },
-     {
-      "id": "8L5FPBPRICQO",
-      "cpid": "BSS-260141000099",
-      "station": "B.THO10388",
+      "id": "8L6QBJ719REO",
+      "cpid": "BSS-26031941000467",
+      "station": "B.HYE10881",
       "date": "2026-07-17",
       "bdkw": "nguồn điện",
-      "bekw": "nhảy mcb",
-      "bc": "---- - PA:  - OS: Kỹ thuật đến kiểm tra thực tế tủ k cấp nguồn điện.Lý do chủ trạm xăng k cho cấp vì khi cấp nguồn cho tủ nhảy MCB tổng của tram xăng ảnh hưởng đến việc kinh doanh của trạm"
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
      },
      {
-      "id": "8L5FPAHZSEM8",
-      "cpid": "BSS-254841000931",
-      "station": "B.THO10388",
+      "id": "8L6QBJ3KEU4G",
+      "cpid": "BSS-26031941000108",
+      "station": "B.HYE10881",
       "date": "2026-07-17",
       "bdkw": "nguồn điện",
-      "bekw": "nhảy mcb",
-      "bc": "---- - PA:  - OS: Kỹ thuật đến kiểm tra thực tế tủ k cấp nguồn điện.Lý do chủ trạm xăng k cho cấp vì khi cấp nguồn cho tủ nhảy MCB tổng của tram xăng ảnh hưởng đến việc kinh doanh của trạm"
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+     },
+     {
+      "id": "8L6QBITPT91C",
+      "cpid": "BSS-26013141000123",
+      "station": "B.HYE11931",
+      "date": "2026-07-17",
+      "bdkw": "nguồn điện",
+      "bekw": "nguồn điện",
+      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
      }
     ]
    },
    "Vệ sinh/bảo dưỡng": {
-    "total": 242,
+    "total": 241,
     "samples": [
      {
       "id": "8L734HV6HA80",
@@ -12956,8 +13388,126 @@ const REPORT_DATA = {
     "total": 0,
     "samples": []
    },
+   "Chưa lắp đặt/nghiệm thu": {
+    "total": 252,
+    "samples": [
+     {
+      "id": "8L4NS6UM6F40",
+      "cpid": "BSS-255341000575",
+      "station": "B.HNO12166",
+      "date": "2026-07-16",
+      "bdkw": "chưa hoạt động",
+      "bekw": "chưa hoạt động",
+      "bc": "---- - PA:  - OS: ktv onsite, tủ chưa được cấp điện, chưa hoạt động"
+     },
+     {
+      "id": "8L4001JOX91C",
+      "cpid": "BSS-26011641000066",
+      "station": "B.VLO11142",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - chưa lắp pin + lỗi thẽ\n"
+     },
+     {
+      "id": "8L4001GI1X4W",
+      "cpid": "BSS-26011641000538",
+      "station": "B.VLO11142",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - Tủ 12 SK chưa lắp pin + lỗi thẽ \n"
+     },
+     {
+      "id": "8L4000TVZ0G0",
+      "cpid": "BSS-260241000332",
+      "station": "B.VLO11147",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - chưa lắp pin\n"
+     },
+     {
+      "id": "8L4000QMLS74",
+      "cpid": "BSS-255241003472",
+      "station": "B.VLO11147",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - Tủ 12 SK chưa lắp pin , thay 12 khóa SK, điện trở thấp, chưa update fw\n"
+     },
+     {
+      "id": "8L3ZZZQ536DC",
+      "cpid": "BSS-26013041000261",
+      "station": "B.VLO00014",
+      "date": "2026-07-16",
+      "bdkw": "chưa lắp",
+      "bekw": "chưa lắp",
+      "bc": "---- - PA:  - OS: NOK - Chưa lắp pin, chưa up fw\n"
+     }
+    ]
+   },
+   "Tắt nguồn/ngắt CB": {
+    "total": 133,
+    "samples": [
+     {
+      "id": "8L7GCM0IY51C",
+      "cpid": "BSS-254841000776",
+      "station": "B.HCM11359",
+      "date": "2026-07-17",
+      "bdkw": "off",
+      "bekw": "off cb",
+      "bc": "---- - PA:  - OS: báo với Vận hành, OFF CB tủ"
+     },
+     {
+      "id": "8L0TB93KSCU8",
+      "cpid": "BSS-26031641020780",
+      "station": "B.HYE10865",
+      "date": "2026-07-15",
+      "bdkw": "off",
+      "bekw": "đang off",
+      "bc": "---- - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
+     },
+     {
+      "id": "8L0NB5BU1FR4",
+      "cpid": "BSS-254841000723",
+      "station": "B.TNG10386",
+      "date": "2026-07-15",
+      "bdkw": "off",
+      "bekw": "đang off",
+      "bc": "---- - PA:  - OS: Trụ sạc đang off, lỗi xảy ra vào thời điểm rework\n"
+     },
+     {
+      "id": "8KXS33023XTS",
+      "cpid": "BSS-254641001327",
+      "station": "B.DLA00017",
+      "date": "2026-07-14",
+      "bdkw": "lấy log",
+      "bekw": "tắt cb",
+      "bc": "---- - PA:  - OS: kỹ thuật đến kiểm tra bị tắt cb, bật cb check lỗi khoá pin, xử lý xong reset trụ hết lỗi, lấy log,trụ hoạt động bình thường\n"
+     },
+     {
+      "id": "8KXCBX7YK45C",
+      "cpid": "BSS-26032241000585",
+      "station": "B.HCM17192",
+      "date": "2026-07-14",
+      "bdkw": "off",
+      "bekw": "off cb",
+      "bc": "---- - PA:  - OS: vị trí có 5 tủ kể cả tủ trên ticket đều bị đấu nguồn 3 pha tạm và gần như dây đã sút ra, đã off cb tủ và cb tổng"
+     },
+     {
+      "id": "8KXCBWKNL14W",
+      "cpid": "BSS-26032241000586",
+      "station": "B.HCM17192",
+      "date": "2026-07-14",
+      "bdkw": "off",
+      "bekw": "off cb",
+      "bc": "---- - PA:  - OS: vị trí có 5 tủ kể cả tủ trên ticket đều bị đấu nguồn 3 pha tạm và gần như dây đã sút ra, đã off cb tủ và cb tổng"
+     }
+    ]
+   },
    "Lỗi thao tác người dùng": {
-    "total": 433,
+    "total": 350,
     "samples": [
      {
       "id": "8L88RDTEMJUO",
@@ -13016,7 +13566,7 @@ const REPORT_DATA = {
     ]
    },
    "Móp, vỡ, trày xước, đâm đụng": {
-    "total": 2,
+    "total": 1,
     "samples": [
      {
       "id": "8L2175DDBUGW",
@@ -13026,20 +13576,11 @@ const REPORT_DATA = {
       "bdkw": "không đúng",
       "bekw": "cơ khí",
       "bc": "---- - PA:  - OS: 6001. Lỗi thay pin không đúng quy trình. Ô số 3 bị lock. Đã check cơ khí và sensor của khóa. Kiểm tra các khoang pin còn lại. Tủ HĐ tốt"
-     },
-     {
-      "id": "1126934322802720768",
-      "cpid": "BSS-255141021274",
-      "station": "B.TQU10771",
-      "date": "2026-07-07",
-      "bdkw": "chưa cấp",
-      "bekw": "móp",
-      "bc": " - PA:  - OS:  rw tdp, tủ chưa cấp nguồn điện, vỏ camera bị móp"
      }
     ]
    },
    "Không phát hiện lỗi": {
-    "total": 159,
+    "total": 152,
     "samples": [
      {
       "id": "8L796XS2ILMO",
@@ -13098,7 +13639,7 @@ const REPORT_DATA = {
     ]
    },
    "Trùng lặp/sai thông tin": {
-    "total": 1353,
+    "total": 1257,
     "samples": [
      {
       "id": "8L8EMXP2PIIO",
@@ -13157,17 +13698,8 @@ const REPORT_DATA = {
     ]
    },
    "Lý do khác": {
-    "total": 718,
+    "total": 274,
     "samples": [
-     {
-      "id": "8L7GCM0IY51C",
-      "cpid": "BSS-254841000776",
-      "station": "B.HCM11359",
-      "date": "2026-07-17",
-      "bdkw": "off",
-      "bekw": "",
-      "bc": "---- - PA:  - OS: báo với Vận hành, OFF CB tủ"
-     },
      {
       "id": "8L723NFM1X4W",
       "cpid": "BSS-254441000312",
@@ -13178,40 +13710,49 @@ const REPORT_DATA = {
       "bc": "---- - PA:  - OS: kiểm tra ghi nhận sai vị trí mã trạm, mã SN đã báo vận hành"
      },
      {
-      "id": "8L6QBJK7QH34",
-      "cpid": "BSS-26022441000181",
-      "station": "B.HYE11931",
+      "id": "8L5IBNO2V5KW",
+      "cpid": "BSS-254641024810",
+      "station": "B.HNO10956",
       "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "bdkw": "sai",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: ktv đến trạm kiểm tra lỗi B6029 tủ chưa đi vào hoạt động sn sai so với thực tế"
      },
      {
-      "id": "8L6QBJ719REO",
-      "cpid": "BSS-26031941000467",
-      "station": "B.HYE10881",
-      "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "id": "8L4W4IDI8QV4",
+      "cpid": "BSS-255141001414",
+      "station": "B.THO10392",
+      "date": "2026-07-16",
+      "bdkw": "sai",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: sai toạ độ"
      },
      {
-      "id": "8L6QBJ3KEU4G",
-      "cpid": "BSS-26031941000108",
-      "station": "B.HYE10881",
-      "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "id": "8L4W3PR07KLC",
+      "cpid": "BSS-254741000533",
+      "station": "B.TNI10009",
+      "date": "2026-07-16",
+      "bdkw": "lấy log",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: Kiểm tra tủ pin ,\nTủ pin hoạt động tốt.\nDây  USB TYPE-C bị lỗi nên không lấy log được"
      },
      {
-      "id": "8L6QBITPT91C",
-      "cpid": "BSS-26013141000123",
-      "station": "B.HYE11931",
-      "date": "2026-07-17",
-      "bdkw": "nguồn điện",
+      "id": "8L4LYCX2ABR4",
+      "cpid": "BSS-254641000251",
+      "station": "B.HTI00014",
+      "date": "2026-07-16",
+      "bdkw": "lấy log",
       "bekw": "",
-      "bc": " - PA:  - OS: Tủ chưa được cấp nguồn điện. Đã báo vận hành\n"
+      "bc": "---- - PA:  - OS: kiểm tra tủ, reset lỗi tủ, lấy log, viết checklist"
+     },
+     {
+      "id": "8L44Z0SGIM0W",
+      "cpid": "BSS-260141000162",
+      "station": "B.QBI00054",
+      "date": "2026-07-16",
+      "bdkw": "lấy log",
+      "bekw": "",
+      "bc": "---- - PA:  - OS: kiểm tra trụ, test đóng nhả pin ok, rs lỗi, lấy log, viết checklist"
      }
     ]
    }
@@ -13226,5 +13767,5 @@ const REPORT_DATA = {
   "partsBssM",
   "partsTotal"
  ],
- "generatedAt": "2026-07-24 06:45"
+ "generatedAt": "2026-07-24 06:56"
 };
