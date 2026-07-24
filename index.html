@@ -124,6 +124,32 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 .arleg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle}
 .kwtag.rc{background:#f5eefb;color:#6b3aa0;border-color:#ddc9ee}
 .kwtag.src{background:#fdf0e6;color:#9a5518;border-color:#f2d6bd}
+/* ===== Cockpit tiles + modal (1 màn hình, bấm ô mới hiện chi tiết) ===== */
+#cockpit{margin:6px 0 2px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:12px 14px;cursor:pointer;
+  transition:box-shadow .15s,transform .12s;display:flex;flex-direction:column;min-height:158px}
+.tile:hover{box-shadow:0 4px 16px rgba(0,0,0,.10);transform:translateY(-2px);border-color:var(--axis)}
+.tile h4{margin:0 0 4px;font-size:12.5px;color:var(--ink2);font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.tile .open-ico{font-size:11px;color:var(--muted);font-weight:400;white-space:nowrap}
+.tile .big{font-size:24px;font-weight:700;color:var(--ink);line-height:1.15}
+.tile .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.tile .cvmini{flex:1;min-height:96px;position:relative;margin-top:4px}
+.morebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.morebar .mlbl{font-size:12px;color:var(--muted);margin-right:2px}
+.morebtn{font-size:12.5px;padding:6px 13px;border:1px solid var(--grid);border-radius:20px;background:var(--surface);
+  color:var(--ink2);cursor:pointer}
+.morebtn:hover{border-color:var(--axis);color:var(--ink)}
+#modalHost{position:fixed;inset:0;background:rgba(20,22,28,.55);z-index:60;display:none;padding:20px}
+#modalHost.open{display:block}
+#modalCard{background:var(--page);max-width:1180px;margin:0 auto;border-radius:14px;max-height:calc(100vh - 40px);
+  display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+#modalBar{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;border-bottom:1px solid var(--grid);flex:0 0 auto}
+#modalBar h3{margin:0;font-size:16px}
+#modalClose{border:0;background:var(--grid);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;line-height:1}
+#modalScroll{overflow-y:auto;padding:14px 18px 22px}
+#modalScroll section{margin-top:6px}
+#modalScroll section:first-child h2{margin-top:0}
 </style>
 </head>
 <body>
@@ -138,12 +164,6 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <button data-s="other">Nguồn khác</button>
     <button data-s="all">Tất cả</button>
   </div>
-  <nav class="toc">
-    <a href="#sec-watch">Cảnh báo</a><a href="#sec-cls">Phân loại</a><a href="#sec-rc">Nguyên nhân</a><a href="#sec-dis">Disclaim</a><a href="#sec-fail">Theo model</a>
-    <a href="#sec-trend">Xu hướng</a><a href="#sec-alarm">Alarm</a><a href="#sec-sla">SLA</a>
-    <a href="#sec-overdue">Giải trình</a><a href="#sec-ovdana">Phân tích OVD</a><a href="#sec-asp">ASP</a><a href="#sec-cse">CSE</a><a href="#sec-parts">Vật tư</a>
-    <a href="#sec-cost">Chi phí</a><a href="#sec-fix">Hiệu chỉnh</a>
-  </nav>
   <div style="flex-basis:100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <span class="freshTag" id="freshTag"></span>
     <span class="partialWarn" id="partialWarn" style="display:none"></span>
@@ -155,6 +175,15 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 
 <div class="kpis" id="kpis"></div>
 
+<section id="cockpit">
+  <div class="tiles" id="tiles"></div>
+  <div class="morebar" id="morebar"><span class="mlbl">Xem thêm:</span></div>
+</section>
+
+<div id="modalHost" aria-hidden="true">
+ <div id="modalCard">
+  <div id="modalBar"><h3 id="modalTitle"></h3><button id="modalClose" title="Đóng (Esc)">✕</button></div>
+  <div id="modalScroll">
 <section id="sec-watch">
   <h2>⚠ Cảnh báo sớm — tuần này so với trung bình các tuần trước</h2>
   <div id="watchWrap"></div>
@@ -385,6 +414,9 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <li><b>Nhãn:</b> thống nhất "Total (Tổng)"/"Grand total (Tổng)" → "Total"/"Grand total"; header "Overdue Rate" của bảng theo trạng thái đổi thành "Overdue share" (đúng bản chất: tử số chia tổng toàn bộ ticket).</li>
   </ol>
 </section>
+  </div>
+ </div>
+</div>
 
 </main>
 <footer>Nguồn: 260717 Report W29 V3.xlsx (đã hiệu chỉnh) · Dashboard tạo tự động · Giải trình đồng bộ qua Google Sheet</footer>
@@ -963,10 +995,103 @@ function costCharts(){
       scales:{y:{grid:{color:GRID}, ticks:{callback:v=>'$'+v}}, x:{grid:{display:false}}}}});
 }
 
+/* ===== Cockpit: tiles tổng quan + modal drill-down ===== */
+const GROUPS = {
+  cls:  {title:'Phân loại ticket & Chi tiết Disclaim', ids:['sec-cls','sec-dis']},
+  rc:   {title:'Nguyên nhân lỗi (RC)', ids:['sec-rc']},
+  sla:  {title:'SLA / Overdue & Giải trình', ids:['sec-sla','sec-overdue','sec-ovdana']},
+  trend:{title:'Tình trạng lỗi theo model & Xu hướng', ids:['sec-fail','sec-trend']},
+  watch:{title:'Cảnh báo sớm', ids:['sec-watch']},
+  alarm:{title:'Top alarm', ids:['sec-alarm']},
+  asp:  {title:'Overdue rate theo ASP', ids:['sec-asp']},
+  cse:  {title:'Hiệu suất CSE & Giải trình', ids:['sec-cse']},
+  parts:{title:'Top vật tư sử dụng', ids:['sec-parts']},
+  cost: {title:'Chi phí dịch vụ', ids:['sec-cost']},
+  fix:  {title:'Dữ liệu đã hiệu chỉnh (V3 vs V2)', ids:['sec-fix']},
+};
+function resizeCharts(){ requestAnimationFrame(()=> Object.values(charts).forEach(c=>{ try{c.resize()}catch(e){} })); }
+function modalOpen(){ return document.getElementById('modalHost').classList.contains('open'); }
+function openModal(grp){
+  const g = GROUPS[grp]; if(!g) return;
+  document.querySelectorAll('#modalScroll > section').forEach(s=> s.style.display = g.ids.includes(s.id)?'':'none');
+  document.getElementById('modalTitle').textContent = g.title;
+  document.getElementById('modalHost').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('modalScroll').scrollTop = 0;
+  resizeCharts();   // chart vẽ lúc container còn ẩn -> kích thước 0; resize khi đã hiện
+}
+function closeModal(){ document.getElementById('modalHost').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('modalClose').onclick = closeModal;
+document.getElementById('modalHost').onclick = e => { if(e.target.id==='modalHost') closeModal(); };
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modalOpen()) closeModal(); });
+
+function miniDonut(id, rows, total){
+  mk(id, {type:'doughnut',
+    data:{labels:rows.map(r=>r.name), datasets:[{data:rows.map(r=>r.qty),
+      backgroundColor:[S[5],S[0],S[1],'#c3c2b7'], borderColor:'#fcfcfb', borderWidth:2}]},
+    options:{maintainAspectRatio:false, cutout:'60%',
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>` ${c.label}: ${n0(c.parsed)} (${pc(c.parsed/(total.qty||1))})`}}}}});
+}
+function miniRcBar(id, rows){
+  const top = [...rows].filter(r=>r.name!=='Chưa xác định').sort((a,b)=>b.qty-a.qty).slice(0,5);
+  mk(id, {type:'bar',
+    data:{labels:top.map(r=>r.name), datasets:[{data:top.map(r=>r.qty),
+      backgroundColor:top.map(r=>RC_CLS_COLOR[r.cls]||RC_UNK), borderRadius:3, maxBarThickness:13}]},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>` ${n0(c.parsed.x)} ticket`}}},
+      scales:{x:{display:false}, y:{grid:{display:false}, ticks:{font:{size:10}}}}}});
+}
+function miniLine(id, labels, data){
+  mk(id, {type:'line',
+    data:{labels, datasets:[{data, borderColor:S[0], backgroundColor:'rgba(42,120,214,.12)',
+      borderWidth:2, fill:true, tension:.3, pointRadius:0}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{title:c=>labels[c[0].dataIndex], label:c=>' '+n0(c.parsed.y)+' ticket lỗi'}}},
+      scales:{x:{grid:{display:false}, ticks:{font:{size:10}}}, y:{display:false}}}});
+}
+function renderTiles(){
+  const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
+  const cB = MODE==='w'?D.clsBssW:D.clsBssM,  cBt = MODE==='w'?D.clsBssW_total:D.clsBssM_total;
+  const rcE = MODE==='w'?D.rcEvcsW:D.rcEvcsM;
+  const sla = [].concat(MODE==='w'?D.slaEvcsW:D.slaEvcsM, MODE==='w'?D.slaBssW:D.slaBssM);
+  const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
+  const wk = D.weeks, sumWk = t => wk.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
+  const te = sumWk(D.trendEvcs), tb = sumWk(D.trendBss), trend = te.map((v,i)=> v + (tb[i]||0));
+  const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
+  const T = [
+    {grp:'cls', title:'Phân loại EVCS', mini:['donut',cE,cEt], sub:`${n0(cEt.qty)} ticket · Undefined ${pc(undefShare(cE))}`},
+    {grp:'cls', title:'Phân loại BSS',  mini:['donut',cB,cBt], sub:`${n0(cBt.qty)} ticket · Undefined ${pc(undefShare(cB))}`},
+    {grp:'sla', title:'SLA / Overdue',  big:pc(settled?ovd/settled:0), sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()})`},
+    {grp:'rc',  title:'Nguyên nhân lỗi (RC)', mini:['rc',rcE], sub:'Top 5 nhóm nguyên nhân EVCS'},
+    {grp:'trend', title:'Xu hướng ticket lỗi', mini:['line',wk,trend], sub:'7 tuần · loại trừ Disclaim'},
+  ];
+  const el = document.getElementById('tiles');
+  el.innerHTML = T.map((t,i)=>{
+    const inner = t.big!=null
+      ? `<div class="big">${t.big}</div><div class="sub">${t.sub}</div>`
+      : `<div class="cvmini"><canvas id="tile_${i}"></canvas></div><div class="sub">${t.sub}</div>`;
+    return `<div class="tile" data-grp="${t.grp}"><h4>${t.title}<span class="open-ico">bấm để xem ▸</span></h4>${inner}</div>`;
+  }).join('');
+  el.querySelectorAll('.tile').forEach(d=> d.onclick = ()=> openModal(d.dataset.grp));
+  T.forEach((t,i)=>{ if(!t.mini) return;
+    if(t.mini[0]==='donut') miniDonut('tile_'+i, t.mini[1], t.mini[2]);
+    else if(t.mini[0]==='rc') miniRcBar('tile_'+i, t.mini[1]);
+    else if(t.mini[0]==='line') miniLine('tile_'+i, t.mini[1], t.mini[2]);
+  });
+  const more = [['watch','Cảnh báo'],['cls','Disclaim'],['trend','Theo model'],['alarm','Alarm'],
+    ['asp','ASP'],['cse','CSE'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh']];
+  const mb = document.getElementById('morebar');
+  mb.innerHTML = '<span class="mlbl">Xem thêm:</span>' +
+    more.map(([g,l])=>`<button class="morebtn" data-grp="${g}">${l}</button>`).join('');
+  mb.querySelectorAll('.morebtn').forEach(b=> b.onclick = ()=> openModal(b.dataset.grp));
+}
+
 /* ================= render theo mode ================= */
 function render(){
   document.querySelectorAll('.modeLbl').forEach(e=> e.textContent = mLbl());
   kpis();
+  renderTiles();
   renderWatch();
   clsBlock('c_cls_evcs','t_cls_evcs', MODE==='w'?D.clsEvcsW:D.clsEvcsM, MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total, 'clsEvcsSub');
   clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
@@ -994,6 +1119,7 @@ function render(){
   resBlock('t_res_bss',  MODE==='w'?D.resBssW:D.resBssM);
   partsBlock('t_parts_evcs', MODE==='w'?D.partsEvcsW:D.partsEvcsM, MODE==='w'?D.partsTotal.evcsW:D.partsTotal.evcsM, 'pEvcsSub');
   partsBlock('t_parts_bss',  MODE==='w'?D.partsBssW:D.partsBssM,  MODE==='w'?D.partsTotal.bssW:D.partsTotal.bssM, 'pBssSub');
+  if(modalOpen()) resizeCharts();   // đổi toggle khi modal đang mở -> chart trong modal co lại đúng cỡ
 }
 document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   MODE = b.dataset.m;
