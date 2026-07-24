@@ -3176,7 +3176,19 @@ const REPORT_DATA = {
    "cls": "Disclaim"
   },
   {
-   "name": "Không lỗi/Trùng lặp/Sai thông tin",
+   "name": "Không tồn lỗi/Trụ bình thường",
+   "qty": 0,
+   "share": 0.0,
+   "cls": "Disclaim"
+  },
+  {
+   "name": "Trùng ticket/Trụ khác",
+   "qty": 0,
+   "share": 0.0,
+   "cls": "Disclaim"
+  },
+  {
+   "name": "Sai thông tin/Không liên hệ",
    "qty": 0,
    "share": 0.0,
    "cls": "Disclaim"
@@ -3184,9 +3196,9 @@ const REPORT_DATA = {
  ],
  "rcEvcsM": [
   {
-   "name": "Không lỗi/Trùng lặp/Sai thông tin",
-   "qty": 4659,
-   "share": 0.4656671664167916,
+   "name": "Không tồn lỗi/Trụ bình thường",
+   "qty": 4104,
+   "share": 0.41019490254872565,
    "cls": "Disclaim"
   },
   {
@@ -3200,6 +3212,12 @@ const REPORT_DATA = {
    "qty": 660,
    "share": 0.06596701649175413,
    "cls": "Hardware"
+  },
+  {
+   "name": "Trùng ticket/Trụ khác",
+   "qty": 536,
+   "share": 0.05357321339330335,
+   "cls": "Disclaim"
   },
   {
    "name": "Mạng/Kết nối",
@@ -3277,6 +3295,12 @@ const REPORT_DATA = {
    "name": "Ngoại cảnh/Tác động vật lý",
    "qty": 28,
    "share": 0.002798600699650175,
+   "cls": "Disclaim"
+  },
+  {
+   "name": "Sai thông tin/Không liên hệ",
+   "qty": 19,
+   "share": 0.0018990504747626188,
    "cls": "Disclaim"
   },
   {
@@ -3408,7 +3432,19 @@ const REPORT_DATA = {
    "cls": "Disclaim"
   },
   {
-   "name": "Không lỗi/Trùng lặp/Sai thông tin",
+   "name": "Không tồn lỗi/Trụ bình thường",
+   "qty": 0,
+   "share": 0.0,
+   "cls": "Disclaim"
+  },
+  {
+   "name": "Trùng ticket/Trụ khác",
+   "qty": 0,
+   "share": 0.0,
+   "cls": "Disclaim"
+  },
+  {
+   "name": "Sai thông tin/Không liên hệ",
    "qty": 0,
    "share": 0.0,
    "cls": "Disclaim"
@@ -3422,9 +3458,9 @@ const REPORT_DATA = {
    "cls": ""
   },
   {
-   "name": "Không lỗi/Trùng lặp/Sai thông tin",
-   "qty": 1039,
-   "share": 0.11904216315307058,
+   "name": "Không tồn lỗi/Trụ bình thường",
+   "qty": 926,
+   "share": 0.10609532538955087,
    "cls": "Disclaim"
   },
   {
@@ -3438,6 +3474,12 @@ const REPORT_DATA = {
    "qty": 149,
    "share": 0.017071494042163154,
    "cls": "Hardware"
+  },
+  {
+   "name": "Trùng ticket/Trụ khác",
+   "qty": 89,
+   "share": 0.010197066911090742,
+   "cls": "Disclaim"
   },
   {
    "name": "Cảm biến/Đo lường/Camera",
@@ -3485,6 +3527,12 @@ const REPORT_DATA = {
    "name": "Chưa nghiệm thu/Chưa vận hành",
    "qty": 35,
    "share": 0.004010082493125573,
+   "cls": "Disclaim"
+  },
+  {
+   "name": "Sai thông tin/Không liên hệ",
+   "qty": 24,
+   "share": 0.002749770852428964,
    "cls": "Disclaim"
   },
   {
@@ -3552,11 +3600,11 @@ const REPORT_DATA = {
  ],
  "rcXclsEvcsM": [
   {
-   "name": "Không lỗi/Trùng lặp/Sai thông tin",
-   "qty": 4659,
-   "Disclaim": 2728,
-   "Hardware": 1609,
-   "Software": 322,
+   "name": "Không tồn lỗi/Trụ bình thường",
+   "qty": 4104,
+   "Disclaim": 2190,
+   "Hardware": 1595,
+   "Software": 319,
    "Undefined yet": 0
   },
   {
@@ -3573,6 +3621,14 @@ const REPORT_DATA = {
    "Disclaim": 130,
    "Hardware": 518,
    "Software": 12,
+   "Undefined yet": 0
+  },
+  {
+   "name": "Trùng ticket/Trụ khác",
+   "qty": 536,
+   "Disclaim": 522,
+   "Hardware": 12,
+   "Software": 2,
    "Undefined yet": 0
   },
   {
@@ -3680,6 +3736,14 @@ const REPORT_DATA = {
    "Undefined yet": 0
   },
   {
+   "name": "Sai thông tin/Không liên hệ",
+   "qty": 19,
+   "Disclaim": 16,
+   "Hardware": 2,
+   "Software": 1,
+   "Undefined yet": 0
+  },
+  {
    "name": "Vệ sinh/Bảo dưỡng",
    "qty": 12,
    "Disclaim": 12,
@@ -3706,10 +3770,10 @@ const REPORT_DATA = {
    "Undefined yet": 2338
   },
   {
-   "name": "Không lỗi/Trùng lặp/Sai thông tin",
-   "qty": 1039,
-   "Disclaim": 748,
-   "Hardware": 269,
+   "name": "Không tồn lỗi/Trụ bình thường",
+   "qty": 926,
+   "Disclaim": 638,
+   "Hardware": 266,
    "Software": 22,
    "Undefined yet": 0
   },
@@ -3727,6 +3791,14 @@ const REPORT_DATA = {
    "Disclaim": 12,
    "Hardware": 136,
    "Software": 1,
+   "Undefined yet": 0
+  },
+  {
+   "name": "Trùng ticket/Trụ khác",
+   "qty": 89,
+   "Disclaim": 88,
+   "Hardware": 1,
+   "Software": 0,
    "Undefined yet": 0
   },
   {
@@ -3790,6 +3862,14 @@ const REPORT_DATA = {
    "qty": 35,
    "Disclaim": 34,
    "Hardware": 1,
+   "Software": 0,
+   "Undefined yet": 0
+  },
+  {
+   "name": "Sai thông tin/Không liên hệ",
+   "qty": 24,
+   "Disclaim": 22,
+   "Hardware": 2,
    "Software": 0,
    "Undefined yet": 0
   },
@@ -3958,14 +4038,19 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 518,
-     "share": 0.6753585397653195
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 484,
+     "share": 0.6310299869621904
     },
     {
      "name": "Mạng/Kết nối",
      "qty": 191,
      "share": 0.24902216427640156
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 33,
+     "share": 0.04302477183833116
     },
     {
      "name": "Firmware/Phần mềm",
@@ -4011,6 +4096,11 @@ const REPORT_DATA = {
      "name": "Ngoại cảnh/Tác động vật lý",
      "qty": 1,
      "share": 0.001303780964797914
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 1,
+     "share": 0.001303780964797914
     }
    ]
   },
@@ -4021,9 +4111,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 547,
-     "share": 0.7950581395348837
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 535,
+     "share": 0.7776162790697675
     },
     {
      "name": "Cảm biến/Đo lường/Camera",
@@ -4041,6 +4131,11 @@ const REPORT_DATA = {
      "share": 0.01744186046511628
     },
     {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 10,
+     "share": 0.014534883720930232
+    },
+    {
      "name": "Mạng/Kết nối",
      "qty": 6,
      "share": 0.00872093023255814
@@ -4054,6 +4149,11 @@ const REPORT_DATA = {
      "name": "Thao tác người dùng/CCS",
      "qty": 2,
      "share": 0.0029069767441860465
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 2,
+     "share": 0.0029069767441860465
     }
    ]
   },
@@ -4064,14 +4164,19 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 422,
-     "share": 0.7250859106529209
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 398,
+     "share": 0.6838487972508591
     },
     {
      "name": "Cơ cấu/Khóa slot BSS",
      "qty": 103,
      "share": 0.17697594501718214
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 21,
+     "share": 0.03608247422680412
     },
     {
      "name": "Thao tác người dùng/CCS",
@@ -4090,6 +4195,11 @@ const REPORT_DATA = {
     },
     {
      "name": "Màn hình/HMI",
+     "qty": 3,
+     "share": 0.005154639175257732
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 3,
      "share": 0.005154639175257732
     },
@@ -4152,9 +4262,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 159,
-     "share": 0.4344262295081967
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 140,
+     "share": 0.3825136612021858
     },
     {
      "name": "Mạng/Kết nối",
@@ -4170,6 +4280,11 @@ const REPORT_DATA = {
      "name": "Thao tác người dùng/CCS",
      "qty": 21,
      "share": 0.05737704918032787
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 15,
+     "share": 0.040983606557377046
     },
     {
      "name": "Bo mạch/PCBA",
@@ -4195,6 +4310,11 @@ const REPORT_DATA = {
      "name": "Nguồn/Điện lưới",
      "qty": 6,
      "share": 0.01639344262295082
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 4,
+     "share": 0.01092896174863388
     },
     {
      "name": "Quạt/Tản nhiệt",
@@ -4240,14 +4360,19 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 259,
-     "share": 0.5704845814977973
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 233,
+     "share": 0.513215859030837
     },
     {
      "name": "Quạt/Tản nhiệt",
      "qty": 171,
      "share": 0.3766519823788546
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 26,
+     "share": 0.05726872246696035
     },
     {
      "name": "Nguồn/Điện lưới",
@@ -4308,9 +4433,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 273,
-     "share": 0.6134831460674157
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 266,
+     "share": 0.597752808988764
     },
     {
      "name": "Cảm biến/Đo lường/Camera",
@@ -4321,6 +4446,11 @@ const REPORT_DATA = {
      "name": "Súng/Cáp sạc",
      "qty": 30,
      "share": 0.06741573033707865
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 7,
+     "share": 0.015730337078651686
     },
     {
      "name": "Firmware/Phần mềm",
@@ -4356,14 +4486,19 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 249,
-     "share": 0.6043689320388349
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 193,
+     "share": 0.4684466019417476
     },
     {
      "name": "Module sạc/Rectifier",
      "qty": 123,
      "share": 0.29854368932038833
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 56,
+     "share": 0.13592233009708737
     },
     {
      "name": "Cảm biến/Đo lường/Camera",
@@ -4424,9 +4559,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 244,
-     "share": 0.7601246105919003
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 236,
+     "share": 0.735202492211838
     },
     {
      "name": "Module sạc/Rectifier",
@@ -4442,6 +4577,11 @@ const REPORT_DATA = {
      "name": "SECC/Bộ điều khiển sạc",
      "qty": 10,
      "share": 0.03115264797507788
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 8,
+     "share": 0.024922118380062305
     },
     {
      "name": "Mạng/Kết nối",
@@ -4479,9 +4619,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 404,
-     "share": 0.44739756367663347
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 377,
+     "share": 0.4174972314507198
     },
     {
      "name": "Cơ cấu/Khóa slot BSS",
@@ -4517,6 +4657,16 @@ const REPORT_DATA = {
      "name": "Mạng/Kết nối",
      "qty": 17,
      "share": 0.018826135105204873
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 14,
+     "share": 0.015503875968992248
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 13,
+     "share": 0.014396456256921373
     },
     {
      "name": "Nguồn/Điện lưới",
@@ -4562,9 +4712,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 52,
-     "share": 0.4369747899159664
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 47,
+     "share": 0.3949579831932773
     },
     {
      "name": "Cơ cấu/Khóa slot BSS",
@@ -4575,6 +4725,11 @@ const REPORT_DATA = {
      "name": "Pin/BMS",
      "qty": 14,
      "share": 0.11764705882352941
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 5,
+     "share": 0.04201680672268908
     },
     {
      "name": "Cảm biến/Đo lường/Camera",
@@ -4630,9 +4785,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 83,
-     "share": 0.5060975609756098
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 80,
+     "share": 0.4878048780487805
     },
     {
      "name": "Cơ cấu/Khóa slot BSS",
@@ -4660,12 +4815,22 @@ const REPORT_DATA = {
      "share": 0.018292682926829267
     },
     {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 2,
+     "share": 0.012195121951219513
+    },
+    {
      "name": "Cảm biến/Đo lường/Camera",
      "qty": 2,
      "share": 0.012195121951219513
     },
     {
      "name": "Thao tác người dùng/CCS",
+     "qty": 1,
+     "share": 0.006097560975609756
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 1,
      "share": 0.006097560975609756
     },
@@ -4693,9 +4858,9 @@ const REPORT_DATA = {
      "share": 0.44680851063829785
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 92,
-     "share": 0.39148936170212767
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 89,
+     "share": 0.37872340425531914
     },
     {
      "name": "Firmware/Phần mềm",
@@ -4721,6 +4886,11 @@ const REPORT_DATA = {
      "name": "Thao tác người dùng/CCS",
      "qty": 3,
      "share": 0.01276595744680851
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 2,
+     "share": 0.00851063829787234
     },
     {
      "name": "Bo mạch/PCBA",
@@ -4751,6 +4921,11 @@ const REPORT_DATA = {
      "name": "Contactor/CB/Đóng cắt",
      "qty": 1,
      "share": 0.00425531914893617
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 1,
+     "share": 0.00425531914893617
     }
    ]
   },
@@ -4761,9 +4936,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 112,
-     "share": 0.5957446808510638
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 107,
+     "share": 0.5691489361702128
     },
     {
      "name": "Pin/BMS",
@@ -4784,6 +4959,11 @@ const REPORT_DATA = {
      "name": "Firmware/Phần mềm",
      "qty": 8,
      "share": 0.0425531914893617
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 4,
+     "share": 0.02127659574468085
     },
     {
      "name": "Thao tác người dùng/CCS",
@@ -4809,6 +4989,11 @@ const REPORT_DATA = {
      "name": "Module sạc/Rectifier",
      "qty": 1,
      "share": 0.005319148936170213
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 1,
+     "share": 0.005319148936170213
     }
    ]
   },
@@ -4819,9 +5004,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 88,
-     "share": 0.4583333333333333
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 83,
+     "share": 0.4322916666666667
     },
     {
      "name": "Contactor/CB/Đóng cắt",
@@ -4859,6 +5044,11 @@ const REPORT_DATA = {
      "share": 0.026041666666666668
     },
     {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 4,
+     "share": 0.020833333333333332
+    },
+    {
      "name": "SECC/Bộ điều khiển sạc",
      "qty": 2,
      "share": 0.010416666666666666
@@ -4870,6 +5060,11 @@ const REPORT_DATA = {
     },
     {
      "name": "Thao tác người dùng/CCS",
+     "qty": 1,
+     "share": 0.005208333333333333
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 1,
      "share": 0.005208333333333333
     },
@@ -4892,14 +5087,19 @@ const REPORT_DATA = {
      "share": 0.5583333333333333
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 32,
-     "share": 0.26666666666666666
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 26,
+     "share": 0.21666666666666667
     },
     {
      "name": "Ngoại cảnh/Tác động vật lý",
      "qty": 8,
      "share": 0.06666666666666667
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 5,
+     "share": 0.041666666666666664
     },
     {
      "name": "Firmware/Phần mềm",
@@ -4922,6 +5122,11 @@ const REPORT_DATA = {
      "share": 0.008333333333333333
     },
     {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 1,
+     "share": 0.008333333333333333
+    },
+    {
      "name": "Mạng/Kết nối",
      "qty": 1,
      "share": 0.008333333333333333
@@ -4935,9 +5140,9 @@ const REPORT_DATA = {
    "thin": false,
    "reasons": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 33,
-     "share": 0.3473684210526316
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 29,
+     "share": 0.30526315789473685
     },
     {
      "name": "Mạng/Kết nối",
@@ -4958,6 +5163,11 @@ const REPORT_DATA = {
      "name": "Module sạc/Rectifier",
      "qty": 8,
      "share": 0.08421052631578947
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 4,
+     "share": 0.042105263157894736
     },
     {
      "name": "Contactor/CB/Đóng cắt",
@@ -4989,23 +5199,23 @@ const REPORT_DATA = {
  ],
  "rcTrendEvcs": {
   "groups": [
-   "Không lỗi/Trùng lặp/Sai thông tin",
+   "Không tồn lỗi/Trụ bình thường",
    "Module sạc/Rectifier",
+   "Trùng ticket/Trụ khác",
    "Mạng/Kết nối",
    "Cảm biến/Đo lường/Camera",
    "Firmware/Phần mềm",
    "Quạt/Tản nhiệt",
-   "Súng/Cáp sạc",
-   "Bo mạch/PCBA"
+   "Súng/Cáp sạc"
   ],
   "series": [
    [
-    2260,
-    1608,
-    1719,
-    1833,
-    1205,
-    1077,
+    2049,
+    1385,
+    1489,
+    1632,
+    1066,
+    927,
     0
    ],
    [
@@ -5015,6 +5225,15 @@ const REPORT_DATA = {
     240,
     167,
     181,
+    0
+   ],
+   [
+    191,
+    216,
+    226,
+    194,
+    132,
+    146,
     0
    ],
    [
@@ -5061,28 +5280,19 @@ const REPORT_DATA = {
     51,
     56,
     0
-   ],
-   [
-    53,
-    50,
-    55,
-    43,
-    62,
-    37,
-    0
    ]
   ]
  },
  "rcTrendBss": {
   "groups": [
-   "Không lỗi/Trùng lặp/Sai thông tin",
+   "Không tồn lỗi/Trụ bình thường",
    "Cơ cấu/Khóa slot BSS",
    "Pin/BMS",
+   "Trùng ticket/Trụ khác",
    "Cảm biến/Đo lường/Camera",
    "Mạng/Kết nối",
    "Firmware/Phần mềm",
-   "Thao tác người dùng/CCS",
-   "Ngoại cảnh/Tác động vật lý"
+   "Thao tác người dùng/CCS"
   ],
   "series": [
    [
@@ -5091,7 +5301,7 @@ const REPORT_DATA = {
     0,
     0,
     0,
-    1039,
+    926,
     0
    ],
    [
@@ -5110,6 +5320,15 @@ const REPORT_DATA = {
     0,
     0,
     149,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    89,
     0
    ],
    [
@@ -5146,15 +5365,6 @@ const REPORT_DATA = {
     0,
     0,
     50,
-    0
-   ],
-   [
-    0,
-    0,
-    0,
-    0,
-    0,
-    45,
     0
    ]
   ]
@@ -5725,7 +5935,19 @@ const REPORT_DATA = {
      "cls": "Disclaim"
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 0,
      "share": 0.0,
      "cls": "Disclaim"
@@ -5733,9 +5955,9 @@ const REPORT_DATA = {
    ],
    "rcEvcsM": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 4659,
-     "share": 0.4656671664167916,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 4104,
+     "share": 0.41019490254872565,
      "cls": "Disclaim"
     },
     {
@@ -5749,6 +5971,12 @@ const REPORT_DATA = {
      "qty": 660,
      "share": 0.06596701649175413,
      "cls": "Hardware"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 536,
+     "share": 0.05357321339330335,
+     "cls": "Disclaim"
     },
     {
      "name": "Mạng/Kết nối",
@@ -5826,6 +6054,12 @@ const REPORT_DATA = {
      "name": "Ngoại cảnh/Tác động vật lý",
      "qty": 28,
      "share": 0.002798600699650175,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 19,
+     "share": 0.0018990504747626188,
      "cls": "Disclaim"
     },
     {
@@ -5957,7 +6191,19 @@ const REPORT_DATA = {
      "cls": "Disclaim"
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 0,
      "share": 0.0,
      "cls": "Disclaim"
@@ -5971,9 +6217,9 @@ const REPORT_DATA = {
      "cls": ""
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 1039,
-     "share": 0.11904216315307058,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 926,
+     "share": 0.10609532538955087,
      "cls": "Disclaim"
     },
     {
@@ -5987,6 +6233,12 @@ const REPORT_DATA = {
      "qty": 149,
      "share": 0.017071494042163154,
      "cls": "Hardware"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 89,
+     "share": 0.010197066911090742,
+     "cls": "Disclaim"
     },
     {
      "name": "Cảm biến/Đo lường/Camera",
@@ -6034,6 +6286,12 @@ const REPORT_DATA = {
      "name": "Chưa nghiệm thu/Chưa vận hành",
      "qty": 35,
      "share": 0.004010082493125573,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 24,
+     "share": 0.002749770852428964,
      "cls": "Disclaim"
     },
     {
@@ -6101,11 +6359,11 @@ const REPORT_DATA = {
    ],
    "rcXclsEvcsM": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 4659,
-     "Disclaim": 2728,
-     "Hardware": 1609,
-     "Software": 322,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 4104,
+     "Disclaim": 2190,
+     "Hardware": 1595,
+     "Software": 319,
      "Undefined yet": 0
     },
     {
@@ -6122,6 +6380,14 @@ const REPORT_DATA = {
      "Disclaim": 130,
      "Hardware": 518,
      "Software": 12,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 536,
+     "Disclaim": 522,
+     "Hardware": 12,
+     "Software": 2,
      "Undefined yet": 0
     },
     {
@@ -6229,6 +6495,14 @@ const REPORT_DATA = {
      "Undefined yet": 0
     },
     {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 19,
+     "Disclaim": 16,
+     "Hardware": 2,
+     "Software": 1,
+     "Undefined yet": 0
+    },
+    {
      "name": "Vệ sinh/Bảo dưỡng",
      "qty": 12,
      "Disclaim": 12,
@@ -6255,10 +6529,10 @@ const REPORT_DATA = {
      "Undefined yet": 2338
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 1039,
-     "Disclaim": 748,
-     "Hardware": 269,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 926,
+     "Disclaim": 638,
+     "Hardware": 266,
      "Software": 22,
      "Undefined yet": 0
     },
@@ -6276,6 +6550,14 @@ const REPORT_DATA = {
      "Disclaim": 12,
      "Hardware": 136,
      "Software": 1,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 89,
+     "Disclaim": 88,
+     "Hardware": 1,
+     "Software": 0,
      "Undefined yet": 0
     },
     {
@@ -6339,6 +6621,14 @@ const REPORT_DATA = {
      "qty": 35,
      "Disclaim": 34,
      "Hardware": 1,
+     "Software": 0,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 24,
+     "Disclaim": 22,
+     "Hardware": 2,
      "Software": 0,
      "Undefined yet": 0
     },
@@ -6507,14 +6797,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 518,
-       "share": 0.6753585397653195
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 484,
+       "share": 0.6310299869621904
       },
       {
        "name": "Mạng/Kết nối",
        "qty": 191,
        "share": 0.24902216427640156
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 33,
+       "share": 0.04302477183833116
       },
       {
        "name": "Firmware/Phần mềm",
@@ -6560,6 +6855,11 @@ const REPORT_DATA = {
        "name": "Ngoại cảnh/Tác động vật lý",
        "qty": 1,
        "share": 0.001303780964797914
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.001303780964797914
       }
      ]
     },
@@ -6570,9 +6870,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 547,
-       "share": 0.7950581395348837
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 535,
+       "share": 0.7776162790697675
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -6590,6 +6890,11 @@ const REPORT_DATA = {
        "share": 0.01744186046511628
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 10,
+       "share": 0.014534883720930232
+      },
+      {
        "name": "Mạng/Kết nối",
        "qty": 6,
        "share": 0.00872093023255814
@@ -6603,6 +6908,11 @@ const REPORT_DATA = {
        "name": "Thao tác người dùng/CCS",
        "qty": 2,
        "share": 0.0029069767441860465
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 2,
+       "share": 0.0029069767441860465
       }
      ]
     },
@@ -6613,14 +6923,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 422,
-       "share": 0.7250859106529209
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 398,
+       "share": 0.6838487972508591
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
        "qty": 103,
        "share": 0.17697594501718214
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 21,
+       "share": 0.03608247422680412
       },
       {
        "name": "Thao tác người dùng/CCS",
@@ -6639,6 +6954,11 @@ const REPORT_DATA = {
       },
       {
        "name": "Màn hình/HMI",
+       "qty": 3,
+       "share": 0.005154639175257732
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
        "qty": 3,
        "share": 0.005154639175257732
       },
@@ -6701,9 +7021,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 159,
-       "share": 0.4344262295081967
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 140,
+       "share": 0.3825136612021858
       },
       {
        "name": "Mạng/Kết nối",
@@ -6719,6 +7039,11 @@ const REPORT_DATA = {
        "name": "Thao tác người dùng/CCS",
        "qty": 21,
        "share": 0.05737704918032787
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 15,
+       "share": 0.040983606557377046
       },
       {
        "name": "Bo mạch/PCBA",
@@ -6744,6 +7069,11 @@ const REPORT_DATA = {
        "name": "Nguồn/Điện lưới",
        "qty": 6,
        "share": 0.01639344262295082
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 4,
+       "share": 0.01092896174863388
       },
       {
        "name": "Quạt/Tản nhiệt",
@@ -6789,14 +7119,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 259,
-       "share": 0.5704845814977973
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 233,
+       "share": 0.513215859030837
       },
       {
        "name": "Quạt/Tản nhiệt",
        "qty": 171,
        "share": 0.3766519823788546
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 26,
+       "share": 0.05726872246696035
       },
       {
        "name": "Nguồn/Điện lưới",
@@ -6857,9 +7192,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 273,
-       "share": 0.6134831460674157
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 266,
+       "share": 0.597752808988764
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -6870,6 +7205,11 @@ const REPORT_DATA = {
        "name": "Súng/Cáp sạc",
        "qty": 30,
        "share": 0.06741573033707865
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 7,
+       "share": 0.015730337078651686
       },
       {
        "name": "Firmware/Phần mềm",
@@ -6905,14 +7245,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 249,
-       "share": 0.6043689320388349
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 193,
+       "share": 0.4684466019417476
       },
       {
        "name": "Module sạc/Rectifier",
        "qty": 123,
        "share": 0.29854368932038833
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 56,
+       "share": 0.13592233009708737
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -6973,9 +7318,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 244,
-       "share": 0.7601246105919003
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 236,
+       "share": 0.735202492211838
       },
       {
        "name": "Module sạc/Rectifier",
@@ -6991,6 +7336,11 @@ const REPORT_DATA = {
        "name": "SECC/Bộ điều khiển sạc",
        "qty": 10,
        "share": 0.03115264797507788
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 8,
+       "share": 0.024922118380062305
       },
       {
        "name": "Mạng/Kết nối",
@@ -7028,9 +7378,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 404,
-       "share": 0.44739756367663347
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 377,
+       "share": 0.4174972314507198
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -7066,6 +7416,16 @@ const REPORT_DATA = {
        "name": "Mạng/Kết nối",
        "qty": 17,
        "share": 0.018826135105204873
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 14,
+       "share": 0.015503875968992248
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 13,
+       "share": 0.014396456256921373
       },
       {
        "name": "Nguồn/Điện lưới",
@@ -7111,9 +7471,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 52,
-       "share": 0.4369747899159664
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 47,
+       "share": 0.3949579831932773
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -7124,6 +7484,11 @@ const REPORT_DATA = {
        "name": "Pin/BMS",
        "qty": 14,
        "share": 0.11764705882352941
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 5,
+       "share": 0.04201680672268908
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -7179,9 +7544,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 83,
-       "share": 0.5060975609756098
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 80,
+       "share": 0.4878048780487805
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -7209,12 +7574,22 @@ const REPORT_DATA = {
        "share": 0.018292682926829267
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 2,
+       "share": 0.012195121951219513
+      },
+      {
        "name": "Cảm biến/Đo lường/Camera",
        "qty": 2,
        "share": 0.012195121951219513
       },
       {
        "name": "Thao tác người dùng/CCS",
+       "qty": 1,
+       "share": 0.006097560975609756
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
        "qty": 1,
        "share": 0.006097560975609756
       },
@@ -7242,9 +7617,9 @@ const REPORT_DATA = {
        "share": 0.44680851063829785
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 92,
-       "share": 0.39148936170212767
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 89,
+       "share": 0.37872340425531914
       },
       {
        "name": "Firmware/Phần mềm",
@@ -7270,6 +7645,11 @@ const REPORT_DATA = {
        "name": "Thao tác người dùng/CCS",
        "qty": 3,
        "share": 0.01276595744680851
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 2,
+       "share": 0.00851063829787234
       },
       {
        "name": "Bo mạch/PCBA",
@@ -7300,6 +7680,11 @@ const REPORT_DATA = {
        "name": "Contactor/CB/Đóng cắt",
        "qty": 1,
        "share": 0.00425531914893617
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.00425531914893617
       }
      ]
     },
@@ -7310,9 +7695,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 112,
-       "share": 0.5957446808510638
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 107,
+       "share": 0.5691489361702128
       },
       {
        "name": "Pin/BMS",
@@ -7333,6 +7718,11 @@ const REPORT_DATA = {
        "name": "Firmware/Phần mềm",
        "qty": 8,
        "share": 0.0425531914893617
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 4,
+       "share": 0.02127659574468085
       },
       {
        "name": "Thao tác người dùng/CCS",
@@ -7358,6 +7748,11 @@ const REPORT_DATA = {
        "name": "Module sạc/Rectifier",
        "qty": 1,
        "share": 0.005319148936170213
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.005319148936170213
       }
      ]
     },
@@ -7368,9 +7763,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 88,
-       "share": 0.4583333333333333
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 83,
+       "share": 0.4322916666666667
       },
       {
        "name": "Contactor/CB/Đóng cắt",
@@ -7408,6 +7803,11 @@ const REPORT_DATA = {
        "share": 0.026041666666666668
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 4,
+       "share": 0.020833333333333332
+      },
+      {
        "name": "SECC/Bộ điều khiển sạc",
        "qty": 2,
        "share": 0.010416666666666666
@@ -7419,6 +7819,11 @@ const REPORT_DATA = {
       },
       {
        "name": "Thao tác người dùng/CCS",
+       "qty": 1,
+       "share": 0.005208333333333333
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
        "qty": 1,
        "share": 0.005208333333333333
       },
@@ -7441,14 +7846,19 @@ const REPORT_DATA = {
        "share": 0.5583333333333333
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 32,
-       "share": 0.26666666666666666
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 26,
+       "share": 0.21666666666666667
       },
       {
        "name": "Ngoại cảnh/Tác động vật lý",
        "qty": 8,
        "share": 0.06666666666666667
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 5,
+       "share": 0.041666666666666664
       },
       {
        "name": "Firmware/Phần mềm",
@@ -7471,6 +7881,11 @@ const REPORT_DATA = {
        "share": 0.008333333333333333
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.008333333333333333
+      },
+      {
        "name": "Mạng/Kết nối",
        "qty": 1,
        "share": 0.008333333333333333
@@ -7484,9 +7899,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 33,
-       "share": 0.3473684210526316
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 29,
+       "share": 0.30526315789473685
       },
       {
        "name": "Mạng/Kết nối",
@@ -7507,6 +7922,11 @@ const REPORT_DATA = {
        "name": "Module sạc/Rectifier",
        "qty": 8,
        "share": 0.08421052631578947
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 4,
+       "share": 0.042105263157894736
       },
       {
        "name": "Contactor/CB/Đóng cắt",
@@ -7538,23 +7958,23 @@ const REPORT_DATA = {
    ],
    "rcTrendEvcs": {
     "groups": [
-     "Không lỗi/Trùng lặp/Sai thông tin",
+     "Không tồn lỗi/Trụ bình thường",
      "Module sạc/Rectifier",
+     "Trùng ticket/Trụ khác",
      "Mạng/Kết nối",
      "Cảm biến/Đo lường/Camera",
      "Firmware/Phần mềm",
      "Quạt/Tản nhiệt",
-     "Súng/Cáp sạc",
-     "Bo mạch/PCBA"
+     "Súng/Cáp sạc"
     ],
     "series": [
      [
-      2260,
-      1608,
-      1719,
-      1833,
-      1205,
-      1077,
+      2049,
+      1385,
+      1489,
+      1632,
+      1066,
+      927,
       0
      ],
      [
@@ -7564,6 +7984,15 @@ const REPORT_DATA = {
       240,
       167,
       181,
+      0
+     ],
+     [
+      191,
+      216,
+      226,
+      194,
+      132,
+      146,
       0
      ],
      [
@@ -7610,28 +8039,19 @@ const REPORT_DATA = {
       51,
       56,
       0
-     ],
-     [
-      53,
-      50,
-      55,
-      43,
-      62,
-      37,
-      0
      ]
     ]
    },
    "rcTrendBss": {
     "groups": [
-     "Không lỗi/Trùng lặp/Sai thông tin",
+     "Không tồn lỗi/Trụ bình thường",
      "Cơ cấu/Khóa slot BSS",
      "Pin/BMS",
+     "Trùng ticket/Trụ khác",
      "Cảm biến/Đo lường/Camera",
      "Mạng/Kết nối",
      "Firmware/Phần mềm",
-     "Thao tác người dùng/CCS",
-     "Ngoại cảnh/Tác động vật lý"
+     "Thao tác người dùng/CCS"
     ],
     "series": [
      [
@@ -7640,7 +8060,7 @@ const REPORT_DATA = {
       0,
       0,
       0,
-      1039,
+      926,
       0
      ],
      [
@@ -7659,6 +8079,15 @@ const REPORT_DATA = {
       0,
       0,
       149,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      89,
       0
      ],
      [
@@ -7695,15 +8124,6 @@ const REPORT_DATA = {
       0,
       0,
       50,
-      0
-     ],
-     [
-      0,
-      0,
-      0,
-      0,
-      0,
-      45,
       0
      ]
     ]
@@ -9975,7 +10395,19 @@ const REPORT_DATA = {
      "cls": "Disclaim"
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 0,
      "share": 0.0,
      "cls": "Disclaim"
@@ -9983,9 +10415,9 @@ const REPORT_DATA = {
    ],
    "rcEvcsM": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 135,
-     "share": 0.3479381443298969,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 118,
+     "share": 0.30412371134020616,
      "cls": "Disclaim"
     },
     {
@@ -10023,6 +10455,12 @@ const REPORT_DATA = {
      "qty": 15,
      "share": 0.03865979381443299,
      "cls": "Hardware"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 15,
+     "share": 0.03865979381443299,
+     "cls": "Disclaim"
     },
     {
      "name": "Bo mạch/PCBA",
@@ -10071,6 +10509,12 @@ const REPORT_DATA = {
      "qty": 2,
      "share": 0.005154639175257732,
      "cls": "Hardware"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 2,
+     "share": 0.005154639175257732,
+     "cls": "Disclaim"
     },
     {
      "name": "Vệ sinh/Bảo dưỡng",
@@ -10207,7 +10651,19 @@ const REPORT_DATA = {
      "cls": "Disclaim"
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 0,
      "share": 0.0,
      "cls": "Disclaim"
@@ -10221,9 +10677,9 @@ const REPORT_DATA = {
      "cls": "Hardware"
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 1207,
-     "share": 0.3179662802950474,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 1083,
+     "share": 0.28530031612223394,
      "cls": "Disclaim"
     },
     {
@@ -10249,6 +10705,12 @@ const REPORT_DATA = {
      "qty": 120,
      "share": 0.03161222339304531,
      "cls": "Hardware"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 104,
+     "share": 0.0273972602739726,
+     "cls": "Disclaim"
     },
     {
      "name": "Ngoại cảnh/Tác động vật lý",
@@ -10291,6 +10753,12 @@ const REPORT_DATA = {
      "qty": 24,
      "share": 0.006322444678609062,
      "cls": "Hardware"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 20,
+     "share": 0.005268703898840885,
+     "cls": "Disclaim"
     },
     {
      "name": "Nguồn/Điện lưới",
@@ -10351,9 +10819,9 @@ const REPORT_DATA = {
    ],
    "rcXclsEvcsM": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 135,
-     "Disclaim": 114,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 118,
+     "Disclaim": 97,
      "Hardware": 14,
      "Software": 7,
      "Undefined yet": 0
@@ -10404,6 +10872,14 @@ const REPORT_DATA = {
      "Disclaim": 3,
      "Hardware": 11,
      "Software": 1,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 15,
+     "Disclaim": 15,
+     "Hardware": 0,
+     "Software": 0,
      "Undefined yet": 0
     },
     {
@@ -10471,6 +10947,14 @@ const REPORT_DATA = {
      "Undefined yet": 0
     },
     {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 2,
+     "Disclaim": 2,
+     "Hardware": 0,
+     "Software": 0,
+     "Undefined yet": 0
+    },
+    {
      "name": "Vệ sinh/Bảo dưỡng",
      "qty": 1,
      "Disclaim": 1,
@@ -10489,10 +10973,10 @@ const REPORT_DATA = {
      "Undefined yet": 0
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 1207,
-     "Disclaim": 547,
-     "Hardware": 644,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 1083,
+     "Disclaim": 437,
+     "Hardware": 630,
      "Software": 16,
      "Undefined yet": 0
     },
@@ -10526,6 +11010,14 @@ const REPORT_DATA = {
      "Disclaim": 14,
      "Hardware": 104,
      "Software": 2,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 104,
+     "Disclaim": 100,
+     "Hardware": 4,
+     "Software": 0,
      "Undefined yet": 0
     },
     {
@@ -10582,6 +11074,14 @@ const REPORT_DATA = {
      "Disclaim": 2,
      "Hardware": 17,
      "Software": 5,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 20,
+     "Disclaim": 10,
+     "Hardware": 10,
+     "Software": 0,
      "Undefined yet": 0
     },
     {
@@ -10757,9 +11257,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 24,
-       "share": 0.48
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 22,
+       "share": 0.44
       },
       {
        "name": "SECC/Bộ điều khiển sạc",
@@ -10780,6 +11280,11 @@ const REPORT_DATA = {
        "name": "Súng/Cáp sạc",
        "qty": 3,
        "share": 0.06
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 2,
+       "share": 0.04
       },
       {
        "name": "Nguồn/Điện lưới",
@@ -10810,9 +11315,9 @@ const REPORT_DATA = {
      "thin": true,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 11,
-       "share": 0.4074074074074074
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 10,
+       "share": 0.37037037037037035
       },
       {
        "name": "Mạng/Kết nối",
@@ -10838,6 +11343,11 @@ const REPORT_DATA = {
        "name": "Module sạc/Rectifier",
        "qty": 1,
        "share": 0.037037037037037035
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.037037037037037035
       }
      ]
     },
@@ -10848,7 +11358,7 @@ const REPORT_DATA = {
      "thin": true,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
+       "name": "Không tồn lỗi/Trụ bình thường",
        "qty": 13,
        "share": 0.48148148148148145
       },
@@ -10886,17 +11396,22 @@ const REPORT_DATA = {
      "thin": true,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 4,
-       "share": 0.3076923076923077
-      },
-      {
        "name": "Màn hình/HMI",
        "qty": 4,
        "share": 0.3076923076923077
       },
       {
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 3,
+       "share": 0.23076923076923078
+      },
+      {
        "name": "Module sạc/Rectifier",
+       "qty": 1,
+       "share": 0.07692307692307693
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
        "qty": 1,
        "share": 0.07692307692307693
       },
@@ -10929,7 +11444,7 @@ const REPORT_DATA = {
      "thin": true,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
+       "name": "Trùng ticket/Trụ khác",
        "qty": 3,
        "share": 0.42857142857142855
       },
@@ -10975,9 +11490,14 @@ const REPORT_DATA = {
      "thin": true,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 4,
-       "share": 0.6666666666666666
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 3,
+       "share": 0.5
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 1,
+       "share": 0.16666666666666666
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -11003,7 +11523,7 @@ const REPORT_DATA = {
        "share": 0.3333333333333333
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
+       "name": "Không tồn lỗi/Trụ bình thường",
        "qty": 1,
        "share": 0.16666666666666666
       },
@@ -11038,14 +11558,19 @@ const REPORT_DATA = {
        "share": 0.4553231939163498
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 465,
-       "share": 0.44201520912547526
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 429,
+       "share": 0.40779467680608367
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
        "qty": 34,
        "share": 0.03231939163498099
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 25,
+       "share": 0.02376425855513308
       },
       {
        "name": "Ngoại cảnh/Tác động vật lý",
@@ -11056,6 +11581,11 @@ const REPORT_DATA = {
        "name": "Pin/BMS",
        "qty": 16,
        "share": 0.015209125475285171
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 11,
+       "share": 0.010456273764258554
       },
       {
        "name": "Bo mạch/PCBA",
@@ -11131,9 +11661,9 @@ const REPORT_DATA = {
        "share": 0.5917843388960206
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 149,
-       "share": 0.19127086007702182
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 133,
+       "share": 0.17073170731707318
       },
       {
        "name": "Ngoại cảnh/Tác động vật lý",
@@ -11154,6 +11684,11 @@ const REPORT_DATA = {
        "name": "Cảm biến/Đo lường/Camera",
        "qty": 16,
        "share": 0.02053915275994865
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 15,
+       "share": 0.019255455712451863
       },
       {
        "name": "Bo mạch/PCBA",
@@ -11196,6 +11731,11 @@ const REPORT_DATA = {
        "share": 0.0012836970474967907
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.0012836970474967907
+      },
+      {
        "name": "Quạt/Tản nhiệt",
        "qty": 1,
        "share": 0.0012836970474967907
@@ -11214,14 +11754,19 @@ const REPORT_DATA = {
        "share": 0.6274509803921569
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 32,
-       "share": 0.20915032679738563
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 26,
+       "share": 0.16993464052287582
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
        "qty": 14,
        "share": 0.0915032679738562
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 6,
+       "share": 0.0392156862745098
       },
       {
        "name": "Chưa nghiệm thu/Chưa vận hành",
@@ -11257,9 +11802,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 54,
-       "share": 0.46551724137931033
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 46,
+       "share": 0.39655172413793105
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -11273,6 +11818,11 @@ const REPORT_DATA = {
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
+       "qty": 8,
+       "share": 0.06896551724137931
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
        "qty": 8,
        "share": 0.06896551724137931
       },
@@ -11305,9 +11855,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 35,
-       "share": 0.45454545454545453
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 30,
+       "share": 0.38961038961038963
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -11323,6 +11873,11 @@ const REPORT_DATA = {
        "name": "Mạng/Kết nối",
        "qty": 6,
        "share": 0.07792207792207792
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 5,
+       "share": 0.06493506493506493
       },
       {
        "name": "Pin/BMS",
@@ -11368,9 +11923,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 28,
-       "share": 0.35443037974683544
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 21,
+       "share": 0.26582278481012656
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -11381,6 +11936,11 @@ const REPORT_DATA = {
        "name": "Contactor/CB/Đóng cắt",
        "qty": 7,
        "share": 0.08860759493670886
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 6,
+       "share": 0.0759493670886076
       },
       {
        "name": "Pin/BMS",
@@ -11423,6 +11983,11 @@ const REPORT_DATA = {
        "share": 0.012658227848101266
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.012658227848101266
+      },
+      {
        "name": "Màn hình/HMI",
        "qty": 1,
        "share": 0.012658227848101266
@@ -11436,14 +12001,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 32,
-       "share": 0.4507042253521127
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 23,
+       "share": 0.323943661971831
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
        "qty": 10,
        "share": 0.14084507042253522
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 8,
+       "share": 0.11267605633802817
       },
       {
        "name": "Chưa nghiệm thu/Chưa vận hành",
@@ -11476,6 +12046,11 @@ const REPORT_DATA = {
        "share": 0.014084507042253521
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.014084507042253521
+      },
+      {
        "name": "Contactor/CB/Đóng cắt",
        "qty": 1,
        "share": 0.014084507042253521
@@ -11489,9 +12064,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 49,
-       "share": 0.7205882352941176
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 47,
+       "share": 0.6911764705882353
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -11502,6 +12077,11 @@ const REPORT_DATA = {
        "name": "Pin/BMS",
        "qty": 7,
        "share": 0.10294117647058823
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 2,
+       "share": 0.029411764705882353
       },
       {
        "name": "Thao tác người dùng/CCS",
@@ -11518,23 +12098,23 @@ const REPORT_DATA = {
    ],
    "rcTrendEvcs": {
     "groups": [
-     "Không lỗi/Trùng lặp/Sai thông tin",
+     "Không tồn lỗi/Trụ bình thường",
      "Súng/Cáp sạc",
      "Mạng/Kết nối",
      "Firmware/Phần mềm",
      "Module sạc/Rectifier",
+     "Trùng ticket/Trụ khác",
      "Màn hình/HMI",
-     "SECC/Bộ điều khiển sạc",
-     "Thao tác người dùng/CCS"
+     "SECC/Bộ điều khiển sạc"
     ],
     "series": [
      [
-      29,
-      36,
-      20,
-      34,
+      21,
+      26,
+      11,
       31,
-      70,
+      28,
+      59,
       0
      ],
      [
@@ -11574,6 +12154,15 @@ const REPORT_DATA = {
       0
      ],
      [
+      6,
+      9,
+      8,
+      2,
+      2,
+      11,
+      0
+     ],
+     [
       12,
       2,
       7,
@@ -11590,28 +12179,19 @@ const REPORT_DATA = {
       3,
       6,
       0
-     ],
-     [
-      1,
-      7,
-      2,
-      4,
-      0,
-      5,
-      0
      ]
     ]
    },
    "rcTrendBss": {
     "groups": [
      "Cơ cấu/Khóa slot BSS",
-     "Không lỗi/Trùng lặp/Sai thông tin",
+     "Không tồn lỗi/Trụ bình thường",
      "Cảm biến/Đo lường/Camera",
      "Pin/BMS",
      "Thao tác người dùng/CCS",
+     "Trùng ticket/Trụ khác",
      "Ngoại cảnh/Tác động vật lý",
-     "Firmware/Phần mềm",
-     "Mạng/Kết nối"
+     "Firmware/Phần mềm"
     ],
     "series": [
      [
@@ -11624,12 +12204,12 @@ const REPORT_DATA = {
       0
      ],
      [
-      272,
-      299,
-      392,
-      329,
-      391,
-      445,
+      259,
+      280,
+      371,
+      297,
+      377,
+      368,
       0
      ],
      [
@@ -11660,6 +12240,15 @@ const REPORT_DATA = {
       0
      ],
      [
+      8,
+      16,
+      16,
+      18,
+      13,
+      72,
+      0
+     ],
+     [
       14,
       17,
       13,
@@ -11675,15 +12264,6 @@ const REPORT_DATA = {
       9,
       26,
       30,
-      0
-     ],
-     [
-      16,
-      26,
-      10,
-      16,
-      17,
-      21,
       0
      ]
     ]
@@ -13935,7 +14515,19 @@ const REPORT_DATA = {
      "cls": "Disclaim"
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 0,
      "share": 0.0,
      "cls": "Disclaim"
@@ -13943,9 +14535,9 @@ const REPORT_DATA = {
    ],
    "rcEvcsM": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 4794,
-     "share": 0.4612720100067353,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 4222,
+     "share": 0.40623496584239394,
      "cls": "Disclaim"
     },
     {
@@ -13959,6 +14551,12 @@ const REPORT_DATA = {
      "qty": 686,
      "share": 0.0660059655537381,
      "cls": "Hardware"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 551,
+     "share": 0.05301645338208409,
+     "cls": "Disclaim"
     },
     {
      "name": "Mạng/Kết nối",
@@ -14036,6 +14634,12 @@ const REPORT_DATA = {
      "name": "Ngoại cảnh/Tác động vật lý",
      "qty": 31,
      "share": 0.0029827768690464736,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 21,
+     "share": 0.0020205907822572885,
      "cls": "Disclaim"
     },
     {
@@ -14167,7 +14771,19 @@ const REPORT_DATA = {
      "cls": "Disclaim"
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 0,
+     "share": 0.0,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
      "qty": 0,
      "share": 0.0,
      "cls": "Disclaim"
@@ -14181,9 +14797,9 @@ const REPORT_DATA = {
      "cls": ""
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 2246,
-     "share": 0.17933567550303417,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 2009,
+     "share": 0.16041200894282975,
      "cls": "Disclaim"
     },
     {
@@ -14203,6 +14819,12 @@ const REPORT_DATA = {
      "qty": 229,
      "share": 0.018284893005429577,
      "cls": "Hardware"
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 193,
+     "share": 0.01541041200894283,
+     "cls": "Disclaim"
     },
     {
      "name": "Thao tác người dùng/CCS",
@@ -14244,6 +14866,12 @@ const REPORT_DATA = {
      "name": "Nguồn/Điện lưới",
      "qty": 60,
      "share": 0.0047908016608112424,
+     "cls": "Disclaim"
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 44,
+     "share": 0.0035132545512615776,
      "cls": "Disclaim"
     },
     {
@@ -14311,11 +14939,11 @@ const REPORT_DATA = {
    ],
    "rcXclsEvcsM": [
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 4794,
-     "Disclaim": 2842,
-     "Hardware": 1623,
-     "Software": 329,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 4222,
+     "Disclaim": 2287,
+     "Hardware": 1609,
+     "Software": 326,
      "Undefined yet": 0
     },
     {
@@ -14332,6 +14960,14 @@ const REPORT_DATA = {
      "Disclaim": 135,
      "Hardware": 539,
      "Software": 12,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 551,
+     "Disclaim": 537,
+     "Hardware": 12,
+     "Software": 2,
      "Undefined yet": 0
     },
     {
@@ -14439,6 +15075,14 @@ const REPORT_DATA = {
      "Undefined yet": 0
     },
     {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 21,
+     "Disclaim": 18,
+     "Hardware": 2,
+     "Software": 1,
+     "Undefined yet": 0
+    },
+    {
      "name": "Vệ sinh/Bảo dưỡng",
      "qty": 13,
      "Disclaim": 13,
@@ -14465,10 +15109,10 @@ const REPORT_DATA = {
      "Undefined yet": 2517
     },
     {
-     "name": "Không lỗi/Trùng lặp/Sai thông tin",
-     "qty": 2246,
-     "Disclaim": 1295,
-     "Hardware": 913,
+     "name": "Không tồn lỗi/Trụ bình thường",
+     "qty": 2009,
+     "Disclaim": 1075,
+     "Hardware": 896,
      "Software": 38,
      "Undefined yet": 0
     },
@@ -14494,6 +15138,14 @@ const REPORT_DATA = {
      "Disclaim": 62,
      "Hardware": 158,
      "Software": 9,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Trùng ticket/Trụ khác",
+     "qty": 193,
+     "Disclaim": 188,
+     "Hardware": 5,
+     "Software": 0,
      "Undefined yet": 0
     },
     {
@@ -14549,6 +15201,14 @@ const REPORT_DATA = {
      "qty": 60,
      "Disclaim": 52,
      "Hardware": 8,
+     "Software": 0,
+     "Undefined yet": 0
+    },
+    {
+     "name": "Sai thông tin/Không liên hệ",
+     "qty": 44,
+     "Disclaim": 32,
+     "Hardware": 12,
      "Software": 0,
      "Undefined yet": 0
     },
@@ -14733,14 +15393,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 522,
-       "share": 0.6761658031088082
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 488,
+       "share": 0.6321243523316062
       },
       {
        "name": "Mạng/Kết nối",
        "qty": 192,
        "share": 0.24870466321243523
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 33,
+       "share": 0.042746113989637305
       },
       {
        "name": "Firmware/Phần mềm",
@@ -14786,6 +15451,11 @@ const REPORT_DATA = {
        "name": "Ngoại cảnh/Tác động vật lý",
        "qty": 1,
        "share": 0.0012953367875647669
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.0012953367875647669
       }
      ]
     },
@@ -14796,9 +15466,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 547,
-       "share": 0.7950581395348837
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 535,
+       "share": 0.7776162790697675
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -14816,6 +15486,11 @@ const REPORT_DATA = {
        "share": 0.01744186046511628
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 10,
+       "share": 0.014534883720930232
+      },
+      {
        "name": "Mạng/Kết nối",
        "qty": 6,
        "share": 0.00872093023255814
@@ -14829,6 +15504,11 @@ const REPORT_DATA = {
        "name": "Thao tác người dùng/CCS",
        "qty": 2,
        "share": 0.0029069767441860465
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 2,
+       "share": 0.0029069767441860465
       }
      ]
     },
@@ -14839,14 +15519,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 424,
-       "share": 0.7247863247863248
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 400,
+       "share": 0.6837606837606838
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
        "qty": 103,
        "share": 0.17606837606837608
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 21,
+       "share": 0.035897435897435895
       },
       {
        "name": "Thao tác người dùng/CCS",
@@ -14870,6 +15555,11 @@ const REPORT_DATA = {
       },
       {
        "name": "Màn hình/HMI",
+       "qty": 3,
+       "share": 0.005128205128205128
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
        "qty": 3,
        "share": 0.005128205128205128
       },
@@ -14927,9 +15617,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 172,
-       "share": 0.43765903307888043
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 153,
+       "share": 0.3893129770992366
       },
       {
        "name": "Mạng/Kết nối",
@@ -14945,6 +15635,11 @@ const REPORT_DATA = {
        "name": "Thao tác người dùng/CCS",
        "qty": 24,
        "share": 0.061068702290076333
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 15,
+       "share": 0.03816793893129771
       },
       {
        "name": "Contactor/CB/Đóng cắt",
@@ -14970,6 +15665,11 @@ const REPORT_DATA = {
        "name": "Nguồn/Điện lưới",
        "qty": 6,
        "share": 0.015267175572519083
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 4,
+       "share": 0.010178117048346057
       },
       {
        "name": "Quạt/Tản nhiệt",
@@ -15015,14 +15715,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 260,
-       "share": 0.5689277899343544
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 234,
+       "share": 0.5120350109409191
       },
       {
        "name": "Quạt/Tản nhiệt",
        "qty": 172,
        "share": 0.37636761487964987
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 26,
+       "share": 0.05689277899343545
       },
       {
        "name": "Nguồn/Điện lưới",
@@ -15083,9 +15788,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 274,
-       "share": 0.6129753914988815
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 267,
+       "share": 0.5973154362416108
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -15096,6 +15801,11 @@ const REPORT_DATA = {
        "name": "Súng/Cáp sạc",
        "qty": 30,
        "share": 0.06711409395973154
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 7,
+       "share": 0.015659955257270694
       },
       {
        "name": "Firmware/Phần mềm",
@@ -15131,14 +15841,19 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 249,
-       "share": 0.6043689320388349
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 193,
+       "share": 0.4684466019417476
       },
       {
        "name": "Module sạc/Rectifier",
        "qty": 123,
        "share": 0.29854368932038833
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 56,
+       "share": 0.13592233009708737
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -15199,9 +15914,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 244,
-       "share": 0.7577639751552795
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 236,
+       "share": 0.7329192546583851
       },
       {
        "name": "Module sạc/Rectifier",
@@ -15217,6 +15932,11 @@ const REPORT_DATA = {
        "name": "SECC/Bộ điều khiển sạc",
        "qty": 10,
        "share": 0.031055900621118012
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 8,
+       "share": 0.024844720496894408
       },
       {
        "name": "Mạng/Kết nối",
@@ -15259,14 +15979,19 @@ const REPORT_DATA = {
        "share": 0.444064901793339
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 517,
-       "share": 0.44150298889837747
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 476,
+       "share": 0.40649017933390263
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
        "qty": 37,
        "share": 0.03159692570452605
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 30,
+       "share": 0.025619128949615714
       },
       {
        "name": "Pin/BMS",
@@ -15277,6 +16002,11 @@ const REPORT_DATA = {
        "name": "Ngoại cảnh/Tác động vật lý",
        "qty": 19,
        "share": 0.016225448334756618
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 11,
+       "share": 0.009393680614859094
       },
       {
        "name": "Bo mạch/PCBA",
@@ -15352,9 +16082,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 436,
-       "share": 0.4128787878787879
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 403,
+       "share": 0.3816287878787879
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -15387,9 +16117,19 @@ const REPORT_DATA = {
        "share": 0.019886363636363636
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 20,
+       "share": 0.01893939393939394
+      },
+      {
        "name": "Mạng/Kết nối",
        "qty": 17,
        "share": 0.016098484848484848
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 13,
+       "share": 0.01231060606060606
       },
       {
        "name": "Nguồn/Điện lưới",
@@ -15440,9 +16180,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 137,
-       "share": 0.48928571428571427
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 126,
+       "share": 0.45
       },
       {
        "name": "Cơ cấu/Khóa slot BSS",
@@ -15453,6 +16193,11 @@ const REPORT_DATA = {
        "name": "Pin/BMS",
        "qty": 19,
        "share": 0.06785714285714285
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 10,
+       "share": 0.03571428571428571
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -15488,6 +16233,11 @@ const REPORT_DATA = {
        "name": "Thao tác người dùng/CCS",
        "qty": 1,
        "share": 0.0035714285714285713
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.0035714285714285713
       }
      ]
     },
@@ -15503,9 +16253,9 @@ const REPORT_DATA = {
        "share": 0.44666666666666666
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 116,
-       "share": 0.38666666666666666
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 113,
+       "share": 0.37666666666666665
       },
       {
        "name": "Firmware/Phần mềm",
@@ -15538,6 +16288,11 @@ const REPORT_DATA = {
        "share": 0.006666666666666667
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 2,
+       "share": 0.006666666666666667
+      },
+      {
        "name": "Contactor/CB/Đóng cắt",
        "qty": 2,
        "share": 0.006666666666666667
@@ -15559,6 +16314,11 @@ const REPORT_DATA = {
       },
       {
        "name": "Module sạc/Rectifier",
+       "qty": 1,
+       "share": 0.0033333333333333335
+      },
+      {
+       "name": "Sai thông tin/Không liên hệ",
        "qty": 1,
        "share": 0.0033333333333333335
       },
@@ -15586,9 +16346,9 @@ const REPORT_DATA = {
        "share": 0.5917843388960206
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 149,
-       "share": 0.19127086007702182
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 133,
+       "share": 0.17073170731707318
       },
       {
        "name": "Ngoại cảnh/Tác động vật lý",
@@ -15609,6 +16369,11 @@ const REPORT_DATA = {
        "name": "Cảm biến/Đo lường/Camera",
        "qty": 16,
        "share": 0.02053915275994865
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 15,
+       "share": 0.019255455712451863
       },
       {
        "name": "Bo mạch/PCBA",
@@ -15651,6 +16416,11 @@ const REPORT_DATA = {
        "share": 0.0012836970474967907
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.0012836970474967907
+      },
+      {
        "name": "Quạt/Tản nhiệt",
        "qty": 1,
        "share": 0.0012836970474967907
@@ -15664,9 +16434,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 145,
-       "share": 0.5894308943089431
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 138,
+       "share": 0.5609756097560976
       },
       {
        "name": "Pin/BMS",
@@ -15694,6 +16464,11 @@ const REPORT_DATA = {
        "share": 0.024390243902439025
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 6,
+       "share": 0.024390243902439025
+      },
+      {
        "name": "Cảm biến/Đo lường/Camera",
        "qty": 3,
        "share": 0.012195121951219513
@@ -15714,6 +16489,11 @@ const REPORT_DATA = {
        "share": 0.0040650406504065045
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.0040650406504065045
+      },
+      {
        "name": "Ngoại cảnh/Tác động vật lý",
        "qty": 1,
        "share": 0.0040650406504065045
@@ -15727,9 +16507,9 @@ const REPORT_DATA = {
      "thin": false,
      "reasons": [
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 123,
-       "share": 0.45724907063197023
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 113,
+       "share": 0.4200743494423792
       },
       {
        "name": "Cảm biến/Đo lường/Camera",
@@ -15767,6 +16547,11 @@ const REPORT_DATA = {
        "share": 0.040892193308550186
       },
       {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 9,
+       "share": 0.03345724907063197
+      },
+      {
        "name": "Module sạc/Rectifier",
        "qty": 4,
        "share": 0.01486988847583643
@@ -15787,6 +16572,11 @@ const REPORT_DATA = {
        "share": 0.007434944237918215
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.0037174721189591076
+      },
+      {
        "name": "Bo mạch/PCBA",
        "qty": 1,
        "share": 0.0037174721189591076
@@ -15805,14 +16595,19 @@ const REPORT_DATA = {
        "share": 0.5319148936170213
       },
       {
-       "name": "Không lỗi/Trùng lặp/Sai thông tin",
-       "qty": 42,
-       "share": 0.2978723404255319
+       "name": "Không tồn lỗi/Trụ bình thường",
+       "qty": 35,
+       "share": 0.24822695035460993
       },
       {
        "name": "Ngoại cảnh/Tác động vật lý",
        "qty": 8,
        "share": 0.05673758865248227
+      },
+      {
+       "name": "Trùng ticket/Trụ khác",
+       "qty": 6,
+       "share": 0.0425531914893617
       },
       {
        "name": "Firmware/Phần mềm",
@@ -15835,6 +16630,11 @@ const REPORT_DATA = {
        "share": 0.0070921985815602835
       },
       {
+       "name": "Sai thông tin/Không liên hệ",
+       "qty": 1,
+       "share": 0.0070921985815602835
+      },
+      {
        "name": "Mạng/Kết nối",
        "qty": 1,
        "share": 0.0070921985815602835
@@ -15844,23 +16644,23 @@ const REPORT_DATA = {
    ],
    "rcTrendEvcs": {
     "groups": [
-     "Không lỗi/Trùng lặp/Sai thông tin",
+     "Không tồn lỗi/Trụ bình thường",
      "Module sạc/Rectifier",
+     "Trùng ticket/Trụ khác",
      "Mạng/Kết nối",
      "Cảm biến/Đo lường/Camera",
      "Firmware/Phần mềm",
      "Súng/Cáp sạc",
-     "Quạt/Tản nhiệt",
-     "Bo mạch/PCBA"
+     "Quạt/Tản nhiệt"
     ],
     "series": [
      [
-      2289,
-      1644,
-      1739,
-      1867,
-      1236,
-      1147,
+      2070,
+      1411,
+      1500,
+      1663,
+      1094,
+      986,
       0
      ],
      [
@@ -15870,6 +16670,15 @@ const REPORT_DATA = {
       246,
       174,
       194,
+      0
+     ],
+     [
+      197,
+      225,
+      234,
+      196,
+      134,
+      157,
       0
      ],
      [
@@ -15916,39 +16725,21 @@ const REPORT_DATA = {
       55,
       59,
       0
-     ],
-     [
-      57,
-      51,
-      57,
-      47,
-      68,
-      38,
-      0
      ]
     ]
    },
    "rcTrendBss": {
     "groups": [
-     "Không lỗi/Trùng lặp/Sai thông tin",
      "Cơ cấu/Khóa slot BSS",
+     "Không tồn lỗi/Trụ bình thường",
      "Pin/BMS",
      "Cảm biến/Đo lường/Camera",
+     "Trùng ticket/Trụ khác",
      "Thao tác người dùng/CCS",
      "Firmware/Phần mềm",
-     "Ngoại cảnh/Tác động vật lý",
-     "Mạng/Kết nối"
+     "Ngoại cảnh/Tác động vật lý"
     ],
     "series": [
-     [
-      272,
-      299,
-      392,
-      329,
-      391,
-      1484,
-      0
-     ],
      [
       220,
       271,
@@ -15956,6 +16747,15 @@ const REPORT_DATA = {
       487,
       428,
       1045,
+      0
+     ],
+     [
+      259,
+      280,
+      371,
+      297,
+      377,
+      1294,
       0
      ],
      [
@@ -15974,6 +16774,15 @@ const REPORT_DATA = {
       25,
       70,
       133,
+      0
+     ],
+     [
+      8,
+      16,
+      16,
+      18,
+      13,
+      161,
       0
      ],
      [
@@ -16001,15 +16810,6 @@ const REPORT_DATA = {
       23,
       27,
       89,
-      0
-     ],
-     [
-      16,
-      26,
-      10,
-      16,
-      17,
-      96,
       0
      ]
     ]
@@ -23894,8 +24694,8 @@ const REPORT_DATA = {
      }
     ]
    },
-   "Không lỗi/Trùng lặp/Sai thông tin": {
-    "total": 4794,
+   "Không tồn lỗi/Trụ bình thường": {
+    "total": 4222,
     "samples": [
      {
       "id": "1128852439327178752",
@@ -23925,6 +24725,29 @@ const REPORT_DATA = {
       "bc": "Error: Trụ sạc OTĐ/Lỗi công tắc cửa - Descript: A0112(DoorAccessDetected) - Repair Descript :ktra trụ không báo lỗi, lấy log - PA:  - OS: TNI10190\n253001000357 ktra trụ không báo lỗi, lấy log"
      },
      {
+      "id": "1128844931249078272",
+      "cpid": "253001004596",
+      "station": "C.TNG0362",
+      "bd": "Disclaim",
+      "kw": "bình thường",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi Modun nguồn - Descript: kỹ thuật kiểm tra module nguồn - Repair Descript :13/07/2026 trụ lỗi C0407. kỹ thuật đến kiểm tra module nguồn và reset lại trụ. Sau reset module hoạt độ"
+     },
+     {
+      "id": "1128842575662153728",
+      "cpid": "252201000336",
+      "station": "C.AGI0077",
+      "bd": "Disclaim",
+      "kw": "bình thường",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi dây kết nối trụ link - Descript: trụ không link - Repair Descript :kiêm tra dây link, reset cứng tru - PA:  - OS: Kiểm tra lại dây link, đo điện trơ link đat, reset cứng, test s"
+     }
+    ]
+   },
+   "Trùng ticket/Trụ khác": {
+    "total": 551,
+    "samples": [
+     {
       "id": "1128845376899383296",
       "cpid": "252601000274",
       "station": "C.LDO0140",
@@ -23934,13 +24757,90 @@ const REPORT_DATA = {
       "bc": "Error: Trụ sạc OTĐ/Lỗi cảm biến - Descript: Trùng case 1126989509005279232 - Repair Descript :Trùng case 1126989509005279232 - PA: lỗi trùng - OS: Trùng case 1126989509005279232"
      },
      {
-      "id": "1128844931249078272",
-      "cpid": "253001004596",
-      "station": "C.TNG0362",
+      "id": "1128836073735979008",
+      "cpid": "242601000230",
+      "station": "C.BGI0043",
       "bd": "Disclaim",
-      "kw": "bình thường",
+      "kw": "trùng",
       "src": "Solution",
-      "bc": "Error: Trụ sạc OTĐ/Lỗi Modun nguồn - Descript: kỹ thuật kiểm tra module nguồn - Repair Descript :13/07/2026 trụ lỗi C0407. kỹ thuật đến kiểm tra module nguồn và reset lại trụ. Sau reset module hoạt độ"
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: trùng TK 1128238675400065024 - Repair Descript :trùng TK 1128238675400065024 - PA:  - OS: trùng TK 1128238675400065024"
+     },
+     {
+      "id": "1128833558097297408",
+      "cpid": "243200002104",
+      "station": "C.PTH0098",
+      "bd": "Disclaim",
+      "kw": "trùng case",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: 1127484129858420736 TRÙNG CASE . KĨ THUẬT ĐÃ LIÊN HỆ VỚI KHÁCH HÀNG NHIỀU LẦN KH KO MUỐN CHO QUA KIỂM TRA VÀ NÓI SẼ TỰ LH KĨ THUẬT KHI SẮP XẾP ĐƯỢ"
+     },
+     {
+      "id": "1128820739417964544",
+      "cpid": "252901001752",
+      "station": "C.GLA00187",
+      "bd": "Disclaim",
+      "kw": "trùng case",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi cảm biến - Descript: Trùng case 1128051378171936768 - Repair Descript :Trùng case 1128051378171936768 - PA:  - OS: Trùng case 1128051378171936768"
+     },
+     {
+      "id": "1128809922300870656",
+      "cpid": "243902001339",
+      "station": "C.QNA0061",
+      "bd": "Disclaim",
+      "kw": "trùng case",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi cảm biến - Descript: Trùng case 1128458817065189376 - Repair Descript :Trùng case 1128458817065189376 - PA:  - OS: Trùng case 1128458817065189376"
+     }
+    ]
+   },
+   "Sai thông tin/Không liên hệ": {
+    "total": 21,
+    "samples": [
+     {
+      "id": "1128816796415688704",
+      "cpid": "252901001988",
+      "station": "C.PTH0397",
+      "bd": "Disclaim",
+      "kw": "không thuộc",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: khu vực không thuộc EC vận hành - Repair Descript :khu vực không thuộc EC vận hành - PA:  - OS: khu vực không thuộc EC vận hành"
+     },
+     {
+      "id": "1128778647400480768",
+      "cpid": "244500002293",
+      "station": "C.LCH0066",
+      "bd": "Disclaim",
+      "kw": "không nghe máy",
+      "src": "Solution",
+      "bc": "Error: Tủ đổi pin/Lỗi khoang pin - Descript: trụ báo đỏ - Repair Descript :ngày 14.07 đã liên hệ với khách hàng nhưng khách hàng không nghe máy - PA:  - OS: ngày 14.07 đã liên hệ với khách hàng nhưng "
+     },
+     {
+      "id": "1128420862807375872",
+      "cpid": "243302000043",
+      "station": "C.YBI0038",
+      "bd": "Disclaim",
+      "kw": "không phải",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: Tại thời điểm kiểm tra trụ không tồn lỗi. Trụ xanh hoạt động bình thường - Repair Descript :Tại thời điểm kiểm tra trụ không tồn lỗi. Trụ xanh hoạ"
+     },
+     {
+      "id": "1128420849730453504",
+      "cpid": "243302000050",
+      "station": "C.YBI0038",
+      "bd": "Software",
+      "kw": "không phải",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: Tại thời điểm kiểm tra trụ không tồn lỗi. Trụ xanh hoạt động bình thường - Repair Descript :Tại thời điểm kiểm tra trụ không tồn lỗi. Trụ xanh hoạ"
+     },
+     {
+      "id": "1125940050786648064",
+      "cpid": "252901000221",
+      "station": "C.DNA0223",
+      "bd": "Disclaim",
+      "kw": "nhầm",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: Giao nhầm ASP - Repair Descript :Giao nhầm ASP - PA:  - OS: giao nhầm ASP"
      }
     ]
    },
@@ -24801,8 +25701,8 @@ const REPORT_DATA = {
      }
     ]
    },
-   "Không lỗi/Trùng lặp/Sai thông tin": {
-    "total": 2246,
+   "Không tồn lỗi/Trụ bình thường": {
+    "total": 2009,
     "samples": [
      {
       "id": "1128836113846108160",
@@ -24812,15 +25712,6 @@ const REPORT_DATA = {
       "kw": "không tồn lỗi",
       "src": "Solution",
       "bc": "Error: Trụ sạc OTĐ/Lỗi AC contactor - Descript: lỗi ac - Repair Descript :check vh clear lỗi - PA:  - OS: nhờ vh check trụ không tồn lỗi"
-     },
-     {
-      "id": "1128834916242292736",
-      "cpid": "BSS-254641025969",
-      "station": "B.LDO10658",
-      "bd": "Disclaim",
-      "kw": "trùng case",
-      "src": "Solution",
-      "bc": "Error: Trụ sạc OTĐ/Lỗi cảm biến - Descript: Trùng case 1127966795782029312 - Repair Descript :Trùng case 1127966795782029312 - PA:  - OS: Trùng case 1127966795782029312"
      },
      {
       "id": "1128813397917958144",
@@ -24841,6 +25732,38 @@ const REPORT_DATA = {
       "bc": "Error: Tủ đổi pin/Lỗi khoang pin - Descript: mkn(nhảy cb) - Repair Descript :bật lại cb - PA:  - OS: trạm xa nhờ người thân xử lý hộ_check lại vận hành trụ ko tồn lỗi"
      },
      {
+      "id": "1128797536326909952",
+      "cpid": "BSS-255141001821",
+      "station": "B.DTH10195",
+      "bd": "Disclaim",
+      "kw": "bình thường",
+      "src": "Solution",
+      "bc": "Error: Tủ đổi pin/Lỗi mạch QT - Descript: Lỗi màn hình - Repair Descript :DTH10195\nBSS-255141001821\nKỹ thuật đến kiểm tra tủ hoạt động bình thường. Rest lại tủ, tủ chưa có pin - PA:  - OS: DTH10195\nBS"
+     },
+     {
+      "id": "1128796286051024896",
+      "cpid": "BSS-254641025692",
+      "station": "B.NAN10393",
+      "bd": "Disclaim",
+      "kw": "bình thường",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: TẠI THỜI ĐIỂM  kiểm tra trụ hoạt động bình thường - Repair Descript :TẠI THỜI ĐIỂM  kiểm tra trụ hoạt động bình thường - PA:  - OS: TẠI THỜI ĐIỂM "
+     }
+    ]
+   },
+   "Trùng ticket/Trụ khác": {
+    "total": 193,
+    "samples": [
+     {
+      "id": "1128834916242292736",
+      "cpid": "BSS-254641025969",
+      "station": "B.LDO10658",
+      "bd": "Disclaim",
+      "kw": "trùng case",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi cảm biến - Descript: Trùng case 1127966795782029312 - Repair Descript :Trùng case 1127966795782029312 - PA:  - OS: Trùng case 1127966795782029312"
+     },
+     {
       "id": "1128802795900239872",
       "cpid": "BSS-254641025969",
       "station": "B.LDO10658",
@@ -24848,6 +25771,83 @@ const REPORT_DATA = {
       "kw": "trùng case",
       "src": "Solution",
       "bc": "Error: Trụ sạc OTĐ/Lỗi cảm biến - Descript: Trùng case 1127966795782029312 - Repair Descript :Trùng case 1127966795782029312 - PA:  - OS: Trùng case 1127966795782029312"
+     },
+     {
+      "id": "1128735532518080512",
+      "cpid": "BSS-254641000803",
+      "station": "B.HCM00264",
+      "bd": "Disclaim",
+      "kw": "trùng case",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi công tắc cửa - Descript: lỗi cửa - Repair Descript :trùng case 1128237780410171392 - PA:  - OS: trùng case đã xử lý ở ticket 1128237780410171392"
+     },
+     {
+      "id": "1128724137685942272",
+      "cpid": "BSS-254641025969",
+      "station": "B.LDO10658",
+      "bd": "Disclaim",
+      "kw": "trùng case",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi cảm biến - Descript: Trùng case 1127966795782029312 - Repair Descript :Trùng case 1127966795782029312 - PA:  - OS: Trùng case 1127966795782029312"
+     },
+     {
+      "id": "1128677833868705792",
+      "cpid": "BSS-26012741000001",
+      "station": "B.HPH11469",
+      "bd": "Disclaim",
+      "kw": "trùng",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: trùng TK 1127775597340393472 - Repair Descript :trùng TK 1127775597340393472 - PA:  - OS: trùng TK 1127775597340393472"
+     }
+    ]
+   },
+   "Sai thông tin/Không liên hệ": {
+    "total": 44,
+    "samples": [
+     {
+      "id": "1128683585773633536",
+      "cpid": "BSS-254441000331",
+      "station": "B.HNO00299",
+      "bd": "Disclaim",
+      "kw": "nhầm",
+      "src": "Solution",
+      "bc": "Error: Trụ sạc OTĐ/Lỗi trụ khác - Descript: tủ đổi pin xanh hoạt động bình thường  - Repair Descript :tại thời điểm kiểm tra tủ đổi pin xanh hoạt động bình thường, cảnh báo cửa không tồn lỗi, khách hà"
+     },
+     {
+      "id": "1128472512335970304",
+      "cpid": "BSS-254641000149",
+      "station": "B.HNO02514",
+      "bd": "Hardware",
+      "kw": "không tìm thấy",
+      "src": "Additional info",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: Trụ sạc báo lỗi B6000 Unlock Failed, lỗi mở khóa ngăn chứa pin. - Repair Descript :Kỹ thuật viên đến hiện trường nhưng không tìm thấy tủ do thông "
+     },
+     {
+      "id": "1128457386332651520",
+      "cpid": "BSS-255141001877",
+      "station": "B.HCM01598",
+      "bd": "Disclaim",
+      "kw": "không tìm thấy",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: Sai thông tin không tìm thấy tủ - Repair Descript :Sai thông tin không tìm thấy tủ - PA:  - OS: Sai thông tin không tìm thấy tủ đã báo VH "
+     },
+     {
+      "id": "1128310762151215104",
+      "cpid": "BSS-255241022595",
+      "station": "B.HCM10225",
+      "bd": "Disclaim",
+      "kw": "không tìm thấy",
+      "src": "Solution",
+      "bc": "Error: Tủ đổi pin/Lỗi thông tin tủ - Descript: kỹ thuật đến nơi, không tìm thấy S/N  - Repair Descript :kỹ thuật đến nơi, không tìm thấy S/N  - PA:  - OS: kỹ thuật đến nơi, không tìm thấy S/N "
+     },
+     {
+      "id": "1128250536177827840",
+      "cpid": "BSS-254941001854",
+      "station": "B.HCM13069",
+      "bd": "Hardware",
+      "kw": "không liên hệ",
+      "src": "Solution",
+      "bc": "Error: Lỗi khách quan/Lỗi khách quan khác - Descript: Lỗi C6029 - Repair Descript :Reset - PA:  - OS: Khu vực mặt sau tủ nằm trong sân nhà dân, kỹ thuật đến nhưng không liên hệ được chủ nhà"
      }
     ]
    },
@@ -24912,5 +25912,5 @@ const REPORT_DATA = {
   "partsBssM",
   "partsTotal"
  ],
- "generatedAt": "2026-07-24 14:06"
+ "generatedAt": "2026-07-24 17:33"
 };
