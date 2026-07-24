@@ -2966,6 +2966,106 @@ const REPORT_DATA = {
    }
   ]
  },
+ "undefEvcsW": {
+  "total": 1065,
+  "rows": [
+   {
+    "name": "Truyền thông/Kết nối",
+    "qty": 633,
+    "share": 0.5943661971830986
+   },
+   {
+    "name": "Door Access (mở cửa)",
+    "qty": 28,
+    "share": 0.02629107981220657
+   },
+   {
+    "name": "Điện lưới/Cách điện/Khói",
+    "qty": 123,
+    "share": 0.11549295774647887
+   },
+   {
+    "name": "Mã lỗi khác",
+    "qty": 281,
+    "share": 0.26384976525821596
+   }
+  ]
+ },
+ "undefEvcsM": {
+  "total": 1115,
+  "rows": [
+   {
+    "name": "Truyền thông/Kết nối",
+    "qty": 644,
+    "share": 0.5775784753363229
+   },
+   {
+    "name": "Door Access (mở cửa)",
+    "qty": 30,
+    "share": 0.026905829596412557
+   },
+   {
+    "name": "Điện lưới/Cách điện/Khói",
+    "qty": 134,
+    "share": 0.12017937219730941
+   },
+   {
+    "name": "Mã lỗi khác",
+    "qty": 307,
+    "share": 0.27533632286995513
+   }
+  ]
+ },
+ "undefBssW": {
+  "total": 2029,
+  "rows": [
+   {
+    "name": "Truyền thông/Kết nối",
+    "qty": 597,
+    "share": 0.2942336126170527
+   },
+   {
+    "name": "Door Access (mở cửa)",
+    "qty": 1011,
+    "share": 0.4982750123213406
+   },
+   {
+    "name": "Điện lưới/Cách điện/Khói",
+    "qty": 129,
+    "share": 0.06357811729916214
+   },
+   {
+    "name": "Mã lỗi khác",
+    "qty": 292,
+    "share": 0.14391325776244454
+   }
+  ]
+ },
+ "undefBssM": {
+  "total": 2338,
+  "rows": [
+   {
+    "name": "Truyền thông/Kết nối",
+    "qty": 744,
+    "share": 0.31822070145423437
+   },
+   {
+    "name": "Door Access (mở cửa)",
+    "qty": 1123,
+    "share": 0.4803250641573995
+   },
+   {
+    "name": "Điện lưới/Cách điện/Khói",
+    "qty": 159,
+    "share": 0.06800684345594525
+   },
+   {
+    "name": "Mã lỗi khác",
+    "qty": 312,
+    "share": 0.13344739093242086
+   }
+  ]
+ },
  "rcEvcsW": [
   {
    "name": "Chưa xác định",
@@ -5412,6 +5512,106 @@ const REPORT_DATA = {
       "name": "Chưa xác định",
       "qty": 2338,
       "share": 0.2678735105407883
+     }
+    ]
+   },
+   "undefEvcsW": {
+    "total": 1065,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 633,
+      "share": 0.5943661971830986
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 28,
+      "share": 0.02629107981220657
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 123,
+      "share": 0.11549295774647887
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 281,
+      "share": 0.26384976525821596
+     }
+    ]
+   },
+   "undefEvcsM": {
+    "total": 1115,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 644,
+      "share": 0.5775784753363229
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 30,
+      "share": 0.026905829596412557
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 134,
+      "share": 0.12017937219730941
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 307,
+      "share": 0.27533632286995513
+     }
+    ]
+   },
+   "undefBssW": {
+    "total": 2029,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 597,
+      "share": 0.2942336126170527
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 1011,
+      "share": 0.4982750123213406
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 129,
+      "share": 0.06357811729916214
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 292,
+      "share": 0.14391325776244454
+     }
+    ]
+   },
+   "undefBssM": {
+    "total": 2338,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 744,
+      "share": 0.31822070145423437
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 1123,
+      "share": 0.4803250641573995
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 159,
+      "share": 0.06800684345594525
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 312,
+      "share": 0.13344739093242086
      }
     ]
    },
@@ -9575,6 +9775,96 @@ const REPORT_DATA = {
      }
     ]
    },
+   "undefEvcsW": {
+    "total": 22,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 3,
+      "share": 0.13636363636363635
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 1,
+      "share": 0.045454545454545456
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 18,
+      "share": 0.8181818181818182
+     }
+    ]
+   },
+   "undefEvcsM": {
+    "total": 38,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 6,
+      "share": 0.15789473684210525
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 2,
+      "share": 0.05263157894736842
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 29,
+      "share": 0.7631578947368421
+     },
+     {
+      "name": "Chưa có mã lỗi",
+      "qty": 1,
+      "share": 0.02631578947368421
+     }
+    ]
+   },
+   "undefBssW": {
+    "total": 59,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 6,
+      "share": 0.1016949152542373
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 46,
+      "share": 0.7796610169491526
+     },
+     {
+      "name": "Chưa có mã lỗi",
+      "qty": 7,
+      "share": 0.11864406779661017
+     }
+    ]
+   },
+   "undefBssM": {
+    "total": 179,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 30,
+      "share": 0.16759776536312848
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 10,
+      "share": 0.055865921787709494
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 126,
+      "share": 0.7039106145251397
+     },
+     {
+      "name": "Chưa có mã lỗi",
+      "qty": 13,
+      "share": 0.07262569832402235
+     }
+    ]
+   },
    "rcEvcsW": [
     {
      "name": "Chưa xác định",
@@ -13417,6 +13707,121 @@ const REPORT_DATA = {
       "name": "Chưa xác định",
       "qty": 2517,
       "share": 0.20097412967103162
+     }
+    ]
+   },
+   "undefEvcsW": {
+    "total": 1087,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 636,
+      "share": 0.5850965961361545
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 28,
+      "share": 0.025758969641214352
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 124,
+      "share": 0.1140754369825207
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 299,
+      "share": 0.2750689972401104
+     }
+    ]
+   },
+   "undefEvcsM": {
+    "total": 1153,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 650,
+      "share": 0.5637467476149176
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 30,
+      "share": 0.026019080659150044
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 136,
+      "share": 0.11795316565481354
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 336,
+      "share": 0.29141370338248046
+     },
+     {
+      "name": "Chưa có mã lỗi",
+      "qty": 1,
+      "share": 0.0008673026886383347
+     }
+    ]
+   },
+   "undefBssW": {
+    "total": 2088,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 603,
+      "share": 0.28879310344827586
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 1011,
+      "share": 0.48419540229885055
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 129,
+      "share": 0.0617816091954023
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 338,
+      "share": 0.16187739463601533
+     },
+     {
+      "name": "Chưa có mã lỗi",
+      "qty": 7,
+      "share": 0.003352490421455939
+     }
+    ]
+   },
+   "undefBssM": {
+    "total": 2517,
+    "rows": [
+     {
+      "name": "Truyền thông/Kết nối",
+      "qty": 774,
+      "share": 0.3075089392133492
+     },
+     {
+      "name": "Door Access (mở cửa)",
+      "qty": 1123,
+      "share": 0.4461660707191101
+     },
+     {
+      "name": "Điện lưới/Cách điện/Khói",
+      "qty": 169,
+      "share": 0.06714342471195868
+     },
+     {
+      "name": "Mã lỗi khác",
+      "qty": 438,
+      "share": 0.17401668653158522
+     },
+     {
+      "name": "Chưa có mã lỗi",
+      "qty": 13,
+      "share": 0.005164878823996822
      }
     ]
    },
@@ -24507,5 +24912,5 @@ const REPORT_DATA = {
   "partsBssM",
   "partsTotal"
  ],
- "generatedAt": "2026-07-24 11:57"
+ "generatedAt": "2026-07-24 14:06"
 };

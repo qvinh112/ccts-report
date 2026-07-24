@@ -169,6 +169,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
       <div class="cv"><canvas id="c_cls_bss"></canvas></div><div class="tblwrap" id="t_cls_bss"></div></div>
   </div>
   <div id="bdSrcWrap"></div>
+  <div id="undefWrap"></div>
 </section>
 
 <section id="sec-rc">
@@ -574,6 +575,30 @@ function renderBdSrc(){
     one('EVCS', D[k[0]]) + one('BSS', D[k[1]]) + '</div>';
 }
 
+// PA3 — phân rã khối "Undefined yet" theo họ mã lỗi (chỉ hiện tượng, KHÔNG đoán HW/SW)
+function renderUndef(){
+  const el = document.getElementById('undefWrap');
+  if(!el) return;
+  const k = MODE==='w' ? ['undefEvcsW','undefBssW'] : ['undefEvcsM','undefBssM'];
+  const COL = {'Truyền thông/Kết nối':'#7e8aa2','Door Access (mở cửa)':'#b08968',
+    'Điện lưới/Cách điện/Khói':'#c9a227','Mã lỗi khác':'#9aa0a6','Chưa có mã lỗi':'#c3c2b7'};
+  const one = (lbl, b) => {
+    if(!b || !b.total) return '';
+    const segs = b.rows.map(r=>
+      `<span class="arseg" style="width:${(r.share*100).toFixed(1)}%;background:${COL[r.name]||'#c3c2b7'}"
+         title="${escH(r.name)}: ${n0(r.qty)} (${pc(r.share)})"></span>`).join('');
+    const leg = b.rows.map(r=>
+      `<span><i style="background:${COL[r.name]||'#c3c2b7'}"></i>${escH(r.name)} ${n0(r.qty)} · ${pc(r.share)}</span>`).join('');
+    return `<div class="card"><h3>${lbl} — khối “Undefined yet” thực chất là gì (${n0(b.total)} ticket)</h3>
+      <div class="arbar">${segs}</div><div class="arleg">${leg}</div></div>`;
+  };
+  const body = one('EVCS', D[k[0]]) + one('BSS', D[k[1]]);
+  el.innerHTML = body ? ('<p class="rcIntro" style="margin:14px 0 4px">Khối xám “Undefined yet” '+
+    'gần như đều <b>có mã lỗi</b> nhưng thuộc họ chưa đủ chắc để gán Hardware/Software '+
+    '(truyền thông, mở cửa, điện lưới…). Tách theo <b>họ mã lỗi</b> để thấy hiện tượng — '+
+    'BD giữ nguyên, không đoán bừa.</p><div class="grid2">'+ body +'</div>') : '';
+}
+
 /* ================= nguyên nhân (RC) =================
    Màu theo LỚP suy ra của nhóm để nhìn là biết cụm nào là lỗi thiết bị, cụm nào không. */
 const RC_CLS_COLOR = {Hardware:S[0], Software:S[2], Disclaim:S[5]};
@@ -946,6 +971,7 @@ function render(){
   clsBlock('c_cls_evcs','t_cls_evcs', MODE==='w'?D.clsEvcsW:D.clsEvcsM, MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total, 'clsEvcsSub');
   clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
   renderBdSrc();
+  renderUndef();
   const rcCv = D.rcCoverage||{};
   rcBlock('c_rc_evcs', MODE==='w'?D.rcEvcsW:D.rcEvcsM, 'rcEvcsSub', MODE==='w'?rcCv.evcsW:rcCv.evcsM);
   rcBlock('c_rc_bss',  MODE==='w'?D.rcBssW :D.rcBssM,  'rcBssSub',  MODE==='w'?rcCv.bssW :rcCv.bssM);
