@@ -40,6 +40,7 @@ h2{font-size:15.5px;border-left:4px solid var(--s1);padding-left:8px;margin:0 0 
 .card h3{margin:0 0 8px;font-size:13.5px;color:var(--ink2)}
 .cv{position:relative;height:240px}
 .cv.tall{height:280px}.cv.short{height:210px}
+.cv.rc{height:430px}   /* 19 nhóm nguyên nhân — 240px là dính nhãn vào nhau */
 table{border-collapse:collapse;width:100%;font-size:12.8px}
 th,td{padding:5px 8px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
 th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
@@ -108,6 +109,21 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 .kwtag{display:inline-block;font-size:11px;font-weight:600;background:#e8f0fb;color:#245ba8;border:1px solid #c5d9f2;border-radius:5px;padding:0 6px;margin-left:4px}
 .kwtag.be{background:#eef7ee;color:#2a7a2a;border-color:#c7e5c7}
 .muted{color:var(--muted)}
+.rcIntro{font-size:12.5px;color:var(--ink2);line-height:1.6;margin:2px 0 10px;max-width:110ch}
+.rcIntro code{background:var(--page);border:1px solid var(--grid);border-radius:4px;padding:0 4px;font-size:12px}
+.covbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.covpill{font-size:12px;border-radius:6px;padding:3px 10px;border:1px solid var(--grid);background:var(--page);color:var(--ink2)}
+.covpill.low{background:#fff4d1;border-color:#f0d98a;color:#7a5c00}
+.scopebar{background:var(--page);border:1px solid var(--grid);border-radius:8px;padding:8px 12px;
+  font-size:12.5px;color:var(--ink2);line-height:1.6;margin:0 0 14px}
+.scopebar b{color:var(--ink)}
+.scopebar .sx{display:inline-block;margin-right:10px;white-space:nowrap}
+.arbar{display:flex;height:14px;border-radius:4px;overflow:hidden;background:var(--grid);min-width:220px}
+.arseg{display:block;height:100%}
+.arleg{margin-top:4px;font-size:11.5px;color:var(--ink2);display:flex;gap:12px;flex-wrap:wrap}
+.arleg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.kwtag.rc{background:#f5eefb;color:#6b3aa0;border-color:#ddc9ee}
+.kwtag.src{background:#fdf0e6;color:#9a5518;border-color:#f2d6bd}
 </style>
 </head>
 <body>
@@ -123,7 +139,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <button data-s="all">Tất cả</button>
   </div>
   <nav class="toc">
-    <a href="#sec-watch">Cảnh báo</a><a href="#sec-cls">Phân loại</a><a href="#sec-dis">Disclaim</a><a href="#sec-fail">Theo model</a>
+    <a href="#sec-watch">Cảnh báo</a><a href="#sec-cls">Phân loại</a><a href="#sec-rc">Nguyên nhân</a><a href="#sec-dis">Disclaim</a><a href="#sec-fail">Theo model</a>
     <a href="#sec-trend">Xu hướng</a><a href="#sec-alarm">Alarm</a><a href="#sec-sla">SLA</a>
     <a href="#sec-overdue">Giải trình</a><a href="#sec-ovdana">Phân tích OVD</a><a href="#sec-asp">ASP</a><a href="#sec-cse">CSE</a><a href="#sec-parts">Vật tư</a>
     <a href="#sec-cost">Chi phí</a><a href="#sec-fix">Hiệu chỉnh</a>
@@ -134,6 +150,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   </div>
 </header>
 <main>
+
+<div class="scopebar" id="scopeBar"></div>
 
 <div class="kpis" id="kpis"></div>
 
@@ -149,6 +167,58 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
       <div class="cv"><canvas id="c_cls_evcs"></canvas></div><div class="tblwrap" id="t_cls_evcs"></div></div>
     <div class="card"><h3>BSS — <span id="clsBssSub"></span></h3>
       <div class="cv"><canvas id="c_cls_bss"></canvas></div><div class="tblwrap" id="t_cls_bss"></div></div>
+  </div>
+  <div id="bdSrcWrap"></div>
+</section>
+
+<section id="sec-rc">
+  <h2>Nguyên nhân lỗi đến từ đâu (<span class="modeLbl"></span>)</h2>
+  <p class="rcIntro">
+    Tầng này đọc <b>ngôn từ</b> của ticket để chỉ ra cụm gây lỗi, áp cho <b>mọi</b> ticket —
+    kể cả khối “Undefined yet” của bảng phân loại. Thứ tự tin cậy của bằng chứng:
+    ① <b>danh mục lỗi CCTS</b> (<code>Error: Nhóm/Lỗi cụ thể</code> trong Additional information,
+    do KTV chọn tay) → ② <b>Solution</b> (mô tả cách xử lý nói đúng nguyên nhân thật hơn
+    triệu chứng ban đầu) → ③ Problem Analysis → ④ phần mô tả tự do của Additional information.
+  </p>
+  <div id="rcCovWrap"></div>
+  <div class="grid2">
+    <div class="card"><h3>EVCS — <span id="rcEvcsSub"></span></h3>
+      <div class="cv rc"><canvas id="c_rc_evcs"></canvas></div></div>
+    <div class="card"><h3>BSS — <span id="rcBssSub"></span></h3>
+      <div class="cv rc"><canvas id="c_rc_bss"></canvas></div></div>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="card"><h3>EVCS — nguyên nhân × phân loại cũ (<span class="modeLbl"></span>)</h3>
+      <div class="tblwrap" id="t_rcx_evcs"></div></div>
+    <div class="card"><h3>BSS — nguyên nhân × phân loại cũ (<span class="modeLbl"></span>)</h3>
+      <div class="tblwrap" id="t_rcx_bss"></div></div>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="card"><h3>EVCS — xu hướng nhóm nguyên nhân theo tuần</h3>
+      <div class="cv"><canvas id="c_rctr_evcs"></canvas></div></div>
+    <div class="card"><h3>BSS — xu hướng nhóm nguyên nhân theo tuần</h3>
+      <div class="cv"><canvas id="c_rctr_bss"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>RCA theo mã lỗi (<span class="modeLbl"></span>)</h3>
+    <p style="font-size:12.5px;color:var(--ink2);margin:2px 0 8px">
+      Thay phần phân tích tay của slide “Top alarm RCA” trong báo cáo tuần. Tỷ trọng tính
+      trên số ticket <b>đã có mô tả</b> của từng mã, không phải tổng ticket.</p>
+    <div class="seg" id="alarmSeg">
+      <button data-s="BSS" class="on">BSS</button><button data-s="EVCS">EVCS</button>
+    </div>
+    <div class="tblwrap" id="alarmRcaBody"></div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <h3>🔍 Kiểm chứng — vì sao ticket được gán nhóm nguyên nhân này</h3>
+    <p style="font-size:12.5px;color:var(--ink2);margin:2px 0 6px">
+      Chọn nhóm để xem ticket mẫu kèm <b>bằng chứng</b> đã kích hoạt nhãn (tô vàng) và
+      <b>nguồn</b> lấy bằng chứng.</p>
+    <div class="seg" id="rcAuditSeg">
+      <button data-s="EVCS" class="on">EVCS</button><button data-s="BSS">BSS</button>
+    </div>
+    <div class="tblwrap" id="rcAuditBody"></div>
   </div>
 </section>
 
@@ -482,6 +552,146 @@ function clsBlock(canvas, tbl, rows, total, subId){
     `<tr class="total"><td>Grand total</td><td></td><td>${n0(total.qty)}</td><td>100%</td><td>${pc(total.rate,2)}</td></tr></table>`;
 }
 
+/* Nguồn quyết định nhãn phân loại — 'Undefined yet' đã được lấp bằng 2 lớp suy thêm
+   (mã lỗi, rồi nhóm nguyên nhân), nên phải nói rõ phần nào là công thức Excel gốc. */
+function renderBdSrc(){
+  const el = document.getElementById('bdSrcWrap');
+  if(!el) return;
+  const k = MODE==='w' ? ['bdSrcEvcsW','bdSrcBssW'] : ['bdSrcEvcsM','bdSrcBssM'];
+  const COL = {'Từ khóa mô tả':S[0], 'Mã lỗi':S[1], 'Nhóm nguyên nhân':S[4], 'Chưa xác định':'#c3c2b7'};
+  const one = (lbl, b) => {
+    if(!b || !b.total) return '';
+    const rows = b.rows.filter(r=>r.qty);
+    const segs = rows.map(r=>
+      `<span class="arseg" style="width:${(r.share*100).toFixed(1)}%;background:${COL[r.name]}"
+         title="${escH(r.name)}: ${n0(r.qty)} (${pc(r.share)})"></span>`).join('');
+    const leg = rows.map(r=>
+      `<span><i style="background:${COL[r.name]}"></i>${escH(r.name)} ${pc(r.share)}</span>`).join('');
+    return `<div class="card"><h3>${lbl} — nhãn phân loại đến từ đâu</h3>
+      <div class="arbar">${segs}</div><div class="arleg">${leg}</div></div>`;
+  };
+  el.innerHTML = '<div class="grid2" style="margin-top:12px">'+
+    one('EVCS', D[k[0]]) + one('BSS', D[k[1]]) + '</div>';
+}
+
+/* ================= nguyên nhân (RC) =================
+   Màu theo LỚP suy ra của nhóm để nhìn là biết cụm nào là lỗi thiết bị, cụm nào không. */
+const RC_CLS_COLOR = {Hardware:S[0], Software:S[2], Disclaim:S[5]};
+const RC_UNK = '#c3c2b7';
+
+function rcBlock(canvas, rows, subId, cov){
+  const sorted = [...rows].sort((a,b)=>b.qty-a.qty);
+  const tot = sorted.reduce((s,r)=>s+r.qty,0);
+  document.getElementById(subId).textContent =
+    n0(tot) + ' ticket · ' + (cov ? 'có mô tả ' + pc(cov.rate) : '');
+  mk(canvas, {type:'bar',
+    data:{labels: sorted.map(r=>r.name),
+      datasets:[{label:'Ticket', data: sorted.map(r=>r.qty), borderRadius:4, maxBarThickness:16,
+        backgroundColor: sorted.map(r=> RC_CLS_COLOR[r.cls] || RC_UNK)}]},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>` ${n0(c.parsed.x)} ticket (${pc(sorted[c.dataIndex].share)})`+
+          (sorted[c.dataIndex].cls?` · ${sorted[c.dataIndex].cls}`:'')}}},
+      // ~19 nhóm: để mặc định Chart.js tự bỏ bớt nhãn, người đọc mất tên cụm gây lỗi
+      scales:{x:{grid:{color:GRID}}, y:{grid:{display:false}, ticks:{autoSkip:false, font:{size:11}}}}}});
+}
+
+/* Chéo RC × BD: cho thấy khối "Undefined yet" của bảng phân loại thực chất là gì. */
+function rcCross(tbl, rows){
+  const CL = ['Disclaim','Hardware','Software','Undefined yet'];
+  document.getElementById(tbl).innerHTML =
+    '<table><tr><th>Nhóm nguyên nhân</th><th>Ticket</th>' + CL.map(c=>`<th>${c}</th>`).join('') + '</tr>' +
+    rows.map(r=>`<tr><td>${r.name}</td><td><b>${n0(r.qty)}</b></td>` +
+      CL.map(c=>`<td${c==='Undefined yet'&&r[c]?' style="font-weight:600"':''}>${r[c]?n0(r[c]):'—'}</td>`).join('') +
+      '</tr>').join('') + '</table>';
+}
+
+function rcTrend(canvas, blk, weeks){
+  if(!blk || !blk.groups.length){
+    mk(canvas, {type:'line', data:{labels:weeks, datasets:[]}, options:{maintainAspectRatio:false}});
+    return;
+  }
+  mk(canvas, {type:'line',
+    data:{labels: weeks, datasets: blk.groups.map((g,i)=>({
+      label:g, data:blk.series[i], borderColor:S[i%S.length], backgroundColor:S[i%S.length],
+      tension:.3, pointRadius:2, borderWidth:2}))},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom'}},
+      scales:{y:{grid:{color:GRID}, beginAtZero:true}, x:{grid:{display:false}}}}});
+}
+
+function renderRcCoverage(){
+  const cv = D.rcCoverage||{}, k = MODE==='w' ? ['evcsW','bssW'] : ['evcsM','bssM'];
+  const el = document.getElementById('rcCovWrap');
+  if(!el) return;
+  // Ticket vừa tạo chưa có Solution/Additional info -> "Chưa xác định" vì THIẾU dữ liệu,
+  // không phải vì không phân loại được. Phải nói rõ, nếu không tuần đang chạy trông như
+  // cả nghìn ca không rõ nguyên nhân.
+  const pill = (lbl,c)=> c ? `<span class="covpill${c.rate<0.5?' low':''}">${lbl}: có mô tả ${n0(c.withText)}/${n0(c.total)} (${pc(c.rate)})</span>` : '';
+  let h = '<div class="covbar">'+pill('EVCS',cv[k[0]])+pill('BSS',cv[k[1]])+'</div>';
+  const worst = Math.min(cv[k[0]]?.rate ?? 1, cv[k[1]]?.rate ?? 1);
+  if(worst < 0.5) h += `<div class="note">⚠ Kỳ này còn nhiều ticket <b>chưa có mô tả</b> (Solution/Additional information) trong dữ liệu đã nạp, nên rơi vào “Chưa xác định” vì <b>thiếu dữ liệu</b> chứ không phải không phân loại được. Số sẽ tự đầy sau lần export kế tiếp — hãy đọc tỷ trọng trên phần <i>đã có mô tả</i>.</div>`;
+  el.innerHTML = h;
+}
+
+/* ---- RCA theo mã lỗi ---- */
+let ALARM_SEG = 'BSS';
+function renderAlarmRca(){
+  const key = 'alarmRca' + (ALARM_SEG==='BSS'?'Bss':'Evcs') + (MODE==='w'?'W':'M');
+  const rows = D[key] || [];
+  const el = document.getElementById('alarmRcaBody');
+  if(!el) return;
+  let h = '<table class="ovd"><tr><th>Mã lỗi</th><th>Ticket</th><th>Có mô tả</th>'+
+          '<th>Phân rã nguyên nhân (theo ticket có mô tả)</th></tr>';
+  if(!rows.length) h += '<tr><td colspan="4" class="muted">Chưa có dữ liệu cho kỳ này.</td></tr>';
+  rows.forEach(r=>{
+    // Mã chưa đủ mô tả -> nói thẳng thay vì vẽ tỷ trọng của vài ca lẻ.
+    const bars = r.thin
+      ? `<span class="muted">chỉ ${n0(r.withText)} ca có mô tả — chưa đủ để đọc tỷ trọng</span>`
+      : '<div class="arbar">' + r.reasons.slice(0,5).map((x,i)=>
+          `<span class="arseg" style="width:${(x.share*100).toFixed(1)}%;background:${S[i%S.length]}"
+             title="${escH(x.name)}: ${n0(x.qty)} (${pc(x.share)})"></span>`).join('') + '</div>' +
+        '<div class="arleg">' + r.reasons.slice(0,3).map((x,i)=>
+          `<span><i style="background:${S[i%S.length]}"></i>${escH(x.name)} ${pc(x.share)}</span>`).join('') + '</div>';
+    h += `<tr><td><b>${escH(r.code)}</b></td><td>${n0(r.qty)}</td><td>${n0(r.withText)}</td><td>${bars}</td></tr>`;
+  });
+  el.innerHTML = h + '</table>';
+}
+
+/* ---- Kiểm chứng nhãn RC ---- */
+let RC_AUDIT_SEG = 'EVCS';
+function rcSamples(samples){
+  if(!samples.length) return '<div class="muted">Không có mẫu.</div>';
+  return samples.map(s=>{
+    const meta = [s.cpid, s.station].filter(Boolean).join(' · ');
+    const t1 = s.kw ? `<span class="kwtag rc">${escH(s.kw)}</span>` : '';
+    const t2 = s.src ? `<span class="kwtag src">nguồn: ${escH(s.src)}</span>` : '';
+    const t3 = s.bd ? `<span class="kwtag">BD: ${escH(s.bd)}</span>` : '';
+    return `<div class="da-s"><div class="da-h"><b>${escH(s.id)}</b> <span class="muted">${escH(meta)}</span> ${t1}${t2}${t3}</div>
+      <div class="da-bc">${hlKw(s.bc || '(không có mô tả trích được)', [s.kw])}</div></div>`;
+  }).join('');
+}
+function renderRcAudit(){
+  const key = RC_AUDIT_SEG + (MODE==='w' ? 'W' : 'M');
+  const data = (D.rcAudit || {})[key] || {};
+  const ent = Object.entries(data).sort((a,b)=>b[1].total-a[1].total);
+  let h = '<table class="ovd"><tr><th>Nhóm nguyên nhân</th><th>Số ticket</th><th></th></tr>';
+  if(!ent.length) h += '<tr><td colspan="3" class="muted">Chưa có dữ liệu cho kỳ này.</td></tr>';
+  ent.forEach(([name, info], i)=>{
+    h += `<tr><td><b>${escH(name)}</b></td><td>${n0(info.total)}</td>
+      <td>${info.samples.length ? `<button class="btn rca-btn" data-i="${i}">xem ${info.samples.length} mẫu ▾</button>` : '<span class="muted">—</span>'}</td></tr>
+      <tr id="rca_${i}" style="display:none"><td colspan="3"><div class="da-samples">${rcSamples(info.samples)}</div></td></tr>`;
+  });
+  h += '</table>';
+  const body = document.getElementById('rcAuditBody');
+  body.innerHTML = h;
+  body.querySelectorAll('.rca-btn').forEach(b=> b.onclick = ()=>{
+    const d = document.getElementById('rca_'+b.dataset.i);
+    const open = d.style.display==='none';
+    d.style.display = open ? '' : 'none';
+    b.textContent = b.textContent.replace(open?'▾':'▴', open?'▴':'▾');
+  });
+}
+
 /* ================= disclaim ================= */
 function disBlock(canvas, rows){
   const sorted = [...rows].sort((a,b)=>b.qty-a.qty);
@@ -735,6 +945,17 @@ function render(){
   renderWatch();
   clsBlock('c_cls_evcs','t_cls_evcs', MODE==='w'?D.clsEvcsW:D.clsEvcsM, MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total, 'clsEvcsSub');
   clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
+  renderBdSrc();
+  const rcCv = D.rcCoverage||{};
+  rcBlock('c_rc_evcs', MODE==='w'?D.rcEvcsW:D.rcEvcsM, 'rcEvcsSub', MODE==='w'?rcCv.evcsW:rcCv.evcsM);
+  rcBlock('c_rc_bss',  MODE==='w'?D.rcBssW :D.rcBssM,  'rcBssSub',  MODE==='w'?rcCv.bssW :rcCv.bssM);
+  renderRcCoverage();
+  rcCross('t_rcx_evcs', (MODE==='w'?D.rcXclsEvcsW:D.rcXclsEvcsM)||[]);
+  rcCross('t_rcx_bss',  (MODE==='w'?D.rcXclsBssW :D.rcXclsBssM )||[]);
+  rcTrend('c_rctr_evcs', D.rcTrendEvcs, D.weeks);
+  rcTrend('c_rctr_bss',  D.rcTrendBss,  D.weeks);
+  renderAlarmRca();
+  renderRcAudit();
   disBlock('c_dis_evcs', MODE==='w'?D.disEvcsW:D.disEvcsM);
   disBlock('c_dis_bss',  MODE==='w'?D.disBssW:D.disBssM);
   renderDisclaimAudit();
@@ -753,6 +974,16 @@ document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on', x===b));
   collectGt();       // không mất giải trình đang gõ
   render(); renderCse();
+});
+document.querySelectorAll('#alarmSeg button').forEach(b=> b.onclick = ()=>{
+  ALARM_SEG = b.dataset.s;
+  document.querySelectorAll('#alarmSeg button').forEach(x=>x.classList.toggle('on', x===b));
+  renderAlarmRca();
+});
+document.querySelectorAll('#rcAuditSeg button').forEach(b=> b.onclick = ()=>{
+  RC_AUDIT_SEG = b.dataset.s;
+  document.querySelectorAll('#rcAuditSeg button').forEach(x=>x.classList.toggle('on', x===b));
+  renderRcAudit();
 });
 document.querySelectorAll('#disAuditSeg button').forEach(b=> b.onclick = ()=>{
   DIS_AUDIT_SEG = b.dataset.s;
@@ -925,6 +1156,17 @@ renderOverdue();
 renderOvdWeek();
 renderScenario();
 renderLateReason();
+/* Phạm vi dữ liệu: nói rõ báo cáo CHỈ gồm ticket vận hành và đã loại những luồng nào.
+   Trước đây mỗi khối lọc một kiểu (bảng phân loại lọc VH, còn SLA/ASP/CSE thì không),
+   nay lọc một lần ở build.apply_scope nên mọi con số trên trang cùng một phạm vi. */
+(function(){
+  const s = D.scopeStats, el = document.getElementById('scopeBar');
+  if(!el || !s) { if(el) el.style.display='none'; return; }
+  const reasons = (s.reasons||[]).map(r=>`<span class="sx">${r.name}: <b>${n0(r.qty)}</b></span>`).join('');
+  el.innerHTML = `<b>Phạm vi:</b> chỉ ticket <b>vận hành</b> (BSS-VH / EVCS-VH / do VOMS sinh) — `+
+    `<b>${n0(s.kept)}</b> ticket. Đã loại <b>${n0(s.dropped)}</b>/${n0(s.total)} `+
+    `(${pc(s.dropped/s.total)}) khỏi <i>toàn bộ</i> các bảng trên trang: ${reasons}`;
+})();
 /* Ngày làm mới + cảnh báo tuần chưa đủ 7 ngày (báo cáo chạy giữa tuần) */
 (function(){
   const ft=document.getElementById('freshTag');
