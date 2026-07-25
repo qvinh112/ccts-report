@@ -563,15 +563,19 @@ tr.xmiss td{background:#fdf3f3}
 </section>
 
 <section id="sec-wh">
-  <h2>Kho &amp; vật tư — tồn kho live từ CCTS</h2>
+  <h2>Kho &amp; vật tư — tồn kho live toàn quốc</h2>
   <div id="whKpi" class="kpis"></div>
   <div class="grid2">
-    <div class="card"><h3>Vật tư sắp hết — <span id="whShortSub"></span></h3><div class="tblwrap" id="t_wh_short"></div></div>
-    <div class="card"><h3>Tồn vật tư lỗi theo kỹ sư</h3><div class="tblwrap" id="t_wh_eng"></div></div>
+    <div class="card"><h3>Theo nhóm — <span id="whGrpSub"></span></h3><div class="tblwrap" id="t_wh_grp"></div></div>
+    <div class="card"><h3>Tỷ lệ vật tư lỗi theo nhóm</h3><div class="cv"><canvas id="c_wh_grp"></canvas></div></div>
   </div>
   <div class="grid2">
+    <div class="card"><h3>Vật tư lỗi tồn đọng nhiều nhất</h3><div class="tblwrap" id="t_wh_stock"></div></div>
+    <div class="card"><h3>Vật tư sắp hết — <span id="whShortSub"></span></h3><div class="tblwrap" id="t_wh_short"></div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Kỹ sư giữ nhiều vật tư lỗi nhất (toàn quốc)</h3><div class="tblwrap" id="t_wh_eng"></div></div>
     <div class="card"><h3>Mã lỗi tiêu thụ nhiều vật tư nhất</h3><div class="tblwrap" id="t_wh_err"></div></div>
-    <div class="card"><h3>Phân bổ Main ↔ kỹ sư</h3><div class="cv"><canvas id="c_wh_split"></canvas></div></div>
   </div>
   <div class="note" id="whNote"></div>
 </section>
@@ -1160,17 +1164,19 @@ function miniLine(id, labels, data, compact){
 }
 /* ===== Kho & vật tư — tồn kho live từ CCTS (warehouse_data.js) ===== */
 const WH = typeof WAREHOUSE_DATA !== 'undefined' ? WAREHOUSE_DATA : null;
-const WH_COVER_DAYS = 14;   // dưới ngần này ngày tồn thì coi là sắp hết
+const WH_COVER_DAYS = WH && WH.meta.coverDays || 30;
 const whLow = () => (WH ? WH.shortage.filter(r => r.cover != null && r.cover < WH_COVER_DAYS) : []);
-/* Headline là số mã sắp hết vì đó là việc phải xử lý ngay; tỷ lệ tồn lỗi để ở dòng phụ. */
+/* Headline là tỷ lệ vật tư lỗi: ở phạm vi toàn quốc thiếu hàng gần như không xảy ra,
+   thứ đọng vốn thật là hàng lỗi nằm rải khắp 308 kho. */
 function whTile(){
   if(!WH) return {grp:'wh', title:'Kho & vật tư', big:'—', sub:'chưa có warehouse_data.js'};
-  return {grp:'wh', title:'Kho & vật tư', big:n0(whLow().length)+' mã',
-    sub:`sắp hết (dưới ${WH_COVER_DAYS} ngày) / ${WH.meta.covered} mã theo dõi được`
-       + ` · tồn lỗi KTV ${pc(WH.engTotal.rate)}`};
+  const t = WH.total;
+  return {grp:'wh', title:'Kho & vật tư', big:pc(t.rate),
+    sub:`${n0(t.faulty)} / ${n0(t.units)} đv lỗi · ${n0(t.warehouses)} kho toàn quốc`};
 }
+/* Mốc theo thời gian đặt hàng thực tế: dưới 1 tuần là gấp, dưới 1 tháng là phải đặt. */
 function whBadge(cover){
-  const c = cover<3 ? 'b-crit' : cover<7 ? 'b-serious' : cover<WH_COVER_DAYS ? 'b-warn' : 'b-good';
+  const c = cover<7 ? 'b-crit' : cover<14 ? 'b-serious' : cover<WH_COVER_DAYS ? 'b-warn' : 'b-good';
   return `<span class="badge ${c}">${cover} ngày</span>`;
 }
 function renderWarehouse(){
@@ -1179,47 +1185,69 @@ function renderWarehouse(){
     note.textContent = 'Chưa có warehouse_data.js — chạy sla_monitor/warehouse_report.py để sinh.';
     return;
   }
-  const e = WH.engTotal, m = WH.main || {total:0, good:0, faulty:0}, low = whLow();
+  const t = WH.total, e = WH.engTotal, fv = WH.faultyValue, low = whLow();
   document.getElementById('whKpi').innerHTML = [
-    ['Tồn kho kỹ sư', n0(e.total), `${e.n} người · ${n0(e.good)} tốt / ${n0(e.faulty)} lỗi`],
-    ['Tỷ lệ tồn lỗi KTV', pc(e.rate), 'vật tư lỗi đang giữ, chưa trả kho'],
-    ['Kho Main', n0(m.total), `${n0(m.good)} tốt / ${n0(m.faulty)} lỗi`],
-    ['Mã sắp hết', n0(low.length), `dưới ${WH_COVER_DAYS} ngày tồn`],
+    ['Tồn kho toàn quốc', n0(t.units), `${n0(t.groups)} nhóm · ${n0(t.warehouses)} kho · ${n0(t.codes)} mã`],
+    ['Tỷ lệ vật tư lỗi', pc(t.rate), `${n0(t.faulty)} đv lỗi trên tổng tồn`],
+    ['Tiền đọng ở hàng lỗi', usd(fv.all), `ước lượng sàn · ${usd(fv.eng)} đang ở kỹ sư`],
+    ['Kỹ sư giữ vật tư', n0(e.n), `${n0(e.total)} đv · lỗi ${pc(e.rate)}`],
   ].map(x=>`<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join('');
 
+  const rg = WH.region || {};
+  document.getElementById('whGrpSub').textContent = (rg.north && rg.south)
+    ? `Site Engineer: Bắc ${pc(rg.north.rate)} vs Nam ${pc(rg.south.rate)} lỗi`
+    : `${n0(t.groups)} nhóm`;
+  document.getElementById('t_wh_grp').innerHTML =
+    '<table><tr><th style="text-align:left">Nhóm</th><th style="text-align:left">Vai trò</th><th>Kho</th><th>KTV</th><th>Tổng</th><th>Lỗi</th><th>% lỗi</th></tr>' +
+    WH.groups.map(r=>`<tr><td style="text-align:left">${r.group}</td><td style="text-align:left">${r.kind}</td>`
+      + `<td>${n0(r.warehouses)}</td><td>${r.eng||'—'}</td><td>${n0(r.total)}</td><td>${n0(r.faulty)}</td>`
+      + `<td>${pc(r.rate)}</td></tr>`).join('') +
+    `<tr class="total"><td style="text-align:left">Toàn quốc</td><td></td><td>${n0(t.warehouses)}</td><td>${n0(e.n)}</td>`
+      + `<td>${n0(t.units)}</td><td>${n0(t.faulty)}</td><td>${pc(t.rate)}</td></tr></table>`;
+
+  document.getElementById('t_wh_stock').innerHTML =
+    '<table><tr><th style="text-align:left">Vật tư</th><th>Mã</th><th>Lỗi</th><th>Tổng</th><th>% lỗi</th><th>Tiền đọng</th></tr>' +
+    WH.topStock.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.name}</td><td>${r.code}</td>`
+      + `<td>${n0(r.faulty)}</td><td>${n0(r.total)}</td><td>${pc(r.rate)}</td>`
+      + `<td>${r.value==null?'—':usd(r.value)}</td></tr>`).join('') +
+    '</table>';
+
   document.getElementById('whShortSub').textContent =
-    `${WH.meta.covered}/${WH.meta.stockCodes} mã tính được ngày tồn`;
+    `${low.length} mã dưới ${WH_COVER_DAYS} ngày / ${WH.meta.covered} mã tính được`;
   document.getElementById('t_wh_short').innerHTML =
-    '<table><tr><th style="text-align:left">Vật tư</th><th>Mã</th><th>Tồn tốt</th><th>Main</th><th>KTV</th><th>Lỗi</th><th>Dùng/tháng</th><th>Ngày tồn</th></tr>' +
-    WH.shortage.slice(0,25).map(r=>`<tr><td style="text-align:left">${r.name}</td><td>${r.code}</td>`
-      + `<td>${n0(r.good)}</td><td>${n0(r.main)}</td><td>${n0(r.eng)}</td><td>${n0(r.faulty)}</td>`
+    '<table><tr><th style="text-align:left">Vật tư</th><th>Tồn tốt</th><th>Ở KTV</th><th>Đang chuyển</th><th>Dùng/tháng</th><th>Ngày tồn</th></tr>' +
+    WH.shortage.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.name}</td>`
+      + `<td>${n0(r.good)}</td><td>${n0(r.eng)}</td><td>${n0(r.inTransit)}</td>`
       + `<td>${n0(r.month)}</td><td>${r.cover==null?'—':whBadge(r.cover)}</td></tr>`).join('') +
     '</table>';
 
   document.getElementById('t_wh_eng').innerHTML =
-    '<table><tr><th style="text-align:left">Kỹ sư</th><th>Tổng</th><th>Tốt</th><th>Lỗi</th><th>% lỗi</th><th>Số mã</th></tr>' +
-    WH.eng.map(r=>`<tr><td style="text-align:left">${r.name}</td><td>${n0(r.total)}</td><td>${n0(r.good)}</td>`
-      + `<td>${n0(r.faulty)}</td><td>${pc(r.rate)}</td><td>${n0(r.codes)}</td></tr>`).join('') +
-    `<tr class="total"><td style="text-align:left">Tổng ${e.n} kỹ sư</td><td>${n0(e.total)}</td><td>${n0(e.good)}</td>`
-      + `<td>${n0(e.faulty)}</td><td>${pc(e.rate)}</td><td></td></tr></table>`;
+    '<table><tr><th style="text-align:left">Kỹ sư</th><th style="text-align:left">Nhóm</th><th>Tổng</th><th>Lỗi</th><th>% lỗi</th></tr>' +
+    WH.eng.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.name}</td><td style="text-align:left">${r.group}</td>`
+      + `<td>${n0(r.total)}</td><td>${n0(r.faulty)}</td><td>${pc(r.rate)}</td></tr>`).join('') +
+    `<tr class="total"><td style="text-align:left">Tổng ${n0(e.n)} kỹ sư</td><td></td><td>${n0(e.total)}</td>`
+      + `<td>${n0(e.faulty)}</td><td>${pc(e.rate)}</td></tr></table>`;
 
   const ep = WH.errParts || [];
   document.getElementById('t_wh_err').innerHTML = ep.length
-    ? '<table><tr><th style="text-align:left">Mã lỗi</th><th style="text-align:left">Mô tả</th><th>Ticket</th><th>SL vật tư</th><th>SL/ticket</th><th style="text-align:left">Vật tư chính</th></tr>' +
-      ep.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.err}</td><td style="text-align:left">${r.desc||'—'}</td>`
+    ? '<table><tr><th style="text-align:left">Mã lỗi</th><th>Ticket</th><th>SL vật tư</th><th>SL/ticket</th><th style="text-align:left">Vật tư chính</th></tr>' +
+      ep.slice(0,15).map(r=>`<tr><td style="text-align:left">${r.err}${r.desc?' — '+r.desc:''}</td>`
         + `<td>${n0(r.tickets)}</td><td>${n0(r.qty)}</td><td>${r.perTicket}</td>`
-        + `<td style="text-align:left">${r.top.map(t=>`${t.name} (${t.qty})`).join('<br>')}</td></tr>`).join('') +
+        + `<td style="text-align:left">${r.top.map(x=>`${x.name} (${x.qty})`).join('<br>')}</td></tr>`).join('') +
       '</table>'
     : '<div class="sub">Không đọc được file vật tư theo mã lỗi.</div>';
 
-  mk('c_wh_split', {type:'bar',
-    data:{labels:['Kho Main','29 kỹ sư'], datasets:[
-      {label:'Tốt', data:[m.good, e.good], backgroundColor:S[1]},
-      {label:'Lỗi', data:[m.faulty, e.faulty], backgroundColor:S[5]}]},
-    options:{maintainAspectRatio:false, plugins:{tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${n0(c.parsed.y)} đv`}}},
-      scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true}}}});
+  /* Chỉ vẽ nhóm có tồn đáng kể, nếu không 5 nhóm nhỏ làm bẹp cả biểu đồ. */
+  const gs = WH.groups.filter(r=>r.total>=500);
+  mk('c_wh_grp', {type:'bar',
+    data:{labels:gs.map(r=>r.group), datasets:[{data:gs.map(r=>+(r.rate*100).toFixed(1)),
+      backgroundColor:gs.map(r=>r.rate>=.3?S[5]:r.rate>=.1?S[2]:S[1]), borderRadius:3, maxBarThickness:16}]},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.parsed.x}% lỗi`}}},
+      scales:{x:{ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}, ticks:{font:{size:10}}}}}});
 
-  note.innerHTML = `ℹ <b>Phạm vi:</b> ${WH.meta.scopeNote} <b>Mã lỗi × vật tư:</b> ${WH.meta.errPartsNote}`
+  note.innerHTML = `ℹ <b>Phạm vi:</b> ${WH.meta.scopeNote} <b>Giá trị:</b> ${WH.meta.valueNote}`
+    + ` <b>Mã lỗi × vật tư:</b> ${WH.meta.errPartsNote}`
     + ` Snapshot lúc ${WH.ts.replace('T',' ')} · đã lưu ${WH.snapshots} ngày.`;
 }
 function renderTiles(){
