@@ -424,31 +424,6 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   </div>
 </section>
 
-<section id="sec-cse">
-  <h2>Hiệu suất CSE &amp; Giải trình tuần W29</h2>
-  <div class="toolbar">
-    <label>Người nhập: <input type="text" id="gtUser" placeholder="tên của bạn" size="14"></label>
-    <button class="btn primary" id="gtSave">💾 Lưu giải trình (máy này)</button>
-    <button class="btn" id="gtPush">☁ Đẩy online</button>
-    <button class="btn" id="gtPull">⬇ Tải online về</button>
-    <button class="btn" id="gtCfg">⚙ URL đồng bộ</button>
-    <button class="btn" id="gtCopy">📋 Sao chép toàn bộ</button>
-  </div>
-  <div class="grid2">
-    <div class="card"><h3>EVCS — Overdue rate W29 theo CSE</h3><div class="cv short"><canvas id="c_cse_evcs"></canvas></div></div>
-    <div class="card"><h3>BSS — Overdue rate W29 theo CSE</h3><div class="cv short"><canvas id="c_cse_bss"></canvas></div></div>
-  </div>
-  <div class="card" style="margin-top:12px"><h3>EVCS — bảng chi tiết + giải trình</h3>
-    <div class="tblwrap" id="t_cse_evcs"></div></div>
-  <div class="card" style="margin-top:12px"><h3>BSS — bảng chi tiết + giải trình</h3>
-    <div class="tblwrap" id="t_cse_bss"></div></div>
-  <div class="card" style="margin-top:12px"><h3>Overdue rate từng CSE qua các tuần (đỏ = cao)</h3>
-    <div class="tblwrap" id="t_cse_heat"></div></div>
-  <div class="card" style="margin-top:12px"><h3>Nhận xét chung tuần W29</h3>
-    <textarea id="gtGeneral" placeholder="Đánh giá chung, nguyên nhân chính, hành động tuần tới…"></textarea>
-    <div class="gt-meta" id="gtGeneralMeta"></div></div>
-</section>
-
 <section id="sec-parts">
   <h2>Top vật tư sử dụng (<span class="modeLbl"></span>)</h2>
   <div class="grid2">
@@ -526,18 +501,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 </div>
 
 </main>
-<footer>Nguồn: 260717 Report W29 V3.xlsx (đã hiệu chỉnh) · Dashboard tạo tự động · Giải trình đồng bộ qua Google Sheet</footer>
+<footer>Nguồn: 260717 Report W29 V3.xlsx (đã hiệu chỉnh) · Dashboard tạo tự động · Giải trình đồng bộ realtime qua Firebase</footer>
 <div id="toast"></div>
-
-<dialog id="dlgCfg">
-  <h3 style="margin-top:0">⚙ URL đồng bộ giải trình</h3>
-  <p style="font-size:13px;color:var(--ink2)">Dán URL Apps Script <code>/exec</code> (cùng URL nhóm đang dùng cho card Giải trình trên dashboard điều hành). Giải trình sẽ được upsert vào sheet <b>GiaiTrinh</b> với Ticket ID dạng <code>RPT-W29-…</code>.</p>
-  <input type="text" id="cfgUrl" style="width:100%;padding:7px 9px;border:1px solid var(--axis);border-radius:8px" placeholder="https://script.google.com/macros/s/…/exec">
-  <div style="margin-top:12px;text-align:right">
-    <button class="btn" onclick="dlgCfg.close()">Đóng</button>
-    <button class="btn primary" id="cfgSave">Lưu</button>
-  </div>
-</dialog>
 
 <script src="data_latest.js"></script>
 <!-- Firebase (giải trình dùng chung node /dashboard/explain với dashboard điều hành) -->
@@ -938,10 +903,7 @@ function resBlock(tbl, rows){
     }).join('') + '</table>';
 }
 
-/* ================= CSE + giải trình ================= */
-const GT_KEY = 'rpt_gt_W29', GT_URL_KEY = 'rpt_gt_url';
-let GT = JSON.parse(localStorage.getItem(GT_KEY) || '{}');
-const cseKey = (sys,cse) => `RPT-${D.week}-${sys}-${cse.replace(/[^a-z0-9]+/gi,'_')}`;
+/* ================= tiện ích bảng ================= */
 const badge = r => r==null ? '' :
   r < .05 ? `<span class="badge b-good">${pc(r)}</span>` :
   r < .12 ? `<span class="badge b-warn">${pc(r)}</span>` :
@@ -950,127 +912,6 @@ const badge = r => r==null ? '' :
 /* Nhãn PIC: hiện ĐỦ tên, không cắt còn tên đầu + "+". Chart.js nhận mảng = nhiều dòng,
    nên nhóm nhiều người vẫn đọc được mà không kéo dài trục. */
 const nameLines = k => String(k==null?'':k).split(';').map(s=>s.trim()).filter(Boolean);
-function spark(tot, ovd){
-  const rates = tot.map((t,i)=> t ? ovd[i]/t : 0);
-  const mx = Math.max(...rates, .0001), W=90, H=22;
-  const pts = rates.map((v,i)=>`${(i/(rates.length-1)*W).toFixed(1)},${(H-2-(v/mx)*(H-5)).toFixed(1)}`).join(' ');
-  return `<svg class="spark" width="${W}" height="${H}"><polyline points="${pts}" fill="none" stroke="#2a78d6" stroke-width="1.6"/><circle cx="${W}" cy="${(H-2-(rates[6]/mx)*(H-5)).toFixed(1)}" r="2.4" fill="#d03b3b"/></svg>`;
-}
-function cseBlock(sys, cd, tblId, cvId){
-  const rows = cd.cse.map((c,i)=>({cse:c, tot:cd.total[i], ovd:cd.overdue[i],
-    t29: cd.total[i][6], o29: cd.overdue[i][6]}));
-  rows.forEach(r=> r.rate = r.t29 ? r.o29/r.t29 : null);
-  // chart
-  mk(cvId, {type:'bar',
-    data:{labels: rows.map(r=>nameLines(r.cse)),
-      datasets:[{data: rows.map(r=>r.rate), borderRadius:4, maxBarThickness:34,
-        backgroundColor: rows.map(r=> r.rate<.05?'#0ca30c':r.rate<.12?'#fab219':r.rate<.25?'#ec835a':'#d03b3b')}]},
-    options:{maintainAspectRatio:false,
-      plugins:{legend:{display:false}, tooltip:{callbacks:{
-        title:t=>rows[t[0].dataIndex].cse,
-        label:c=>` ${pc(c.parsed.y)} (${n0(rows[c.dataIndex].o29)}/${n0(rows[c.dataIndex].t29)})`}}},
-      scales:{y:{ticks:pctTick, grid:{color:GRID}}, x:{grid:{display:false}}}}});
-  // table
-  document.getElementById(tblId).innerHTML =
-    `<table><tr><th>CSE</th><th>Ticket ${D.week}</th><th>Overdue ${D.week}</th><th>Rate</th><th>Xu hướng ${D.weeks[0]}→${D.weeks[D.weeks.length-1]}</th><th style="width:42%;text-align:left">Giải trình của CSE</th></tr>` +
-    rows.map(r=>{
-      const k = cseKey(sys, r.cse), e = GT[k] || {};
-      return `<tr><td>${r.cse}</td><td>${n0(r.t29)}</td><td>${n0(r.o29)}</td><td>${badge(r.rate)}</td>
-        <td>${spark(r.tot, r.ovd)}</td>
-        <td class="l"><textarea data-k="${k}" placeholder="Nguyên nhân overdue + hướng khắc phục…">${e.text||''}</textarea>
-        <div class="gt-meta" id="meta_${k}">${e.user? '✍ '+e.user+' · '+(e.ts||'') : 'chưa có giải trình'}</div></td></tr>`;
-    }).join('') + '</table>';
-}
-function heatCol(r){ // rate -> màu nền (xanh->vàng->đỏ)
-  if(r==null) return '#f4f3ef';
-  if(r<.05) return '#dff3df'; if(r<.12) return '#fdf3cf'; if(r<.25) return '#fbdcc0'; return '#f6c2c2';
-}
-function renderCseHeat(){
-  const ce=D.cseEvcs, cb=D.cseBss, wk=D.weeks;
-  let h = `<table><tr><th style="text-align:left">CSE</th>`+ wk.map(w=>`<th>${w}</th>`).join('') +`</tr>`;
-  ce.cse.forEach((c,i)=>{
-    h += `<tr><td style="text-align:left">${escH(c)}</td>`;
-    wk.forEach((w,j)=>{
-      const tot=(ce.total[i][j]||0)+(cb.total[i][j]||0), ovd=(ce.overdue[i][j]||0)+(cb.overdue[i][j]||0);
-      const rate = tot? ovd/tot : null;
-      h += `<td style="background:${heatCol(rate)}" title="${ovd}/${tot}">${rate==null?'—':pc(rate,0)}</td>`;
-    });
-    h += `</tr>`;
-  });
-  h += `</table>`;
-  document.getElementById('t_cse_heat').innerHTML = h;
-}
-function renderCse(){
-  cseBlock('EVCS', D.cseEvcs, 't_cse_evcs', 'c_cse_evcs');
-  cseBlock('BSS',  D.cseBss,  't_cse_bss',  'c_cse_bss');
-  renderCseHeat();
-  const gg = GT['RPT-'+D.week+'-GENERAL'] || {};
-  document.getElementById('gtGeneral').value = gg.text || '';
-  document.getElementById('gtGeneralMeta').textContent = gg.user ? `✍ ${gg.user} · ${gg.ts||''}` : '';
-  document.getElementById('gtUser').value = localStorage.getItem('rpt_gt_user') || '';
-}
-function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity=1; setTimeout(()=>t.style.opacity=0, 2600); }
-function collectGt(){
-  const user = document.getElementById('gtUser').value.trim();
-  const ts = new Date().toLocaleString('vi-VN');
-  document.querySelectorAll('textarea[data-k]').forEach(ta=>{
-    const k = ta.dataset.k, old = GT[k] || {};
-    if(ta.value.trim() !== (old.text||'')){ GT[k] = {text: ta.value.trim(), user, ts}; }
-  });
-  const gv = document.getElementById('gtGeneral').value.trim();
-  if(gv !== ((GT['RPT-'+D.week+'-GENERAL']||{}).text||'')) GT['RPT-'+D.week+'-GENERAL'] = {text:gv, user, ts};
-  localStorage.setItem(GT_KEY, JSON.stringify(GT));
-  localStorage.setItem('rpt_gt_user', user);
-}
-document.getElementById('gtSave').onclick = ()=>{ collectGt(); renderCse(); toast('Đã lưu giải trình trên máy này ✓'); };
-document.getElementById('gtCfg').onclick = ()=>{ document.getElementById('cfgUrl').value = localStorage.getItem(GT_URL_KEY)||''; dlgCfg.showModal(); };
-document.getElementById('cfgSave').onclick = ()=>{ localStorage.setItem(GT_URL_KEY, document.getElementById('cfgUrl').value.trim()); dlgCfg.close(); toast('Đã lưu URL ✓'); };
-function gtRows(){
-  return Object.entries(GT).filter(([k,v])=>v.text).map(([k,v])=>{
-    const m = k.match(new RegExp('^RPT-'+D.week+'-(EVCS|BSS)-(.+)$'));
-    return {tid:k, name: m? `${m[2].replace(/_/g,';')} (${m[1]})` : 'Nhận xét chung '+D.week,
-      day:D.week, cat:'Giải trình báo cáo tuần', text:v.text, user:v.user||'', status:D.week};
-  });
-}
-document.getElementById('gtPush').onclick = async ()=>{
-  const url = localStorage.getItem(GT_URL_KEY);
-  if(!url) return toast('Chưa có URL đồng bộ — bấm ⚙ trước');
-  collectGt();
-  const rows = gtRows();
-  if(!rows.length) return toast('Chưa có giải trình nào để đẩy');
-  try{
-    await fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify({mode:'merge', rows})});
-    toast(`Đã gửi ${rows.length} giải trình lên sheet online ✓`);
-  }catch(e){ toast('Lỗi gửi: ' + e.message); }
-};
-document.getElementById('gtPull').onclick = ()=>{
-  const url = localStorage.getItem(GT_URL_KEY);
-  if(!url) return toast('Chưa có URL đồng bộ — bấm ⚙ trước');
-  const cb = 'gtcb_' + Date.now();
-  window[cb] = resp => {
-    delete window[cb];
-    if(!resp || !resp.ok) return toast('Không đọc được sheet online');
-    let cnt = 0;
-    (resp.rows||[]).forEach(r=>{
-      const tid = String(r[0]||'');
-      if(!tid.startsWith('RPT-'+D.week)) return;
-      GT[tid] = {text: r[4]||'', user: r[5]||'', ts: r[6]||''}; cnt++;
-    });
-    localStorage.setItem(GT_KEY, JSON.stringify(GT));
-    renderCse(); toast(`Đã tải ${cnt} giải trình từ sheet online ✓`);
-  };
-  const s = document.createElement('script');
-  s.src = url + (url.includes('?')?'&':'?') + 'callback=' + cb;
-  s.onerror = ()=> toast('Lỗi kết nối sheet online');
-  document.body.appendChild(s);
-};
-document.getElementById('gtCopy').onclick = ()=>{
-  collectGt();
-  const lines = ['GIẢI TRÌNH BÁO CÁO TUẦN W29', ''];
-  gtRows().forEach(r=> lines.push(`• ${r.name} — ${r.user||'?'}:\n  ${r.text}`));
-  navigator.clipboard.writeText(lines.join('\n')).then(()=>toast('Đã sao chép ✓'));
-};
 
 /* ================= parts ================= */
 function partsBlock(tbl, rows, total, subId){
@@ -1115,7 +956,6 @@ const GROUPS = {
   watch:{title:'Cảnh báo sớm', ids:['sec-watch']},
   alarm:{title:'Top alarm', ids:['sec-alarm']},
   asp:  {title:'Overdue rate theo ASP', ids:['sec-asp']},
-  cse:  {title:'Hiệu suất CSE & Giải trình', ids:['sec-cse']},
   parts:{title:'Top vật tư sử dụng', ids:['sec-parts']},
   cost: {title:'Chi phí dịch vụ', ids:['sec-cost']},
   fix:  {title:'Dữ liệu đã hiệu chỉnh (V3 vs V2)', ids:['sec-fix']},
@@ -1204,7 +1044,7 @@ function renderTiles(){
   });
   const more = [['watch','Cảnh báo'],['cls','Disclaim'],['trend','Theo model'],['alarm','Alarm'],
     ['cause','Nguyên nhân overdue'],
-    ['asp','ASP'],['cse','CSE'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
+    ['asp','ASP'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
     ['explain','✍ Giải trình overdue']];
   const mb = document.getElementById('morebar');
   mb.innerHTML = '<span class="mlbl">Xem thêm:</span>' +
@@ -1250,7 +1090,7 @@ document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   MODE = b.dataset.m;
   document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on', x===b));
   collectGt();       // không mất giải trình đang gõ
-  render(); renderCse();
+  render();
 });
 document.querySelectorAll('#alarmSeg button').forEach(b=> b.onclick = ()=>{
   ALARM_SEG = b.dataset.s;
@@ -1790,7 +1630,7 @@ document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
   SRC = b.dataset.s;
   document.querySelectorAll('#srcSeg button').forEach(x=>x.classList.toggle('on', x===b));
   Object.assign(D, D.variants[SRC]);
-  render(); renderCse(); drawSourceCharts();
+  render(); drawSourceCharts();
   setTimeout(fixSizes, 60);
 });
 /* nhãn động theo dữ liệu (báo cáo chạy hằng ngày -> tuần/tháng thay đổi) */
@@ -1802,7 +1642,6 @@ document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
   if(segs[1]) segs[1].textContent = 'Tháng ('+D.month+')';
 })();
 render();
-renderCse();
 initOvdFilters();
 renderOverdue();
 renderOvdProgress();
