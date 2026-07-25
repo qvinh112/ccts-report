@@ -345,9 +345,9 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   </p>
   <div class="grid2">
     <div class="card"><h3>Khối lượng &amp; overdue rate — <span class="perfLbl"></span></h3>
-      <div class="cv tall"><canvas id="c_perf"></canvas></div></div>
+      <div class="cv rc"><canvas id="c_perf"></canvas></div></div>
     <div class="card"><h3>Xu hướng overdue rate 7 tuần (top 8)</h3>
-      <div class="cv tall"><canvas id="c_perf_trend"></canvas></div></div>
+      <div class="cv rc"><canvas id="c_perf_trend"></canvas></div></div>
   </div>
   <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_perf"></div></div>
 </section>
@@ -372,7 +372,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <div class="card"><h3>Cơ cấu nguyên nhân toàn quốc</h3>
       <div class="cv tall"><canvas id="c_cause"></canvas></div></div>
     <div class="card"><h3>Tỷ trọng nguyên nhân theo <span class="causeLbl"></span></h3>
-      <div class="cv tall"><canvas id="c_cause_by"></canvas></div></div>
+      <div class="cv rc"><canvas id="c_cause_by"></canvas></div></div>
   </div>
   <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_cause"></div></div>
   <h2 style="margin-top:18px">Dữ liệu nói gì về phần chưa ai giải trình</h2>
@@ -384,7 +384,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   </p>
   <div class="grid2">
     <div class="card"><h3>Tình huống overdue theo <span class="causeLbl"></span></h3>
-      <div class="cv tall"><canvas id="c_scn_by"></canvas></div></div>
+      <div class="cv rc"><canvas id="c_scn_by"></canvas></div></div>
     <div class="card"><h3>Chi tiết</h3><div class="tblwrap" id="t_scn"></div></div>
   </div>
 </section>
@@ -938,6 +938,9 @@ const badge = r => r==null ? '' :
   r < .12 ? `<span class="badge b-warn">${pc(r)}</span>` :
   r < .25 ? `<span class="badge b-serious">${pc(r)}</span>` :
             `<span class="badge b-crit">${pc(r)}</span>`;
+/* Nhãn PIC: hiện ĐỦ tên, không cắt còn tên đầu + "+". Chart.js nhận mảng = nhiều dòng,
+   nên nhóm nhiều người vẫn đọc được mà không kéo dài trục. */
+const nameLines = k => String(k==null?'':k).split(';').map(s=>s.trim()).filter(Boolean);
 function spark(tot, ovd){
   const rates = tot.map((t,i)=> t ? ovd[i]/t : 0);
   const mx = Math.max(...rates, .0001), W=90, H=22;
@@ -950,7 +953,7 @@ function cseBlock(sys, cd, tblId, cvId){
   rows.forEach(r=> r.rate = r.t29 ? r.o29/r.t29 : null);
   // chart
   mk(cvId, {type:'bar',
-    data:{labels: rows.map(r=>r.cse.split(';')[0] + (r.cse.includes(';')?' +':'')),
+    data:{labels: rows.map(r=>nameLines(r.cse)),
       datasets:[{data: rows.map(r=>r.rate), borderRadius:4, maxBarThickness:34,
         backgroundColor: rows.map(r=> r.rate<.05?'#0ca30c':r.rate<.12?'#fab219':r.rate<.25?'#ec835a':'#d03b3b')}]},
     options:{maintainAspectRatio:false,
@@ -977,7 +980,7 @@ function renderCseHeat(){
   const ce=D.cseEvcs, cb=D.cseBss, wk=D.weeks;
   let h = `<table><tr><th style="text-align:left">CSE</th>`+ wk.map(w=>`<th>${w}</th>`).join('') +`</tr>`;
   ce.cse.forEach((c,i)=>{
-    h += `<tr><td style="text-align:left">${c.split(';')[0]}${c.includes(';')?' +':''}</td>`;
+    h += `<tr><td style="text-align:left">${escH(c)}</td>`;
     wk.forEach((w,j)=>{
       const tot=(ce.total[i][j]||0)+(cb.total[i][j]||0), ovd=(ce.overdue[i][j]||0)+(cb.overdue[i][j]||0);
       const rate = tot? ovd/tot : null;
@@ -1158,7 +1161,7 @@ function perfTile(){
   const worst = teams.slice().sort((a,b)=> b.rate-a.rate)[0];
   return worst
     ? {grp:'perf', title:'Hiệu suất · team trễ nhất', big:pc(worst.rate),
-       sub:`${worst.k.split(';')[0]} — ${n0(worst.ovd)}/${n0(worst.qty)} ticket ${D.week} · ${teams.length} team đang so`}
+       sub:`${worst.k} — ${n0(worst.ovd)}/${n0(worst.qty)} ticket ${D.week} · ${teams.length} team đang so`}
     : {grp:'perf', title:'Hiệu suất người / team', big:'—', sub:'chưa đủ dữ liệu tuần này'};
 }
 function renderTiles(){
@@ -1558,7 +1561,7 @@ function renderPerf(){
   document.querySelectorAll('.perfLbl').forEach(e=> e.textContent = PERF_LBL[PERF_DIM]);
   const top = rows.slice(0, 12);
   mk('c_perf', {type:'bar',
-    data:{labels: top.map(r=>r.k.split(';')[0]), datasets:[
+    data:{labels: top.map(r=>nameLines(r.k)), datasets:[
       {label:'Ticket', data: top.map(r=>r.qty), backgroundColor:'#c9d6e8', borderRadius:4, maxBarThickness:30, order:2},
       {label:'Overdue', data: top.map(r=>r.ovd), backgroundColor:'#d03b3b', borderRadius:4, maxBarThickness:30, order:2},
       {label:'Overdue rate', data: top.map(r=>r.rate*100), type:'line', yAxisID:'y1',
@@ -1570,7 +1573,7 @@ function renderPerf(){
         x:{grid:{display:false}, ticks:{font:{size:10.5}}}}}});
   const t8 = rows.slice(0, 8);
   mk('c_perf_trend', {type:'line',
-    data:{labels: D.weeks, datasets: t8.map((r,i)=>({label:r.k.split(';')[0],
+    data:{labels: D.weeks, datasets: t8.map((r,i)=>({label:r.k,
       data:r.series.map(v=> v==null?null:v*100), borderColor:S[i%S.length], backgroundColor:S[i%S.length],
       tension:.3, pointRadius:2, borderWidth:2, spanGaps:true}))},
     options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10.5}}},
@@ -1627,7 +1630,7 @@ function renderCause(){
       tooltip:{callbacks:{label:c=>` ${n0(c.parsed)} ca`}}}}});
   const keys = Object.keys(by).sort((a,b)=> by[b].reduce((s,v)=>s+v,0) - by[a].reduce((s,v)=>s+v,0)).slice(0,10);
   mk('c_cause_by', {type:'bar',
-    data:{labels: keys.map(k=>k.split(';')[0]), datasets: CAUSE_GROUPS.map((g,i)=>({
+    data:{labels: keys.map(k=>nameLines(k)), datasets: CAUSE_GROUPS.map((g,i)=>({
       label:g, data: keys.map(k=>{ const s=by[k].reduce((a,v)=>a+v,0); return s? by[k][i]/s*100 : 0; }),
       backgroundColor: CAUSE_COL[i], stack:'c', maxBarThickness:26}))},
     options:{indexAxis:'y', maintainAspectRatio:false,
@@ -1656,7 +1659,7 @@ function renderScnBy(rows){
   const keys = Object.keys(by).sort((a,b)=> by[b].reduce((s,v)=>s+v,0) - by[a].reduce((s,v)=>s+v,0));
   const top = keys.slice(0,10);
   mk('c_scn_by', {type:'bar',
-    data:{labels: top.map(k=>k.split(';')[0]), datasets: SCN.map((s,i)=>({
+    data:{labels: top.map(k=>nameLines(k)), datasets: SCN.map((s,i)=>({
       label:s, data: top.map(k=>{ const t=by[k].reduce((a,v)=>a+v,0); return t? by[k][i]/t*100 : 0; }),
       backgroundColor: SCN_COL[s]||'#999', stack:'s', maxBarThickness:26}))},
     options:{indexAxis:'y', maintainAspectRatio:false,
