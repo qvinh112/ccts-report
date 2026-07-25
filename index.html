@@ -161,6 +161,57 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 #modalScroll{overflow-y:auto;padding:14px 18px 22px}
 #modalScroll section{margin-top:6px}
 #modalScroll section:first-child h2{margin-top:0}
+/* ============ Chế độ ĐIỀU HÀNH (gộp từ /exec, 25/07) — mọi class tiền tố x ============ */
+body.xmode #scopeBar,body.xmode #kpis,body.xmode #cockpit,
+body.xmode #modeSeg,body.xmode #srcSeg,body.xmode #freshTag,body.xmode #partialWarn{display:none}
+#execView{display:none}
+body.xmode #execView{display:block}
+#execView h2{font-size:15px;margin:26px 0 10px;border-left:4px solid var(--ink);padding-left:8px}
+#execView h3{font-size:13px;margin:14px 0 6px;color:var(--ink2)}
+.xmuted{color:var(--muted);font-size:12px}
+a.xdef{color:var(--s1);text-decoration:none;font-size:11px;margin-left:4px}
+.xtoolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.xtiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.xtile{background:var(--surface);border:1px solid var(--grid);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.xtile .xlbl{font-size:12px;color:var(--ink2);font-weight:600}
+.xtile .xval{font-size:26px;font-weight:700;line-height:1.1}
+.xtile .xval small{font-size:13px;color:var(--muted);font-weight:500}
+.xtile .xdl{font-size:12px}
+.xup{color:var(--crit)} .xdown{color:var(--good)}
+.xtgt{font-size:11px;color:var(--muted)}
+.xchip{display:inline-block;border-radius:6px;padding:0 6px;font-weight:600}
+.xchip.ok{background:#e4f5e4;color:var(--good)} .xchip.no{background:#fdeaea;color:var(--crit)}
+.xchip.na{background:#f0efe9;color:var(--muted)}
+.xdefline{font-size:10.5px;color:var(--muted);border-top:1px dashed var(--grid);padding-top:4px;margin-top:auto}
+.xccbar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:2px 0}
+.xccbar i{display:block;height:100%}
+.xstrip{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.xbadge{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--axis);border-radius:8px;padding:5px 10px;font-size:12px;background:var(--surface);cursor:pointer}
+.xalert{border-left:4px solid var(--warn);background:#fff8e6;border-radius:8px;padding:8px 12px;font-size:12.5px;flex:1;min-width:260px}
+.xalert.red{border-left-color:var(--crit);background:#fdeeee}
+.xtwrap{overflow-x:auto}
+#execView th{position:sticky;top:0;background:var(--surface)}
+#execView th:first-child,#execView td:first-child{text-align:left}
+tr.xref td{background:#f2f6fb;font-weight:600}
+tr.xmiss td{background:#fdf3f3}
+#execView td.l{text-align:left;white-space:normal}
+.xchipst{display:inline-block;border-radius:6px;padding:1px 8px;font-size:11px;font-weight:600}
+.st-analyzing{background:#f0efe9;color:var(--ink2)} .st-tqa{background:#eef;color:var(--s5)}
+.st-pilot{background:#fff3da;color:#9c6d00} .st-rollout{background:#e2f0ff;color:var(--s1)}
+.st-closed{background:#e4f5e4;color:var(--good)} .st-missing{background:#fdeaea;color:var(--crit)}
+.xexp{cursor:pointer;color:var(--s1);font-weight:600}
+.xchartbox{position:relative;height:260px}
+.xchartbox.tall{height:320px}
+#covDlg{border:1px solid var(--grid);border-radius:12px;max-width:640px;width:92vw;padding:16px}
+#covDlg::backdrop{background:rgba(0,0,0,.25)}
+#xfoot{color:var(--muted);font-size:11.5px;text-align:center;padding:20px 0 0}
+@media (max-width:760px){.xtile .xval{font-size:22px}}
+@media print{
+  body.xmode header,body.xmode footer,body.xmode .noprint{display:none !important}
+  body.xmode .card,body.xmode .xtile{break-inside:avoid}
+  body.xmode .xchartbox{height:230px}
+  body.xmode a.xdef{display:none}
+}
 </style>
 </head>
 <body>
@@ -175,12 +226,96 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <button data-s="other">Nguồn khác</button>
     <button data-s="all">Tất cả</button>
   </div>
+  <div class="seg" id="viewSeg" title="Chế độ xem: Nội bộ (phân tích) / Điều hành (khách hàng, lãnh đạo)">
+    <button data-v="int" class="on">Nội bộ</button>
+    <button data-v="exec">Điều hành</button>
+  </div>
   <div style="flex-basis:100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <span class="freshTag" id="freshTag"></span>
     <span class="partialWarn" id="partialWarn" style="display:none"></span>
   </div>
 </header>
 <main>
+
+<!-- ============ CHẾ ĐỘ ĐIỀU HÀNH (khách hàng V-GREEN/VinFast + lãnh đạo) ============
+     Gộp từ route /exec cũ (25/07). Dữ liệu: exec_data.js (sinh bởi exec_data.py, cùng
+     nguồn build). KHÔNG hiện tên CSE; chỉ ASP/tỉnh/toàn quốc. Bật qua nút "Điều hành"
+     trên header hoặc hash #exec. -->
+<div id="execView">
+  <div class="xtoolbar">
+    <span class="xmuted" id="xhdWeek"></span>
+    <span style="flex:1"></span>
+    <span class="seg" id="xlangSeg">
+      <button data-lang="vi">VI</button><button data-lang="en">EN</button>
+    </span>
+    <button class="btn noprint" onclick="window.print()" data-xi18n="print"></button>
+    <a class="btn noprint" href="definitions.html" data-xi18n="defs" style="text-decoration:none"></a>
+  </div>
+  <div id="xpartialNote" class="xmuted" style="margin-bottom:8px"></div>
+  <div class="xtiles" id="xtiles"></div>
+  <div class="xstrip">
+    <span class="xbadge" id="xcovBadge" onclick="document.getElementById('covDlg').showModal()"></span>
+    <div id="xcampAlert" style="display:none" class="xalert"></div>
+  </div>
+
+  <dialog id="covDlg">
+    <h3 style="margin-top:0" data-xi18n="covTitle"></h3>
+    <div id="xcovBody"></div>
+    <p class="xmuted" data-xi18n="covNote"></p>
+    <button class="btn" onclick="document.getElementById('covDlg').close()" data-xi18n="close"></button>
+  </dialog>
+
+  <h2><span data-xi18n="t2"></span><a class="xdef" href="definitions.html#cause">ⓘ</a></h2>
+  <div class="card">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <span class="seg" id="xsegSeg">
+        <button data-seg="EVCS">EVCS</button><button data-seg="BSS">BSS</button>
+      </span>
+      <span class="xmuted" id="xparetoTop"></span>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><h3 data-xi18n="pareto"></h3><div class="xchartbox tall"><canvas id="c_xpareto"></canvas></div>
+        <p class="xmuted" data-xi18n="unvNote"></p></div>
+      <div><h3 data-xi18n="resp"></h3><div class="xchartbox tall"><canvas id="c_xresp"></canvas></div>
+        <p class="xmuted" data-xi18n="respNote"></p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span data-xi18n="drill"></span> <select id="xdrillSel" style="max-width:280px"></select></h3>
+    <div class="grid2">
+      <div><h3>ASP</h3><div class="xtwrap"><table id="t_xdrill_asp"></table></div></div>
+      <div><h3 data-xi18n="prov"></h3><div class="xtwrap" style="max-height:280px;overflow-y:auto"><table id="t_xdrill_prov"></table></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span data-xi18n="rank"></span><a class="xdef" href="definitions.html#rank">ⓘ</a>
+      <span class="seg noprint" style="margin-left:10px;font-size:12px" id="xsortSeg">
+        <button data-sort="ovd" data-xi18n="sortAbs"></button><button data-sort="rate" data-xi18n="sortRate"></button>
+      </span></h3>
+    <p class="xmuted" data-xi18n="rankNote"></p>
+    <div class="grid2">
+      <div><h3>ASP</h3><div class="xtwrap"><table id="t_xrank_asp"></table></div></div>
+      <div><h3 data-xi18n="prov"></h3><div class="xtwrap" style="max-height:340px;overflow-y:auto"><table id="t_xrank_prov"></table></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span data-xi18n="aspTrend"></span> <select id="xaspSel"></select></h3>
+    <div class="xchartbox"><canvas id="c_xasp_trend"></canvas></div>
+    <p class="xmuted" data-xi18n="campNote2"></p>
+  </div>
+
+  <h2><span data-xi18n="t3"></span><a class="xdef" href="definitions.html#action">ⓘ</a></h2>
+  <div id="xactAlerts"></div>
+  <div class="card">
+    <p class="xmuted" id="xactEmpty" style="display:none"></p>
+    <div class="xtwrap"><table id="t_xactions"></table></div>
+    <p class="xmuted" data-xi18n="actNote"></p>
+  </div>
+  <div id="xfoot"></div>
+</div>
 
 <div class="scopebar" id="scopeBar"></div>
 
@@ -1698,6 +1833,411 @@ renderCause();
 function fixSizes(){ Object.values(charts).forEach(c=>{ if(c.canvas.width===0) c.resize(); }); }
 window.addEventListener('load', ()=>{ fixSizes(); setTimeout(fixSizes, 250); setTimeout(fixSizes, 1000); });
 setTimeout(fixSizes, 100);
+</script>
+<script src="exec_data.js"></script>
+<script>
+/* ============ Chế độ ĐIỀU HÀNH — gộp từ /exec (25/07) ============
+   Toàn bộ trong IIFE: không rò biến ra trang nội bộ (charts/mk/pc/D... đều đã có
+   bản riêng của trang chính). Chỉ expose window.xToggleAct cho onclick inline. */
+(function(){
+'use strict';
+if(typeof EXEC_DATA === 'undefined'){ console.warn('Thiếu exec_data.js — ẩn chế độ Điều hành');
+  document.getElementById('viewSeg').style.display='none'; return; }
+const XD = EXEC_DATA;
+const $x = id => document.getElementById(id);
+
+/* ---- i18n ---- */
+let LANG = localStorage.getItem('execLang') || 'vi';
+const I18N = {
+ vi: {
+  print:'🖨 In / PDF', defs:'Định nghĩa chỉ số', close:'Đóng',
+  scope:'Phạm vi: luồng API creation, đã lọc phạm vi vận hành',
+  partial:'Tuần {w} mới có {d}/7 ngày dữ liệu ({f} → {t}) — số đếm chưa phải cả tuần.',
+  kpi_evcs:'Tỉ lệ lỗi EVCS', kpi_bss:'Tỉ lệ lỗi BSS', kpi_ovd:'SLA overdue toàn mạng',
+  kpi_cc:'Vé do ChargeCore', kpi_backlog:'Vé tồn chưa xử lý xong', kpi_total:'Tổng số vé',
+  def_evcs:'Thiết bị EVCS lỗi (distinct, trừ Disclaim) / thiết bị vận hành (fleet tĩnh W29) — tuần này.',
+  def_bss:'Thiết bị BSS lỗi (distinct, trừ Disclaim) / thiết bị vận hành (fleet tĩnh W29) — tuần này.',
+  def_ovd:'Vé Overdue theo cờ SLA tinh / tổng vé thuộc 13 trạng thái SLA, EVCS+BSS. Gồm cả vé chưa xử lý xong.',
+  def_cc:'Vé Hardware+Software / vé ĐÃ phân định (HW+SW+Disclaim). Vé chưa phân định hiện dải riêng, không vào mẫu số.',
+  def_backlog:'Vé tạo trong tuần chưa có solution đầu tiên tại thời điểm chốt số liệu.',
+  def_total:'Tổng vé EVCS+BSS trong tuần, phạm vi vận hành, luồng API creation.',
+  vsPrev:'so tuần trước', perDay:'đã quy /ngày', noTarget:'chưa đặt mục tiêu', target:'mục tiêu', since:'từ',
+  met:'Đạt', notMet:'Chưa đạt',
+  ccBands:'ChargeCore {cc} · Không do CC {dis} · Chưa phân định {und}',
+  covBadge:'Độ phủ dữ liệu', covTitle:'Độ phủ dữ liệu tuần này',
+  covNote:'Hiện giới hạn của số liệu làm tăng niềm tin. "Đang xử lý" (Open/Appointment) là trạng thái bình thường; "ngoài 13 trạng thái SLA" mới là lỗi dữ liệu của workbook. Độ phủ chấm trên vé đã có solution đầu tiên. Giá vật tư: export CCTS không có nguồn giá theo tuần.',
+  covRow:['Tổng vé','Đang xử lý (Open/Appointment)','Ngoài 13 trạng thái SLA','Chưa có mã lỗi','Mã lỗi gộp biến thể','Đã có solution','Độ phủ'],
+  campaign:'chiến dịch', natural:'lỗi tự nhiên',
+  campAlert:'⚠ {n} vé {seg} tuần {w} thuộc {label} — không phải chất lượng sản phẩm xấu đi. Mọi biểu đồ xu hướng đã tách riêng hai đường.',
+  t2:'Nguyên nhân & trách nhiệm', pareto:'Nhóm nguyên nhân — Pareto', resp:'Trách nhiệm theo nhóm nguyên nhân',
+  paretoTop:'{k} nhóm đầu giải thích {p} số vé {seg} tuần này',
+  unvNote:'"Chưa xác minh" phần lớn là vé mới chưa có mô tả xử lý — sẽ tự phân loại khi kỹ thuật viên cập nhật.',
+  respNote:'Do ChargeCore = vé Hardware/Software. Không do CC = Disclaim. Còn lại chưa phân định.',
+  drill:'Chi tiết nhóm nguyên nhân:', prov:'Tỉnh/Thành', rank:'Xếp hạng ASP & khu vực (SLA/khối lượng)',
+  rankNote:'Chỉ hiện đơn vị ≥ 20 vé/tuần. Mặc định xếp theo SỐ VÉ TRỄ (sửa chỗ nào giảm nhiều nhất); có thể chuyển sang tỉ lệ.',
+  sortAbs:'Theo vé trễ', sortRate:'Theo tỉ lệ',
+  thRank:['Đơn vị','Vé','Trễ','Tỉ lệ trễ','Giờ xử lý TV','% trong hạn','Open→VOMS TV'],
+  thDrill:['Đơn vị','Vé','Do CC','Không do CC','Chưa phân định'],
+  national:'Toàn quốc (mốc)', aspTrend:'Xu hướng 7 tuần theo ASP — tách chiến dịch',
+  campNote2:'Cột "chiến dịch" = vé khớp quy tắc trong config/campaigns.json (đợt thay thế hàng loạt theo kế hoạch).',
+  t3:'Hành động theo mã lỗi', actEmpty:'Chưa cấu hình sổ hành động (config/actions.json trống) — bảng dưới chỉ gồm mã lỗi lớn đang THIẾU kế hoạch.',
+  thAct:['Mã lỗi','Dòng','Vé tuần','Biến động','Nguyên nhân gốc','Giải pháp','Loại','Trạng thái','Phụ trách','Hạn','Mục tiêu',''],
+  stMissing:'Chưa có kế hoạch', actNote:'Bấm ▸ để xem xu hướng 7 tuần của mã lỗi, kèm vạch ngày deploy. Mã lỗi lớn chưa có bản ghi hành động bị đánh dấu đỏ — đó là danh sách việc phải bổ sung.',
+  alertDue:'⚠ {code} ({seg}) đã quá hạn {due} mà chưa deploy giải pháp.',
+  alertNoImp:'⚠ {code} ({seg}) deploy {dep} nhưng vé không giảm ({base} → {cur}).',
+  deployed:'deploy', foot:'Nguồn: export CCTS hàng ngày · Sinh lúc {t} · {scope}',
+  types:{firmware:'Firmware',hardware:'Phần cứng',process:'Quy trình',training:'Đào tạo'},
+  status:{analyzing:'Đang phân tích',tqa:'TQA',pilot:'Pilot',rollout:'Rollout',closed:'Đóng'},
+ },
+ en: {
+  print:'🖨 Print / PDF', defs:'Metric definitions', close:'Close',
+  scope:'Scope: API-creation flow, operations scope applied',
+  partial:'Week {w} has only {d}/7 days of data ({f} → {t}) — counts are not a full week yet.',
+  kpi_evcs:'EVCS failure rate', kpi_bss:'BSS failure rate', kpi_ovd:'Network SLA overdue',
+  kpi_cc:'ChargeCore-attributable', kpi_backlog:'Unresolved backlog', kpi_total:'Total tickets',
+  def_evcs:'Distinct failed EVCS units (excl. Disclaim) / units in service (static W29 fleet) — this week.',
+  def_bss:'Distinct failed BSS units (excl. Disclaim) / units in service (static W29 fleet) — this week.',
+  def_ovd:'Overdue tickets per refined SLA flag / all tickets in the 13 SLA statuses, EVCS+BSS. Includes unresolved tickets.',
+  def_cc:'Hardware+Software tickets / classified tickets (HW+SW+Disclaim). Unclassified shown separately, not in denominator.',
+  def_backlog:'Tickets created this week with no first solution at data cut-off.',
+  def_total:'All EVCS+BSS tickets this week, operations scope, API-creation flow.',
+  vsPrev:'vs last week', perDay:'per-day basis', noTarget:'no target set', target:'target', since:'since',
+  met:'Met', notMet:'Not met',
+  ccBands:'ChargeCore {cc} · Not CC {dis} · Unclassified {und}',
+  covBadge:'Data coverage', covTitle:'Data coverage this week',
+  covNote:'Showing data limits builds trust. "In progress" (Open/Appointment) is normal; only statuses outside the 13 SLA statuses are true workbook data issues. Coverage is scored on tickets with a first solution. Part prices: the CCTS export has no weekly price source.',
+  covRow:['Total tickets','In progress (Open/Appointment)','Outside 13 SLA statuses','No error code','Codes with merged spelling variants','Has first solution','Coverage'],
+  campaign:'campaign', natural:'natural failures',
+  campAlert:'⚠ {n} {seg} tickets in {w} belong to {label} — not a product-quality collapse. All trend charts split the two series.',
+  t2:'Root cause & responsibility', pareto:'Cause groups — Pareto', resp:'Responsibility by cause group',
+  paretoTop:'Top {k} groups explain {p} of {seg} tickets this week',
+  unvNote:'"Unverified" is mostly fresh tickets without a resolution note yet — they reclassify as technicians update.',
+  respNote:'ChargeCore = Hardware/Software tickets. Not CC = Disclaim. Rest unclassified.',
+  drill:'Cause group detail:', prov:'Province', rank:'ASP & region ranking (SLA/volume)',
+  rankNote:'Only units with ≥ 20 tickets/week are listed. Default sort = OVERDUE COUNT (where fixing helps most); switch to rate if needed.',
+  sortAbs:'By overdue', sortRate:'By rate',
+  thRank:['Unit','Tickets','Overdue','Overdue rate','Median proc. h','% within SLA','Median Open→VOMS h'],
+  thDrill:['Unit','Tickets','ChargeCore','Not CC','Unclassified'],
+  national:'National (reference)', aspTrend:'7-week trend by ASP — campaign split',
+  campNote2:'"Campaign" = tickets matching rules in config/campaigns.json (planned mass-replacement drives).',
+  t3:'Actions by error code', actEmpty:'Action register not configured yet (config/actions.json empty) — the table below only lists top error codes MISSING a plan.',
+  thAct:['Error code','Line','Tickets/wk','Change','Root cause','Solution','Type','Status','Owner','Due','Target',''],
+  stMissing:'No plan yet', actNote:'Click ▸ for the code\'s 7-week trend with a deploy-date marker. Top codes without an action record are flagged red — that is the to-do list.',
+  alertDue:'⚠ {code} ({seg}) passed its due date {due} with no deployment.',
+  alertNoImp:'⚠ {code} ({seg}) deployed {dep} but tickets did not drop ({base} → {cur}).',
+  deployed:'deployed', foot:'Source: daily CCTS export · Generated {t} · {scope}',
+  types:{firmware:'Firmware',hardware:'Hardware',process:'Process',training:'Training'},
+  status:{analyzing:'Analyzing',tqa:'TQA',pilot:'Pilot',rollout:'Rollout',closed:'Closed'},
+ }
+};
+const DT_EN = {
+ 'SECC/Bộ điều khiển sạc':'SECC / charge controller','Module sạc/Rectifier':'Charging module / rectifier',
+ 'Bo mạch/PCBA':'PCBA / boards','Súng/Cáp sạc':'Charging gun / cable','Màn hình/HMI':'Screen / HMI',
+ 'Contactor/CB/Đóng cắt':'Contactor / breaker','Quạt/Tản nhiệt':'Fan / cooling',
+ 'Cảm biến/Đo lường/Camera':'Sensors / metering / camera','Cơ cấu/Khóa slot BSS':'BSS slot mechanism / lock',
+ 'Pin/BMS':'Battery / BMS','Firmware/Phần mềm':'Firmware / software','Mạng/Kết nối':'Network / connectivity',
+ 'Nguồn/Điện lưới':'Power / grid','Vệ sinh/Bảo dưỡng':'Cleaning / maintenance',
+ 'Chưa nghiệm thu/Chưa vận hành':'Not commissioned','Thao tác người dùng/CCS':'User operation / CCS',
+ 'Ngoại cảnh/Tác động vật lý':'External / physical impact','Không tồn lỗi/Trụ bình thường':'No fault found',
+ 'Trùng ticket/Trụ khác':'Duplicate ticket / wrong unit','Sai thông tin/Không liên hệ':'Wrong info / no contact',
+ 'Chưa xác định':'Unverified','Toàn quốc':'National','(trống)':'(blank)',
+};
+const T = k => I18N[LANG][k] ?? I18N.vi[k] ?? k;
+const TD = s => LANG === 'en' ? (DT_EN[s] ?? s) : s;
+const TT = (k, vars) => Object.entries(vars).reduce((s,[a,b]) => s.replaceAll('{'+a+'}', b), T(k));
+
+const LOC = () => LANG === 'vi' ? 'vi-VN' : 'en-US';
+const fm = n => (n ?? 0).toLocaleString(LOC());
+const xpc = (v, d=1) => v == null ? '—' : (v*100).toLocaleString(LOC(), {minimumFractionDigits:d, maximumFractionDigits:d}) + '%';
+const xpp = v => (v > 0 ? '+' : '') + (v*100).toLocaleString(LOC(), {maximumFractionDigits:1}) + (LANG==='vi'?' đ%':' pp');
+const xhrs = v => v == null ? '—' : v.toLocaleString(LOC(), {maximumFractionDigits:1}) + 'h';
+
+const xch = {};
+function xmk(id, cfg){ if(xch[id]) xch[id].destroy(); xch[id] = new Chart($x(id), cfg); }
+Chart.register({
+ id:'xvline',
+ afterDraw(chart, _a, opts){
+  if(opts?.idx == null) return;
+  const x = chart.scales.x.getPixelForValue(opts.idx);
+  const {top, bottom} = chart.chartArea, c = chart.ctx;
+  c.save(); c.strokeStyle = '#d03b3b'; c.setLineDash([5,4]); c.lineWidth = 1.5;
+  c.beginPath(); c.moveTo(x, top); c.lineTo(x, bottom); c.stroke();
+  c.setLineDash([]); c.fillStyle = '#d03b3b'; c.font = '11px system-ui';
+  c.textAlign = 'center'; c.fillText(opts.label || '', x, top - 4); c.restore();
+ }
+});
+
+/* ---- Tầng 1 ---- */
+const wPrevIdx = XD.weeks.length - 2;
+const xpartial = XD.coverageWeek?.partial, pdays = XD.coverageWeek?.days || 7;
+const KPIS = [
+ {id:'evcs_fail_rate', lbl:'kpi_evcs', def:'def_evcs', anchor:'evcs',
+  cur:()=>XD.kpis.evcsFail.cur, prev:()=>XD.kpis.evcsFail.series[wPrevIdx], rate:true,
+  val:()=>xpc(XD.kpis.evcsFail.cur, 2)},
+ {id:'bss_fail_rate', lbl:'kpi_bss', def:'def_bss', anchor:'bss',
+  cur:()=>XD.kpis.bssFail.cur, prev:()=>XD.kpis.bssFail.series[wPrevIdx], rate:true,
+  val:()=>xpc(XD.kpis.bssFail.cur, 2)},
+ {id:'overdue_rate', lbl:'kpi_ovd', def:'def_ovd', anchor:'ovd',
+  cur:()=>XD.kpis.ovd.cur.rate, prev:()=>XD.kpis.ovd.series[wPrevIdx]?.rate, rate:true,
+  val:()=>xpc(XD.kpis.ovd.cur.rate), sub:()=>`${fm(XD.kpis.ovd.cur.ovd)}/${fm(XD.kpis.ovd.cur.total)}`},
+ {id:'cc_share', lbl:'kpi_cc', def:'def_cc', anchor:'cc',
+  cur:()=>XD.kpis.cc.cur.share, prev:()=>XD.kpis.cc.series[wPrevIdx]?.share, rate:true,
+  val:()=>xpc(XD.kpis.cc.cur.share), bands:true},
+ {id:'backlog_rate', lbl:'kpi_backlog', def:'def_backlog', anchor:'backlog',
+  cur:()=>XD.kpis.backlog.cur.share, prev:()=>XD.kpis.backlog.series[wPrevIdx]?.share, rate:true,
+  val:()=>fm(XD.kpis.backlog.cur.qty), sub:()=>xpc(XD.kpis.backlog.cur.share)},
+ {id:'total_tickets', lbl:'kpi_total', def:'def_total', anchor:'total',
+  cur:()=>XD.kpis.total.cur, prev:()=>XD.kpis.total.series[wPrevIdx], rate:false,
+  val:()=>fm(XD.kpis.total.cur)},
+];
+
+function deltaHtml(k){
+  let cur = k.cur(), prev = k.prev();
+  if(cur == null || prev == null) return '<span class="xtgt">—</span>';
+  let note = '';
+  if(!k.rate){ cur /= (xpartial ? pdays : 7); prev /= 7; note = xpartial ? ' · ' + T('perDay') : ''; }
+  const d = cur - prev;
+  const tinfo = (XD.targets || {})[k.id] || {};
+  const lower = (tinfo.direction || 'lower_is_better') === 'lower_is_better';
+  const bad = lower ? d > 0 : d < 0;
+  const arrow = d > 0 ? '▲' : d < 0 ? '▼' : '＝';
+  const cls = d === 0 ? '' : bad ? 'xup' : 'xdown';
+  const txt = k.rate ? xpp(d) : (d > 0 ? '+' : '') + d.toLocaleString(LOC(), {maximumFractionDigits:1}) + '/d';
+  return `<span class="${cls}">${arrow} ${txt}</span> <span class="xtgt">${T('vsPrev')}${note}</span>`;
+}
+function targetHtml(k){
+  const t = (XD.targets || {})[k.id];
+  if(!t || t.target == null) return `<span class="xchip na">${T('noTarget')}</span>`;
+  const lower = (t.direction || 'lower_is_better') === 'lower_is_better';
+  const met = lower ? k.cur() <= t.target : k.cur() >= t.target;
+  const tv = k.rate ? xpc(t.target) : fm(t.target);
+  return `<span class="xchip ${met?'ok':'no'}">${met?T('met'):T('notMet')}</span> ` +
+         `${T('target')} ${tv}${t.set_on ? ` (${T('since')} ${t.set_on})` : ''}`;
+}
+function renderTiles(){
+  $x('xtiles').innerHTML = KPIS.map(k => {
+    const c = XD.kpis.cc.cur;
+    const bands = k.bands ? `
+      <div class="xccbar" title="${TT('ccBands',{cc:fm(c.cc),dis:fm(c.dis),und:fm(c.und)})}">
+        <i style="width:${c.cc/(c.cc+c.dis+c.und)*100}%;background:var(--s1)"></i>
+        <i style="width:${c.dis/(c.cc+c.dis+c.und)*100}%;background:var(--s2)"></i>
+        <i style="width:${c.und/(c.cc+c.dis+c.und)*100}%;background:var(--axis)"></i></div>
+      <div class="xtgt">${TT('ccBands',{cc:fm(c.cc),dis:fm(c.dis),und:fm(c.und)})}</div>` : '';
+    return `<div class="xtile">
+      <span class="xlbl">${T(k.lbl)}<a class="xdef" href="definitions.html#${k.anchor}">ⓘ</a></span>
+      <span class="xval">${k.val()}${k.sub ? ` <small>${k.sub()}</small>` : ''}</span>
+      <span class="xdl">${deltaHtml(k)}</span>${bands}
+      <span class="xtgt">${targetHtml(k)}</span>
+      <span class="xdefline">${T(k.def)}</span>
+    </div>`;
+  }).join('');
+}
+function renderCoverage(){
+  const cov = XD.coverage;
+  $x('xcovBadge').innerHTML = `📊 ${T('covBadge')}: <b>${xpc(cov.covPct)}</b>`;
+  const L = T('covRow');
+  $x('xcovBody').innerHTML = ['EVCS','BSS'].map(seg => {
+    const s = cov.segs[seg];
+    const out13 = s.outside13.rows.map(r => `${TD(r.name)}: ${fm(r.qty)}`).join(' · ') || '0';
+    return `<h3>${seg}</h3><table>
+      <tr><td class="l">${L[0]}</td><td>${fm(s.total)}</td></tr>
+      <tr><td class="l">${L[1]}</td><td>${fm(s.inProgress)}</td></tr>
+      <tr><td class="l">${L[2]}</td><td>${fm(s.outside13.qty)} (${xpc(s.outside13.qty/s.total)})<br><span class="xmuted">${out13}</span></td></tr>
+      <tr><td class="l">${L[3]}</td><td>${fm(s.noCode)}</td></tr>
+      <tr><td class="l">${L[4]}</td><td>${fm(s.mergedCodes)} (${fm(s.mergedVariants)} ${LANG==='vi'?'biến thể':'variants'})</td></tr>
+      <tr><td class="l">${L[5]}</td><td>${fm(s.resolved)}</td></tr>
+      <tr><td class="l">${L[6]}</td><td><b>${xpc(s.covPct)}</b></td></tr></table>`;
+  }).join('');
+}
+function renderCampAlert(){
+  const el = $x('xcampAlert');
+  const hits = (XD.campaigns.rules || []).map(r => {
+    const n = Math.max(r.matched[r.matched.length-1] || 0, r.matched[r.matched.length-2] || 0);
+    const wi = (r.matched[r.matched.length-1] || 0) >= n ? XD.weeks.length-1 : XD.weeks.length-2;
+    return {r, n, w: XD.weeks[wi]};
+  }).filter(h => h.n > 0);
+  if(!hits.length){ el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = hits.map(h => TT('campAlert', {
+    n: fm(h.n), seg: h.r.seg, w: h.w,
+    label: LANG === 'en' ? h.r.label_en : h.r.label_vi})).join('<br>');
+}
+
+/* ---- Tầng 2 ---- */
+let XSEG = 'BSS', XSORT = 'ovd';
+const MIN_QTY = 20;
+function renderPareto(){
+  const rows = XD.causes[XSEG].rows;
+  const tot = rows.reduce((s,r) => s + r.qty, 0);
+  let cum = 0;
+  const cumv = rows.map(r => (cum += r.qty) / tot);
+  const k80 = (cumv.findIndex(v => v >= .8) + 1) || rows.length;
+  $x('xparetoTop').textContent = TT('paretoTop', {k: k80, p: xpc(cumv[k80-1] ?? 1, 0), seg: XSEG});
+  const top = rows.slice(0, 10);
+  xmk('c_xpareto', {
+    data:{labels: top.map(r => TD(r.name)), datasets:[
+      {type:'bar', data: top.map(r => r.qty), backgroundColor:'#2a78d6', yAxisID:'y'},
+      {type:'line', data: cumv.slice(0, 10), borderColor:'#e34948', pointRadius:2, yAxisID:'y2'},
+    ]},
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label: c => c.dataset.type === 'line' ? ' ' + xpc(c.parsed.y) : ' ' + fm(c.parsed.y)}}},
+      scales:{x:{ticks:{autoSkip:false, maxRotation:60, font:{size:10}}},
+        y:{beginAtZero:true},
+        y2:{position:'right', min:0, max:1, ticks:{callback: v => (v*100)+'%'}, grid:{display:false}}}}
+  });
+  xmk('c_xresp', {
+    type:'bar',
+    data:{labels: top.map(r => TD(r.name)), datasets:[
+      {label:'ChargeCore', data: top.map(r => r.cc), backgroundColor:'#2a78d6'},
+      {label: LANG==='vi'?'Không do CC':'Not CC', data: top.map(r => r.dis), backgroundColor:'#1baf7a'},
+      {label: LANG==='vi'?'Chưa phân định':'Unclassified', data: top.map(r => r.und), backgroundColor:'#c3c2b7'},
+    ]},
+    options:{maintainAspectRatio:false, indexAxis:'y',
+      plugins:{legend:{position:'bottom', labels:{boxWidth:12, font:{size:11}}}},
+      scales:{x:{stacked:true, beginAtZero:true}, y:{stacked:true, ticks:{font:{size:10}}}}}
+  });
+}
+function renderDrillSel(){
+  const rows = XD.causes[XSEG].rows;
+  $x('xdrillSel').innerHTML = rows.map((r,i) => `<option value="${i}">${TD(r.name)} (${fm(r.qty)})</option>`).join('');
+  renderDrill();
+}
+function renderDrill(){
+  const r = XD.causes[XSEG].rows[+$x('xdrillSel').value || 0];
+  if(!r) return;
+  const H = T('thDrill');
+  const head = `<tr>${H.map(h => `<th>${h}</th>`).join('')}</tr>`;
+  const row = a => `<tr><td>${a[0]}</td><td>${fm(a[1])}</td><td>${fm(a[2])}</td><td>${fm(a[3])}</td><td>${fm(a[4])}</td></tr>`;
+  $x('t_xdrill_asp').innerHTML = head + r.byAsp.map(row).join('');
+  $x('t_xdrill_prov').innerHTML = head + r.byProv.map(a =>
+    row([(XD.provinces[a[0]]?.[0] ?? a[0]), ...a.slice(1)])).join('');
+}
+function rankRow(r, ref){
+  return `<tr${ref ? ' class="xref"' : ''}><td>${ref ? T('national') : TD(r.k)}</td><td>${fm(r.qty)}</td><td>${fm(r.ovd)}</td>` +
+    `<td>${xpc(r.rate)}</td><td>${xhrs(r.med)}</td><td>${xpc(r.ontime)}</td><td>${xhrs(r.voms)}</td></tr>`;
+}
+function renderRank(){
+  const head = `<tr>${T('thRank').map(h => `<th>${h}</th>`).join('')}</tr>`;
+  const nat = XD.perf.all[0];
+  const srt = (a,b) => XSORT === 'ovd' ? b.ovd - a.ovd : b.rate - a.rate;
+  const asp = [...XD.perf.asp].filter(r => r.qty >= MIN_QTY).sort(srt);
+  const prov = [...XD.perf.prov].filter(r => r.qty >= MIN_QTY).sort(srt);
+  $x('t_xrank_asp').innerHTML = head + asp.map(r => rankRow(r)).join('') + (nat ? rankRow(nat, true) : '');
+  $x('t_xrank_prov').innerHTML = head + prov.map(r => rankRow(r)).join('') + (nat ? rankRow(nat, true) : '');
+}
+function renderAspTrend(){
+  const asp = $x('xaspSel').value || 'EC';
+  const s = XD.campaigns.byAsp[asp];
+  if(!s) return;
+  xmk('c_xasp_trend', {
+    type:'bar',
+    data:{labels: XD.weeks, datasets:[
+      {label: T('natural'), data: s.natural, backgroundColor:'#2a78d6'},
+      {label: T('campaign'), data: s.campaign, backgroundColor:'#eda100'},
+    ]},
+    options:{maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{boxWidth:12}}},
+      scales:{x:{stacked:true}, y:{stacked:true, beginAtZero:true}}}
+  });
+}
+
+/* ---- Tầng 3 ---- */
+function chipSt(r){
+  if(r.missing_action) return `<span class="xchipst st-missing">${T('stMissing')}</span>`;
+  const s = r.status || 'analyzing';
+  return `<span class="xchipst st-${s}">${T('status')[s] ?? s}</span>`;
+}
+function renderActions(){
+  const rows = XD.actions.rows;
+  $x('xactEmpty').style.display = XD.actions.cfgEmpty ? 'block' : 'none';
+  $x('xactEmpty').textContent = T('actEmpty');
+  const head = `<tr>${T('thAct').map(h => `<th>${h}</th>`).join('')}</tr>`;
+  $x('t_xactions').innerHTML = head + rows.map((r, i) => {
+    const d = r.prev == null ? '—' :
+      `<span class="${r.qty > r.prev ? 'xup' : r.qty < r.prev ? 'xdown' : ''}">${r.qty > r.prev ? '▲' : r.qty < r.prev ? '▼' : '＝'} ${fm(Math.abs(r.qty - r.prev))}</span>`;
+    const rc = r.missing_action ? '—' : (LANG === 'en' ? (r.root_cause_en || r.root_cause_vi) : r.root_cause_vi) || '—';
+    const sol = r.missing_action ? '—' : (LANG === 'en' ? (r.solution_en || r.solution_vi) : r.solution_vi) || '—';
+    const tgt = r.target_value != null ? `${r.target_metric || ''} ≤ ${fm(r.target_value)}` : '—';
+    return `<tr${r.missing_action ? ' class="xmiss"' : ''}>
+      <td><b>${r.error_code}</b></td><td>${r.product_line}</td><td>${fm(r.qty)}</td><td>${d}</td>
+      <td class="l" style="max-width:180px">${rc}</td><td class="l" style="max-width:180px">${sol}</td>
+      <td>${r.missing_action ? '—' : (T('types')[r.solution_type] ?? r.solution_type ?? '—')}</td>
+      <td>${chipSt(r)}</td><td>${r.owner || '—'}</td><td>${r.due_date || '—'}</td><td>${tgt}</td>
+      <td><span class="xexp" onclick="xToggleAct(${i}, this)">▸</span></td></tr>
+      <tr id="xactrow_${i}" style="display:none"><td colspan="12">
+        <div class="xchartbox" style="height:180px"><canvas id="xact_${i}"></canvas></div></td></tr>`;
+  }).join('');
+  $x('xactAlerts').innerHTML = (XD.actions.alerts || []).map(a =>
+    `<div class="xalert red" style="margin-bottom:8px">${
+      a.type === 'due_passed'
+        ? TT('alertDue', {code: a.code, seg: a.seg, due: a.due})
+        : TT('alertNoImp', {code: a.code, seg: a.seg, dep: a.deployed, base: fm(a.base), cur: fm(a.cur)})
+    }</div>`).join('');
+}
+window.xToggleAct = function(i, el){
+  const tr = $x('xactrow_' + i);
+  const open = tr.style.display !== 'none';
+  tr.style.display = open ? 'none' : '';
+  el.textContent = open ? '▸' : '▾';
+  if(open) return;
+  const r = XD.actions.rows[i];
+  let idx = null;
+  if(r.deployed_on){
+    idx = XD.weeks.findIndex(w => {
+      const g = XD.actions.weekRanges[w];
+      return g && g[1] && r.deployed_on <= g[1];
+    });
+    if(idx < 0) idx = null;
+  }
+  xmk('xact_' + i, {
+    type:'line',
+    data:{labels: XD.weeks, datasets:[{label: r.error_code + ' · ' + r.product_line,
+      data: r.series, borderColor:'#2a78d6', backgroundColor:'rgba(42,120,214,.12)', fill:true, pointRadius:3}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false},
+      xvline:{idx, label: idx != null ? (T('deployed') + ' ' + r.deployed_on) : ''}},
+      scales:{y:{beginAtZero:true}}}
+  });
+};
+
+/* ---- render + chuyển chế độ ---- */
+function renderStatic(){
+  document.querySelectorAll('#execView [data-xi18n]').forEach(el => { el.textContent = T(el.dataset.xi18n); });
+  $x('xhdWeek').textContent = `${XD.week} · ${T('scope')}`;
+  $x('xpartialNote').textContent = xpartial
+    ? TT('partial', {w: XD.week, d: pdays, f: XD.coverageWeek.from, t: XD.coverageWeek.to}) : '';
+  $x('xfoot').textContent = TT('foot', {t: XD.generatedAt, scope: T('scope')});
+  document.querySelectorAll('#xlangSeg button').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
+  document.querySelectorAll('#xsegSeg button').forEach(b => b.classList.toggle('on', b.dataset.seg === XSEG));
+  document.querySelectorAll('#xsortSeg button').forEach(b => b.classList.toggle('on', b.dataset.sort === XSORT));
+}
+function renderAll(){
+  renderStatic(); renderTiles(); renderCoverage(); renderCampAlert();
+  renderPareto(); renderDrillSel(); renderRank(); renderAspTrend(); renderActions();
+}
+let XRENDERED = false;
+function setView(v){
+  document.body.classList.toggle('xmode', v === 'exec');
+  document.querySelectorAll('#viewSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  if(v === 'exec'){
+    if(typeof closeModal === 'function') closeModal();
+    if(!XRENDERED){ XRENDERED = true; renderAll(); }
+    history.replaceState(null, '', '#exec');
+  } else {
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+}
+$x('viewSeg').onclick = e => { if(e.target.dataset.v) setView(e.target.dataset.v); };
+$x('xlangSeg').onclick = e => { if(e.target.dataset.lang){ LANG = e.target.dataset.lang;
+  localStorage.setItem('execLang', LANG); renderAll(); } };
+$x('xsegSeg').onclick = e => { if(e.target.dataset.seg){ XSEG = e.target.dataset.seg;
+  renderStatic(); renderPareto(); renderDrillSel(); } };
+$x('xsortSeg').onclick = e => { if(e.target.dataset.sort){ XSORT = e.target.dataset.sort;
+  renderStatic(); renderRank(); } };
+$x('xdrillSel').onchange = renderDrill;
+$x('xaspSel').innerHTML = Object.keys(XD.campaigns.byAsp).map(a => `<option>${a}</option>`).join('');
+$x('xaspSel').onchange = renderAspTrend;
+if(location.hash === '#exec') setView('exec');
+})();
 </script>
 </body>
 </html>

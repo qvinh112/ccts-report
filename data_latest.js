@@ -33237,5 +33237,5 @@ const REPORT_DATA = {
   "partsBssM",
   "partsTotal"
  ],
- "generatedAt": "2026-07-25 11:18"
+ "generatedAt": "2026-07-25 11:37"
 };
