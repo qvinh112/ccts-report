@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard báo cáo tuần W29 — EVCS & BSS</title>
+<title>Dashboard báo cáo tuần — EVCS &amp; BSS</title>
+<meta name="description" content="Báo cáo vận hành tuần EVCS &amp; BSS: phân loại ticket, nguyên nhân lỗi, SLA overdue, tồn kho vật tư và giải trình overdue realtime.">
+<meta name="theme-color" content="#2a78d6">
+<link rel="preload" href="data_latest.js" as="script">
+<meta property="og:title" content="Báo cáo tuần EVCS & BSS">
+<meta property="og:description" content="Phân loại ticket, nguyên nhân lỗi, SLA overdue, tồn kho vật tư — cập nhật hằng ngày.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232a78d6'/%3E%3Cg fill='%23fff'%3E%3Crect x='7' y='16' width='4.5' height='9' rx='1'/%3E%3Crect x='14' y='11' width='4.5' height='14' rx='1'/%3E%3Crect x='21' y='7' width='4.5' height='18' rx='1'/%3E%3C/g%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
 :root{
@@ -209,33 +216,68 @@ tr.xmiss td{background:#fdf3f3}
 #covDlg::backdrop{background:rgba(0,0,0,.25)}
 #xfoot{color:var(--muted);font-size:11.5px;text-align:center;padding:20px 0 0}
 @media (max-width:760px){.xtile .xval{font-size:22px}}
+/* ===== bổ sung 25/07: bản lưu tuần, mục lục modal, trợ năng, in bản Nội bộ ===== */
+.hdWk{font-size:12px;color:var(--ink2);display:inline-flex;gap:5px;align-items:center}
+.hdWk select{font:12.5px inherit;padding:3px 6px;border:1px solid var(--axis);border-radius:7px;
+  background:var(--surface);color:var(--ink)}
+.tile:focus-visible,.morebtn:focus-visible,.seg button:focus-visible,#modalClose:focus-visible,
+.btn:focus-visible,.jump a:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.jump{display:flex;gap:4px;flex-wrap:wrap;padding:6px 18px 0}
+.jump a{color:var(--ink2);text-decoration:none;padding:3px 8px;border-radius:6px;font-size:12px;
+  border:1px solid var(--grid)}
+.jump a:hover{background:var(--page);color:var(--ink)}
+.loadfail{max-width:640px;margin:60px auto;background:var(--surface);border:1px solid var(--ring);
+  border-radius:12px;padding:20px 24px;line-height:1.6}
+.loadfail h2{border-left-color:var(--crit)}
+.blockfail{background:#fdeeee;border:1px solid #f2c9c9;color:#8a2b2b;border-radius:8px;
+  padding:8px 12px;font-size:12.5px;margin:6px 0}
+@media (max-width:760px){
+  header{padding:8px 12px;gap:7px}
+  header h1{font-size:15px;flex-basis:100%;margin:0}
+  .seg button{padding:5px 10px;font-size:12.5px}
+  main{padding:10px}
+  .cv{height:200px}.cv.tall{height:230px}.cv.rc{height:360px}
+  .tile{min-height:132px}
+}
 @media print{
   body.xmode header,body.xmode footer,body.xmode .noprint{display:none !important}
   body.xmode .card,body.xmode .xtile{break-inside:avoid}
   body.xmode .xchartbox{height:230px}
   body.xmode a.xdef{display:none}
+  /* Bản Nội bộ: nội dung nằm trong modal nên phải gỡ khung nổi ra mới in được */
+  body:not(.xmode) header,body:not(.xmode) footer,body:not(.xmode) .jump,
+  body:not(.xmode) #modalClose,body:not(.xmode) .toolbar,body:not(.xmode) .filterbar{display:none !important}
+  body:not(.xmode) #modalHost.open{position:static;background:none;padding:0}
+  body:not(.xmode) #modalCard{max-width:none;max-height:none;box-shadow:none;overflow:visible}
+  body:not(.xmode) #modalScroll{overflow:visible;padding:0}
+  body:not(.xmode) .card,body:not(.xmode) .kpi,body:not(.xmode) section{break-inside:avoid}
 }
 </style>
 </head>
 <body>
 <header>
-  <h1>📊 Báo cáo tuần <span id="hdW">W29</span> — EVCS &amp; BSS</h1>
-  <div class="seg" id="modeSeg">
-    <button data-m="w" class="on">Tuần (W29)</button>
-    <button data-m="m">Tháng (M6)</button>
+  <h1>📊 Báo cáo tuần <span id="hdW"></span> — EVCS &amp; BSS</h1>
+  <label class="hdWk" id="wkPick" style="display:none">Bản lưu
+    <select id="wkSel" title="Xem lại báo cáo của tuần đã chốt"></select>
+  </label>
+  <div class="seg" id="modeSeg" role="group" aria-label="Kỳ báo cáo">
+    <button data-m="w" class="on" aria-pressed="true">Tuần</button>
+    <button data-m="m" aria-pressed="false">Tháng</button>
   </div>
-  <div class="seg" id="srcSeg" title="Lọc theo luồng tạo ticket">
-    <button data-s="api" class="on">API creation</button>
-    <button data-s="other">Nguồn khác</button>
-    <button data-s="all">Tất cả</button>
+  <div class="seg" id="srcSeg" title="Lọc theo luồng tạo ticket" role="group" aria-label="Nguồn tạo ticket">
+    <button data-s="api" class="on" aria-pressed="true">API creation</button>
+    <button data-s="other" aria-pressed="false">Nguồn khác</button>
+    <button data-s="all" aria-pressed="false">Tất cả</button>
   </div>
-  <div class="seg" id="viewSeg" title="Chế độ xem: Nội bộ (phân tích) / Điều hành (khách hàng, lãnh đạo)">
-    <button data-v="int" class="on">Nội bộ</button>
-    <button data-v="exec">Điều hành</button>
+  <div class="seg" id="viewSeg" title="Chế độ xem: Nội bộ (phân tích) / Điều hành (khách hàng, lãnh đạo)" role="group" aria-label="Chế độ xem">
+    <button data-v="int" class="on" aria-pressed="true">Nội bộ</button>
+    <button data-v="exec" aria-pressed="false">Điều hành</button>
   </div>
   <div style="flex-basis:100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <span class="freshTag" id="freshTag"></span>
     <span class="partialWarn" id="partialWarn" style="display:none"></span>
+    <span class="partialWarn" id="monthWarn" style="display:none"></span>
+    <span class="partialWarn" id="archTag" style="display:none"></span>
   </div>
 </header>
 <main>
@@ -330,8 +372,9 @@ tr.xmiss td{background:#fdf3f3}
 </section>
 
 <div id="modalHost" aria-hidden="true">
- <div id="modalCard">
-  <div id="modalBar"><h3 id="modalTitle"></h3><button id="modalClose" title="Đóng (Esc)">✕</button></div>
+ <div id="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div id="modalBar"><h3 id="modalTitle"></h3><button id="modalClose" title="Đóng (Esc)" aria-label="Đóng">✕</button></div>
+  <nav class="jump" id="modalJump" aria-label="Mục trong phần này"></nav>
   <div id="modalScroll">
 <section id="sec-watch">
   <h2>⚠ Cảnh báo sớm — tuần này so với trung bình các tuần trước</h2>
@@ -438,7 +481,9 @@ tr.xmiss td{background:#fdf3f3}
     <div class="card"><h3>BSS — Số ticket</h3><div class="cv"><canvas id="c_tr_bss_t"></canvas></div></div>
     <div class="card"><h3>BSS — Failure rate</h3><div class="cv"><canvas id="c_tr_bss_r"></canvas></div></div>
   </div>
-  <div class="note">⚠ <b>W29 BSS tăng đột biến</b> (BSS-06: 830 → 2.422 ticket; BSS-12: 26 → 591) — trùng với đợt xử lý/thay khóa hàng loạt (190 E Lock Module ZZ dùng trong tuần, alarm khóa B6029/C6030/A0112 chiếm tỷ trọng lớn). Cần bóc tách ticket chiến dịch khỏi ticket hỏng hóc tự nhiên khi đánh giá.</div>
+  <!-- Ghi chú bất thường gắn theo tuần, đổ từ D.weekNote (build.py: WEEK_NOTES).
+       Trước 25/07 viết cứng ghi chú của W29 nên tuần nào cũng hiện. -->
+  <div class="note" id="weekNote" style="display:none"></div>
 </section>
 
 <section id="sec-alarm">
@@ -594,13 +639,18 @@ tr.xmiss td{background:#fdf3f3}
 <section id="sec-cost">
   <h2>Chi phí dịch vụ theo tháng (USD)</h2>
   <div class="grid2">
-    <div class="card"><h3>Cơ cấu chi phí M1 → M6</h3><div class="cv"><canvas id="c_cost"></canvas></div></div>
+    <div class="card"><h3>Cơ cấu chi phí <span id="costRange"></span></h3><div class="cv"><canvas id="c_cost"></canvas></div></div>
     <div class="card"><h3>Chi phí / thiết bị ($)</h3><div class="cv"><canvas id="c_cpe"></canvas></div></div>
   </div>
 </section>
 
 <section id="sec-fix">
   <h2>Dữ liệu đã hiệu chỉnh (bản V3 so với V2)</h2>
+  <details>
+  <summary style="cursor:pointer;font-size:13px;color:var(--ink2);margin-bottom:8px">
+    Biên bản đối soát một lần ngày <b>17/07/2026</b> khi chuyển từ file Excel sang dashboard —
+    mở ra nếu cần tra lại vì sao số khác bản V2. Không liên quan tới dữ liệu tuần đang xem.
+  </summary>
   <ol class="fixlist">
     <li><b>Phân loại tháng BSS:</b> nhãn ô Y27 ghi <span class="was">"Undefined"</span> trong khi dữ liệu gốc là "Undefined yet" → nhóm Undefined tháng bị đếm <span class="was">0</span>, sửa thành <span class="now">402 ticket</span>; tổng tháng BSS <span class="was">3.132</span> → <span class="now">3.534</span> (khớp bảng SLA).</li>
     <li><b>CSE BSS (W26–W29):</b> cột overdue trong bảng trình bày là số dán tay cũ, lệch số đếm thật — ví dụ dinhnguyen W27 <span class="was">57/14 = 407%</span> (overdue &gt; tổng, vô lý) → <span class="now">10/14 = 71,4%</span>; dinhnguyen W29 <span class="was">3</span> → <span class="now">425</span>; chuongpham W29 <span class="was">37</span> → <span class="now">278</span>. Đã nối công thức về dữ liệu gốc như phía EVCS.</li>
@@ -609,6 +659,7 @@ tr.xmiss td{background:#fdf3f3}
     <li><b>Giá vật tư #N/A:</b> mã đuôi <b>-RP</b> (12070000153-RP, 12030000054-RP, 12030000064-RP) tra theo giá mã gốc; ô công thức chứa <span class="was">#REF!</span> đã sửa; tổng chi phí không còn #N/A. 3 mã chưa có giá — xem ghi chú mục Vật tư.</li>
     <li><b>Nhãn:</b> thống nhất "Total (Tổng)"/"Grand total (Tổng)" → "Total"/"Grand total"; header "Overdue Rate" của bảng theo trạng thái đổi thành "Overdue share" (đúng bản chất: tử số chia tổng toàn bộ ticket).</li>
   </ol>
+  </details>
 </section>
 
 <section id="sec-overdue">
@@ -657,10 +708,25 @@ tr.xmiss td{background:#fdf3f3}
 </div>
 
 </main>
-<footer>Nguồn: 260717 Report W29 V3.xlsx (đã hiệu chỉnh) · Dashboard tạo tự động · Giải trình đồng bộ realtime qua Firebase</footer>
+<footer id="pageFoot"></footer>
 <div id="toast"></div>
 
 <script src="data_latest.js"></script>
+<script>
+/* data_latest.js do job 6h sáng đẩy lên (1 MB). Nếu file thiếu / up dở thì trước đây cả
+   trang trắng vì `const D = REPORT_DATA` ném lỗi ngay dòng đầu. Chặn ở đây và nói rõ. */
+if (typeof REPORT_DATA === 'undefined' || !REPORT_DATA || !REPORT_DATA.week) {
+  document.querySelector('main').innerHTML =
+    '<div class="loadfail"><h2>Chưa tải được dữ liệu báo cáo</h2>' +
+    '<p>File <code>data_latest.js</code> không tải được hoặc đang được ghi dở ' +
+    '(job build chạy 6h sáng).</p>' +
+    '<p>Thử lại sau ít phút. Nếu vẫn lỗi thì báo quản trị kiểm tra log ' +
+    '<code>report_auto/run_daily.log</code>.</p>' +
+    '<p><button class="btn primary" onclick="location.reload()">Tải lại</button></p></div>';
+  document.querySelector('header').style.display = 'none';
+  throw new Error('REPORT_DATA missing');
+}
+</script>
 <!-- Tồn kho vật tư (sinh bởi sla_monitor/warehouse_report.py). Thiếu file = ẩn ô Kho. -->
 <script src="warehouse_data.js"></script>
 <!-- Firebase (giải trình dùng chung node /dashboard/explain với dashboard điều hành) -->
@@ -788,14 +854,17 @@ function kpis(){
   const se = MODE==='w' ? D.slaEvcsW : D.slaEvcsM, sb = MODE==='w' ? D.slaBssW : D.slaBssM;
   const gse = se[se.length-1], gsb = sb[sb.length-1];
   const c = MODE==='w' ? cw : cm, b = MODE==='w' ? bw : bm;
-  const cost = D.cost, i = 5; // M6
+  // Chi phí là khối TĨNH lấy từ baseline: luôn đọc tháng cuối cùng có trong bảng thay vì
+  // chốt cứng chỉ số 5 (= M6) — baseline dài thêm là KPI tự đi theo.
+  const cost = D.cost, i = cost.grandTotal.length - 1;
+  const costM = (cost.months && cost.months[i]) || '';
   const ws = D.wowSeries || {};
   const items = [
     ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate), wowTag(ws.evcsQty, {higherIsBad:true})],
     ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate), wowTag(ws.bssQty, {higherIsBad:true})],
     ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket', wowTag(ws.evcsOvdRate, {isRate:true, higherIsBad:true})],
     ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket', wowTag(ws.bssOvdRate, {isRate:true, higherIsBad:true})],
-    ['Chi phí M6 (est.)', usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị', ''],
+    ['Chi phí ' + costM, usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị', ''],
   ];
   document.getElementById('kpis').innerHTML = items.map(x =>
     `<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div>${x[3]||''}</div>`).join('');
@@ -1122,19 +1191,62 @@ const GROUPS = {
 };
 function resizeCharts(){ requestAnimationFrame(()=> Object.values(charts).forEach(c=>{ try{c.resize()}catch(e){} })); }
 function modalOpen(){ return document.getElementById('modalHost').classList.contains('open'); }
-function openModal(grp){
+let OPEN_GRP = '', lastFocus = null;
+function openModal(grp, keepUrl){
   const g = GROUPS[grp]; if(!g) return;
+  const host = document.getElementById('modalHost');
+  lastFocus = document.activeElement;
+  OPEN_GRP = grp;
   document.querySelectorAll('#modalScroll > section').forEach(s=> s.style.display = g.ids.includes(s.id)?'':'none');
   document.getElementById('modalTitle').textContent = g.title;
-  document.getElementById('modalHost').classList.add('open');
+  host.classList.add('open');
+  host.setAttribute('aria-hidden','false');   // trước đây kẹt 'true' -> trình đọc màn hình không thấy gì
   document.body.style.overflow='hidden';
   document.getElementById('modalScroll').scrollTop = 0;
+  buildJump(g);
+  document.getElementById('modalClose').focus();
   resizeCharts();   // chart vẽ lúc container còn ẩn -> kích thước 0; resize khi đã hiện
+  if(!keepUrl) syncUrl();
 }
-function closeModal(){ document.getElementById('modalHost').classList.remove('open'); document.body.style.overflow=''; }
+/* Mục lục trong phần đang mở — nhóm 'sla'/'cause' dài vài màn hình, cuộn tay rất mệt. */
+function buildJump(g){
+  const nav = document.getElementById('modalJump'); if(!nav) return;
+  const links = [];
+  g.ids.forEach(id=>{
+    const sec = document.getElementById(id); if(!sec) return;
+    sec.querySelectorAll(':scope > h2').forEach((h,i)=>{
+      const anchor = id + '-h' + i;
+      h.id = anchor;
+      links.push(`<a href="#${anchor}">${escH(h.textContent.trim().replace(/^[⚠🔍ℹ]\s*/,''))}</a>`);
+    });
+  });
+  nav.innerHTML = links.length > 1 ? links.join('') : '';
+  nav.style.display = links.length > 1 ? '' : 'none';
+}
+function closeModal(){
+  const host = document.getElementById('modalHost');
+  host.classList.remove('open');
+  host.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  OPEN_GRP = '';
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+  syncUrl();
+}
 document.getElementById('modalClose').onclick = closeModal;
 document.getElementById('modalHost').onclick = e => { if(e.target.id==='modalHost') closeModal(); };
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modalOpen()) closeModal(); });
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape' && modalOpen()) return closeModal();
+  /* Giữ focus trong modal: trước đây Tab chạy ra sau nền, người dùng bàn phím lạc mất trang */
+  if(e.key==='Tab' && modalOpen()){
+    const f = document.getElementById('modalCard').querySelectorAll(
+      'a[href],button:not([disabled]),select,input,textarea,[tabindex]:not([tabindex="-1"])');
+    const vis = [...f].filter(el=> el.offsetParent !== null);
+    if(!vis.length) return;
+    const first = vis[0], last = vis[vis.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+});
 
 function miniDonut(id, rows, total){
   mk(id, {type:'doughnut',
@@ -1282,9 +1394,12 @@ function renderTiles(){
       ? `<div class="big">${t.big}</div><div class="sub">${t.sub}</div>`
       : `<div class="cvmini"><canvas id="tile_${i}"></canvas></div><div class="sub">${t.sub}</div>`;
     const spark = t.spark ? `<div class="trendline"><canvas id="trend_${i}"></canvas></div>` : '';
-    return `<div class="tile" data-grp="${t.grp}"><h4>${t.title}<span class="open-ico">bấm để xem ▸</span></h4>${inner}${spark}</div>`;
+    return `<div class="tile" data-grp="${t.grp}" role="button" tabindex="0"><h4>${t.title}<span class="open-ico">bấm để xem ▸</span></h4>${inner}${spark}</div>`;
   }).join('');
-  el.querySelectorAll('.tile').forEach(d=> d.onclick = ()=> openModal(d.dataset.grp));
+  el.querySelectorAll('.tile').forEach(d=>{
+    d.onclick = ()=> openModal(d.dataset.grp);
+    d.onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openModal(d.dataset.grp); } };
+  });
   T.forEach((t,i)=>{
     if(t.spark) miniLine('trend_'+i, wk, t.spark, true);
     if(!t.mini) return;
@@ -1340,10 +1455,23 @@ function render(){
 }
 document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   MODE = b.dataset.m;
-  document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on', x===b));
-  collectGt();       // không mất giải trình đang gõ
+  segOn('#modeSeg', b);
+  /* Bỏ collectGt(): hàm này bị gỡ cùng mục "Hiệu suất CSE & Giải trình" (commit 141dd99)
+     nhưng lời gọi còn sót -> mỗi lần bấm Tuần/Tháng ném ReferenceError NGAY TRƯỚC render(),
+     nên nút Tháng không đổi được số. Giải trình giờ lưu thẳng qua saveExplain nên không
+     cần gom từ DOM trước khi vẽ lại. */
   render();
+  monthCovNote();    // tháng có thể mới gồm 1 tuần -> phải nói rõ, xem monthCovNote()
+  syncUrl();
 });
+/* bật nút đang chọn + cập nhật aria-pressed (trước đây chỉ đổi class, đọc màn hình không thấy) */
+function segOn(sel, btn){
+  document.querySelectorAll(sel+' button').forEach(x=>{
+    const on = x===btn;
+    x.classList.toggle('on', on);
+    x.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
 document.querySelectorAll('#alarmSeg button').forEach(b=> b.onclick = ()=>{
   ALARM_SEG = b.dataset.s;
   document.querySelectorAll('#alarmSeg button').forEach(x=>x.classList.toggle('on', x===b));
@@ -1372,7 +1500,7 @@ const EXPLAIN_CATS = (D.overdue && D.overdue.cats && D.overdue.cats.length) ? D.
 ];
 /* build.py đóng gói bảng overdue cho gọn file: rows = mảng theo thứ tự cols; cột nằm trong
    dictCols là CHỈ SỐ vào dicts[cột]. Giải nén 1 lần lúc tải trang (~5.8k dòng). */
-const OVD_ROWS = (function(){
+function unpackOvdRows(){
   const p = D.overdue || {};
   if(!Array.isArray(p.rows)) return [];
   const cols = p.cols||[], dicts = p.dicts||{}, provs = p.provinces||{};
@@ -1384,18 +1512,36 @@ const OVD_ROWS = (function(){
     o.reg = pv ? pv[1] : 'Khác';
     return o;
   });
-})();
+}
+let OVD_ROWS = unpackOvdRows();   // let: nạp bản lưu tuần khác thì phải giải nén lại
 let explainMap = {}, fbExpRef = null;
 let ovdUser = localStorage.getItem('rpt_ovd_user') || '';
 const expKey = tid => String(tid).replace(/[.#$/\[\]]/g, c => '%'+c.charCodeAt(0).toString(16).toUpperCase());
 const expOf = tid => { const v = explainMap[tid]; return v ? {c:v.c||'',t:v.t||'',u:v.u||'',up:v.up||0} : {c:'',t:'',u:'',up:0}; };
+/* Node /dashboard/explain dùng chung và ghi bằng set() -> người sau ghi đè người trước,
+   im lặng, không có vết. Ít nhất phải hỏi trước khi đè giải trình của người khác. */
+function whoElse(tid){
+  const p = expOf(tid);
+  if(!p.c || !p.u || !ovdUser || p.u === ovdUser) return null;
+  return {u: p.u, c: p.c,
+          when: p.up ? new Date(p.up).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : ''};
+}
 function saveExplain(tid, c, t){
   c=(c||'').trim(); t=(t||'').trim();
+  const other = whoElse(tid);
+  if(other && !confirm(`Ticket ${tid} đã có giải trình của ${other.u}`
+      + (other.when ? ` lúc ${other.when}` : '') + `:\n\n“${other.c}”\n\nGhi đè bằng nội dung của bạn?`)){
+    renderOverdue();   // trả ô về đúng giá trị đang lưu
+    return;
+  }
   if(c||t) explainMap[tid]={c,t,u:ovdUser||'',up:Date.now()}; else delete explainMap[tid];
   if(fbExpRef){
-    if(c||t) fbExpRef.child(expKey(tid)).set({id:tid,c,t,user:ovdUser||'',up:Date.now()}).catch(()=>{});
-    else fbExpRef.child(expKey(tid)).remove().catch(()=>{});
+    // trước đây nuốt lỗi -> người dùng tưởng đã lưu, thực tế server từ chối
+    const fail = e => toast('⚠ Chưa lưu được lên server: ' + e.message);
+    if(c||t) fbExpRef.child(expKey(tid)).set({id:tid,c,t,user:ovdUser||'',up:Date.now()}).catch(fail);
+    else fbExpRef.child(expKey(tid)).remove().catch(fail);
   }
+  if(!ovdUser) toast('Nên điền ô "Người nhập" để biết ai giải trình ticket này');
 }
 /* Điền hàng loạt: gộp thành 1 lần update nhiều nhánh, tránh bắn hàng trăm request lẻ. */
 function saveExplainBatch(items){
@@ -1431,14 +1577,16 @@ function fillSel(id, list, cur, allLbl){
 }
 function initOvdFilters(){
   document.querySelectorAll('.hdW2').forEach(e=> e.textContent = D.week);
+  // truyền F.* làm giá trị đang chọn để khôi phục được bộ lọc từ URL
   fillSel('fW',   (D.weeks||[]).slice().reverse(), F.w, 'tất cả');
-  fillSel('fReg', ['Bắc','Trung','Nam','Khác'].filter(x=>OVD_ROWS.some(r=>r.reg===x)), '', 'tất cả');
-  fillSel('fCse', uniq('cse'), '', 'tất cả');
-  fillSel('fAsp', uniq('asp'), '', 'tất cả');
-  fillSel('fSeg', uniq('seg'), '', 'tất cả');
+  fillSel('fReg', ['Bắc','Trung','Nam','Khác'].filter(x=>OVD_ROWS.some(r=>r.reg===x)), F.reg, 'tất cả');
+  fillSel('fCse', uniq('cse'), F.cse, 'tất cả');
+  fillSel('fAsp', uniq('asp'), F.asp, 'tất cả');
+  fillSel('fSeg', uniq('seg'), F.seg, 'tất cả');
   refreshProvSel();
   const st = document.getElementById('fSt');
-  st.innerHTML = `<option value="">tất cả</option><option value="todo">chưa giải trình</option><option value="done">đã giải trình</option>`;
+  st.innerHTML = ['','todo','done'].map(v=>
+    `<option value="${v}"${v===F.st?' selected':''}>${v===''?'tất cả':(v==='todo'?'chưa giải trình':'đã giải trình')}</option>`).join('');
   document.getElementById('bulkCat').innerHTML =
     `<option value="">— chọn nhãn —</option>` + EXPLAIN_CATS.map(c=>`<option>${escH(c)}</option>`).join('') +
     `<option value="__clear">(xóa giải trình)</option>`;
@@ -1446,15 +1594,16 @@ function initOvdFilters(){
     F[key] = e.target.value; ovdPage = 0;
     if(key==='reg'){ F.prov=''; refreshProvSel(); }
     if(key==='w') document.querySelectorAll('.ovdWLbl').forEach(x=> x.textContent = F.w||'tất cả');
-    renderOverdue(); renderOvdProgress();
+    renderOverdue(); renderOvdProgress(); syncUrl();
   };
   on('fW','w'); on('fReg','reg'); on('fProv','prov'); on('fCse','cse');
   on('fAsp','asp'); on('fSeg','seg'); on('fSt','st');
   const q = document.getElementById('fQ');
-  q.oninput = ()=>{ F.q = q.value; ovdPage = 0; renderOverdue(); };
+  q.value = F.q || '';
+  q.oninput = ()=>{ F.q = q.value; ovdPage = 0; renderOverdue(); syncUrl(); };
   document.getElementById('fReset').onclick = ()=>{
     Object.assign(F, {w:D.week, reg:'', prov:'', cse:'', asp:'', seg:'', st:'', q:''});
-    ovdPage = 0; q.value=''; initOvdFilters(); renderOverdue(); renderOvdProgress();
+    ovdPage = 0; q.value=''; initOvdFilters(); renderOverdue(); renderOvdProgress(); syncUrl();
   };
   document.getElementById('ovdCsv').onclick = exportOvdCsv;
   document.getElementById('bulkApply').onclick = bulkApplySelected;
@@ -1549,7 +1698,10 @@ function bulkApplySelected(){
   if(!ids.length) return toast('Chưa chọn dòng nào');
   if(!v) return toast('Chọn nhãn trước đã');
   const clear = v==='__clear';
-  if(!confirm(`${clear?'XÓA giải trình của':'Gán nhãn cho'} ${ids.length} ticket đã chọn?`)) return;
+  const others = ids.map(whoElse).filter(Boolean);
+  const names = [...new Set(others.map(o=>o.u))].join(', ');
+  if(!confirm(`${clear?'XÓA giải trình của':'Gán nhãn cho'} ${ids.length} ticket đã chọn?`
+      + (others.length ? `\n\n⚠ ${others.length} ticket trong đó đang có giải trình của ${names} — sẽ bị ghi đè.` : ''))) return;
   saveExplainBatch(ids.map(id=>({id, c: clear?'':v, t: clear?'':expOf(id).t})));
   toast(`Đã ${clear?'xóa':'gán nhãn'} ${ids.length} ticket`);
 }
@@ -1878,29 +2030,96 @@ costCharts();
 /* Đổi nguồn (API / khác / tất cả): ghi đè các khối live trên D bằng variant tương ứng
    rồi vẽ lại. List giải trình GIỮ NGUYÊN (luôn luồng API, toàn quốc) — nó là công cụ điền tay riêng. */
 let SRC = 'api';
-document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
-  SRC = b.dataset.s;
-  document.querySelectorAll('#srcSeg button').forEach(x=>x.classList.toggle('on', x===b));
+function applySrc(mode){
+  if(!D.variants || !D.variants[mode]) return;
+  SRC = mode;
   Object.assign(D, D.variants[SRC]);
   render(); drawSourceCharts();
   setTimeout(fixSizes, 60);
+}
+document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
+  segOn('#srcSeg', b);
+  applySrc(b.dataset.s);
+  syncUrl();
 });
+/* ===== Trạng thái xem nằm trên URL =====
+   Trước đây chỉ #exec được ghi lại: F5 hay gửi link là mất chế độ tuần/tháng, nguồn, mục
+   đang mở và cả bộ lọc giải trình — không chỉ được cho ai "xem đúng chỗ này". Nay gói hết
+   vào hash, ví dụ #m=m&src=all&sec=sla&fcse=dinhnguyen. Link #exec cũ vẫn chạy. */
+const FURL = {fw:'w', freg:'reg', fprov:'prov', fcse:'cse', fasp:'asp', fseg:'seg', fst:'st', fq:'q'};
+function urlState(){
+  const h = location.hash.replace(/^#/, '');
+  if(h === 'exec') return {v:'exec'};
+  const o = {};
+  new URLSearchParams(h).forEach((v, k)=> o[k] = v);
+  return o;
+}
+function syncUrl(){
+  const p = new URLSearchParams();
+  if(document.body.classList.contains('xmode')) p.set('v', 'exec');
+  if(MODE !== 'w') p.set('m', MODE);
+  if(SRC !== 'api') p.set('src', SRC);
+  if(OPEN_GRP) p.set('sec', OPEN_GRP);
+  Object.entries(FURL).forEach(([k, key])=>{
+    const def = key === 'w' ? D.week : '';
+    if((F[key] || '') !== def) p.set(k, F[key] || '');
+  });
+  const s = p.toString();
+  history.replaceState(null, '', location.pathname + location.search + (s ? '#' + s : ''));
+}
+function applyUrl(){
+  const o = urlState(), q = s => document.querySelector(s);
+  let redraw = false, refilter = false;
+  if(o.m === 'm'){ MODE = 'm'; segOn('#modeSeg', q('#modeSeg [data-m="m"]')); redraw = true; }
+  if(o.src && o.src !== 'api' && D.variants && D.variants[o.src]){
+    SRC = o.src; segOn('#srcSeg', q(`#srcSeg [data-s="${o.src}"]`));
+    Object.assign(D, D.variants[SRC]); redraw = true;
+  }
+  Object.entries(FURL).forEach(([k, key])=>{ if(o[k] != null){ F[key] = o[k]; refilter = true; } });
+  if(redraw){ render(); drawSourceCharts(); monthCovNote(); setTimeout(fixSizes, 60); }
+  if(refilter){ initOvdFilters(); renderOverdue(); renderOvdProgress(); }
+  if(o.sec) openModal(o.sec, true);
+}
 /* nhãn động theo dữ liệu (báo cáo chạy hằng ngày -> tuần/tháng thay đổi) */
 (function(){
-  document.title = document.title.replace(/W\d+/, D.week);
+  document.title = 'Báo cáo tuần ' + D.week + ' — EVCS & BSS';
   const hd = document.getElementById('hdW'); if(hd) hd.textContent = D.week;
   const segs = document.querySelectorAll('#modeSeg button');
   if(segs[0]) segs[0].textContent = 'Tuần ('+D.week+')';
   if(segs[1]) segs[1].textContent = 'Tháng ('+D.month+')';
+  const cr = document.getElementById('costRange'), cm = (D.cost&&D.cost.months)||[];
+  if(cr && cm.length) cr.textContent = cm[0] + ' → ' + cm[cm.length-1];
+  const wn = document.getElementById('weekNote');
+  if(wn && D.weekNote){ wn.style.display=''; wn.innerHTML = '⚠ ' + D.weekNote; }
+  const bi = D.baselineInfo||{}, ft = document.getElementById('pageFoot');
+  if(ft) ft.innerHTML = 'Số liệu live tính từ export CCTS (' + escH(D.generatedAt||'') + ')' +
+    (bi.source ? ' · phần tĩnh (fleet, tài chính, giá vật tư) giữ từ <b>'+escH(bi.source)+'</b>' : '') +
+    ' · giải trình đồng bộ realtime qua Firebase';
 })();
-render();
-initOvdFilters();
-renderOverdue();
-renderOvdProgress();
-renderOvdWeek();
-renderScenario();
-renderLateReason();
-renderCause();
+/* Một khối lỗi (dữ liệu lệch phiên bản, key thiếu sau khi đổi build) không được kéo sập
+   cả trang — bọc từng khối, chỗ nào hỏng thì báo đúng chỗ đó. */
+function safe(name, fn){
+  try { fn(); }
+  catch(e){
+    console.error('[' + name + ']', e);
+    const host = document.getElementById('modalScroll') || document.querySelector('main');
+    if(host) host.insertAdjacentHTML('afterbegin',
+      `<div class="blockfail">⚠ Khối <b>${escH(name)}</b> lỗi khi dựng (${escH(e.message||'')}) — `
+      + `các phần khác vẫn dùng được. Xem console để biết chi tiết.</div>`);
+  }
+}
+function bootAll(){
+  safe('tổng quan', render);
+  safe('bộ lọc giải trình', initOvdFilters);
+  safe('bảng giải trình', renderOverdue);
+  safe('tiến độ giải trình', renderOvdProgress);
+  safe('overdue theo tuần', renderOvdWeek);
+  safe('thành phần overdue', renderScenario);
+  safe('lý do xử lý muộn', renderLateReason);
+  safe('nguyên nhân overdue', renderCause);
+}
+bootAll();
+safe('khôi phục trạng thái từ URL', applyUrl);
 /* Phạm vi dữ liệu: nói rõ báo cáo CHỈ gồm ticket vận hành và đã loại những luồng nào.
    Trước đây mỗi khối lọc một kiểu (bảng phân loại lọc VH, còn SLA/ASP/CSE thì không),
    nay lọc một lần ở build.apply_scope nên mọi con số trên trang cùng một phạm vi. */
@@ -1922,30 +2141,86 @@ renderCause();
     if(pw){ pw.style.display=''; pw.textContent = `⚠ Tuần ${D.week} mới có ${cov.days}/7 ngày (${cov.from}→${cov.to}) — số tuần hiện tại chưa đủ, đừng so trực tiếp với các tuần đã trọn.`; }
   }
 })();
-/* Nhãn "số tĩnh W29" cho các khối KHÔNG tính được từ export (cost/alarm/parts giá) */
+/* Vì sao chế độ Tháng có lúc ra số y hệt chế độ Tuần: bucket tháng (cột AX) tính ticket
+   từ ngày 20 sang tháng sau, nên đầu chu kỳ tháng nó chỉ chứa đúng tuần đang xem. Trước
+   đây trang im lặng nên người dùng tưởng nút Tháng hỏng — giờ nói thẳng. */
+function monthCovNote(){
+  const mw = document.getElementById('monthWarn'), mc = D.monthCoverage;
+  if(!mw) return;
+  if(!mc || !mc.days || MODE !== 'm'){ mw.style.display='none'; return; }
+  const span = `${mc.from}→${mc.to}`;
+  mw.style.display = '';
+  mw.textContent = mc.sameAsWeek
+    ? `⚠ Tháng ${D.month} mới có ${mc.days} ngày (${span}) và hiện chỉ gồm đúng tuần ${D.week} — số liệu hai chế độ giống nhau là đúng, không phải lỗi. Chúng tách nhau khi sang tuần kế tiếp.`
+    : `ℹ Tháng ${D.month} gồm ${mc.weeks.join(', ')} (${span})${mc.partial ? ' — tháng chưa trọn' : ''}. Quy ước: ticket từ ngày 20 tính sang tháng sau.`;
+}
+monthCovNote();
+/* Nhãn "số tĩnh" cho các khối KHÔNG tính được từ export (cost/alarm/parts giá) — mốc lấy
+   từ baseline trong dữ liệu, không viết cứng tuần vào HTML nữa. */
 (function(){
-  (D.staticKeys||[]).length;  // chỉ để rõ nguồn: xem build STATIC_KEYS
+  const asOf = (D.baselineInfo||{}).week || '';
   const cost=document.getElementById('sec-cost');
   if(cost){ const h=cost.querySelector('h2');
-    if(h && !h.querySelector('.staticTag')) h.insertAdjacentHTML('beforeend','<span class="staticTag">số tĩnh W29 — chưa tính live (cần bảng giá vật tư + fleet q\'ty)</span>'); }
-  // KPI "Chi phí M6" cũng là số tĩnh
-  document.querySelectorAll('#sec-kpi .kpi, .kpi').forEach(k=>{
-    if(/Chi phí M6/i.test(k.textContent) && !k.querySelector('.staticTag'))
+    if(h && !h.querySelector('.staticTag')) h.insertAdjacentHTML('beforeend',
+      `<span class="staticTag">số tĩnh ${escH(asOf)} — chưa tính live (cần bảng giá vật tư + fleet q'ty)</span>`); }
+  document.querySelectorAll('.kpi').forEach(k=>{
+    if(/^Chi phí /i.test(k.querySelector('.lbl')?.textContent||'') && !k.querySelector('.staticTag'))
       k.insertAdjacentHTML('beforeend','<span class="staticTag">tĩnh</span>');
   });
 })();
+/* ===== Bản lưu theo tuần =====
+   data_latest.js bị ghi đè mỗi lần build nên báo cáo tuần trước trước đây biến mất. build.py
+   giữ thêm 8 tuần trong data/. `?w=W30` -> nạp bản đó rồi dựng lại trang bằng chính D. */
+function loadArchive(w){
+  const tag = document.getElementById('archTag');
+  if(tag){ tag.style.display=''; tag.textContent = `⏳ Đang tải bản lưu tuần ${w}…`; }
+  return fetch('data/' + encodeURIComponent(w) + '.js')
+    .then(r=> r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)))
+    .then(t=>{
+      const j = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1));
+      if(!j.week) throw new Error('file lưu không hợp lệ');
+      Object.assign(D, j);            // giữ nguyên tham chiếu D mà mọi hàm đang dùng
+      OVD_ROWS = unpackOvdRows();
+      Object.assign(F, {w:D.week, reg:'', prov:'', cse:'', asp:'', seg:'', st:'', q:''});
+      SRC = 'api'; segOn('#srcSeg', document.querySelector('#srcSeg [data-s="api"]'));
+      document.getElementById('hdW').textContent = D.week;
+      document.title = 'Báo cáo tuần ' + D.week + ' — EVCS & BSS';
+      document.querySelectorAll('#modeSeg button')[0].textContent = 'Tuần ('+D.week+')';
+      document.querySelectorAll('#modeSeg button')[1].textContent = 'Tháng ('+D.month+')';
+      bootAll(); monthCovNote(); syncWeekLabels(); setTimeout(fixSizes, 60);
+      if(tag) tag.innerHTML = `📁 Đang xem bản lưu tuần <b>${escH(D.week)}</b> (chốt ${escH(D.generatedAt||'')}) — <a href="./">về bản mới nhất</a>`;
+    })
+    .catch(e=>{
+      if(tag) tag.innerHTML = `⚠ Không tải được bản lưu tuần ${escH(w)} (${escH(e.message)}) — đang hiển thị bản mới nhất. <a href="./">Bỏ lọc tuần</a>`;
+    });
+}
+safe('bản lưu theo tuần', function(){
+  const sel = document.getElementById('wkSel'), pick = document.getElementById('wkPick');
+  const cur = new URLSearchParams(location.search).get('w') || '';
+  if(cur && /^W\d+$/.test(cur) && cur !== D.week) loadArchive(cur);
+  fetch('data/index.js').then(r=> r.ok ? r.text() : Promise.reject())
+    .then(t=>{
+      const list = JSON.parse(t.slice(t.indexOf('['), t.lastIndexOf(']') + 1));
+      if(!list.length || !sel) return;
+      sel.innerHTML = `<option value="">mới nhất</option>` +
+        list.slice().reverse().map(w=>`<option value="${escH(w)}"${w===cur?' selected':''}>${escH(w)}</option>`).join('');
+      pick.style.display = '';
+      sel.onchange = ()=>{ location.search = sel.value ? '?w='+encodeURIComponent(sel.value) : ''; };
+    }).catch(()=>{});   // chưa có thư mục lưu (build cũ) -> ẩn luôn ô chọn
+});
 /* đồng bộ nhãn tuần trong các tiêu đề TĨNH của HTML shell (KPI, tên section) theo D.week.
-   Chỉ sửa text-node hiển thị, không đụng script/thuộc tính. Mục "Chi phí M6" giữ nguyên
-   vì là dữ liệu tháng carry baseline. */
-(function(){
+   Chỉ sửa text-node hiển thị, không đụng script/thuộc tính. Nhãn tháng của khối chi phí
+   không đụng tới vì là dữ liệu tháng carry từ baseline (xem kpis()). */
+function syncWeekLabels(){
   const reps = [[/tuần W\d+/g, 'tuần '+D.week],
-                [/W\d+\s*→\s*W\d+/g, D.weeks[0]+'→'+D.week]];
+                [/W\d+\s*→\s*W\d+/g, D.weeks[0]+' → '+D.week]];
   const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const ns = []; let n; while(n = w.nextNode()) ns.push(n);
   ns.forEach(t => { let s = t.nodeValue;
     reps.forEach(([rx, v]) => s = s.replace(rx, v));
     if(s !== t.nodeValue) t.nodeValue = s; });
-})();
+}
+safe('đồng bộ nhãn tuần', syncWeekLabels);
 // một số canvas có thể bị đo width=0 trong lần layout đầu — ép resize lại
 function fixSizes(){ Object.values(charts).forEach(c=>{ if(c.canvas.width===0) c.resize(); }); }
 window.addEventListener('load', ()=>{ fixSizes(); setTimeout(fixSizes, 250); setTimeout(fixSizes, 1000); });
@@ -1972,8 +2247,8 @@ const I18N = {
   partial:'Tuần {w} mới có {d}/7 ngày dữ liệu ({f} → {t}) — số đếm chưa phải cả tuần.',
   kpi_evcs:'Tỉ lệ lỗi EVCS', kpi_bss:'Tỉ lệ lỗi BSS', kpi_ovd:'SLA overdue toàn mạng',
   kpi_cc:'Vé do ChargeCore', kpi_backlog:'Vé tồn chưa xử lý xong', kpi_total:'Tổng số vé',
-  def_evcs:'Thiết bị EVCS lỗi (distinct, trừ Disclaim) / thiết bị vận hành (fleet tĩnh W29) — tuần này.',
-  def_bss:'Thiết bị BSS lỗi (distinct, trừ Disclaim) / thiết bị vận hành (fleet tĩnh W29) — tuần này.',
+  def_evcs:'Thiết bị EVCS lỗi (distinct, trừ Disclaim) / thiết bị vận hành (fleet tĩnh theo baseline) — tuần này.',
+  def_bss:'Thiết bị BSS lỗi (distinct, trừ Disclaim) / thiết bị vận hành (fleet tĩnh theo baseline) — tuần này.',
   def_ovd:'Vé Overdue theo cờ SLA tinh / tổng vé thuộc 13 trạng thái SLA, EVCS+BSS. Gồm cả vé chưa xử lý xong.',
   def_cc:'Vé Hardware+Software / vé ĐÃ phân định (HW+SW+Disclaim). Vé chưa phân định hiện dải riêng, không vào mẫu số.',
   def_backlog:'Vé tạo trong tuần chưa có solution đầu tiên tại thời điểm chốt số liệu.',
@@ -2012,8 +2287,8 @@ const I18N = {
   partial:'Week {w} has only {d}/7 days of data ({f} → {t}) — counts are not a full week yet.',
   kpi_evcs:'EVCS failure rate', kpi_bss:'BSS failure rate', kpi_ovd:'Network SLA overdue',
   kpi_cc:'ChargeCore-attributable', kpi_backlog:'Unresolved backlog', kpi_total:'Total tickets',
-  def_evcs:'Distinct failed EVCS units (excl. Disclaim) / units in service (static W29 fleet) — this week.',
-  def_bss:'Distinct failed BSS units (excl. Disclaim) / units in service (static W29 fleet) — this week.',
+  def_evcs:'Distinct failed EVCS units (excl. Disclaim) / units in service (static baseline fleet) — this week.',
+  def_bss:'Distinct failed BSS units (excl. Disclaim) / units in service (static baseline fleet) — this week.',
   def_ovd:'Overdue tickets per refined SLA flag / all tickets in the 13 SLA statuses, EVCS+BSS. Includes unresolved tickets.',
   def_cc:'Hardware+Software tickets / classified tickets (HW+SW+Disclaim). Unclassified shown separately, not in denominator.',
   def_backlog:'Tickets created this week with no first solution at data cut-off.',
@@ -2334,14 +2609,18 @@ function renderAll(){
 let XRENDERED = false;
 function setView(v){
   document.body.classList.toggle('xmode', v === 'exec');
-  document.querySelectorAll('#viewSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  document.querySelectorAll('#viewSeg button').forEach(b => {
+    const on = b.dataset.v === v;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
   if(v === 'exec'){
     if(typeof closeModal === 'function') closeModal();
     if(!XRENDERED){ XRENDERED = true; renderAll(); }
-    history.replaceState(null, '', '#exec');
-  } else {
-    history.replaceState(null, '', location.pathname + location.search);
   }
+  // URL do syncUrl() của bản Nội bộ giữ (gồm cả chế độ/nguồn/mục đang mở), không ghi đè '#exec'
+  if(typeof syncUrl === 'function') syncUrl();
+  else history.replaceState(null, '', v === 'exec' ? '#exec' : location.pathname + location.search);
 }
 $x('viewSeg').onclick = e => { if(e.target.dataset.v) setView(e.target.dataset.v); };
 $x('xlangSeg').onclick = e => { if(e.target.dataset.lang){ LANG = e.target.dataset.lang;
@@ -2353,7 +2632,8 @@ $x('xsortSeg').onclick = e => { if(e.target.dataset.sort){ XSORT = e.target.data
 $x('xdrillSel').onchange = renderDrill;
 $x('xaspSel').innerHTML = Object.keys(XD.campaigns.byAsp).map(a => `<option>${a}</option>`).join('');
 $x('xaspSel').onchange = renderAspTrend;
-if(location.hash === '#exec') setView('exec');
+// '#exec' (link cũ) hoặc '#v=exec&...' (dạng mới, kèm chế độ/nguồn/mục)
+if(typeof urlState === 'function' ? urlState().v === 'exec' : location.hash === '#exec') setView('exec');
 })();
 </script>
 </body>
