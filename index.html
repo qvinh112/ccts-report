@@ -323,45 +323,69 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   </div>
 </section>
 
-<section id="sec-overdue">
-  <h2>Giải trình ticket Overdue — toàn quốc, luồng API (7 tuần gần nhất)</h2>
-  <div class="toolbar">
-    <label>Người nhập: <input type="text" id="ovdUser" placeholder="tên của bạn" size="14"></label>
-    <span id="ovdSync" class="gt-meta">⚪ đang kết nối đồng bộ…</span>
+<section id="sec-perf">
+  <h2>Hiệu suất xử lý — ai đang gánh việc, ai đang trễ (tuần <span class="hdW2"></span>)</h2>
+  <div class="seg" id="perfDim">
+    <button data-d="lead" class="on">Người phụ trách</button>
+    <button data-d="team">Team CSE</button>
+    <button data-d="asp">ASP</button>
+    <button data-d="reg">Miền</button>
+    <button data-d="prov">Tỉnh</button>
+    <button data-d="member">Tài khoản cộng tác</button>
   </div>
-  <p style="font-size:13px;color:var(--ink2);margin:2px 0 10px">
-    Mọi CSE / khu vực đều điền và tra cứu được ở đây — lọc theo tuần, miền, tỉnh, CSE, ASP.
-    Giải trình dùng chung realtime với <b>dashboard điều hành</b>: gõ ở đây hiện luôn bên kia
-    và ngược lại. Cột “gợi ý” là nhãn máy đoán từ dữ liệu, chỉ để tham khảo — người điền quyết định.
+  <p class="rcIntro">
+    <b>Người phụ trách</b> = tài khoản đứng đầu Ticket Owner; <b>Team CSE</b> gộp theo nhóm
+    quản lý; <b>Tài khoản cộng tác</b> tính cho MỌI tài khoản trong Ticket Owner nên tổng
+    lớn hơn số ticket, và các tài khoản dùng chung (<code>Ec_engineer 1</code>,
+    <code>its_frontdesk 01</code>…) là của nhiều người — đừng chấm điểm cá nhân bằng cột đó.
+    <b>Giờ xử lý</b> = trung vị từ lúc tạo ticket tới solution đầu tiên (trung vị chứ không
+    phải trung bình, để vài ca treo trăm giờ không kéo lệch cả nhóm). <b>% trong hạn</b> tính
+    trên số ca ĐÃ xử lý xong, đối chiếu hạn SLA của chính ticket đó (3/4/7/48h).
+    <b>Chưa xong</b> = ca còn chưa có solution — chỗ này cao là tồn đọng thật.
   </p>
-  <div class="card">
-    <div class="filterbar">
-      <label>Tuần <select id="fW"></select></label>
-      <label>Miền <select id="fReg"></select></label>
-      <label>Tỉnh <select id="fProv"></select></label>
-      <label>CSE <select id="fCse"></select></label>
-      <label>ASP <select id="fAsp"></select></label>
-      <label>Loại <select id="fSeg"></select></label>
-      <label>Tình trạng <select id="fSt"></select></label>
-      <input type="text" id="fQ" placeholder="tìm Ticket ID / mã trụ" size="20">
-      <button class="btn" id="fReset">Xóa lọc</button>
-      <button class="btn" id="ovdCsv">⬇ CSV phần đang lọc</button>
-    </div>
-    <div id="ovdProg" class="ovd-prog"></div>
-    <div class="filterbar">
-      <span class="muted">Điền hàng loạt:</span>
-      <select id="bulkCat"></select>
-      <button class="btn" id="bulkApply">Áp cho dòng đã chọn</button>
-      <button class="btn" id="bulkAuto">Lấy gợi ý cho dòng chưa giải trình (đang lọc)</button>
-    </div>
-    <div class="tblwrap" id="t_overdue"></div>
-    <div class="filterbar" id="ovdPager"></div>
+  <div class="grid2">
+    <div class="card"><h3>Khối lượng &amp; overdue rate — <span class="perfLbl"></span></h3>
+      <div class="cv tall"><canvas id="c_perf"></canvas></div></div>
+    <div class="card"><h3>Xu hướng overdue rate 7 tuần (top 8)</h3>
+      <div class="cv tall"><canvas id="c_perf_trend"></canvas></div></div>
   </div>
-  <div class="grid2" style="margin-top:12px">
-    <div class="card"><h3>Tiến độ giải trình theo CSE — tuần <span class="ovdWLbl"></span></h3>
-      <div class="tblwrap" id="t_ovd_cse"></div></div>
-    <div class="card"><h3>Tiến độ giải trình theo khu vực — tuần <span class="ovdWLbl"></span></h3>
-      <div class="tblwrap" id="t_ovd_reg"></div></div>
+  <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_perf"></div></div>
+</section>
+
+<section id="sec-cause">
+  <h2>Nguyên nhân sâu xa của Overdue (tuần <span class="hdW2"></span>)</h2>
+  <div class="seg" id="causeDim">
+    <button data-d="cse" class="on">Team CSE</button>
+    <button data-d="lead">Người phụ trách</button>
+    <button data-d="asp">ASP</button>
+    <button data-d="reg">Miền</button>
+    <button data-d="provName">Tỉnh</button>
+  </div>
+  <p class="rcIntro">
+    Gộp 11 nhãn giải trình thành 6 nhóm gốc. Ưu tiên <b>giải trình do người điền</b>; chưa ai
+    điền thì lấy nhãn máy đoán. Riêng ca máy quy về “① Xử lý muộn” <b>không</b> tính là lỗi KTV
+    mà xếp <b>Chưa xác minh</b> — đó là phần dư “không tìm được lý do khách quan trong dữ liệu”,
+    chưa phải bằng chứng người làm sai. Muốn con số này có giá trị thì phải điền giải trình
+    (mục <b>Giải trình ticket Overdue</b> ở cuối trang).
+  </p>
+  <div class="grid2">
+    <div class="card"><h3>Cơ cấu nguyên nhân toàn quốc</h3>
+      <div class="cv tall"><canvas id="c_cause"></canvas></div></div>
+    <div class="card"><h3>Tỷ trọng nguyên nhân theo <span class="causeLbl"></span></h3>
+      <div class="cv tall"><canvas id="c_cause_by"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_cause"></div></div>
+  <h2 style="margin-top:18px">Dữ liệu nói gì về phần chưa ai giải trình</h2>
+  <p class="rcIntro">
+    Phần “Chưa xác minh” ở trên vẫn suy được từ mốc thời gian trong CCTS: ticket đó đang
+    <b>chưa xử lý xong</b>, <b>tới muộn</b> (tạo → solution đầu đã vượt hạn), hay <b>xử lý
+    trong hạn nhưng không đóng được</b> (kẹt VOMS/quy trình). Đây mới là chỗ phân biệt
+    <b>lỗi người</b> với <b>lỗi hệ thống</b> khi chưa có ai điền giải trình.
+  </p>
+  <div class="grid2">
+    <div class="card"><h3>Tình huống overdue theo <span class="causeLbl"></span></h3>
+      <div class="cv tall"><canvas id="c_scn_by"></canvas></div></div>
+    <div class="card"><h3>Chi tiết</h3><div class="tblwrap" id="t_scn"></div></div>
   </div>
 </section>
 
@@ -445,6 +469,48 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
     <li><b>Giá vật tư #N/A:</b> mã đuôi <b>-RP</b> (12070000153-RP, 12030000054-RP, 12030000064-RP) tra theo giá mã gốc; ô công thức chứa <span class="was">#REF!</span> đã sửa; tổng chi phí không còn #N/A. 3 mã chưa có giá — xem ghi chú mục Vật tư.</li>
     <li><b>Nhãn:</b> thống nhất "Total (Tổng)"/"Grand total (Tổng)" → "Total"/"Grand total"; header "Overdue Rate" của bảng theo trạng thái đổi thành "Overdue share" (đúng bản chất: tử số chia tổng toàn bộ ticket).</li>
   </ol>
+</section>
+
+<section id="sec-overdue">
+  <h2>Giải trình ticket Overdue — toàn quốc, luồng API (7 tuần gần nhất)</h2>
+  <div class="toolbar">
+    <label>Người nhập: <input type="text" id="ovdUser" placeholder="tên của bạn" size="14"></label>
+    <span id="ovdSync" class="gt-meta">⚪ đang kết nối đồng bộ…</span>
+  </div>
+  <p style="font-size:13px;color:var(--ink2);margin:2px 0 10px">
+    Mọi CSE / khu vực đều điền và tra cứu được ở đây — lọc theo tuần, miền, tỉnh, CSE, ASP.
+    Giải trình dùng chung realtime với <b>dashboard điều hành</b>: gõ ở đây hiện luôn bên kia
+    và ngược lại. Cột “gợi ý” là nhãn máy đoán từ dữ liệu, chỉ để tham khảo — người điền quyết định.
+  </p>
+  <div class="card">
+    <div class="filterbar">
+      <label>Tuần <select id="fW"></select></label>
+      <label>Miền <select id="fReg"></select></label>
+      <label>Tỉnh <select id="fProv"></select></label>
+      <label>CSE <select id="fCse"></select></label>
+      <label>ASP <select id="fAsp"></select></label>
+      <label>Loại <select id="fSeg"></select></label>
+      <label>Tình trạng <select id="fSt"></select></label>
+      <input type="text" id="fQ" placeholder="tìm Ticket ID / mã trụ" size="20">
+      <button class="btn" id="fReset">Xóa lọc</button>
+      <button class="btn" id="ovdCsv">⬇ CSV phần đang lọc</button>
+    </div>
+    <div id="ovdProg" class="ovd-prog"></div>
+    <div class="filterbar">
+      <span class="muted">Điền hàng loạt:</span>
+      <select id="bulkCat"></select>
+      <button class="btn" id="bulkApply">Áp cho dòng đã chọn</button>
+      <button class="btn" id="bulkAuto">Lấy gợi ý cho dòng chưa giải trình (đang lọc)</button>
+    </div>
+    <div class="tblwrap" id="t_overdue"></div>
+    <div class="filterbar" id="ovdPager"></div>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="card"><h3>Tiến độ giải trình theo CSE — tuần <span class="ovdWLbl"></span></h3>
+      <div class="tblwrap" id="t_ovd_cse"></div></div>
+    <div class="card"><h3>Tiến độ giải trình theo khu vực — tuần <span class="ovdWLbl"></span></h3>
+      <div class="tblwrap" id="t_ovd_reg"></div></div>
+  </div>
 </section>
   </div>
  </div>
@@ -1031,7 +1097,9 @@ function costCharts(){
 const GROUPS = {
   cls:  {title:'Phân loại ticket & Chi tiết Disclaim', ids:['sec-cls','sec-dis']},
   rc:   {title:'Nguyên nhân lỗi (RC)', ids:['sec-rc']},
-  sla:  {title:'SLA / Overdue & Giải trình', ids:['sec-sla','sec-overdue','sec-ovdana']},
+  sla:  {title:'SLA / Overdue', ids:['sec-sla']},
+  perf: {title:'Hiệu suất xử lý — người / team / ASP / khu vực', ids:['sec-perf']},
+  cause:{title:'Nguyên nhân Overdue', ids:['sec-cause','sec-ovdana']},
   trend:{title:'Tình trạng lỗi theo model & Xu hướng', ids:['sec-fail','sec-trend']},
   watch:{title:'Cảnh báo sớm', ids:['sec-watch']},
   alarm:{title:'Top alarm', ids:['sec-alarm']},
@@ -1040,6 +1108,7 @@ const GROUPS = {
   parts:{title:'Top vật tư sử dụng', ids:['sec-parts']},
   cost: {title:'Chi phí dịch vụ', ids:['sec-cost']},
   fix:  {title:'Dữ liệu đã hiệu chỉnh (V3 vs V2)', ids:['sec-fix']},
+  explain:{title:'Giải trình ticket Overdue (toàn quốc)', ids:['sec-overdue']},
 };
 function resizeCharts(){ requestAnimationFrame(()=> Object.values(charts).forEach(c=>{ try{c.resize()}catch(e){} })); }
 function modalOpen(){ return document.getElementById('modalHost').classList.contains('open'); }
@@ -1082,6 +1151,16 @@ function miniLine(id, labels, data){
       tooltip:{callbacks:{title:c=>labels[c[0].dataIndex], label:c=>' '+n0(c.parsed.y)+' ticket lỗi'}}},
       scales:{x:{grid:{display:false}, ticks:{font:{size:10}}}, y:{display:false}}}});
 }
+/* Tile hiệu suất: chỉ ra ngay team đang trễ nhất tuần này (≥30 ticket mới xét, tránh
+   nhóm 3 ca/tuần chiếm hạng bét vì 1 case). */
+function perfTile(){
+  const teams = ((D.perf||{}).team||[]).filter(r=>r.qty>=30);
+  const worst = teams.slice().sort((a,b)=> b.rate-a.rate)[0];
+  return worst
+    ? {grp:'perf', title:'Hiệu suất · team trễ nhất', big:pc(worst.rate),
+       sub:`${worst.k.split(';')[0]} — ${n0(worst.ovd)}/${n0(worst.qty)} ticket ${D.week} · ${teams.length} team đang so`}
+    : {grp:'perf', title:'Hiệu suất người / team', big:'—', sub:'chưa đủ dữ liệu tuần này'};
+}
 function renderTiles(){
   const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
   const cB = MODE==='w'?D.clsBssW:D.clsBssM,  cBt = MODE==='w'?D.clsBssW_total:D.clsBssM_total;
@@ -1097,6 +1176,7 @@ function renderTiles(){
     {grp:'sla', title:'SLA / Overdue',  big:pc(settled?ovd/settled:0), sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()})`},
     {grp:'rc',  title:'Nguyên nhân lỗi (RC)', mini:['rc',rcE], sub:'Top 5 nhóm nguyên nhân EVCS'},
     {grp:'trend', title:'Xu hướng ticket lỗi', mini:['line',wk,trend], sub:'7 tuần · loại trừ Disclaim'},
+    perfTile(),
   ];
   const el = document.getElementById('tiles');
   el.innerHTML = T.map((t,i)=>{
@@ -1112,7 +1192,9 @@ function renderTiles(){
     else if(t.mini[0]==='line') miniLine('tile_'+i, t.mini[1], t.mini[2]);
   });
   const more = [['watch','Cảnh báo'],['cls','Disclaim'],['trend','Theo model'],['alarm','Alarm'],
-    ['asp','ASP'],['cse','CSE'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh']];
+    ['perf','Hiệu suất người/team'],['cause','Nguyên nhân overdue'],
+    ['asp','ASP'],['cse','CSE'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
+    ['explain','✍ Giải trình overdue']];
   const mb = document.getElementById('morebar');
   mb.innerHTML = '<span class="mlbl">Xem thêm:</span>' +
     more.map(([g,l])=>`<button class="morebtn" data-grp="${g}">${l}</button>`).join('');
@@ -1222,7 +1304,7 @@ function saveExplainBatch(items){
   });
   if(fbExpRef && Object.keys(upd).length)
     fbExpRef.update(upd).catch(e=> toast('Lỗi lưu: '+e.message));
-  renderOverdue(); renderOvdProgress(); renderLateReason();
+  renderOverdue(); renderOvdProgress(); renderLateReason(); renderCause();
 }
 function ovdSyncStat(ok,msg){ const e=document.getElementById('ovdSync'); if(e){ e.textContent=(ok?'🟢 ':'⚪ ')+msg; } }
 
@@ -1324,7 +1406,7 @@ function renderOverdue(){
   const sa = document.getElementById('selAll');
   if(sa) sa.onchange = ()=> document.querySelectorAll('#t_overdue .exp-sel').forEach(c=> c.checked = sa.checked);
   document.querySelectorAll('#t_overdue .exp-cat').forEach(s=> s.onchange = ()=>{
-    const id=s.dataset.id; saveExplain(id, s.value, expOf(id).t); renderOvdProgress(); renderLateReason(); });
+    const id=s.dataset.id; saveExplain(id, s.value, expOf(id).t); renderOvdProgress(); renderLateReason(); renderCause(); });
   document.querySelectorAll('#t_overdue .exp-txt').forEach(inp=> inp.onchange = ()=>{
     const id=inp.dataset.id; saveExplain(id, expOf(id).c, inp.value); });
 }
@@ -1398,6 +1480,7 @@ function applyExplainRemote(all){
   renderOverdue();
   renderOvdProgress();
   renderLateReason();  // pie lý do Xử lý muộn tự đầy khi có giải trình mới
+  renderCause();       // cơ cấu nguyên nhân cũng đổi theo giải trình vừa nhận
 }
 
 /* ===== (A)+(B) So sánh overdue theo tuần: hệ thống vs thực sự trễ + rate ===== */
@@ -1452,6 +1535,153 @@ function renderLateReason(){
     options:{maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{boxWidth:12,font:{size:10.5}}},
       tooltip:{callbacks:{label:c=>` ${n0(c.parsed)} ca`}}}}});
 }
+/* ================= Hiệu suất: người / team / ASP / khu vực =================
+   Nguồn: D.perf (build.perf_block) — theo nguồn đang chọn nhờ nằm trong live_blocks. */
+const PERF_LBL = {lead:'Người phụ trách', member:'Tài khoản cộng tác', team:'Team CSE',
+                  asp:'ASP', reg:'Miền', prov:'Tỉnh'};
+let PERF_DIM = 'lead';
+const hrs = v => v==null ? '—' : String(v).replace('.',',')+'h';
+function sparkRates(series){
+  const W=90, H=22, n=series.length;
+  const mx = Math.max(...series.filter(v=>v!=null), .0001);
+  const pts = series.map((v,i)=> v==null?null:`${(i/(n-1)*W).toFixed(1)},${(H-2-(v/mx)*(H-5)).toFixed(1)}`)
+    .filter(Boolean).join(' ');
+  const last = series[n-1];
+  return `<svg class="spark" width="${W}" height="${H}"><polyline points="${pts}" fill="none" stroke="#2a78d6" stroke-width="1.6"/>`+
+    (last==null?'':`<circle cx="${W}" cy="${(H-2-(last/mx)*(H-5)).toFixed(1)}" r="2.4" fill="#d03b3b"/>`)+`</svg>`;
+}
+const delta = (cur, prev) => (cur==null||prev==null) ? '<span class="muted">—</span>' :
+  (Math.abs(cur-prev) < .005 ? '<span class="muted">≈</span>' :
+   `<span style="color:${cur>prev?'var(--crit)':'var(--good)'};font-weight:600">${cur>prev?'▲':'▼'} ${pc(Math.abs(cur-prev),1)}</span>`);
+function renderPerf(){
+  const rows = ((D.perf||{})[PERF_DIM]) || [];
+  document.querySelectorAll('.perfLbl').forEach(e=> e.textContent = PERF_LBL[PERF_DIM]);
+  const top = rows.slice(0, 12);
+  mk('c_perf', {type:'bar',
+    data:{labels: top.map(r=>r.k.split(';')[0]), datasets:[
+      {label:'Ticket', data: top.map(r=>r.qty), backgroundColor:'#c9d6e8', borderRadius:4, maxBarThickness:30, order:2},
+      {label:'Overdue', data: top.map(r=>r.ovd), backgroundColor:'#d03b3b', borderRadius:4, maxBarThickness:30, order:2},
+      {label:'Overdue rate', data: top.map(r=>r.rate*100), type:'line', yAxisID:'y1',
+       borderColor:'#eda100', backgroundColor:'#eda100', tension:.3, pointRadius:3, order:1}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom'},
+      tooltip:{callbacks:{title:t=>top[t[0].dataIndex].k}}},
+      scales:{y:{grid:{color:GRID}, title:{display:true,text:'số ticket'}},
+        y1:{position:'right', grid:{display:false}, ticks:{callback:v=>v+'%'}},
+        x:{grid:{display:false}, ticks:{font:{size:10.5}}}}}});
+  const t8 = rows.slice(0, 8);
+  mk('c_perf_trend', {type:'line',
+    data:{labels: D.weeks, datasets: t8.map((r,i)=>({label:r.k.split(';')[0],
+      data:r.series.map(v=> v==null?null:v*100), borderColor:S[i%S.length], backgroundColor:S[i%S.length],
+      tension:.3, pointRadius:2, borderWidth:2, spanGaps:true}))},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10.5}}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y==null?'—':c.parsed.y.toFixed(1)+'%'}`}}},
+      scales:{y:{grid:{color:GRID}, ticks:{callback:v=>v+'%'}}, x:{grid:{display:false}}}}});
+  let h = `<table><tr><th>${PERF_LBL[PERF_DIM]}</th><th>Ticket</th><th>Overdue</th><th>Rate</th>`+
+    `<th>Δ tuần trước</th><th>Giờ xử lý (TV)</th><th>% trong hạn</th><th>Chưa xong</th>`+
+    `<th>Open→VOMS (TV)</th><th>Xu hướng ${D.weeks[0]}→${D.weeks[D.weeks.length-1]}</th></tr>`;
+  let q=0, o=0;
+  rows.forEach(r=>{ q+=r.qty; o+=r.ovd;
+    h += `<tr><td>${escH(r.k)}</td><td>${n0(r.qty)}</td><td>${n0(r.ovd)}</td><td>${badge(r.rate)}</td>`+
+      `<td>${delta(r.rate, r.series[r.series.length-2])}</td><td>${hrs(r.med)}</td>`+
+      `<td>${r.ontime==null?'—':pc(r.ontime)}</td><td>${n0(r.open)}</td><td>${hrs(r.voms)}</td>`+
+      `<td>${sparkRates(r.series)}</td></tr>`; });
+  h += `<tr class="total"><td>Tổng</td><td>${n0(q)}</td><td>${n0(o)}</td><td>${pc(q?o/q:0)}</td>`+
+    `<td colspan="6"></td></tr></table>`;
+  document.getElementById('t_perf').innerHTML = h;
+}
+document.querySelectorAll('#perfDim button').forEach(b=> b.onclick = ()=>{
+  PERF_DIM = b.dataset.d;
+  document.querySelectorAll('#perfDim button').forEach(x=>x.classList.toggle('on', x===b));
+  renderPerf();
+});
+
+/* ================= Nguyên nhân sâu xa của Overdue =================
+   Gộp 11 nhãn giải trình -> 6 nhóm gốc + "Chưa xác minh". Tính CLIENT-SIDE từ OVD_ROWS
+   (đã có mọi ticket overdue của 7 tuần) phủ explainMap, nên điền giải trình tới đâu biểu đồ
+   đổi tới đó. Ca máy quy ① (phần dư) KHÔNG tính là lỗi KTV — xem chú thích trên trang. */
+const CAUSE_GROUPS = ['Do KTV / nội bộ','Chờ vật tư / hậu cần','Lỗi hệ thống VOMS-CCTS',
+  'Khách quan hiện trường','Không tồn lỗi / trùng lặp','Khách quan khác','Chưa xác minh'];
+const CAUSE_COL = ['#d03b3b','#eda100','#8e44ad','#2a78d6','#1baf7a','#898781','#d9d7cf'];
+const CAT2CAUSE = [0,4,1,3,3,3,3,2,2,4,5];   // vị trí trong EXPLAIN_CATS -> nhóm gốc
+let CAUSE_DIM = 'cse';
+const CAUSE_LBL = {cse:'Team CSE', lead:'Người phụ trách', asp:'ASP', reg:'Miền', provName:'Tỉnh'};
+function causeOf(r){
+  const fb = explainMap[r.id] && explainMap[r.id].c;
+  if(fb){ const i = EXPLAIN_CATS.indexOf(fb); return i>=0 ? CAT2CAUSE[i] : 5; }
+  if(r.auto > 0) return CAT2CAUSE[r.auto];   // máy chỉ suy được nhãn khách quan cụ thể
+  return 6;                                   // ① auto = phần dư, chưa có bằng chứng
+}
+function renderCause(){
+  document.querySelectorAll('.causeLbl').forEach(e=> e.textContent = CAUSE_LBL[CAUSE_DIM]);
+  const rows = OVD_ROWS.filter(r=> r.w === D.week);
+  const tot = CAUSE_GROUPS.map(()=>0), by = {};
+  rows.forEach(r=>{
+    const g = causeOf(r); tot[g]++;
+    const k = r[CAUSE_DIM] || '—';
+    (by[k] || (by[k] = CAUSE_GROUPS.map(()=>0)))[g]++;
+  });
+  mk('c_cause', {type:'doughnut',
+    data:{labels: CAUSE_GROUPS.map((g,i)=>`${g} (${rows.length?(tot[i]/rows.length*100).toFixed(0):0}%)`),
+      datasets:[{data: tot, backgroundColor: CAUSE_COL, borderWidth:1, borderColor:'#fff'}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{boxWidth:12,font:{size:10.5}}},
+      tooltip:{callbacks:{label:c=>` ${n0(c.parsed)} ca`}}}}});
+  const keys = Object.keys(by).sort((a,b)=> by[b].reduce((s,v)=>s+v,0) - by[a].reduce((s,v)=>s+v,0)).slice(0,10);
+  mk('c_cause_by', {type:'bar',
+    data:{labels: keys.map(k=>k.split(';')[0]), datasets: CAUSE_GROUPS.map((g,i)=>({
+      label:g, data: keys.map(k=>{ const s=by[k].reduce((a,v)=>a+v,0); return s? by[k][i]/s*100 : 0; }),
+      backgroundColor: CAUSE_COL[i], stack:'c', maxBarThickness:26}))},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10}}},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x.toFixed(0)}% (${n0(by[keys[c.dataIndex]][c.datasetIndex])} ca)`}}},
+      scales:{x:{stacked:true, max:100, ticks:{callback:v=>v+'%'}, grid:{color:GRID}},
+        y:{stacked:true, grid:{display:false}, ticks:{font:{size:10.5}}}}}});
+  let h = `<table><tr><th>${CAUSE_LBL[CAUSE_DIM]}</th><th>Overdue</th>`+
+    CAUSE_GROUPS.map(g=>`<th>${escH(g)}</th>`).join('') + `</tr>`;
+  const all = Object.keys(by).sort((a,b)=> by[b].reduce((s,v)=>s+v,0) - by[a].reduce((s,v)=>s+v,0));
+  all.forEach(k=>{ const v = by[k], s = v.reduce((a,x)=>a+x,0);
+    h += `<tr><td>${escH(k)}</td><td>${n0(s)}</td>` +
+      v.map((x,i)=>`<td${i===0&&x?' style="font-weight:700;color:var(--crit)"':''}>${x?n0(x)+' <span class="muted">'+(x/s*100).toFixed(0)+'%</span>':'—'}</td>`).join('') + `</tr>`; });
+  h += `<tr class="total"><td>Tổng</td><td>${n0(rows.length)}</td>`+
+    tot.map(x=>`<td>${x?n0(x)+' <span class="muted">'+(x/(rows.length||1)*100).toFixed(0)+'%</span>':'—'}</td>`).join('')+`</tr></table>`;
+  document.getElementById('t_cause').innerHTML = h;
+  renderScnBy(rows);
+}
+/* Tầng 2: tình huống overdue suy từ mốc thời gian CCTS (đúng cho 100% ticket, không cần
+   ai điền) — tách "chưa xử lý xong" / "tới muộn" / "kẹt không đóng được". */
+function renderScnBy(rows){
+  const SCN = (D.overdue && D.overdue.scns) || [];
+  const by = {};
+  rows.forEach(r=>{ const k = r[CAUSE_DIM] || '—';
+    (by[k] || (by[k] = SCN.map(()=>0)))[r.scn]++; });
+  const keys = Object.keys(by).sort((a,b)=> by[b].reduce((s,v)=>s+v,0) - by[a].reduce((s,v)=>s+v,0));
+  const top = keys.slice(0,10);
+  mk('c_scn_by', {type:'bar',
+    data:{labels: top.map(k=>k.split(';')[0]), datasets: SCN.map((s,i)=>({
+      label:s, data: top.map(k=>{ const t=by[k].reduce((a,v)=>a+v,0); return t? by[k][i]/t*100 : 0; }),
+      backgroundColor: SCN_COL[s]||'#999', stack:'s', maxBarThickness:26}))},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10}}},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x.toFixed(0)}% (${n0(by[top[c.dataIndex]][c.datasetIndex])} ca)`}}},
+      scales:{x:{stacked:true, max:100, ticks:{callback:v=>v+'%'}, grid:{color:GRID}},
+        y:{stacked:true, grid:{display:false}, ticks:{font:{size:10.5}}}}}});
+  let h = `<table><tr><th>${CAUSE_LBL[CAUSE_DIM]}</th><th>Overdue</th>`+
+    SCN.map(s=>`<th>${escH(s)}</th>`).join('')+`</tr>`;
+  const tot = SCN.map(()=>0);
+  keys.forEach(k=>{ const v=by[k], s=v.reduce((a,x)=>a+x,0);
+    v.forEach((x,i)=> tot[i]+=x);
+    h += `<tr><td>${escH(k)}</td><td>${n0(s)}</td>`+
+      v.map(x=>`<td>${x?n0(x)+' <span class="muted">'+(x/s*100).toFixed(0)+'%</span>':'—'}</td>`).join('')+`</tr>`; });
+  const g = tot.reduce((a,x)=>a+x,0)||1;
+  h += `<tr class="total"><td>Tổng</td><td>${n0(g)}</td>`+
+    tot.map(x=>`<td>${x?n0(x)+' <span class="muted">'+(x/g*100).toFixed(0)+'%</span>':'—'}</td>`).join('')+`</tr></table>`;
+  document.getElementById('t_scn').innerHTML = h;
+}
+document.querySelectorAll('#causeDim button').forEach(b=> b.onclick = ()=>{
+  CAUSE_DIM = b.dataset.d;
+  document.querySelectorAll('#causeDim button').forEach(x=>x.classList.toggle('on', x===b));
+  renderCause();
+});
+
 const ovdUserInp = document.getElementById('ovdUser');
 ovdUserInp.value = ovdUser;
 ovdUserInp.onchange = ()=>{ ovdUser = ovdUserInp.value.trim(); localStorage.setItem('rpt_ovd_user', ovdUser); };
@@ -1471,6 +1701,7 @@ ovdUserInp.onchange = ()=>{ ovdUser = ovdUserInp.value.trim(); localStorage.setI
 
 /* charts trend + ASP: phụ thuộc nguồn -> vẽ lại khi đổi nguồn */
 function drawSourceCharts(){
+  renderPerf();   // bảng hiệu suất nằm trong live_blocks -> đổi theo nguồn
   lineChart('c_tr_evcs_t', D.weeks, D.trendEvcs.models, D.trendEvcs.tickets, false);
   lineChart('c_tr_evcs_r', D.weeks, D.trendEvcs.models, D.trendEvcs.failRate, true);
   lineChart('c_tr_bss_t', D.weeks, D.trendBss.models, D.trendBss.tickets, false);
@@ -1506,6 +1737,7 @@ renderOvdProgress();
 renderOvdWeek();
 renderScenario();
 renderLateReason();
+renderCause();
 /* Phạm vi dữ liệu: nói rõ báo cáo CHỈ gồm ticket vận hành và đã loại những luồng nào.
    Trước đây mỗi khối lọc một kiểu (bảng phân loại lọc VH, còn SLA/ASP/CSE thì không),
    nay lọc một lần ở build.apply_scope nên mọi con số trên trang cùng một phạm vi. */
