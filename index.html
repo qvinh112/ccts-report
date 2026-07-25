@@ -574,7 +574,7 @@ tr.xmiss td{background:#fdf3f3}
     <div class="card"><h3>Vật tư sắp hết — <span id="whShortSub"></span></h3><div class="tblwrap" id="t_wh_short"></div></div>
   </div>
   <div class="grid2">
-    <div class="card"><h3>Kỹ sư giữ nhiều vật tư lỗi nhất (toàn quốc)</h3><div class="tblwrap" id="t_wh_eng"></div></div>
+    <div class="card"><h3>Kho giữ nhiều vật tư lỗi nhất — gồm cả KTV và kho vùng</h3><div class="tblwrap" id="t_wh_eng"></div></div>
     <div class="card"><h3>Mã lỗi tiêu thụ nhiều vật tư nhất</h3><div class="tblwrap" id="t_wh_err"></div></div>
   </div>
   <div class="note" id="whNote"></div>
@@ -1185,12 +1185,12 @@ function renderWarehouse(){
     note.textContent = 'Chưa có warehouse_data.js — chạy sla_monitor/warehouse_report.py để sinh.';
     return;
   }
-  const t = WH.total, e = WH.engTotal, fv = WH.faultyValue, low = whLow();
+  const t = WH.total, e = WH.acctTotal, fv = WH.faultyValue, low = whLow();
   document.getElementById('whKpi').innerHTML = [
     ['Tồn kho toàn quốc', n0(t.units), `${n0(t.groups)} nhóm · ${n0(t.warehouses)} kho · ${n0(t.codes)} mã`],
     ['Tỷ lệ vật tư lỗi', pc(t.rate), `${n0(t.faulty)} đv lỗi trên tổng tồn`],
-    ['Tiền đọng ở hàng lỗi', usd(fv.all), `ước lượng sàn · ${usd(fv.eng)} đang ở kỹ sư`],
-    ['Kỹ sư giữ vật tư', n0(e.n), `${n0(e.total)} đv · lỗi ${pc(e.rate)}`],
+    ['Tiền đọng ở hàng lỗi', usd(fv.all), `ước lượng sàn · ${usd(fv.acct)} ở kho tài khoản`],
+    ['Kho theo tài khoản', n0(e.n), `${n0(e.total)} đv · lỗi ${pc(e.rate)}`],
   ].map(x=>`<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join('');
 
   const rg = WH.region || {};
@@ -1198,9 +1198,9 @@ function renderWarehouse(){
     ? `Site Engineer: Bắc ${pc(rg.north.rate)} vs Nam ${pc(rg.south.rate)} lỗi`
     : `${n0(t.groups)} nhóm`;
   document.getElementById('t_wh_grp').innerHTML =
-    '<table><tr><th style="text-align:left">Nhóm</th><th style="text-align:left">Vai trò</th><th>Kho</th><th>KTV</th><th>Tổng</th><th>Lỗi</th><th>% lỗi</th></tr>' +
+    '<table><tr><th style="text-align:left">Nhóm</th><th style="text-align:left">Vai trò</th><th>Kho</th><th>Kho TK</th><th>Tổng</th><th>Lỗi</th><th>% lỗi</th></tr>' +
     WH.groups.map(r=>`<tr><td style="text-align:left">${r.group}</td><td style="text-align:left">${r.kind}</td>`
-      + `<td>${n0(r.warehouses)}</td><td>${r.eng||'—'}</td><td>${n0(r.total)}</td><td>${n0(r.faulty)}</td>`
+      + `<td>${n0(r.warehouses)}</td><td>${r.acct||'—'}</td><td>${n0(r.total)}</td><td>${n0(r.faulty)}</td>`
       + `<td>${pc(r.rate)}</td></tr>`).join('') +
     `<tr class="total"><td style="text-align:left">Toàn quốc</td><td></td><td>${n0(t.warehouses)}</td><td>${n0(e.n)}</td>`
       + `<td>${n0(t.units)}</td><td>${n0(t.faulty)}</td><td>${pc(t.rate)}</td></tr></table>`;
@@ -1215,17 +1215,17 @@ function renderWarehouse(){
   document.getElementById('whShortSub').textContent =
     `${low.length} mã dưới ${WH_COVER_DAYS} ngày / ${WH.meta.covered} mã tính được`;
   document.getElementById('t_wh_short').innerHTML =
-    '<table><tr><th style="text-align:left">Vật tư</th><th>Tồn tốt</th><th>Ở KTV</th><th>Đang chuyển</th><th>Dùng/tháng</th><th>Ngày tồn</th></tr>' +
+    '<table><tr><th style="text-align:left">Vật tư</th><th>Tồn tốt</th><th>Ở kho TK</th><th>Đang chuyển</th><th>Dùng/tháng</th><th>Ngày tồn</th></tr>' +
     WH.shortage.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.name}</td>`
-      + `<td>${n0(r.good)}</td><td>${n0(r.eng)}</td><td>${n0(r.inTransit)}</td>`
+      + `<td>${n0(r.good)}</td><td>${n0(r.acct)}</td><td>${n0(r.inTransit)}</td>`
       + `<td>${n0(r.month)}</td><td>${r.cover==null?'—':whBadge(r.cover)}</td></tr>`).join('') +
     '</table>';
 
   document.getElementById('t_wh_eng').innerHTML =
-    '<table><tr><th style="text-align:left">Kỹ sư</th><th style="text-align:left">Nhóm</th><th>Tổng</th><th>Lỗi</th><th>% lỗi</th></tr>' +
-    WH.eng.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.name}</td><td style="text-align:left">${r.group}</td>`
+    '<table><tr><th style="text-align:left">Kho</th><th style="text-align:left">Nhóm</th><th>Tổng</th><th>Lỗi</th><th>% lỗi</th></tr>' +
+    WH.accts.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.name}</td><td style="text-align:left">${r.group}</td>`
       + `<td>${n0(r.total)}</td><td>${n0(r.faulty)}</td><td>${pc(r.rate)}</td></tr>`).join('') +
-    `<tr class="total"><td style="text-align:left">Tổng ${n0(e.n)} kỹ sư</td><td></td><td>${n0(e.total)}</td>`
+    `<tr class="total"><td style="text-align:left">Tổng ${n0(e.n)} kho</td><td></td><td>${n0(e.total)}</td>`
       + `<td>${n0(e.faulty)}</td><td>${pc(e.rate)}</td></tr></table>`;
 
   const ep = WH.errParts || [];

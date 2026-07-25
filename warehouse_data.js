@@ -19,7 +19,7 @@ const WAREHOUSE_DATA = {
    "faulty": 6896,
    "rate": 0.0382,
    "warehouses": 4,
-   "eng": 0
+   "acct": 3
   },
   {
    "group": "VN_ES",
@@ -29,7 +29,7 @@ const WAREHOUSE_DATA = {
    "faulty": 1658,
    "rate": 0.0297,
    "warehouses": 80,
-   "eng": 42
+   "acct": 42
   },
   {
    "group": "VN_FPT",
@@ -39,7 +39,7 @@ const WAREHOUSE_DATA = {
    "faulty": 0,
    "rate": 0.0,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_EC",
@@ -49,7 +49,7 @@ const WAREHOUSE_DATA = {
    "faulty": 3070,
    "rate": 0.0899,
    "warehouses": 83,
-   "eng": 48
+   "acct": 48
   },
   {
    "group": "VN_ITS",
@@ -59,7 +59,7 @@ const WAREHOUSE_DATA = {
    "faulty": 7748,
    "rate": 0.3362,
    "warehouses": 64,
-   "eng": 37
+   "acct": 38
   },
   {
    "group": "VN_SS",
@@ -69,7 +69,7 @@ const WAREHOUSE_DATA = {
    "faulty": 0,
    "rate": 0.0,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_CC Site Engineer",
@@ -79,7 +79,7 @@ const WAREHOUSE_DATA = {
    "faulty": 775,
    "rate": 0.1763,
    "warehouses": 31,
-   "eng": 27
+   "acct": 27
   },
   {
    "group": "VN_CSE",
@@ -89,7 +89,7 @@ const WAREHOUSE_DATA = {
    "faulty": 2,
    "rate": 0.0006,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_CCHCM Site Engineer",
@@ -99,7 +99,7 @@ const WAREHOUSE_DATA = {
    "faulty": 793,
    "rate": 0.3396,
    "warehouses": 37,
-   "eng": 33
+   "acct": 33
   },
   {
    "group": "CCVN – Storms Season Stockpile",
@@ -109,7 +109,7 @@ const WAREHOUSE_DATA = {
    "faulty": 0,
    "rate": 0.0,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_ES_non-matched data",
@@ -119,7 +119,7 @@ const WAREHOUSE_DATA = {
    "faulty": 534,
    "rate": 0.5091,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_ITS_non-matched data",
@@ -129,7 +129,7 @@ const WAREHOUSE_DATA = {
    "faulty": 369,
    "rate": 0.4862,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_Hardware RD",
@@ -139,7 +139,7 @@ const WAREHOUSE_DATA = {
    "faulty": 196,
    "rate": 1.0,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_PSE",
@@ -149,7 +149,7 @@ const WAREHOUSE_DATA = {
    "faulty": 91,
    "rate": 0.5449,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   },
   {
    "group": "VN_TSE",
@@ -159,7 +159,7 @@ const WAREHOUSE_DATA = {
    "faulty": 49,
    "rate": 0.8596,
    "warehouses": 1,
-   "eng": 0
+   "acct": 0
   }
  ],
  "region": {
@@ -168,28 +168,37 @@ const WAREHOUSE_DATA = {
    "total": 4395,
    "faulty": 775,
    "rate": 0.1763,
-   "eng": 27,
-   "engTotal": 1813,
-   "engFaulty": 698
+   "acct": 27,
+   "acctTotal": 1813,
+   "acctFaulty": 698
   },
   "south": {
    "group": "VN_CCHCM Site Engineer",
    "total": 2335,
    "faulty": 793,
    "rate": 0.3396,
-   "eng": 33,
-   "engTotal": 1083,
-   "engFaulty": 352
+   "acct": 33,
+   "acctTotal": 1083,
+   "acctFaulty": 352
   }
  },
- "engTotal": {
-  "n": 187,
-  "total": 48965,
-  "good": 44414,
-  "faulty": 4551,
-  "rate": 0.0929
+ "acctTotal": {
+  "n": 191,
+  "total": 230081,
+  "good": 218587,
+  "faulty": 11494,
+  "rate": 0.05
  },
- "eng": [
+ "accts": [
+  {
+   "name": "cc_phuongtri warehouse",
+   "group": "CCVN_DuyNam EW",
+   "total": 7717,
+   "good": 1198,
+   "faulty": 6519,
+   "rate": 0.8448,
+   "codes": 168
+  },
   {
    "name": "es-khomientrung",
    "group": "VN_ES",
@@ -207,6 +216,15 @@ const WAREHOUSE_DATA = {
    "faulty": 384,
    "rate": 0.1928,
    "codes": 73
+  },
+  {
+   "name": "cc_longhung warehouse",
+   "group": "CCVN_DuyNam EW",
+   "total": 58693,
+   "good": 58316,
+   "faulty": 377,
+   "rate": 0.0064,
+   "codes": 23
   },
   {
    "name": "kho hochiminh",
@@ -407,6 +425,15 @@ const WAREHOUSE_DATA = {
    "codes": 10
   },
   {
+   "name": "its_hcm warehouse",
+   "group": "VN_ITS",
+   "total": 524,
+   "good": 477,
+   "faulty": 47,
+   "rate": 0.0897,
+   "codes": 42
+  },
+  {
    "name": "thanghoang",
    "group": "VN_CC Site Engineer",
    "total": 55,
@@ -522,33 +549,6 @@ const WAREHOUSE_DATA = {
    "faulty": 33,
    "rate": 0.0418,
    "codes": 46
-  },
-  {
-   "name": "phamanhtuan",
-   "group": "VN_EC",
-   "total": 631,
-   "good": 598,
-   "faulty": 33,
-   "rate": 0.0523,
-   "codes": 36
-  },
-  {
-   "name": "tranminhloi",
-   "group": "VN_EC",
-   "total": 107,
-   "good": 74,
-   "faulty": 33,
-   "rate": 0.3084,
-   "codes": 40
-  },
-  {
-   "name": "hoangvanquan",
-   "group": "VN_EC",
-   "total": 390,
-   "good": 358,
-   "faulty": 32,
-   "rate": 0.0821,
-   "codes": 30
   }
  ],
  "shortage": [
@@ -560,7 +560,7 @@ const WAREHOUSE_DATA = {
    "good": 248,
    "faulty": 554,
    "inTransit": 17,
-   "eng": 165,
+   "acct": 187,
    "holders": 133,
    "cover": 20.4,
    "price": 541.81
@@ -573,7 +573,7 @@ const WAREHOUSE_DATA = {
    "good": 14,
    "faulty": 15,
    "inTransit": 0,
-   "eng": 14,
+   "acct": 14,
    "holders": 16,
    "cover": 28.0,
    "price": 55.71
@@ -586,7 +586,7 @@ const WAREHOUSE_DATA = {
    "good": 1,
    "faulty": 9,
    "inTransit": 0,
-   "eng": 1,
+   "acct": 1,
    "holders": 4,
    "cover": 30.0,
    "price": 0.57
@@ -599,7 +599,7 @@ const WAREHOUSE_DATA = {
    "good": 37,
    "faulty": 87,
    "inTransit": 0,
-   "eng": 29,
+   "acct": 31,
    "holders": 39,
    "cover": 39.6,
    "price": 35.81
@@ -612,7 +612,7 @@ const WAREHOUSE_DATA = {
    "good": 185,
    "faulty": 454,
    "inTransit": 10,
-   "eng": 166,
+   "acct": 171,
    "holders": 103,
    "cover": 41.4,
    "price": 39.0
@@ -625,7 +625,7 @@ const WAREHOUSE_DATA = {
    "good": 194,
    "faulty": 365,
    "inTransit": 63,
-   "eng": 103,
+   "acct": 108,
    "holders": 97,
    "cover": 44.4,
    "price": 150.43
@@ -638,7 +638,7 @@ const WAREHOUSE_DATA = {
    "good": 604,
    "faulty": 415,
    "inTransit": 0,
-   "eng": 340,
+   "acct": 340,
    "holders": 55,
    "cover": 45.9,
    "price": 4
@@ -651,7 +651,7 @@ const WAREHOUSE_DATA = {
    "good": 19,
    "faulty": 21,
    "inTransit": 0,
-   "eng": 7,
+   "acct": 7,
    "holders": 19,
    "cover": 47.5,
    "price": 150.44
@@ -664,7 +664,7 @@ const WAREHOUSE_DATA = {
    "good": 92,
    "faulty": 330,
    "inTransit": 0,
-   "eng": 65,
+   "acct": 67,
    "holders": 73,
    "cover": 48.4,
    "price": 30.84
@@ -677,7 +677,7 @@ const WAREHOUSE_DATA = {
    "good": 29,
    "faulty": 106,
    "inTransit": 1,
-   "eng": 12,
+   "acct": 12,
    "holders": 21,
    "cover": 62.1,
    "price": 221.43
@@ -690,7 +690,7 @@ const WAREHOUSE_DATA = {
    "good": 261,
    "faulty": 878,
    "inTransit": 4,
-   "eng": 190,
+   "acct": 194,
    "holders": 127,
    "cover": 64.7,
    "price": 33.1
@@ -703,7 +703,7 @@ const WAREHOUSE_DATA = {
    "good": 22,
    "faulty": 20,
    "inTransit": 0,
-   "eng": 18,
+   "acct": 19,
    "holders": 29,
    "cover": 73.3,
    "price": 150.44
@@ -716,7 +716,7 @@ const WAREHOUSE_DATA = {
    "good": 93,
    "faulty": 213,
    "inTransit": 2,
-   "eng": 29,
+   "acct": 31,
    "holders": 52,
    "cover": 84.5,
    "price": 291.43
@@ -729,7 +729,7 @@ const WAREHOUSE_DATA = {
    "good": 17,
    "faulty": 15,
    "inTransit": 0,
-   "eng": 17,
+   "acct": 17,
    "holders": 13,
    "cover": 85.0,
    "price": 22.06
@@ -742,7 +742,7 @@ const WAREHOUSE_DATA = {
    "good": 876,
    "faulty": 1146,
    "inTransit": 0,
-   "eng": 780,
+   "acct": 780,
    "holders": 92,
    "cover": 90.0,
    "price": 9.57
@@ -755,7 +755,7 @@ const WAREHOUSE_DATA = {
    "good": 66,
    "faulty": 274,
    "inTransit": 2,
-   "eng": 18,
+   "acct": 20,
    "holders": 30,
    "cover": 90.0,
    "price": 985.88
@@ -768,7 +768,7 @@ const WAREHOUSE_DATA = {
    "good": 280,
    "faulty": 635,
    "inTransit": 3,
-   "eng": 180,
+   "acct": 185,
    "holders": 116,
    "cover": 102.4,
    "price": 18.01
@@ -781,7 +781,7 @@ const WAREHOUSE_DATA = {
    "good": 50,
    "faulty": 155,
    "inTransit": 0,
-   "eng": 25,
+   "acct": 25,
    "holders": 40,
    "cover": 107.1,
    "price": 26.9
@@ -794,7 +794,7 @@ const WAREHOUSE_DATA = {
    "good": 113,
    "faulty": 215,
    "inTransit": 0,
-   "eng": 52,
+   "acct": 55,
    "holders": 59,
    "cover": 113.0,
    "price": 52.49
@@ -807,7 +807,7 @@ const WAREHOUSE_DATA = {
    "good": 143,
    "faulty": 137,
    "inTransit": 13,
-   "eng": 97,
+   "acct": 101,
    "holders": 65,
    "cover": 115.9,
    "price": 55.71
@@ -820,7 +820,7 @@ const WAREHOUSE_DATA = {
    "good": 148,
    "faulty": 273,
    "inTransit": 0,
-   "eng": 72,
+   "acct": 74,
    "holders": 65,
    "cover": 170.8,
    "price": 30.39
@@ -833,7 +833,7 @@ const WAREHOUSE_DATA = {
    "good": 206,
    "faulty": 173,
    "inTransit": 0,
-   "eng": 156,
+   "acct": 160,
    "holders": 46,
    "cover": 268.7,
    "price": 20.81
@@ -846,7 +846,7 @@ const WAREHOUSE_DATA = {
    "good": 243,
    "faulty": 98,
    "inTransit": 0,
-   "eng": 139,
+   "acct": 139,
    "holders": 34,
    "cover": 317.0,
    "price": 26.61
@@ -859,7 +859,7 @@ const WAREHOUSE_DATA = {
    "good": 1462,
    "faulty": 1003,
    "inTransit": 0,
-   "eng": 300,
+   "acct": 1346,
    "holders": 90,
    "cover": 452.2,
    "price": 25.63
@@ -872,7 +872,7 @@ const WAREHOUSE_DATA = {
    "good": 62,
    "faulty": 32,
    "inTransit": 0,
-   "eng": 57,
+   "acct": 58,
    "holders": 42,
    "cover": 465.0,
    "price": 110
@@ -885,7 +885,7 @@ const WAREHOUSE_DATA = {
    "good": 54,
    "faulty": 19,
    "inTransit": 0,
-   "eng": 35,
+   "acct": 36,
    "holders": 33,
    "cover": 540.0,
    "price": 111.43
@@ -898,7 +898,7 @@ const WAREHOUSE_DATA = {
    "good": 184,
    "faulty": 5,
    "inTransit": 0,
-   "eng": 110,
+   "acct": 110,
    "holders": 27,
    "cover": 2760.0,
    "price": 8.72
@@ -911,7 +911,7 @@ const WAREHOUSE_DATA = {
    "good": 184,
    "faulty": 2,
    "inTransit": 0,
-   "eng": 107,
+   "acct": 107,
    "holders": 23,
    "cover": 2760.0,
    "price": 6.9
@@ -924,7 +924,7 @@ const WAREHOUSE_DATA = {
    "good": 1221,
    "faulty": 40,
    "inTransit": 2,
-   "eng": 518,
+   "acct": 519,
    "holders": 74,
    "cover": 4070.0,
    "price": 11.27
@@ -937,7 +937,7 @@ const WAREHOUSE_DATA = {
    "good": 168,
    "faulty": 8,
    "inTransit": 0,
-   "eng": 70,
+   "acct": 75,
    "holders": 34,
    "cover": 5040.0,
    "price": 32.8
@@ -950,7 +950,7 @@ const WAREHOUSE_DATA = {
    "good": 196,
    "faulty": 13,
    "inTransit": 4,
-   "eng": 115,
+   "acct": 136,
    "holders": 34,
    "cover": 5880.0,
    "price": 42.57
@@ -963,7 +963,7 @@ const WAREHOUSE_DATA = {
    "good": 196412,
    "faulty": 6389,
    "inTransit": 0,
-   "eng": 27366,
+   "acct": 118772,
    "holders": 81,
    "cover": 10911.8,
    "price": 0.5
@@ -976,7 +976,7 @@ const WAREHOUSE_DATA = {
    "good": 788,
    "faulty": 7,
    "inTransit": 0,
-   "eng": 445,
+   "acct": 513,
    "holders": 26,
    "cover": 11820.0,
    "price": 2.57
@@ -989,7 +989,7 @@ const WAREHOUSE_DATA = {
    "good": 1073,
    "faulty": 19,
    "inTransit": 222,
-   "eng": 373,
+   "acct": 373,
    "holders": 22,
    "cover": 16095.0,
    "price": 10.82
@@ -1002,7 +1002,7 @@ const WAREHOUSE_DATA = {
    "good": 50454,
    "faulty": 591,
    "inTransit": 0,
-   "eng": 6498,
+   "acct": 29225,
    "holders": 38,
    "cover": 32204.7,
    "price": 0.5
@@ -1015,7 +1015,7 @@ const WAREHOUSE_DATA = {
    "good": 1183,
    "faulty": 15,
    "inTransit": 0,
-   "eng": 0,
+   "acct": 1101,
    "holders": 8,
    "cover": 35490.0,
    "price": 0
@@ -1250,7 +1250,7 @@ const WAREHOUSE_DATA = {
  ],
  "faultyValue": {
   "all": 883920,
-  "eng": 288526,
+  "acct": 679349,
   "units": 14834,
   "codes": 41
  },
