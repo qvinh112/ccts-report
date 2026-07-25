@@ -65,6 +65,17 @@ textarea:focus{outline:2px solid var(--s1);border-color:transparent}
 table.ovd td{text-align:left;white-space:normal;vertical-align:top}
 table.ovd th{text-align:left}
 table.ovd select,table.ovd input{width:100%;font:12px system-ui;padding:3px 4px;border:1px solid var(--grid);border-radius:5px;background:var(--surface)}
+/* Giải trình overdue toàn quốc: thanh lọc + tiến độ */
+.filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px}
+.filterbar label{font-size:12px;color:var(--ink2);display:inline-flex;gap:4px;align-items:center}
+.filterbar select,.filterbar input[type=text]{font:12.5px inherit;padding:4px 7px;border:1px solid var(--axis);
+  border-radius:7px;background:var(--surface);color:var(--ink);max-width:220px}
+.filterbar .btn{padding:4px 11px;font-size:12.5px}
+.ovd-prog{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+.ovd-prog .bar{flex:1;min-width:180px;max-width:420px;height:10px;border-radius:6px;background:var(--grid);overflow:hidden}
+.ovd-prog .bar i{display:block;height:100%;background:var(--good)}
+table.ovd tr.done td{background:#f4faf4}
+table.ovd td.sel{text-align:center}
 .staticTag{display:inline-block;font-size:10.5px;font-weight:600;color:#8a6d00;background:#fff4d1;border:1px solid #f0d98a;border-radius:4px;padding:1px 6px;margin-left:6px;text-transform:none;letter-spacing:0}
 .partialWarn{background:#fff4d1;border:1px solid #f0d98a;color:#7a5c00;border-radius:6px;padding:3px 10px;font-size:12px}
 .freshTag{font-size:11.5px;color:var(--muted)}
@@ -313,23 +324,44 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 </section>
 
 <section id="sec-overdue">
-  <h2>Giải trình ticket Overdue — Hà Nội, luồng API (tuần <span class="hdW2"></span>)</h2>
+  <h2>Giải trình ticket Overdue — toàn quốc, luồng API (7 tuần gần nhất)</h2>
   <div class="toolbar">
     <label>Người nhập: <input type="text" id="ovdUser" placeholder="tên của bạn" size="14"></label>
     <span id="ovdSync" class="gt-meta">⚪ đang kết nối đồng bộ…</span>
   </div>
   <p style="font-size:13px;color:var(--ink2);margin:2px 0 10px">
-    Chỉ ticket <b>HNO + API creation</b> (điền tay). Giải trình dùng chung realtime với
-    <b>dashboard điều hành</b> — gõ ở đây hiện luôn bên kia và ngược lại. Cột “gợi ý” là
-    nhãn tự đoán từ dữ liệu; sửa lại nếu chưa đúng.
+    Mọi CSE / khu vực đều điền và tra cứu được ở đây — lọc theo tuần, miền, tỉnh, CSE, ASP.
+    Giải trình dùng chung realtime với <b>dashboard điều hành</b>: gõ ở đây hiện luôn bên kia
+    và ngược lại. Cột “gợi ý” là nhãn máy đoán từ dữ liệu, chỉ để tham khảo — người điền quyết định.
   </p>
-  <div class="card"><div class="tblwrap" id="t_overdue"></div></div>
-  <div class="card" style="margin-top:12px">
-    <h3>Overdue ngoài Hà Nội (luồng API) — tự phân loại, không điền tay</h3>
-    <p style="font-size:13px;color:var(--ink2);margin:2px 0 8px">
-      Số lượng lớn (~1,5k/tuần) nên hệ thống tự gán nhãn theo dữ liệu; phần quá hạn không
-      rõ lý do khách quan quy về <b>① Xử lý muộn</b>.</p>
-    <div class="tblwrap" id="t_overdue_auto"></div>
+  <div class="card">
+    <div class="filterbar">
+      <label>Tuần <select id="fW"></select></label>
+      <label>Miền <select id="fReg"></select></label>
+      <label>Tỉnh <select id="fProv"></select></label>
+      <label>CSE <select id="fCse"></select></label>
+      <label>ASP <select id="fAsp"></select></label>
+      <label>Loại <select id="fSeg"></select></label>
+      <label>Tình trạng <select id="fSt"></select></label>
+      <input type="text" id="fQ" placeholder="tìm Ticket ID / mã trụ" size="20">
+      <button class="btn" id="fReset">Xóa lọc</button>
+      <button class="btn" id="ovdCsv">⬇ CSV phần đang lọc</button>
+    </div>
+    <div id="ovdProg" class="ovd-prog"></div>
+    <div class="filterbar">
+      <span class="muted">Điền hàng loạt:</span>
+      <select id="bulkCat"></select>
+      <button class="btn" id="bulkApply">Áp cho dòng đã chọn</button>
+      <button class="btn" id="bulkAuto">Lấy gợi ý cho dòng chưa giải trình (đang lọc)</button>
+    </div>
+    <div class="tblwrap" id="t_overdue"></div>
+    <div class="filterbar" id="ovdPager"></div>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="card"><h3>Tiến độ giải trình theo CSE — tuần <span class="ovdWLbl"></span></h3>
+      <div class="tblwrap" id="t_ovd_cse"></div></div>
+    <div class="card"><h3>Tiến độ giải trình theo khu vực — tuần <span class="ovdWLbl"></span></h3>
+      <div class="tblwrap" id="t_ovd_reg"></div></div>
   </div>
 </section>
 
@@ -1146,61 +1178,225 @@ document.querySelectorAll('#disAuditSeg button').forEach(b=> b.onclick = ()=>{
 /* ============ Giải trình ticket Overdue (per-ticket, sync Firebase /dashboard/explain) ============
    Dùng CHUNG node + ĐÚNG shape với dashboard/app.js: explainMap[tid]={c,t}; child(expKey(tid))
    .set({id,c,t,user,up}). Nhờ vậy giải trình gõ ở đây hiện trên dashboard và ngược lại. */
-const EXPLAIN_CATS = [
+const EXPLAIN_CATS = (D.overdue && D.overdue.cats && D.overdue.cats.length) ? D.overdue.cats : [
   "① Xử lý muộn (lỗi KTV)","② KTV đến, trụ bình thường / không tồn lỗi",
   "③ Chờ vật tư / thiếu linh kiện","④ Thời tiết / thiên tai",
   "⑤ Không tiếp cận / không có quyền vào trạm","⑥ Yêu cầu / lỗi từ khách hàng",
   "⑦ Hạ tầng điện / mạng của khách","⑧ VOMS reject dù xử lý đạt",
   "⑨ Lỗi hệ thống VOMS / CCTS treo","⑩ Trùng ticket / tạo lô theo phase","⑪ Khách quan khác",
 ];
+/* build.py đóng gói bảng overdue cho gọn file: rows = mảng theo thứ tự cols; cột nằm trong
+   dictCols là CHỈ SỐ vào dicts[cột]. Giải nén 1 lần lúc tải trang (~5.8k dòng). */
+const OVD_ROWS = (function(){
+  const p = D.overdue || {};
+  if(!Array.isArray(p.rows)) return [];
+  const cols = p.cols||[], dicts = p.dicts||{}, provs = p.provinces||{};
+  return p.rows.map(a=>{
+    const o = {};
+    cols.forEach((c,i)=>{ const d = dicts[c]; o[c] = d ? d[a[i]] : a[i]; });
+    const pv = provs[o.prov];
+    o.provName = pv ? pv[0] : (o.prov || '—');
+    o.reg = pv ? pv[1] : 'Khác';
+    return o;
+  });
+})();
 let explainMap = {}, fbExpRef = null;
 let ovdUser = localStorage.getItem('rpt_ovd_user') || '';
 const expKey = tid => String(tid).replace(/[.#$/\[\]]/g, c => '%'+c.charCodeAt(0).toString(16).toUpperCase());
-const expOf = tid => { const v = explainMap[tid]; return v ? {c:v.c||'',t:v.t||''} : {c:'',t:''}; };
+const expOf = tid => { const v = explainMap[tid]; return v ? {c:v.c||'',t:v.t||'',u:v.u||'',up:v.up||0} : {c:'',t:'',u:'',up:0}; };
 function saveExplain(tid, c, t){
   c=(c||'').trim(); t=(t||'').trim();
-  if(c||t) explainMap[tid]={c,t}; else delete explainMap[tid];
+  if(c||t) explainMap[tid]={c,t,u:ovdUser||'',up:Date.now()}; else delete explainMap[tid];
   if(fbExpRef){
     if(c||t) fbExpRef.child(expKey(tid)).set({id:tid,c,t,user:ovdUser||'',up:Date.now()}).catch(()=>{});
     else fbExpRef.child(expKey(tid)).remove().catch(()=>{});
   }
 }
+/* Điền hàng loạt: gộp thành 1 lần update nhiều nhánh, tránh bắn hàng trăm request lẻ. */
+function saveExplainBatch(items){
+  const upd = {}, now = Date.now();
+  items.forEach(it=>{
+    const c=(it.c||'').trim(), t=(it.t||'').trim();
+    if(c||t){ explainMap[it.id]={c,t,u:ovdUser||'',up:now}; upd[expKey(it.id)]={id:it.id,c,t,user:ovdUser||'',up:now}; }
+    else { delete explainMap[it.id]; upd[expKey(it.id)]=null; }
+  });
+  if(fbExpRef && Object.keys(upd).length)
+    fbExpRef.update(upd).catch(e=> toast('Lỗi lưu: '+e.message));
+  renderOverdue(); renderOvdProgress(); renderLateReason();
+}
 function ovdSyncStat(ok,msg){ const e=document.getElementById('ovdSync'); if(e){ e.textContent=(ok?'🟢 ':'⚪ ')+msg; } }
+
+/* ---- bộ lọc + phân trang ---- */
+const OVD_PAGE = 100;
+const F = {w: D.week, reg:'', prov:'', cse:'', asp:'', seg:'', st:'', q:''};
+let ovdPage = 0;
+const uniq = (key, rows) => [...new Set((rows||OVD_ROWS).map(r=>r[key]).filter(Boolean))].sort();
+function ovdFiltered(){
+  const q = F.q.trim().toLowerCase();
+  return OVD_ROWS.filter(r=>
+    (!F.w   || r.w===F.w)     && (!F.reg || r.reg===F.reg)  && (!F.prov || r.prov===F.prov) &&
+    (!F.cse || r.cse===F.cse) && (!F.asp || r.asp===F.asp)  && (!F.seg  || r.seg===F.seg)  &&
+    (!F.st  || (F.st==='done' ? !!expOf(r.id).c : !expOf(r.id).c)) &&
+    (!q || r.id.toLowerCase().includes(q) || String(r.cpid||'').toLowerCase().includes(q)));
+}
+function fillSel(id, list, cur, allLbl){
+  const s = document.getElementById(id); if(!s) return;
+  s.innerHTML = `<option value="">${allLbl}</option>` +
+    list.map(v=>`<option value="${escH(v)}"${v===cur?' selected':''}>${escH(v)}</option>`).join('');
+}
+function initOvdFilters(){
+  document.querySelectorAll('.hdW2').forEach(e=> e.textContent = D.week);
+  fillSel('fW',   (D.weeks||[]).slice().reverse(), F.w, 'tất cả');
+  fillSel('fReg', ['Bắc','Trung','Nam','Khác'].filter(x=>OVD_ROWS.some(r=>r.reg===x)), '', 'tất cả');
+  fillSel('fCse', uniq('cse'), '', 'tất cả');
+  fillSel('fAsp', uniq('asp'), '', 'tất cả');
+  fillSel('fSeg', uniq('seg'), '', 'tất cả');
+  refreshProvSel();
+  const st = document.getElementById('fSt');
+  st.innerHTML = `<option value="">tất cả</option><option value="todo">chưa giải trình</option><option value="done">đã giải trình</option>`;
+  document.getElementById('bulkCat').innerHTML =
+    `<option value="">— chọn nhãn —</option>` + EXPLAIN_CATS.map(c=>`<option>${escH(c)}</option>`).join('') +
+    `<option value="__clear">(xóa giải trình)</option>`;
+  const on = (id, key)=> document.getElementById(id).onchange = e=>{
+    F[key] = e.target.value; ovdPage = 0;
+    if(key==='reg'){ F.prov=''; refreshProvSel(); }
+    if(key==='w') document.querySelectorAll('.ovdWLbl').forEach(x=> x.textContent = F.w||'tất cả');
+    renderOverdue(); renderOvdProgress();
+  };
+  on('fW','w'); on('fReg','reg'); on('fProv','prov'); on('fCse','cse');
+  on('fAsp','asp'); on('fSeg','seg'); on('fSt','st');
+  const q = document.getElementById('fQ');
+  q.oninput = ()=>{ F.q = q.value; ovdPage = 0; renderOverdue(); };
+  document.getElementById('fReset').onclick = ()=>{
+    Object.assign(F, {w:D.week, reg:'', prov:'', cse:'', asp:'', seg:'', st:'', q:''});
+    ovdPage = 0; q.value=''; initOvdFilters(); renderOverdue(); renderOvdProgress();
+  };
+  document.getElementById('ovdCsv').onclick = exportOvdCsv;
+  document.getElementById('bulkApply').onclick = bulkApplySelected;
+  document.getElementById('bulkAuto').onclick = bulkApplyAuto;
+  document.querySelectorAll('.ovdWLbl').forEach(x=> x.textContent = F.w||'tất cả');
+}
+/* Tỉnh: option value = MÃ trạm (HNO), nhãn = tên tiếng Việt; danh sách co lại theo miền đang chọn. */
+function refreshProvSel(){
+  const rows = F.reg ? OVD_ROWS.filter(r=>r.reg===F.reg) : OVD_ROWS;
+  const seen = new Map();
+  rows.forEach(r=> seen.set(r.prov, r.provName));
+  const list = [...seen].sort((a,b)=> a[1].localeCompare(b[1],'vi'));
+  document.getElementById('fProv').innerHTML = `<option value="">tất cả</option>` +
+    list.map(([code,nm])=>`<option value="${escH(code)}"${code===F.prov?' selected':''}>${escH(nm)}</option>`).join('');
+}
 function renderOverdue(){
-  const wl = document.querySelectorAll('.hdW2'); wl.forEach(e=> e.textContent = D.week);
-  const ov = D.overdue || {manual:[],auto:[]};
-  const opts = tid => { const c=expOf(tid).c;
-    return '<option value="">— chọn —</option>' +
-      EXPLAIN_CATS.map(x=>`<option${x===c?' selected':''}>${x}</option>`).join(''); };
-  const esc = s => String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
-  let h = `<table class="ovd"><tr><th>#</th><th>Ticket / Trụ</th><th>Lỗi</th><th>Trạng thái</th><th>CSE</th><th>Ngày</th><th>Gợi ý</th><th style="width:22%">Phân loại</th><th style="width:26%">Chi tiết</th></tr>`;
-  ov.manual.forEach((r,i)=>{ const e=expOf(r.id);
-    h += `<tr><td>${i+1}</td><td><b>${esc(r.id)}</b><br><span class="muted">${esc(r.cpid)}</span></td>`+
-      `<td>${esc(r.err)}</td><td>${esc(r.status)}</td><td>${esc(r.cse)}</td><td>${esc(r.date)}</td>`+
-      `<td class="muted" style="font-size:12px">${esc(r.auto||'—')}</td>`+
-      `<td><select class="exp-cat" data-id="${esc(r.id)}">${opts(r.id)}</select></td>`+
-      `<td><input class="exp-txt" data-id="${esc(r.id)}" value="${esc(e.t)}" placeholder="ghi chú thêm…"></td></tr>`; });
-  if(!ov.manual.length) h += `<tr><td colspan="9" class="muted">Không có ticket HNO/API quá hạn trong tuần.</td></tr>`;
+  const all = ovdFiltered();
+  const done = all.filter(r=>expOf(r.id).c).length;
+  const pgs = Math.max(1, Math.ceil(all.length / OVD_PAGE));
+  if(ovdPage >= pgs) ovdPage = pgs-1;
+  const view = all.slice(ovdPage*OVD_PAGE, (ovdPage+1)*OVD_PAGE);
+  const opts = cur => '<option value="">— chọn —</option>' +
+    EXPLAIN_CATS.map(x=>`<option${x===cur?' selected':''}>${escH(x)}</option>`).join('');
+  let h = `<table class="ovd"><tr><th><input type="checkbox" id="selAll" title="chọn cả trang"></th>`+
+    `<th>#</th><th>Ticket / Trụ</th><th>Tỉnh</th><th>Lỗi</th><th>Trạng thái</th><th>CSE</th><th>ASP</th>`+
+    `<th>Tuần</th><th>Ngày</th><th>Gợi ý</th><th style="width:19%">Phân loại</th><th style="width:21%">Chi tiết</th><th>Người nhập</th></tr>`;
+  view.forEach((r,i)=>{ const e = expOf(r.id);
+    h += `<tr class="${e.c?'done':''}"><td class="sel"><input type="checkbox" class="exp-sel" data-id="${escH(r.id)}"></td>`+
+      `<td>${ovdPage*OVD_PAGE+i+1}</td>`+
+      `<td><b>${escH(r.id)}</b><br><span class="muted">${escH(r.cpid)}</span></td>`+
+      `<td>${escH(r.provName)}<br><span class="muted">${escH(r.reg)}</span></td>`+
+      `<td>${escH(r.err)}</td><td>${escH(r.status)}</td><td>${escH(r.cse)}</td><td>${escH(r.asp)}</td>`+
+      `<td>${escH(r.w)}</td><td>${escH(r.date)}</td>`+
+      `<td class="muted" style="font-size:12px">${escH(r.auto>=0?EXPLAIN_CATS[r.auto]:'—')}</td>`+
+      `<td><select class="exp-cat" data-id="${escH(r.id)}">${opts(e.c)}</select></td>`+
+      `<td><input class="exp-txt" data-id="${escH(r.id)}" value="${escH(e.t)}" placeholder="ghi chú thêm…"></td>`+
+      `<td class="muted" style="font-size:11.5px">${escH(e.u||'')}${e.up?'<br>'+new Date(e.up).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</td></tr>`; });
+  if(!all.length) h += `<tr><td colspan="14" class="muted">Không có ticket overdue khớp bộ lọc.</td></tr>`;
   h += `</table>`;
   document.getElementById('t_overdue').innerHTML = h;
-  // auto breakdown non-HNO
-  const tot = ov.auto.reduce((a,r)=>a+r.qty,0);
-  let a = `<table class="ovd"><tr><th>Nhãn tự phân loại</th><th>Số ticket</th><th>Tỷ trọng</th></tr>`;
-  ov.auto.forEach(r=> a += `<tr><td>${esc(r.cat)}</td><td>${n0(r.qty)}</td><td>${pc(tot?r.qty/tot:0)}</td></tr>`);
-  a += `<tr><td><b>Tổng</b></td><td><b>${n0(tot)}</b></td><td></td></tr></table>`;
-  document.getElementById('t_overdue_auto').innerHTML = a;
-  // gắn sự kiện
+  document.getElementById('ovdProg').innerHTML =
+    `<b>${n0(done)}/${n0(all.length)}</b> ticket đã giải trình (${pc(all.length?done/all.length:0)})`+
+    `<span class="bar"><i style="width:${all.length?(done/all.length*100):0}%"></i></span>`+
+    `<span class="muted">còn ${n0(all.length-done)} ca chưa có lý do</span>`;
+  document.getElementById('ovdPager').innerHTML = all.length > OVD_PAGE ?
+    `<button class="btn" id="pgPrev"${ovdPage?'':' disabled'}>‹ Trước</button>`+
+    `<span class="muted">Trang ${ovdPage+1}/${pgs} — ${n0(all.length)} ticket</span>`+
+    `<button class="btn" id="pgNext"${ovdPage>=pgs-1?' disabled':''}>Sau ›</button>` : '';
+  const prev=document.getElementById('pgPrev'), next=document.getElementById('pgNext');
+  if(prev) prev.onclick = ()=>{ ovdPage--; renderOverdue(); };
+  if(next) next.onclick = ()=>{ ovdPage++; renderOverdue(); };
+  const sa = document.getElementById('selAll');
+  if(sa) sa.onchange = ()=> document.querySelectorAll('#t_overdue .exp-sel').forEach(c=> c.checked = sa.checked);
   document.querySelectorAll('#t_overdue .exp-cat').forEach(s=> s.onchange = ()=>{
-    const id=s.dataset.id; saveExplain(id, s.value, expOf(id).t); });
+    const id=s.dataset.id; saveExplain(id, s.value, expOf(id).t); renderOvdProgress(); renderLateReason(); });
   document.querySelectorAll('#t_overdue .exp-txt').forEach(inp=> inp.onchange = ()=>{
     const id=inp.dataset.id; saveExplain(id, expOf(id).c, inp.value); });
+}
+/* Tiến độ theo CSE / khu vực — chỉ theo TUẦN đang chọn để luôn thấy đủ mọi người,
+   không phụ thuộc các bộ lọc còn lại. */
+function renderOvdProgress(){
+  const rows = OVD_ROWS.filter(r=> !F.w || r.w===F.w);
+  const agg = key => {
+    const m = {};
+    rows.forEach(r=>{
+      const k = r[key] || '—';
+      const g = m[k] || (m[k] = {k, tot:0, done:0, users:{}});
+      g.tot++;
+      const e = expOf(r.id);
+      if(e.c){ g.done++; if(e.u) g.users[e.u] = (g.users[e.u]||0)+1; }
+    });
+    return Object.values(m).sort((a,b)=> b.tot-a.tot);
+  };
+  const tbl = (list, lbl) => {
+    let h = `<table><tr><th>${lbl}</th><th>Overdue</th><th>Đã giải trình</th><th>Tỷ lệ</th><th style="text-align:left">Người nhập</th></tr>`;
+    let t=0, d=0;
+    list.forEach(g=>{ t+=g.tot; d+=g.done;
+      const who = Object.entries(g.users).sort((a,b)=>b[1]-a[1]).map(([u,n])=>`${escH(u)} (${n})`).join(', ');
+      const cls = g.done===g.tot ? 'b-good' : (g.done/g.tot>=.5 ? 'b-warn' : 'b-crit');
+      h += `<tr><td>${escH(g.k)}</td><td>${n0(g.tot)}</td><td>${n0(g.done)}</td>`+
+        `<td><span class="badge ${cls}">${pc(g.tot?g.done/g.tot:0,0)}</span></td>`+
+        `<td class="l muted" style="font-size:11.5px">${who||'—'}</td></tr>`; });
+    h += `<tr class="total"><td>Tổng</td><td>${n0(t)}</td><td>${n0(d)}</td><td>${pc(t?d/t:0,0)}</td><td></td></tr></table>`;
+    return h;
+  };
+  document.getElementById('t_ovd_cse').innerHTML = tbl(agg('cse'), 'CSE');
+  document.getElementById('t_ovd_reg').innerHTML = tbl(agg('provName'), 'Tỉnh');
+}
+function bulkApplySelected(){
+  const ids = [...document.querySelectorAll('#t_overdue .exp-sel:checked')].map(c=>c.dataset.id);
+  const v = document.getElementById('bulkCat').value;
+  if(!ids.length) return toast('Chưa chọn dòng nào');
+  if(!v) return toast('Chọn nhãn trước đã');
+  const clear = v==='__clear';
+  if(!confirm(`${clear?'XÓA giải trình của':'Gán nhãn cho'} ${ids.length} ticket đã chọn?`)) return;
+  saveExplainBatch(ids.map(id=>({id, c: clear?'':v, t: clear?'':expOf(id).t})));
+  toast(`Đã ${clear?'xóa':'gán nhãn'} ${ids.length} ticket`);
+}
+function bulkApplyAuto(){
+  const todo = ovdFiltered().filter(r=> !expOf(r.id).c && r.auto>=0);
+  if(!todo.length) return toast('Không còn dòng nào có gợi ý để lấy');
+  if(!confirm(`Lấy nhãn GỢI Ý cho ${todo.length} ticket chưa giải trình (đang lọc)?\nBạn vẫn sửa lại từng dòng được.`)) return;
+  saveExplainBatch(todo.map(r=>({id:r.id, c:EXPLAIN_CATS[r.auto], t:expOf(r.id).t})));
+  toast(`Đã điền gợi ý cho ${todo.length} ticket`);
+}
+function exportOvdCsv(){
+  const rows = ovdFiltered();
+  const head = ['Ticket ID','Mã trụ','Tỉnh','Miền','Lỗi','Trạng thái','CSE','ASP','Loại','Tuần','Ngày','Gợi ý','Phân loại','Chi tiết','Người nhập'];
+  const cell = v => `"${String(v==null?'':v).replace(/"/g,'""')}"`;
+  const body = rows.map(r=>{ const e=expOf(r.id);
+    return [r.id,r.cpid,r.provName,r.reg,r.err,r.status,r.cse,r.asp,r.seg,r.w,r.date,
+            r.auto>=0?EXPLAIN_CATS[r.auto]:'', e.c, e.t, e.u].map(cell).join(','); });
+  const blob = new Blob(['﻿'+[head.map(cell).join(','), ...body].join('\r\n')], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `overdue_giaitrinh_${F.w||'all'}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(a.href);
+  toast(`Đã xuất ${rows.length} dòng`);
 }
 function applyExplainRemote(all){
   const ae=document.activeElement;
   if(ae && (ae.classList.contains('exp-cat')||ae.classList.contains('exp-txt'))) return; // đang gõ dở
   explainMap={};
-  for(const k in all){ const v=all[k]||{}; const id=v.id||k; if(v.c||v.t) explainMap[id]={c:v.c||'',t:v.t||''}; }
+  for(const k in all){ const v=all[k]||{}; const id=v.id||k;
+    if(v.c||v.t) explainMap[id]={c:v.c||'',t:v.t||'',u:v.user||'',up:v.up||0}; }
   renderOverdue();
+  renderOvdProgress();
   renderLateReason();  // pie lý do Xử lý muộn tự đầy khi có giải trình mới
 }
 
@@ -1285,7 +1481,7 @@ function drawSourceCharts(){
 drawSourceCharts();
 costCharts();
 /* Đổi nguồn (API / khác / tất cả): ghi đè các khối live trên D bằng variant tương ứng
-   rồi vẽ lại. List giải trình GIỮ NGUYÊN (luôn HNO+API) — nó là công cụ điền tay riêng. */
+   rồi vẽ lại. List giải trình GIỮ NGUYÊN (luôn luồng API, toàn quốc) — nó là công cụ điền tay riêng. */
 let SRC = 'api';
 document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
   SRC = b.dataset.s;
@@ -1304,7 +1500,9 @@ document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
 })();
 render();
 renderCse();
+initOvdFilters();
 renderOverdue();
+renderOvdProgress();
 renderOvdWeek();
 renderScenario();
 renderLateReason();
