@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Định nghĩa chỉ số — CCVN Weekly Executive</title>
+<style>
+:root{--surface:#fcfcfb;--page:#f9f9f7;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--s1:#2a78d6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--grid);padding:10px 16px;display:flex;gap:10px;align-items:center}
+h1{font-size:16px;margin:0}
+a.back{color:var(--s1);text-decoration:none;font-weight:600}
+main{max-width:860px;margin:0 auto;padding:16px 16px 60px}
+section{background:var(--surface);border:1px solid var(--grid);border-radius:10px;padding:14px 16px;margin-bottom:12px;scroll-margin-top:60px}
+h2{font-size:14px;margin:0 0 6px}
+p{margin:6px 0}
+p.en{color:var(--ink2);font-style:italic;font-size:13px;border-left:3px solid var(--grid);padding-left:10px}
+:target{outline:2px solid var(--s1)}
+@media print{header{position:static}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><a class="back" href="index.html">← Dashboard</a><h1>Định nghĩa chỉ số · Metric definitions</h1></header>
+<main>
+<p style="color:var(--muted);font-size:12.5px">Mỗi chỉ số trên dashboard chỉ có MỘT nghĩa, chốt tại đây và không đổi giữa các tuần.
+· <i>Each metric has exactly ONE meaning, fixed here and unchanged week to week.</i></p>
+
+<section id="evcs"><h2>Tỉ lệ lỗi EVCS · EVCS failure rate</h2>
+<p>Số thiết bị EVCS lỗi (đếm distinct theo thiết bị, loại trừ vé Disclaim) chia cho số thiết bị đang vận hành. Số thiết bị vận hành (fleet) là số tĩnh chốt tại W29 vì export CCTS không có nguồn fleet theo tuần. Phạm vi: vé luồng API creation, đã lọc phạm vi vận hành.</p>
+<p class="en">Distinct failed EVCS units (excluding Disclaim tickets) divided by units in service. Fleet size is a static W29 figure because the CCTS export carries no weekly fleet source. Scope: API-creation tickets, operations scope applied.</p></section>
+
+<section id="bss"><h2>Tỉ lệ lỗi BSS · BSS failure rate</h2>
+<p>Như trên, cho trạm đổi pin (BSS-06, BSS-12).</p>
+<p class="en">Same as above, for battery-swap stations (BSS-06, BSS-12).</p></section>
+
+<section id="ovd"><h2>SLA overdue toàn mạng · Network SLA overdue</h2>
+<p><b>Định nghĩa chốt:</b> số vé mang cờ Overdue theo bộ luật SLA tinh (3h/4h/7h/48h tùy vùng, nguồn tạo vé, có thay vật tư hay không) chia cho tổng số vé thuộc 13 trạng thái SLA, gộp EVCS+BSS. Con số này GỒM cả vé chưa xử lý xong (đã quá hạn mà còn Open) — nó đo trải nghiệm khách hàng, không phải chỉ đo vé đã đóng. Đây là cùng một con số với trang phân tích nội bộ, không có phiên bản "đã trừ" nào khác.</p>
+<p class="en"><b>Fixed definition:</b> tickets flagged Overdue by the refined SLA rules (3h/4h/7h/48h depending on region, ticket source, parts replacement) divided by all tickets in the 13 SLA statuses, EVCS+BSS combined. This INCLUDES unresolved tickets already past their deadline — it measures customer experience, not just closed tickets. Identical to the internal analyst page; there is no alternative "adjusted" version.</p></section>
+
+<section id="cc"><h2>Vé do ChargeCore · ChargeCore-attributable</h2>
+<p>Tử số: vé phân loại Hardware + Software. Mẫu số: vé ĐÃ phân định trách nhiệm (Hardware + Software + Disclaim). Vé "Undefined yet" (chưa phân định) hiển thị thành dải riêng trên ô KPI và KHÔNG nằm trong mẫu số — không giấu, không đổ oan.</p>
+<p class="en">Numerator: Hardware + Software tickets. Denominator: tickets with responsibility already classified (Hardware + Software + Disclaim). "Undefined yet" tickets appear as a separate band on the KPI tile and are NOT in the denominator — neither hidden nor presumed.</p></section>
+
+<section id="backlog"><h2>Vé tồn chưa xử lý xong · Unresolved backlog</h2>
+<p>Vé tạo trong tuần chưa có solution đầu tiên tại thời điểm chốt số liệu. Đây là chỉ số thay cho "chi phí vật tư trong tuần" — export CCTS không có Material Code/giá nên chi phí tuần chưa có nguồn dữ liệu trung thực.</p>
+<p class="en">Tickets created this week with no first solution at data cut-off. This tile replaces "weekly parts cost" — the CCTS export has no material codes/prices, so an honest weekly cost figure has no data source yet.</p></section>
+
+<section id="total"><h2>Tổng số vé · Total tickets</h2>
+<p>Mọi vé EVCS+BSS tạo trong tuần, luồng API creation, đã lọc phạm vi vận hành (loại vé lắp đặt/nghiệm thu/REWORK...). Tuần hiện tại thường chưa đủ 7 ngày — trang ghi chú rõ và mọi so sánh tuần-trước đều quy về /ngày.</p>
+<p class="en">All EVCS+BSS tickets created this week, API-creation flow, operations scope applied (installation/acceptance/REWORK tickets excluded). The current week is often partial — the page says so and week-over-week deltas are per-day normalized.</p></section>
+
+<section id="coverage"><h2>Độ phủ dữ liệu · Data coverage</h2>
+<p>Tách hai loại: (1) vé ĐANG xử lý (Open/Appointment) — trạng thái bình thường của vé mới; (2) vé mang trạng thái ngoài 13 nhóm SLA (ví dụ "Pending for VOMS confirm") — lỗi dữ liệu thật của workbook, các vé này không được đếm vào bảng SLA. Độ phủ (%) chấm trên vé đã có solution đầu tiên. Kèm theo: số vé chưa có mã lỗi, số mã lỗi phải gộp nhiều cách viết (VOMS phát cùng một alarm dưới nhiều chính tả).</p>
+<p class="en">Two kinds are separated: (1) tickets IN PROGRESS (Open/Appointment) — the normal state of fresh tickets; (2) tickets whose status falls outside the 13 SLA statuses (e.g. "Pending for VOMS confirm") — a genuine workbook data issue; those tickets are excluded from the SLA table. Coverage (%) is scored on tickets that have a first solution. Also listed: tickets without an error code, and codes merged across spelling variants (VOMS emits the same alarm under several spellings).</p></section>
+
+<section id="campaign"><h2>Tách vé chiến dịch · Campaign split</h2>
+<p>Vé thuộc đợt thay thế hàng loạt theo kế hoạch (ví dụ đợt thay khóa slot BSS từ W29) được nhận diện bằng quy tắc khai báo (mã lỗi chuẩn hóa + khoảng tuần + dòng sản phẩm) và tách thành đường riêng trên mọi biểu đồ xu hướng. Không tách thì một đợt thay khóa đọc thành "chất lượng sản phẩm sụp đổ".</p>
+<p class="en">Tickets from planned mass-replacement drives (e.g. the BSS slot-lock campaign from W29) are identified by declared rules (normalized error code + week range + product line) and plotted as a separate series on every trend chart. Without the split, a lock-replacement drive reads as a product-quality collapse.</p></section>
+
+<section id="cause"><h2>Nhóm nguyên nhân · Cause groups</h2>
+<p>Suy từ ngôn từ xử lý thật của vé (Solution / Problem Analysis / Additional info) theo bộ luật từ khóa, cùng bộ với trang phân tích nội bộ. "Chưa xác minh" phần lớn là vé mới chưa có mô tả — không phải "không rõ nguyên nhân". Trách nhiệm (do ChargeCore / không do CC / chưa phân định) được giữ ở MỌI cấp drill: dòng sản phẩm → nhóm nguyên nhân → ASP/tỉnh.</p>
+<p class="en">Derived from the tickets' actual resolution text (Solution / Problem Analysis / Additional info) via keyword rules — the same engine as the internal analyst page. "Unverified" is mostly fresh tickets without notes yet, not "cause unknown". The responsibility split (ChargeCore / not CC / unclassified) is preserved at EVERY drill level: product line → cause group → ASP/province.</p></section>
+
+<section id="rank"><h2>Xếp hạng ASP & khu vực · ASP & region ranking</h2>
+<p>Chỉ đơn vị ≥ 20 vé/tuần mới lên bảng (1 vé / 1 trễ = 100% là vô nghĩa thống kê). Mặc định xếp theo SỐ VÉ TRỄ tuyệt đối — người quản lý cần biết sửa chỗ nào giảm được nhiều nhất; có nút chuyển sang tỉ lệ. "Giờ xử lý TV" = TRUNG VỊ giờ từ tạo vé đến solution đầu tiên (trung vị vì vài ca treo hàng trăm giờ kéo lệch trung bình). "Open→VOMS TV" = trung vị giờ từ lúc VOMS mở vé đến khi kỹ thuật viên đẩy "Pending for VOMS confirm" vòng đầu — hai mốc này khác nhau nên hiệu của chúng có thể lệch nhẹ.</p>
+<p class="en">Only units with ≥ 20 tickets/week are listed (1 ticket / 1 late = 100% is statistically meaningless). Default sort is ABSOLUTE overdue count — managers need to know where fixing helps most; a toggle switches to rate. "Median proc. h" = MEDIAN hours from ticket creation to first solution (median because a few hundred-hour stragglers skew the mean). "Median Open→VOMS h" = median hours from VOMS opening the ticket to the technician's first "Pending for VOMS confirm" — different anchors, so their difference can drift slightly.</p></section>
+
+<section id="action"><h2>Sổ hành động · Action register</h2>
+<p>Mỗi mã lỗi lớn có một bản ghi: nguyên nhân gốc, giải pháp, loại (firmware/phần cứng/quy trình/đào tạo), trạng thái, người phụ trách, hạn, mục tiêu. Biểu đồ 7 tuần của từng mã có vạch đánh dấu ngày deploy — sau deploy vé có giảm thật không là thứ kiểm chứng được, không phải lời hứa. Cảnh báo tự động khi quá hạn chưa deploy, hoặc deploy ≥3 tuần mà vé không giảm. Mã lỗi lớn chưa có bản ghi bị đánh dấu "chưa có kế hoạch".</p>
+<p class="en">Each major error code carries one record: root cause, solution, type (firmware/hardware/process/training), status, owner, due date, target. Each code's 7-week chart marks the deployment date — whether tickets actually dropped after deploy is verifiable, not a promise. Automatic alerts fire when a due date passes without deployment, or ≥3 weeks after deploy with no decrease. Major codes without a record are flagged "no plan yet".</p></section>
+
+</main>
+</body>
+</html>
