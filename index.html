@@ -1169,7 +1169,8 @@ const whLow = () => (WH ? WH.shortage.filter(r => r.cover != null && r.cover < W
 /* Headline là tỷ lệ vật tư lỗi: ở phạm vi toàn quốc thiếu hàng gần như không xảy ra,
    thứ đọng vốn thật là hàng lỗi nằm rải khắp 308 kho. */
 function whTile(){
-  if(!WH) return {grp:'wh', title:'Kho & vật tư', big:'—', sub:'chưa có warehouse_data.js'};
+  if(!WH || !WH.total) return {grp:'wh', title:'Kho & vật tư', big:'—',
+    sub: WH ? 'warehouse_data.js không khớp phiên bản trang' : 'chưa có warehouse_data.js'};
   const t = WH.total;
   return {grp:'wh', title:'Kho & vật tư', big:pc(t.rate),
     sub:`${n0(t.faulty)} / ${n0(t.units)} đv lỗi · ${n0(t.warehouses)} kho toàn quốc`};
@@ -1183,6 +1184,13 @@ function renderWarehouse(){
   const note = document.getElementById('whNote');
   if(!WH){
     note.textContent = 'Chưa có warehouse_data.js — chạy sla_monitor/warehouse_report.py để sinh.';
+    return;
+  }
+  /* warehouse_data.js sinh riêng nên có thể cũ hơn trang (cache CDN, task chưa chạy).
+     Thiếu khối nào thì báo và dừng ở đây, không để cả trang chết theo. */
+  if(!WH.total || !WH.acctTotal || !WH.groups){
+    note.textContent = 'warehouse_data.js không khớp phiên bản trang (thiếu total/acctTotal/groups)'
+      + ' — chạy lại sla_monitor/warehouse_report.py, hoặc tải lại trang bỏ cache.';
     return;
   }
   const t = WH.total, e = WH.acctTotal, fv = WH.faultyValue, low = whLow();
@@ -1299,7 +1307,8 @@ function render(){
   document.querySelectorAll('.modeLbl').forEach(e=> e.textContent = mLbl());
   kpis();
   renderTiles();
-  renderWarehouse();
+  /* Khối Kho đọc file sinh riêng — lỗi ở đó không được phép kéo sập phần còn lại. */
+  try{ renderWarehouse(); }catch(err){ console.warn('Bỏ qua khối Kho:', err); }
   renderWatch();
   clsBlock('c_cls_evcs','t_cls_evcs', MODE==='w'?D.clsEvcsW:D.clsEvcsM, MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total, 'clsEvcsSub');
   clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
