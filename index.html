@@ -1137,16 +1137,6 @@ function miniLine(id, labels, data){
       tooltip:{callbacks:{title:c=>labels[c[0].dataIndex], label:c=>' '+n0(c.parsed.y)+' ticket lỗi'}}},
       scales:{x:{grid:{display:false}, ticks:{font:{size:10}}}, y:{display:false}}}});
 }
-/* Tile hiệu suất: chỉ ra ngay team đang trễ nhất tuần này (≥30 ticket mới xét, tránh
-   nhóm 3 ca/tuần chiếm hạng bét vì 1 case). */
-function perfTile(){
-  const teams = ((D.perf||{}).team||[]).filter(r=>r.qty>=30);
-  const worst = teams.slice().sort((a,b)=> b.rate-a.rate)[0];
-  return worst
-    ? {grp:'sla', title:'Hiệu suất · team trễ nhất', big:pc(worst.rate),
-       sub:`${worst.k} — ${n0(worst.ovd)}/${n0(worst.qty)} ticket ${D.week} · ${teams.length} team đang so`}
-    : {grp:'sla', title:'Hiệu suất team', big:'—', sub:'chưa đủ dữ liệu tuần này'};
-}
 function renderTiles(){
   const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
   const cB = MODE==='w'?D.clsBssW:D.clsBssM,  cBt = MODE==='w'?D.clsBssW_total:D.clsBssM_total;
@@ -1162,7 +1152,6 @@ function renderTiles(){
     {grp:'sla', title:'SLA / Overdue',  big:pc(settled?ovd/settled:0), sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()})`},
     {grp:'rc',  title:'Nguyên nhân lỗi (RC)', mini:['rc',rcE], sub:'Top 5 nhóm nguyên nhân EVCS'},
     {grp:'trend', title:'Xu hướng ticket lỗi', mini:['line',wk,trend], sub:'7 tuần · loại trừ Disclaim'},
-    perfTile(),
   ];
   const el = document.getElementById('tiles');
   el.innerHTML = T.map((t,i)=>{
