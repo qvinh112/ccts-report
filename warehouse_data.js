@@ -1,5 +1,5 @@
 const WAREHOUSE_DATA = {
- "ts": "2026-07-25T12:46:16",
+ "ts": "2026-07-25T13:05:11",
  "snapshots": 1,
  "main": {
   "total": 2580,
@@ -9,9 +9,9 @@ const WAREHOUSE_DATA = {
  "engTotal": {
   "n": 29,
   "total": 1815,
-  "good": 1116,
-  "faulty": 699,
-  "rate": 0.3851
+  "good": 1115,
+  "faulty": 700,
+  "rate": 0.3857
  },
  "eng": [
   {
@@ -121,9 +121,9 @@ const WAREHOUSE_DATA = {
   {
    "name": "longpham",
    "total": 60,
-   "good": 39,
-   "faulty": 21,
-   "rate": 0.35,
+   "good": 38,
+   "faulty": 22,
+   "rate": 0.3667,
    "codes": 17
   },
   {
@@ -374,7 +374,7 @@ const WAREHOUSE_DATA = {
    "month": 292,
    "week": 31,
    "good": 72,
-   "faulty": 198,
+   "faulty": 199,
    "main": 0,
    "eng": 72,
    "cover": 7.4,
