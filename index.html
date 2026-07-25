@@ -326,22 +326,17 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <section id="sec-perf">
   <h2>Hiệu suất xử lý — ai đang gánh việc, ai đang trễ (tuần <span class="hdW2"></span>)</h2>
   <div class="seg" id="perfDim">
-    <button data-d="lead" class="on">Người phụ trách</button>
-    <button data-d="team">Team CSE</button>
+    <button data-d="team" class="on">Team CSE</button>
     <button data-d="asp">ASP</button>
-    <button data-d="reg">Miền</button>
     <button data-d="prov">Tỉnh</button>
-    <button data-d="member">Tài khoản cộng tác</button>
   </div>
   <p class="rcIntro">
-    <b>Người phụ trách</b> = tài khoản đứng đầu Ticket Owner; <b>Team CSE</b> gộp theo nhóm
-    quản lý; <b>Tài khoản cộng tác</b> tính cho MỌI tài khoản trong Ticket Owner nên tổng
-    lớn hơn số ticket, và các tài khoản dùng chung (<code>Ec_engineer 1</code>,
-    <code>its_frontdesk 01</code>…) là của nhiều người — đừng chấm điểm cá nhân bằng cột đó.
     <b>Giờ xử lý</b> = trung vị từ lúc tạo ticket tới solution đầu tiên (trung vị chứ không
-    phải trung bình, để vài ca treo trăm giờ không kéo lệch cả nhóm). <b>% trong hạn</b> tính
-    trên số ca ĐÃ xử lý xong, đối chiếu hạn SLA của chính ticket đó (3/4/7/48h).
-    <b>Chưa xong</b> = ca còn chưa có solution — chỗ này cao là tồn đọng thật.
+    phải trung bình, để vài ca treo trăm giờ không kéo lệch cả nhóm).
+    <b>Open→VOMS</b> = trung vị từ lúc VOMS mở ticket tới lúc KTV đẩy “Pending for VOMS
+    confirm”, tức trọn vòng xử lý kể cả khâu chốt hồ sơ.
+    <b>% trong hạn</b> tính trên số ca ĐÃ xử lý xong, đối chiếu hạn SLA của chính ticket đó
+    (3/4/7/48h). <b>Chưa xong</b> = ca còn chưa có solution — chỗ này cao là tồn đọng thật.
   </p>
   <div class="grid2">
     <div class="card"><h3>Khối lượng &amp; overdue rate — <span class="perfLbl"></span></h3>
@@ -350,15 +345,29 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
       <div class="cv rc"><canvas id="c_perf_trend"></canvas></div></div>
   </div>
   <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_perf"></div></div>
+
+  <h2 style="margin-top:18px">Thời gian xử lý &amp; Open→VOMS — soi bất thường</h2>
+  <p class="rcIntro">
+    Hai mốc thời gian nói hai chuyện khác nhau: <b>giờ xử lý</b> cao = KTV tới hiện trường /
+    ra được giải pháp muộn; <b>chênh lệch Open→VOMS trừ giờ xử lý</b> cao = đã có giải pháp
+    rồi nhưng ticket nằm đó lâu mới đẩy sang VOMS — lỗi khâu chốt hồ sơ chứ không phải khâu
+    sửa chữa. Mốc so sánh là <b>trung vị toàn quốc</b> (<span id="baseMed"></span> xử lý ·
+    <span id="baseVoms"></span> Open→VOMS). Chỉ xét đơn vị có <b>≥20 ticket</b> trong tuần để
+    không bắt nhiễu từ nhóm vài ca.
+  </p>
+  <div class="grid2">
+    <div class="card"><h3>Giờ xử lý vs Open→VOMS — <span class="perfLbl"></span> lệch nhiều nhất</h3>
+      <div class="cv rc"><canvas id="c_time"></canvas></div></div>
+    <div class="card"><h3>Cảnh báo</h3><div id="timeWarn"></div></div>
+  </div>
+  <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_time"></div></div>
 </section>
 
 <section id="sec-cause">
   <h2>Nguyên nhân sâu xa của Overdue (tuần <span class="hdW2"></span>)</h2>
   <div class="seg" id="causeDim">
     <button data-d="cse" class="on">Team CSE</button>
-    <button data-d="lead">Người phụ trách</button>
     <button data-d="asp">ASP</button>
-    <button data-d="reg">Miền</button>
     <button data-d="provName">Tỉnh</button>
   </div>
   <p class="rcIntro">
@@ -1100,8 +1109,7 @@ function costCharts(){
 const GROUPS = {
   cls:  {title:'Phân loại ticket & Chi tiết Disclaim', ids:['sec-cls','sec-dis']},
   rc:   {title:'Nguyên nhân lỗi (RC)', ids:['sec-rc']},
-  sla:  {title:'SLA / Overdue', ids:['sec-sla']},
-  perf: {title:'Hiệu suất xử lý — người / team / ASP / khu vực', ids:['sec-perf']},
+  sla:  {title:'SLA / Overdue & Hiệu suất xử lý', ids:['sec-sla','sec-perf']},
   cause:{title:'Nguyên nhân Overdue', ids:['sec-cause','sec-ovdana']},
   trend:{title:'Tình trạng lỗi theo model & Xu hướng', ids:['sec-fail','sec-trend']},
   watch:{title:'Cảnh báo sớm', ids:['sec-watch']},
@@ -1160,9 +1168,9 @@ function perfTile(){
   const teams = ((D.perf||{}).team||[]).filter(r=>r.qty>=30);
   const worst = teams.slice().sort((a,b)=> b.rate-a.rate)[0];
   return worst
-    ? {grp:'perf', title:'Hiệu suất · team trễ nhất', big:pc(worst.rate),
+    ? {grp:'sla', title:'Hiệu suất · team trễ nhất', big:pc(worst.rate),
        sub:`${worst.k} — ${n0(worst.ovd)}/${n0(worst.qty)} ticket ${D.week} · ${teams.length} team đang so`}
-    : {grp:'perf', title:'Hiệu suất người / team', big:'—', sub:'chưa đủ dữ liệu tuần này'};
+    : {grp:'sla', title:'Hiệu suất team', big:'—', sub:'chưa đủ dữ liệu tuần này'};
 }
 function renderTiles(){
   const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
@@ -1195,7 +1203,7 @@ function renderTiles(){
     else if(t.mini[0]==='line') miniLine('tile_'+i, t.mini[1], t.mini[2]);
   });
   const more = [['watch','Cảnh báo'],['cls','Disclaim'],['trend','Theo model'],['alarm','Alarm'],
-    ['perf','Hiệu suất người/team'],['cause','Nguyên nhân overdue'],
+    ['cause','Nguyên nhân overdue'],
     ['asp','ASP'],['cse','CSE'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
     ['explain','✍ Giải trình overdue']];
   const mb = document.getElementById('morebar');
@@ -1540,9 +1548,8 @@ function renderLateReason(){
 }
 /* ================= Hiệu suất: người / team / ASP / khu vực =================
    Nguồn: D.perf (build.perf_block) — theo nguồn đang chọn nhờ nằm trong live_blocks. */
-const PERF_LBL = {lead:'Người phụ trách', member:'Tài khoản cộng tác', team:'Team CSE',
-                  asp:'ASP', reg:'Miền', prov:'Tỉnh'};
-let PERF_DIM = 'lead';
+const PERF_LBL = {team:'Team CSE', asp:'ASP', prov:'Tỉnh'};
+let PERF_DIM = 'team';
 const hrs = v => v==null ? '—' : String(v).replace('.',',')+'h';
 function sparkRates(series){
   const W=90, H=22, n=series.length;
@@ -1591,6 +1598,68 @@ function renderPerf(){
   h += `<tr class="total"><td>Tổng</td><td>${n0(q)}</td><td>${n0(o)}</td><td>${pc(q?o/q:0)}</td>`+
     `<td colspan="6"></td></tr></table>`;
   document.getElementById('t_perf').innerHTML = h;
+  renderTime(rows);
+}
+/* ---- Soi bất thường thời gian: giờ xử lý (tạo→solution đầu) vs Open→VOMS (trọn vòng).
+   Chênh lệch giữa hai mốc = thời gian ticket đã có giải pháp mà chưa được đẩy sang VOMS,
+   tức lỗi khâu CHỐT HỒ SƠ, tách hẳn với lỗi khâu SỬA CHỮA. */
+const TIME_MIN_QTY = 20;      // dưới ngưỡng này là nhiễu, không kết luận
+const mult = v => v.toFixed(1).replace('.',',') + '×';
+// chênh ≤0 = không có độ trễ chốt hồ sơ (hai mốc neo khác nhau nên có thể âm nhẹ)
+const gapTxt = g => g > 0 ? hrs(Math.round(g*10)/10) : '—';
+function timeFlags(r, base){
+  const f = [];
+  const gap = (r.voms!=null && r.med!=null) ? r.voms - r.med : null;
+  if(gap != null && gap >= 8) f.push({t:'crit', s:`Chốt VOMS chậm: xong rồi còn treo ${hrs(Math.round(gap*10)/10)}`});
+  if(r.med != null && base.med && r.med >= 2*base.med) f.push({t:'serious', s:`Ra giải pháp muộn: ${hrs(r.med)} = ${mult(r.med/base.med)} toàn quốc`});
+  if(r.ontime != null && r.ontime < .85) f.push({t:'crit', s:`Chỉ ${pc(r.ontime,0)} ca xử lý trong hạn SLA`});
+  return f;
+}
+function renderTime(rows){
+  const base = ((D.perf||{}).all||[])[0] || {med:null, voms:null};
+  const bm=document.getElementById('baseMed'), bv=document.getElementById('baseVoms');
+  if(bm) bm.textContent = hrs(base.med);
+  if(bv) bv.textContent = hrs(base.voms);
+  const elig = rows.filter(r=> r.qty >= TIME_MIN_QTY && r.med != null && r.voms != null);
+  // xếp theo mức lệch so với mốc toàn quốc (lấy cái nào nặng hơn: chênh chốt VOMS hay giờ xử lý)
+  const sev = r => Math.max((r.voms-r.med)/8, base.med ? r.med/base.med - 1 : 0);
+  const top = elig.slice().sort((a,b)=> sev(b)-sev(a)).slice(0,12);
+  mk('c_time', {type:'bar',
+    data:{labels: top.map(r=>nameLines(r.k)), datasets:[
+      {label:'Giờ xử lý (tạo→solution đầu)', data: top.map(r=>r.med), backgroundColor:'#2a78d6', maxBarThickness:12},
+      {label:'Open→VOMS (trọn vòng)', data: top.map(r=>r.voms), backgroundColor:'#eda100', maxBarThickness:12}]},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10.5}}},
+        tooltip:{callbacks:{afterBody:it=>{ const r=top[it[0].dataIndex];
+          return `chênh chốt hồ sơ ${gapTxt(r.voms-r.med)} · ${n0(r.qty)} ticket · trong hạn ${r.ontime==null?'—':pc(r.ontime,0)}`; }}}},
+      scales:{x:{grid:{color:GRID}, title:{display:true,text:'giờ (trung vị)'}},
+        y:{grid:{display:false}, ticks:{font:{size:10.5}}}}}});
+  const warned = elig.map(r=>({r, f:timeFlags(r, base)})).filter(x=>x.f.length)
+    .sort((a,b)=> b.f.length-a.f.length || sev(b.r)-sev(a.r));
+  document.getElementById('timeWarn').innerHTML = warned.length
+    ? `<div class="watchgrid">` + warned.map(({r,f})=>
+        `<div class="watchcard ${f.some(x=>x.t==='crit')?'crit':'serious'}">`+
+        `<div class="wk">${escH(PERF_LBL[PERF_DIM])} · ${n0(r.qty)} ticket</div>`+
+        `<div class="wn">${escH(r.k)}</div>`+
+        f.map(x=>`<div class="wv">• ${x.s}</div>`).join('')+
+        `<div class="wvol">xử lý ${hrs(r.med)} · Open→VOMS ${hrs(r.voms)} · overdue ${pc(r.rate,0)}</div></div>`).join('')
+      + `</div>`
+    : `<div class="okbar">Không có đơn vị nào (≥${TIME_MIN_QTY} ticket) lệch bất thường trong tuần này.</div>`;
+  let h = `<table><tr><th>${escH(PERF_LBL[PERF_DIM])}</th><th>Ticket</th><th>Giờ xử lý</th><th>so toàn quốc</th>`+
+    `<th>Open→VOMS</th><th>so toàn quốc</th><th>Chênh (chốt hồ sơ)</th><th>% trong hạn</th><th>Overdue</th></tr>`;
+  const x = (v, b) => (v==null||!b) ? '—' : mult(v/b);
+  elig.slice().sort((a,b)=> sev(b)-sev(a)).forEach(r=>{
+    const gap = r.voms - r.med;
+    h += `<tr><td>${escH(r.k)}</td><td>${n0(r.qty)}</td><td>${hrs(r.med)}</td>`+
+      `<td${base.med && r.med>=2*base.med ? ' style="color:var(--crit);font-weight:700"' : ''}>${x(r.med, base.med)}</td>`+
+      `<td>${hrs(r.voms)}</td><td>${x(r.voms, base.voms)}</td>`+
+      `<td${gap>=8 ? ' style="color:var(--crit);font-weight:700"' : ''}>${gapTxt(gap)}</td>`+
+      `<td${r.ontime!=null && r.ontime<.85 ? ' style="color:var(--crit);font-weight:700"' : ''}>${r.ontime==null?'—':pc(r.ontime)}</td>`+
+      `<td>${badge(r.rate)}</td></tr>`; });
+  h += `<tr class="total"><td>Toàn quốc</td><td>${n0(base.qty)}</td><td>${hrs(base.med)}</td><td>1,0×</td>`+
+    `<td>${hrs(base.voms)}</td><td>1,0×</td><td>${gapTxt(base.voms-base.med)}</td>`+
+    `<td>${base.ontime==null?'—':pc(base.ontime)}</td><td>${badge(base.rate)}</td></tr></table>`;
+  document.getElementById('t_time').innerHTML = h;
 }
 document.querySelectorAll('#perfDim button').forEach(b=> b.onclick = ()=>{
   PERF_DIM = b.dataset.d;
@@ -1607,7 +1676,7 @@ const CAUSE_GROUPS = ['Do KTV / nội bộ','Chờ vật tư / hậu cần','L�
 const CAUSE_COL = ['#d03b3b','#eda100','#8e44ad','#2a78d6','#1baf7a','#898781','#d9d7cf'];
 const CAT2CAUSE = [0,4,1,3,3,3,3,2,2,4,5];   // vị trí trong EXPLAIN_CATS -> nhóm gốc
 let CAUSE_DIM = 'cse';
-const CAUSE_LBL = {cse:'Team CSE', lead:'Người phụ trách', asp:'ASP', reg:'Miền', provName:'Tỉnh'};
+const CAUSE_LBL = {cse:'Team CSE', asp:'ASP', provName:'Tỉnh'};
 function causeOf(r){
   const fb = explainMap[r.id] && explainMap[r.id].c;
   if(fb){ const i = EXPLAIN_CATS.indexOf(fb); return i>=0 ? CAT2CAUSE[i] : 5; }
