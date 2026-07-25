@@ -146,6 +146,9 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 .tile .big{font-size:24px;font-weight:700;color:var(--ink);line-height:1.15}
 .tile .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
 .tile .cvmini{flex:1;min-height:96px;position:relative;margin-top:4px}
+/* sparkline xu hướng 7 tuần gắn trong ô phân loại (thay ô "Xu hướng ticket lỗi" cũ).
+   Tên riêng, không dùng lại .spark vì class đó là sparkline SVG trong bảng. */
+.tile .trendline{height:30px;position:relative;margin-top:4px}
 .morebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
 .morebar .mlbl{font-size:12px;color:var(--muted);margin-right:2px}
 .morebtn{font-size:12.5px;padding:6px 13px;border:1px solid var(--grid);border-radius:20px;background:var(--surface);
@@ -559,6 +562,20 @@ tr.xmiss td{background:#fdf3f3}
   </div>
 </section>
 
+<section id="sec-wh">
+  <h2>Kho &amp; vật tư — tồn kho live từ CCTS</h2>
+  <div id="whKpi" class="kpis"></div>
+  <div class="grid2">
+    <div class="card"><h3>Vật tư sắp hết — <span id="whShortSub"></span></h3><div class="tblwrap" id="t_wh_short"></div></div>
+    <div class="card"><h3>Tồn vật tư lỗi theo kỹ sư</h3><div class="tblwrap" id="t_wh_eng"></div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Mã lỗi tiêu thụ nhiều vật tư nhất</h3><div class="tblwrap" id="t_wh_err"></div></div>
+    <div class="card"><h3>Phân bổ Main ↔ kỹ sư</h3><div class="cv"><canvas id="c_wh_split"></canvas></div></div>
+  </div>
+  <div class="note" id="whNote"></div>
+</section>
+
 <section id="sec-parts">
   <h2>Top vật tư sử dụng (<span class="modeLbl"></span>)</h2>
   <div class="grid2">
@@ -640,6 +657,8 @@ tr.xmiss td{background:#fdf3f3}
 <div id="toast"></div>
 
 <script src="data_latest.js"></script>
+<!-- Tồn kho vật tư (sinh bởi sla_monitor/warehouse_report.py). Thiếu file = ẩn ô Kho. -->
+<script src="warehouse_data.js"></script>
 <!-- Firebase (giải trình dùng chung node /dashboard/explain với dashboard điều hành) -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -1091,6 +1110,7 @@ const GROUPS = {
   watch:{title:'Cảnh báo sớm', ids:['sec-watch']},
   alarm:{title:'Top alarm', ids:['sec-alarm']},
   asp:  {title:'Overdue rate theo ASP', ids:['sec-asp']},
+  wh:   {title:'Kho & vật tư (tồn kho live)', ids:['sec-wh']},
   parts:{title:'Top vật tư sử dụng', ids:['sec-parts']},
   cost: {title:'Chi phí dịch vụ', ids:['sec-cost']},
   fix:  {title:'Dữ liệu đã hiệu chỉnh (V3 vs V2)', ids:['sec-fix']},
@@ -1129,13 +1149,78 @@ function miniRcBar(id, rows){
       plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>` ${n0(c.parsed.x)} ticket`}}},
       scales:{x:{display:false}, y:{grid:{display:false}, ticks:{font:{size:10}}}}}});
 }
-function miniLine(id, labels, data){
+/* compact=true: sparkline nhét trong ô phân loại — bỏ trục x cho đỡ chật, tooltip vẫn còn */
+function miniLine(id, labels, data, compact){
   mk(id, {type:'line',
     data:{labels, datasets:[{data, borderColor:S[0], backgroundColor:'rgba(42,120,214,.12)',
-      borderWidth:2, fill:true, tension:.3, pointRadius:0}]},
+      borderWidth:compact?1.5:2, fill:true, tension:.3, pointRadius:0}]},
     options:{maintainAspectRatio:false, plugins:{legend:{display:false},
       tooltip:{callbacks:{title:c=>labels[c[0].dataIndex], label:c=>' '+n0(c.parsed.y)+' ticket lỗi'}}},
-      scales:{x:{grid:{display:false}, ticks:{font:{size:10}}}, y:{display:false}}}});
+      scales:{x:{display:!compact, grid:{display:false}, ticks:{font:{size:10}}}, y:{display:false}}}});
+}
+/* ===== Kho & vật tư — tồn kho live từ CCTS (warehouse_data.js) ===== */
+const WH = typeof WAREHOUSE_DATA !== 'undefined' ? WAREHOUSE_DATA : null;
+const WH_COVER_DAYS = 14;   // dưới ngần này ngày tồn thì coi là sắp hết
+const whLow = () => (WH ? WH.shortage.filter(r => r.cover != null && r.cover < WH_COVER_DAYS) : []);
+/* Headline là số mã sắp hết vì đó là việc phải xử lý ngay; tỷ lệ tồn lỗi để ở dòng phụ. */
+function whTile(){
+  if(!WH) return {grp:'wh', title:'Kho & vật tư', big:'—', sub:'chưa có warehouse_data.js'};
+  return {grp:'wh', title:'Kho & vật tư', big:n0(whLow().length)+' mã',
+    sub:`sắp hết (dưới ${WH_COVER_DAYS} ngày) / ${WH.meta.covered} mã theo dõi được`
+       + ` · tồn lỗi KTV ${pc(WH.engTotal.rate)}`};
+}
+function whBadge(cover){
+  const c = cover<3 ? 'b-crit' : cover<7 ? 'b-serious' : cover<WH_COVER_DAYS ? 'b-warn' : 'b-good';
+  return `<span class="badge ${c}">${cover} ngày</span>`;
+}
+function renderWarehouse(){
+  const note = document.getElementById('whNote');
+  if(!WH){
+    note.textContent = 'Chưa có warehouse_data.js — chạy sla_monitor/warehouse_report.py để sinh.';
+    return;
+  }
+  const e = WH.engTotal, m = WH.main || {total:0, good:0, faulty:0}, low = whLow();
+  document.getElementById('whKpi').innerHTML = [
+    ['Tồn kho kỹ sư', n0(e.total), `${e.n} người · ${n0(e.good)} tốt / ${n0(e.faulty)} lỗi`],
+    ['Tỷ lệ tồn lỗi KTV', pc(e.rate), 'vật tư lỗi đang giữ, chưa trả kho'],
+    ['Kho Main', n0(m.total), `${n0(m.good)} tốt / ${n0(m.faulty)} lỗi`],
+    ['Mã sắp hết', n0(low.length), `dưới ${WH_COVER_DAYS} ngày tồn`],
+  ].map(x=>`<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join('');
+
+  document.getElementById('whShortSub').textContent =
+    `${WH.meta.covered}/${WH.meta.stockCodes} mã tính được ngày tồn`;
+  document.getElementById('t_wh_short').innerHTML =
+    '<table><tr><th style="text-align:left">Vật tư</th><th>Mã</th><th>Tồn tốt</th><th>Main</th><th>KTV</th><th>Lỗi</th><th>Dùng/tháng</th><th>Ngày tồn</th></tr>' +
+    WH.shortage.slice(0,25).map(r=>`<tr><td style="text-align:left">${r.name}</td><td>${r.code}</td>`
+      + `<td>${n0(r.good)}</td><td>${n0(r.main)}</td><td>${n0(r.eng)}</td><td>${n0(r.faulty)}</td>`
+      + `<td>${n0(r.month)}</td><td>${r.cover==null?'—':whBadge(r.cover)}</td></tr>`).join('') +
+    '</table>';
+
+  document.getElementById('t_wh_eng').innerHTML =
+    '<table><tr><th style="text-align:left">Kỹ sư</th><th>Tổng</th><th>Tốt</th><th>Lỗi</th><th>% lỗi</th><th>Số mã</th></tr>' +
+    WH.eng.map(r=>`<tr><td style="text-align:left">${r.name}</td><td>${n0(r.total)}</td><td>${n0(r.good)}</td>`
+      + `<td>${n0(r.faulty)}</td><td>${pc(r.rate)}</td><td>${n0(r.codes)}</td></tr>`).join('') +
+    `<tr class="total"><td style="text-align:left">Tổng ${e.n} kỹ sư</td><td>${n0(e.total)}</td><td>${n0(e.good)}</td>`
+      + `<td>${n0(e.faulty)}</td><td>${pc(e.rate)}</td><td></td></tr></table>`;
+
+  const ep = WH.errParts || [];
+  document.getElementById('t_wh_err').innerHTML = ep.length
+    ? '<table><tr><th style="text-align:left">Mã lỗi</th><th style="text-align:left">Mô tả</th><th>Ticket</th><th>SL vật tư</th><th>SL/ticket</th><th style="text-align:left">Vật tư chính</th></tr>' +
+      ep.slice(0,20).map(r=>`<tr><td style="text-align:left">${r.err}</td><td style="text-align:left">${r.desc||'—'}</td>`
+        + `<td>${n0(r.tickets)}</td><td>${n0(r.qty)}</td><td>${r.perTicket}</td>`
+        + `<td style="text-align:left">${r.top.map(t=>`${t.name} (${t.qty})`).join('<br>')}</td></tr>`).join('') +
+      '</table>'
+    : '<div class="sub">Không đọc được file vật tư theo mã lỗi.</div>';
+
+  mk('c_wh_split', {type:'bar',
+    data:{labels:['Kho Main','29 kỹ sư'], datasets:[
+      {label:'Tốt', data:[m.good, e.good], backgroundColor:S[1]},
+      {label:'Lỗi', data:[m.faulty, e.faulty], backgroundColor:S[5]}]},
+    options:{maintainAspectRatio:false, plugins:{tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${n0(c.parsed.y)} đv`}}},
+      scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true}}}});
+
+  note.innerHTML = `ℹ <b>Phạm vi:</b> ${WH.meta.scopeNote} <b>Mã lỗi × vật tư:</b> ${WH.meta.errPartsNote}`
+    + ` Snapshot lúc ${WH.ts.replace('T',' ')} · đã lưu ${WH.snapshots} ngày.`;
 }
 function renderTiles(){
   const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
@@ -1144,24 +1229,29 @@ function renderTiles(){
   const sla = [].concat(MODE==='w'?D.slaEvcsW:D.slaEvcsM, MODE==='w'?D.slaBssW:D.slaBssM);
   const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
   const wk = D.weeks, sumWk = t => wk.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
-  const te = sumWk(D.trendEvcs), tb = sumWk(D.trendBss), trend = te.map((v,i)=> v + (tb[i]||0));
+  const te = sumWk(D.trendEvcs), tb = sumWk(D.trendBss);
   const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
   const T = [
-    {grp:'cls', title:'Phân loại EVCS', mini:['donut',cE,cEt], sub:`${n0(cEt.qty)} ticket · Undefined ${pc(undefShare(cE))}`},
-    {grp:'cls', title:'Phân loại BSS',  mini:['donut',cB,cBt], sub:`${n0(cBt.qty)} ticket · Undefined ${pc(undefShare(cB))}`},
+    {grp:'cls', title:'Phân loại EVCS', mini:['donut',cE,cEt], spark:te,
+     sub:`${n0(cEt.qty)} ticket · Undefined ${pc(undefShare(cE))} · xu hướng 7 tuần`},
+    {grp:'cls', title:'Phân loại BSS',  mini:['donut',cB,cBt], spark:tb,
+     sub:`${n0(cBt.qty)} ticket · Undefined ${pc(undefShare(cB))} · xu hướng 7 tuần`},
     {grp:'sla', title:'SLA / Overdue',  big:pc(settled?ovd/settled:0), sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()})`},
     {grp:'rc',  title:'Nguyên nhân lỗi (RC)', mini:['rc',rcE], sub:'Top 5 nhóm nguyên nhân EVCS'},
-    {grp:'trend', title:'Xu hướng ticket lỗi', mini:['line',wk,trend], sub:'7 tuần · loại trừ Disclaim'},
+    whTile(),
   ];
   const el = document.getElementById('tiles');
   el.innerHTML = T.map((t,i)=>{
     const inner = t.big!=null
       ? `<div class="big">${t.big}</div><div class="sub">${t.sub}</div>`
       : `<div class="cvmini"><canvas id="tile_${i}"></canvas></div><div class="sub">${t.sub}</div>`;
-    return `<div class="tile" data-grp="${t.grp}"><h4>${t.title}<span class="open-ico">bấm để xem ▸</span></h4>${inner}</div>`;
+    const spark = t.spark ? `<div class="trendline"><canvas id="trend_${i}"></canvas></div>` : '';
+    return `<div class="tile" data-grp="${t.grp}"><h4>${t.title}<span class="open-ico">bấm để xem ▸</span></h4>${inner}${spark}</div>`;
   }).join('');
   el.querySelectorAll('.tile').forEach(d=> d.onclick = ()=> openModal(d.dataset.grp));
-  T.forEach((t,i)=>{ if(!t.mini) return;
+  T.forEach((t,i)=>{
+    if(t.spark) miniLine('trend_'+i, wk, t.spark, true);
+    if(!t.mini) return;
     if(t.mini[0]==='donut') miniDonut('tile_'+i, t.mini[1], t.mini[2]);
     else if(t.mini[0]==='rc') miniRcBar('tile_'+i, t.mini[1]);
     else if(t.mini[0]==='line') miniLine('tile_'+i, t.mini[1], t.mini[2]);
@@ -1181,6 +1271,7 @@ function render(){
   document.querySelectorAll('.modeLbl').forEach(e=> e.textContent = mLbl());
   kpis();
   renderTiles();
+  renderWarehouse();
   renderWatch();
   clsBlock('c_cls_evcs','t_cls_evcs', MODE==='w'?D.clsEvcsW:D.clsEvcsM, MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total, 'clsEvcsSub');
   clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
