@@ -37047,6 +37047,290 @@ const REPORT_DATA = {
    "set_on": null
   }
  },
+ "actions": {
+  "rows": [
+   {
+    "error_code": "A0112",
+    "product_line": "BSS",
+    "root_cause_vi": "Đang phân tích (nháp — user điền)",
+    "root_cause_en": "Under analysis (draft — to be filled)",
+    "solution_vi": "Đang phân tích",
+    "solution_en": "Under analysis",
+    "solution_type": "hardware",
+    "status": "analyzing",
+    "owner": "",
+    "due_date": null,
+    "target_metric": "tickets_per_week",
+    "target_value": null,
+    "deployed_on": null,
+    "qty": 1374,
+    "prev": 1823,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     1094,
+     1823,
+     1374
+    ],
+    "missing_action": false
+   },
+   {
+    "error_code": "C6029",
+    "product_line": "BSS",
+    "qty": 1326,
+    "prev": 1351,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     208,
+     1351,
+     1326
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "C6030",
+    "product_line": "BSS",
+    "qty": 1065,
+    "prev": 1011,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     291,
+     1011,
+     1065
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "B6022",
+    "product_line": "BSS",
+    "qty": 787,
+    "prev": 534,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     253,
+     534,
+     787
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "C2405",
+    "product_line": "EVCS",
+    "qty": 436,
+    "prev": 445,
+    "series": [
+     216,
+     217,
+     256,
+     194,
+     280,
+     445,
+     436
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "A0101",
+    "product_line": "EVCS",
+    "qty": 357,
+    "prev": 331,
+    "series": [
+     165,
+     229,
+     410,
+     78,
+     111,
+     331,
+     357
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "C6100",
+    "product_line": "BSS",
+    "qty": 331,
+    "prev": 119,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     119,
+     331
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "B6029",
+    "product_line": "BSS",
+    "root_cause_vi": "Đang phân tích (nháp — user điền)",
+    "root_cause_en": "Under analysis (draft — to be filled)",
+    "solution_vi": "Đang phân tích",
+    "solution_en": "Under analysis",
+    "solution_type": "hardware",
+    "status": "analyzing",
+    "owner": "",
+    "due_date": null,
+    "target_metric": "tickets_per_week",
+    "target_value": null,
+    "deployed_on": null,
+    "qty": 312,
+    "prev": 1439,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     168,
+     1439,
+     312
+    ],
+    "missing_action": false
+   },
+   {
+    "error_code": "A0605",
+    "product_line": "BSS",
+    "qty": 282,
+    "prev": 171,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     242,
+     171,
+     282
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "B6000",
+    "product_line": "BSS",
+    "qty": 239,
+    "prev": 244,
+    "series": [
+     0,
+     0,
+     0,
+     0,
+     137,
+     244,
+     239
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "A0112",
+    "product_line": "EVCS",
+    "qty": 212,
+    "prev": 176,
+    "series": [
+     157,
+     239,
+     217,
+     210,
+     92,
+     176,
+     212
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "C0116",
+    "product_line": "EVCS",
+    "qty": 190,
+    "prev": 161,
+    "series": [
+     137,
+     157,
+     172,
+     136,
+     104,
+     161,
+     190
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "CONNECTION_LOST",
+    "product_line": "EVCS",
+    "qty": 176,
+    "prev": 425,
+    "series": [
+     100,
+     103,
+     124,
+     129,
+     98,
+     425,
+     176
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "C2006",
+    "product_line": "EVCS",
+    "qty": 136,
+    "prev": 170,
+    "series": [
+     139,
+     186,
+     149,
+     126,
+     115,
+     170,
+     136
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "D1403",
+    "product_line": "EVCS",
+    "qty": 121,
+    "prev": 150,
+    "series": [
+     174,
+     195,
+     160,
+     102,
+     99,
+     150,
+     121
+    ],
+    "missing_action": true
+   },
+   {
+    "error_code": "B0207",
+    "product_line": "EVCS",
+    "qty": 105,
+    "prev": 108,
+    "series": [
+     46,
+     42,
+     61,
+     49,
+     72,
+     108,
+     105
+    ],
+    "missing_action": true
+   }
+  ],
+  "alerts": [],
+  "cfgEmpty": false
+ },
  "disclaimAudit": {
   "EVCSW": {
    "Hạ tầng điện/mạng internet": {
@@ -43197,5 +43481,5 @@ const REPORT_DATA = {
   "source": "260717 Report W29 V3.xlsx"
  },
  "weekNote": "",
- "generatedAt": "2026-07-27 11:01"
+ "generatedAt": "2026-07-27 13:52"
 };
