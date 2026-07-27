@@ -37331,6 +37331,3515 @@ const REPORT_DATA = {
   "alerts": [],
   "cfgEmpty": false
  },
+ "modelErrors": {
+  "AC": {
+   "seg": "EVCS",
+   "total": 9570,
+   "win": 1318,
+   "week": 224,
+   "effN": 8845,
+   "recur": 0.4349,
+   "codes": [
+    {
+     "code": "A0101",
+     "qty": 563,
+     "hist": 1624,
+     "cur": 114,
+     "series": [
+      58,
+      60,
+      135,
+      30,
+      41,
+      125,
+      114
+     ],
+     "effN": 1299,
+     "recur": 0.5751,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 636,
+       "share": 0.391626,
+       "parts": 0.0,
+       "med": 21.4,
+       "effN": 536,
+       "recur": 0.5392
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 452,
+       "share": 0.278325,
+       "parts": 0.002212,
+       "med": 18.5,
+       "effN": 335,
+       "recur": 0.609
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 229,
+       "share": 0.14101,
+       "parts": 0.004367,
+       "med": 21.0,
+       "effN": 185,
+       "recur": 0.6541
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 209,
+       "share": 0.128695,
+       "parts": 0.0,
+       "med": 23.7,
+       "effN": 184,
+       "recur": 0.5707
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 30,
+       "share": 0.018473,
+       "parts": 0.0,
+       "med": 11.4,
+       "effN": 30,
+       "recur": 0.5667
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 20,
+       "share": 0.012315,
+       "parts": 0.0,
+       "med": 29.6,
+       "effN": 15,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 9,
+       "share": 0.005542,
+       "parts": 0.888889,
+       "med": 30.5,
+       "effN": 8,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 7,
+       "share": 0.00431,
+       "parts": 0.0,
+       "med": 32.4,
+       "effN": 6,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "B0207",
+     "qty": 226,
+     "hist": 716,
+     "cur": 38,
+     "series": [
+      24,
+      21,
+      38,
+      28,
+      35,
+      42,
+      38
+     ],
+     "effN": 563,
+     "recur": 0.2487,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 262,
+       "share": 0.365922,
+       "parts": 0.0,
+       "med": 31.2,
+       "effN": 219,
+       "recur": 0.21
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 211,
+       "share": 0.294693,
+       "parts": 0.0,
+       "med": 17.1,
+       "effN": 177,
+       "recur": 0.2599
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 104,
+       "share": 0.145251,
+       "parts": 0.0,
+       "med": 30.2,
+       "effN": 70,
+       "recur": 0.2429
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 92,
+       "share": 0.128492,
+       "parts": 0.0,
+       "med": 31.9,
+       "effN": 69,
+       "recur": 0.2754
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 17,
+       "share": 0.023743,
+       "parts": 0.0,
+       "med": 40.3,
+       "effN": 13,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 12,
+       "share": 0.01676,
+       "parts": 0.0,
+       "med": 29.2,
+       "effN": 10,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 5,
+       "share": 0.006983,
+       "parts": 0.0,
+       "med": 31.5,
+       "effN": 3,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 3,
+       "share": 0.00419,
+       "parts": 0.666667,
+       "med": 25.3,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 1,
+       "share": 0.001397,
+       "parts": 0.0,
+       "med": 35.6,
+       "effN": 1,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A2007",
+     "qty": 115,
+     "hist": 447,
+     "cur": 18,
+     "series": [
+      15,
+      15,
+      22,
+      7,
+      20,
+      18,
+      18
+     ],
+     "effN": 380,
+     "recur": 0.8211,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 177,
+       "share": 0.395973,
+       "parts": 0.033898,
+       "med": 20.0,
+       "effN": 154,
+       "recur": 0.8961
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 101,
+       "share": 0.225951,
+       "parts": 0.029703,
+       "med": 24.4,
+       "effN": 74,
+       "recur": 0.8378
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 80,
+       "share": 0.178971,
+       "parts": 0.0375,
+       "med": 33.3,
+       "effN": 76,
+       "recur": 0.8553
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 44,
+       "share": 0.098434,
+       "parts": 0.75,
+       "med": 45.1,
+       "effN": 38,
+       "recur": 0.4474
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 17,
+       "share": 0.038031,
+       "parts": 0.0,
+       "med": 41.4,
+       "effN": 16,
+       "recur": null
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 10,
+       "share": 0.022371,
+       "parts": 0.0,
+       "med": 39.7,
+       "effN": 9,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 8,
+       "share": 0.017897,
+       "parts": 0.0,
+       "med": 29.0,
+       "effN": 7,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "CONNECTION_LOST",
+     "qty": 105,
+     "hist": 1853,
+     "cur": 16,
+     "series": [
+      5,
+      6,
+      47,
+      10,
+      3,
+      18,
+      16
+     ],
+     "effN": 1804,
+     "recur": 0.3154,
+     "sols": [
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 611,
+       "share": 0.329736,
+       "parts": 0.006547,
+       "med": 13.6,
+       "effN": 603,
+       "recur": 0.2935
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 547,
+       "share": 0.295197,
+       "parts": 0.023766,
+       "med": 28.9,
+       "effN": 539,
+       "recur": 0.3599
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 305,
+       "share": 0.164598,
+       "parts": 0.013115,
+       "med": 39.3,
+       "effN": 299,
+       "recur": 0.2843
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 211,
+       "share": 0.113869,
+       "parts": 0.0,
+       "med": 20.7,
+       "effN": 202,
+       "recur": 0.2723
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 87,
+       "share": 0.046951,
+       "parts": 0.011494,
+       "med": 21.9,
+       "effN": 86,
+       "recur": 0.5116
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 39,
+       "share": 0.021047,
+       "parts": 0.0,
+       "med": 41.5,
+       "effN": 37,
+       "recur": 0.2432
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 31,
+       "share": 0.01673,
+       "parts": 0.903226,
+       "med": 41.3,
+       "effN": 26,
+       "recur": 0.1154
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 12,
+       "share": 0.006476,
+       "parts": 0.0,
+       "med": 34.1,
+       "effN": 9,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 3,
+       "share": 0.001619,
+       "parts": 0.0,
+       "med": 46.8,
+       "effN": 3,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A0113",
+     "qty": 85,
+     "hist": 317,
+     "cur": 14,
+     "series": [
+      24,
+      8,
+      13,
+      15,
+      5,
+      6,
+      14
+     ],
+     "effN": 276,
+     "recur": 0.3043,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 116,
+       "share": 0.365931,
+       "parts": 0.017241,
+       "med": 15.5,
+       "effN": 103,
+       "recur": 0.3495
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 66,
+       "share": 0.208202,
+       "parts": 0.0,
+       "med": 12.8,
+       "effN": 57,
+       "recur": 0.3509
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 61,
+       "share": 0.192429,
+       "parts": 0.032787,
+       "med": 35.4,
+       "effN": 50,
+       "recur": 0.16
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 25,
+       "share": 0.078864,
+       "parts": 0.0,
+       "med": 36.7,
+       "effN": 24,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 19,
+       "share": 0.059937,
+       "parts": 0.0,
+       "med": 33.1,
+       "effN": 19,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 17,
+       "share": 0.053628,
+       "parts": 0.0,
+       "med": 13.6,
+       "effN": 17,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 9,
+       "share": 0.028391,
+       "parts": 0.666667,
+       "med": 25.7,
+       "effN": 4,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 2,
+       "share": 0.006309,
+       "parts": 0.0,
+       "med": 15.0,
+       "effN": 2,
+       "recur": null
+      }
+     ]
+    }
+   ]
+  },
+  "Core": {
+   "seg": "EVCS",
+   "total": 17273,
+   "win": 3888,
+   "week": 622,
+   "effN": 14929,
+   "recur": 0.6669,
+   "codes": [
+    {
+     "code": "C2405",
+     "qty": 651,
+     "hist": 3122,
+     "cur": 126,
+     "series": [
+      72,
+      75,
+      95,
+      62,
+      90,
+      131,
+      126
+     ],
+     "effN": 2695,
+     "recur": 0.856,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 987,
+       "share": 0.316143,
+       "parts": 0.0,
+       "med": 36.3,
+       "effN": 893,
+       "recur": 0.8331
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 745,
+       "share": 0.238629,
+       "parts": 0.0,
+       "med": 22.3,
+       "effN": 581,
+       "recur": 0.7969
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 686,
+       "share": 0.219731,
+       "parts": 0.0,
+       "med": 21.4,
+       "effN": 638,
+       "recur": 0.9373
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 517,
+       "share": 0.165599,
+       "parts": 0.0,
+       "med": 21.5,
+       "effN": 444,
+       "recur": 0.8491
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 47,
+       "share": 0.015054,
+       "parts": 0.0,
+       "med": 28.4,
+       "effN": 31,
+       "recur": 0.9032
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 46,
+       "share": 0.014734,
+       "parts": 0.0,
+       "med": 42.1,
+       "effN": 39,
+       "recur": 0.9231
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 40,
+       "share": 0.012812,
+       "parts": 0.0,
+       "med": 21.4,
+       "effN": 39,
+       "recur": 0.8462
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 20,
+       "share": 0.006406,
+       "parts": 0.55,
+       "med": 33.7,
+       "effN": 18,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 10,
+       "share": 0.003203,
+       "parts": 0.0,
+       "med": 5.0,
+       "effN": 8,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C0116",
+     "qty": 458,
+     "hist": 2774,
+     "cur": 71,
+     "series": [
+      62,
+      70,
+      82,
+      57,
+      46,
+      70,
+      71
+     ],
+     "effN": 2512,
+     "recur": 0.922,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 1393,
+       "share": 0.502163,
+       "parts": 0.003589,
+       "med": 20.2,
+       "effN": 1366,
+       "recur": 0.978
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 264,
+       "share": 0.095169,
+       "parts": 0.003788,
+       "med": 25.4,
+       "effN": 213,
+       "recur": 0.8451
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 228,
+       "share": 0.082192,
+       "parts": 0.776316,
+       "med": 41.6,
+       "effN": 189,
+       "recur": 0.7725
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 214,
+       "share": 0.077145,
+       "parts": 0.023364,
+       "med": 26.9,
+       "effN": 160,
+       "recur": 0.8812
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 210,
+       "share": 0.075703,
+       "parts": 0.02381,
+       "med": 19.9,
+       "effN": 171,
+       "recur": 0.8538
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 199,
+       "share": 0.071738,
+       "parts": 0.0,
+       "med": 36.0,
+       "effN": 196,
+       "recur": 0.9643
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 132,
+       "share": 0.047585,
+       "parts": 0.0,
+       "med": 18.5,
+       "effN": 109,
+       "recur": 0.7339
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 46,
+       "share": 0.016583,
+       "parts": 0.0,
+       "med": 1.9,
+       "effN": 46,
+       "recur": 0.913
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 33,
+       "share": 0.011896,
+       "parts": 0.0,
+       "med": 23.6,
+       "effN": 20,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C0407",
+     "qty": 327,
+     "hist": 1746,
+     "cur": 35,
+     "series": [
+      56,
+      57,
+      86,
+      27,
+      29,
+      37,
+      35
+     ],
+     "effN": 1599,
+     "recur": 0.9043,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 690,
+       "share": 0.395189,
+       "parts": 0.002899,
+       "med": 20.0,
+       "effN": 682,
+       "recur": 0.9692
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 290,
+       "share": 0.166094,
+       "parts": 0.003448,
+       "med": 21.1,
+       "effN": 242,
+       "recur": 0.8306
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 240,
+       "share": 0.137457,
+       "parts": 0.0,
+       "med": 15.1,
+       "effN": 215,
+       "recur": 0.8651
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 179,
+       "share": 0.10252,
+       "parts": 0.027933,
+       "med": 16.7,
+       "effN": 152,
+       "recur": 0.8947
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 157,
+       "share": 0.08992,
+       "parts": 0.0,
+       "med": 18.3,
+       "effN": 133,
+       "recur": 0.6917
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 106,
+       "share": 0.06071,
+       "parts": 0.0,
+       "med": 36.6,
+       "effN": 104,
+       "recur": 0.9904
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 35,
+       "share": 0.020046,
+       "parts": 0.571429,
+       "med": 42.0,
+       "effN": 31,
+       "recur": 0.9355
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 25,
+       "share": 0.014318,
+       "parts": 0.0,
+       "med": 2.5,
+       "effN": 22,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 3,
+       "share": 0.001718,
+       "parts": 0.0,
+       "med": 9.5,
+       "effN": 2,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "D1403",
+     "qty": 324,
+     "hist": 359,
+     "cur": 56,
+     "series": [
+      50,
+      45,
+      53,
+      31,
+      36,
+      53,
+      56
+     ],
+     "effN": 166,
+     "recur": 0.5663,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 96,
+       "share": 0.267409,
+       "parts": 0.0,
+       "med": 19.5,
+       "effN": 48,
+       "recur": 0.7292
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 91,
+       "share": 0.253482,
+       "parts": 0.010989,
+       "med": 16.0,
+       "effN": 39,
+       "recur": 0.6667
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 69,
+       "share": 0.192201,
+       "parts": 0.768116,
+       "med": 29.9,
+       "effN": 34,
+       "recur": 0.2647
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 46,
+       "share": 0.128134,
+       "parts": 0.021739,
+       "med": 9.3,
+       "effN": 16,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 41,
+       "share": 0.114206,
+       "parts": 0.146341,
+       "med": 28.1,
+       "effN": 22,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 6,
+       "share": 0.016713,
+       "parts": 0.0,
+       "med": 28.0,
+       "effN": 3,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 4,
+       "share": 0.011142,
+       "parts": 0.0,
+       "med": 21.6,
+       "effN": 2,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 2,
+       "share": 0.005571,
+       "parts": 0.0,
+       "med": 26.7,
+       "effN": 2,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C0410",
+     "qty": 278,
+     "hist": 1201,
+     "cur": 49,
+     "series": [
+      40,
+      46,
+      29,
+      28,
+      29,
+      57,
+      49
+     ],
+     "effN": 1029,
+     "recur": 0.6297,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 354,
+       "share": 0.294754,
+       "parts": 0.022599,
+       "med": 23.7,
+       "effN": 321,
+       "recur": 0.6822
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 271,
+       "share": 0.225645,
+       "parts": 0.081181,
+       "med": 18.0,
+       "effN": 249,
+       "recur": 0.7751
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 210,
+       "share": 0.174854,
+       "parts": 0.014286,
+       "med": 21.7,
+       "effN": 160,
+       "recur": 0.6
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 179,
+       "share": 0.149042,
+       "parts": 0.01676,
+       "med": 13.9,
+       "effN": 154,
+       "recur": 0.6299
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 153,
+       "share": 0.127394,
+       "parts": 0.895425,
+       "med": 27.7,
+       "effN": 125,
+       "recur": 0.208
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 8,
+       "share": 0.006661,
+       "parts": 0.125,
+       "med": 24.6,
+       "effN": 8,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 7,
+       "share": 0.005828,
+       "parts": 0.0,
+       "med": 34.1,
+       "effN": 4,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 6,
+       "share": 0.004996,
+       "parts": 0.166667,
+       "med": 65.7,
+       "effN": 5,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 4,
+       "share": 0.003331,
+       "parts": 0.0,
+       "med": 57.9,
+       "effN": 3,
+       "recur": null
+      }
+     ]
+    }
+   ]
+  },
+  "Coremini": {
+   "seg": "EVCS",
+   "total": 21075,
+   "win": 5567,
+   "week": 804,
+   "effN": 17876,
+   "recur": 0.5451,
+   "codes": [
+    {
+     "code": "C2006",
+     "qty": 892,
+     "hist": 1106,
+     "cur": 123,
+     "series": [
+      120,
+      167,
+      134,
+      103,
+      103,
+      142,
+      123
+     ],
+     "effN": 593,
+     "recur": 0.855,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 567,
+       "share": 0.512658,
+       "parts": 0.0,
+       "med": 26.9,
+       "effN": 318,
+       "recur": 0.9277
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 181,
+       "share": 0.163653,
+       "parts": 0.022099,
+       "med": 24.7,
+       "effN": 85,
+       "recur": 0.9059
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 114,
+       "share": 0.103074,
+       "parts": 0.850877,
+       "med": 41.7,
+       "effN": 65,
+       "recur": 0.3385
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 86,
+       "share": 0.077758,
+       "parts": 0.023256,
+       "med": 24.6,
+       "effN": 46,
+       "recur": 0.9348
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 64,
+       "share": 0.057866,
+       "parts": 0.03125,
+       "med": 26.5,
+       "effN": 25,
+       "recur": 0.88
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 30,
+       "share": 0.027125,
+       "parts": 0.0,
+       "med": 22.3,
+       "effN": 17,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 23,
+       "share": 0.020796,
+       "parts": 0.0,
+       "med": 35.8,
+       "effN": 16,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 21,
+       "share": 0.018987,
+       "parts": 0.0,
+       "med": 39.1,
+       "effN": 16,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 6,
+       "share": 0.005425,
+       "parts": 0.0,
+       "med": 16.5,
+       "effN": 4,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C2405",
+     "qty": 707,
+     "hist": 2848,
+     "cur": 140,
+     "series": [
+      69,
+      75,
+      86,
+      63,
+      111,
+      163,
+      140
+     ],
+     "effN": 2340,
+     "recur": 0.812,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 765,
+       "share": 0.26861,
+       "parts": 0.0,
+       "med": 25.4,
+       "effN": 549,
+       "recur": 0.7505
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 755,
+       "share": 0.265098,
+       "parts": 0.001325,
+       "med": 29.0,
+       "effN": 678,
+       "recur": 0.7861
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 566,
+       "share": 0.198736,
+       "parts": 0.001767,
+       "med": 15.4,
+       "effN": 501,
+       "recur": 0.9062
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 539,
+       "share": 0.189256,
+       "parts": 0.0,
+       "med": 21.6,
+       "effN": 453,
+       "recur": 0.8234
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 72,
+       "share": 0.025281,
+       "parts": 0.0,
+       "med": 29.1,
+       "effN": 47,
+       "recur": 0.7234
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 62,
+       "share": 0.02177,
+       "parts": 0.0,
+       "med": 22.6,
+       "effN": 60,
+       "recur": 0.85
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 34,
+       "share": 0.011938,
+       "parts": 0.0,
+       "med": 43.6,
+       "effN": 30,
+       "recur": 0.8333
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 14,
+       "share": 0.004916,
+       "parts": 0.642857,
+       "med": 32.6,
+       "effN": 11,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 13,
+       "share": 0.004565,
+       "parts": 0.0,
+       "med": 15.6,
+       "effN": 9,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "D1403",
+     "qty": 675,
+     "hist": 775,
+     "cur": 64,
+     "series": [
+      126,
+      150,
+      106,
+      70,
+      62,
+      97,
+      64
+     ],
+     "effN": 450,
+     "recur": 0.6444,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 201,
+       "share": 0.259355,
+       "parts": 0.024876,
+       "med": 28.9,
+       "effN": 117,
+       "recur": 0.7863
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 154,
+       "share": 0.19871,
+       "parts": 0.811688,
+       "med": 32.0,
+       "effN": 97,
+       "recur": 0.3093
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 135,
+       "share": 0.174194,
+       "parts": 0.02963,
+       "med": 21.7,
+       "effN": 92,
+       "recur": 0.7826
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 122,
+       "share": 0.157419,
+       "parts": 0.106557,
+       "med": 25.9,
+       "effN": 75,
+       "recur": 0.64
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 115,
+       "share": 0.148387,
+       "parts": 0.06087,
+       "med": 20.4,
+       "effN": 51,
+       "recur": 0.7059
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 10,
+       "share": 0.012903,
+       "parts": 0.0,
+       "med": 20.7,
+       "effN": 5,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 9,
+       "share": 0.011613,
+       "parts": 0.0,
+       "med": 15.4,
+       "effN": 6,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 7,
+       "share": 0.009032,
+       "parts": 0.0,
+       "med": 15.8,
+       "effN": 6,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 7,
+       "share": 0.009032,
+       "parts": 0.0,
+       "med": 19.4,
+       "effN": 1,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C0116",
+     "qty": 557,
+     "hist": 2673,
+     "cur": 115,
+     "series": [
+      65,
+      78,
+      82,
+      76,
+      56,
+      85,
+      115
+     ],
+     "effN": 2318,
+     "recur": 0.8538,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 1095,
+       "share": 0.409652,
+       "parts": 0.015525,
+       "med": 17.7,
+       "effN": 1061,
+       "recur": 0.9519
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 394,
+       "share": 0.1474,
+       "parts": 0.030457,
+       "med": 30.9,
+       "effN": 321,
+       "recur": 0.8754
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 342,
+       "share": 0.127946,
+       "parts": 0.859649,
+       "med": 35.3,
+       "effN": 281,
+       "recur": 0.516
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 320,
+       "share": 0.119716,
+       "parts": 0.015625,
+       "med": 34.1,
+       "effN": 235,
+       "recur": 0.7915
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 213,
+       "share": 0.079686,
+       "parts": 0.0,
+       "med": 2.2,
+       "effN": 213,
+       "recur": 0.9718
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 160,
+       "share": 0.059858,
+       "parts": 0.075,
+       "med": 28.0,
+       "effN": 105,
+       "recur": 0.7905
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 48,
+       "share": 0.017957,
+       "parts": 0.0,
+       "med": 21.6,
+       "effN": 34,
+       "recur": 0.8529
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 42,
+       "share": 0.015713,
+       "parts": 0.02381,
+       "med": 39.5,
+       "effN": 39,
+       "recur": 0.5641
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 41,
+       "share": 0.015339,
+       "parts": 0.0,
+       "med": 35.5,
+       "effN": 27,
+       "recur": 0.5926
+      }
+     ]
+    },
+    {
+     "code": "A0112",
+     "qty": 457,
+     "hist": 4141,
+     "cur": 58,
+     "series": [
+      59,
+      88,
+      81,
+      71,
+      43,
+      57,
+      58
+     ],
+     "effN": 3895,
+     "recur": 0.3384,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 1293,
+       "share": 0.312243,
+       "parts": 0.001547,
+       "med": 31.4,
+       "effN": 1218,
+       "recur": 0.3309
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 1038,
+       "share": 0.250664,
+       "parts": 0.001927,
+       "med": 13.4,
+       "effN": 974,
+       "recur": 0.2505
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 620,
+       "share": 0.149722,
+       "parts": 0.0,
+       "med": 23.3,
+       "effN": 617,
+       "recur": 0.3566
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 595,
+       "share": 0.143685,
+       "parts": 0.011765,
+       "med": 11.9,
+       "effN": 546,
+       "recur": 0.5458
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 442,
+       "share": 0.106738,
+       "parts": 0.002262,
+       "med": 17.2,
+       "effN": 405,
+       "recur": 0.2988
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 87,
+       "share": 0.021009,
+       "parts": 0.0,
+       "med": 13.1,
+       "effN": 85,
+       "recur": 0.1882
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 31,
+       "share": 0.007486,
+       "parts": 0.677419,
+       "med": 11.3,
+       "effN": 26,
+       "recur": 0.1923
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 15,
+       "share": 0.003622,
+       "parts": 0.0,
+       "med": 42.9,
+       "effN": 14,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 14,
+       "share": 0.003381,
+       "parts": 0.0,
+       "med": 4.6,
+       "effN": 9,
+       "recur": null
+      }
+     ]
+    }
+   ]
+  },
+  "Kern": {
+   "seg": "EVCS",
+   "total": 18132,
+   "win": 3574,
+   "week": 584,
+   "effN": 16040,
+   "recur": 0.4805,
+   "codes": [
+    {
+     "code": "C2405",
+     "qty": 696,
+     "hist": 2883,
+     "cur": 170,
+     "series": [
+      77,
+      70,
+      75,
+      69,
+      84,
+      151,
+      170
+     ],
+     "effN": 2379,
+     "recur": 0.7953,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 841,
+       "share": 0.29171,
+       "parts": 0.0,
+       "med": 28.8,
+       "effN": 761,
+       "recur": 0.8003
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 658,
+       "share": 0.228234,
+       "parts": 0.00152,
+       "med": 22.1,
+       "effN": 477,
+       "recur": 0.74
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 607,
+       "share": 0.210545,
+       "parts": 0.001647,
+       "med": 19.7,
+       "effN": 484,
+       "recur": 0.7459
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 591,
+       "share": 0.204995,
+       "parts": 0.001692,
+       "med": 16.0,
+       "effN": 528,
+       "recur": 0.8939
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 53,
+       "share": 0.018384,
+       "parts": 0.0,
+       "med": 23.1,
+       "effN": 49,
+       "recur": 0.9388
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 44,
+       "share": 0.015262,
+       "parts": 0.0,
+       "med": 22.7,
+       "effN": 30,
+       "recur": 0.6
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 31,
+       "share": 0.010753,
+       "parts": 0.0,
+       "med": 39.6,
+       "effN": 28,
+       "recur": 0.7143
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 16,
+       "share": 0.00555,
+       "parts": 0.625,
+       "med": 41.4,
+       "effN": 13,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 10,
+       "share": 0.003469,
+       "parts": 0.0,
+       "med": 22.6,
+       "effN": 8,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A0112",
+     "qty": 582,
+     "hist": 3913,
+     "cur": 99,
+     "series": [
+      65,
+      112,
+      98,
+      93,
+      29,
+      86,
+      99
+     ],
+     "effN": 3583,
+     "recur": 0.3857,
+     "sols": [
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 1210,
+       "share": 0.309226,
+       "parts": 0.003306,
+       "med": 11.8,
+       "effN": 1106,
+       "recur": 0.3264
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 1140,
+       "share": 0.291337,
+       "parts": 0.000877,
+       "med": 19.7,
+       "effN": 1054,
+       "recur": 0.3653
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 521,
+       "share": 0.133146,
+       "parts": 0.009597,
+       "med": 5.9,
+       "effN": 474,
+       "recur": 0.597
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 452,
+       "share": 0.115512,
+       "parts": 0.0,
+       "med": 18.5,
+       "effN": 388,
+       "recur": 0.3247
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 446,
+       "share": 0.113979,
+       "parts": 0.0,
+       "med": 26.7,
+       "effN": 441,
+       "recur": 0.4263
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 77,
+       "share": 0.019678,
+       "parts": 0.0,
+       "med": 14.1,
+       "effN": 68,
+       "recur": 0.2206
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 33,
+       "share": 0.008433,
+       "parts": 0.0,
+       "med": 41.3,
+       "effN": 31,
+       "recur": 0.4194
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 14,
+       "share": 0.003578,
+       "parts": 0.714286,
+       "med": 24.2,
+       "effN": 13,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 10,
+       "share": 0.002556,
+       "parts": 0.0,
+       "med": 4.2,
+       "effN": 8,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A0401",
+     "qty": 539,
+     "hist": 1967,
+     "cur": 38,
+     "series": [
+      97,
+      115,
+      111,
+      87,
+      58,
+      33,
+      38
+     ],
+     "effN": 1717,
+     "recur": 0.2796,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 782,
+       "share": 0.39756,
+       "parts": 0.001279,
+       "med": 21.5,
+       "effN": 667,
+       "recur": 0.2489
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 528,
+       "share": 0.268429,
+       "parts": 0.001894,
+       "med": 35.0,
+       "effN": 490,
+       "recur": 0.249
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 395,
+       "share": 0.200813,
+       "parts": 0.0,
+       "med": 20.5,
+       "effN": 340,
+       "recur": 0.2529
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 161,
+       "share": 0.081851,
+       "parts": 0.0,
+       "med": 19.8,
+       "effN": 142,
+       "recur": 0.5986
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 31,
+       "share": 0.01576,
+       "parts": 0.0,
+       "med": 26.6,
+       "effN": 30,
+       "recur": 0.2333
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 27,
+       "share": 0.013726,
+       "parts": 0.0,
+       "med": 22.1,
+       "effN": 18,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 13,
+       "share": 0.006609,
+       "parts": 0.0,
+       "med": 23.7,
+       "effN": 13,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 11,
+       "share": 0.005592,
+       "parts": 0.0,
+       "med": 47.9,
+       "effN": 11,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 9,
+       "share": 0.004575,
+       "parts": 0.666667,
+       "med": 47.1,
+       "effN": 6,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A0101",
+     "qty": 272,
+     "hist": 1149,
+     "cur": 63,
+     "series": [
+      33,
+      41,
+      75,
+      4,
+      11,
+      45,
+      63
+     ],
+     "effN": 1014,
+     "recur": 0.7367,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 533,
+       "share": 0.463882,
+       "parts": 0.0,
+       "med": 10.1,
+       "effN": 484,
+       "recur": 0.7851
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 219,
+       "share": 0.190601,
+       "parts": 0.0,
+       "med": 20.4,
+       "effN": 186,
+       "recur": 0.7473
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 209,
+       "share": 0.181897,
+       "parts": 0.0,
+       "med": 13.9,
+       "effN": 176,
+       "recur": 0.7216
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 89,
+       "share": 0.077459,
+       "parts": 0.0,
+       "med": 27.6,
+       "effN": 84,
+       "recur": 0.3214
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 70,
+       "share": 0.060923,
+       "parts": 0.0,
+       "med": 17.6,
+       "effN": 68,
+       "recur": 0.8971
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 12,
+       "share": 0.010444,
+       "parts": 0.0,
+       "med": 20.4,
+       "effN": 12,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 4,
+       "share": 0.003481,
+       "parts": 0.0,
+       "med": 14.7,
+       "effN": 2,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A0302",
+     "qty": 193,
+     "hist": 1436,
+     "cur": 39,
+     "series": [
+      24,
+      16,
+      23,
+      14,
+      39,
+      38,
+      39
+     ],
+     "effN": 1300,
+     "recur": 0.5331,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 455,
+       "share": 0.316852,
+       "parts": 0.002198,
+       "med": 28.8,
+       "effN": 438,
+       "recur": 0.4543
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 384,
+       "share": 0.267409,
+       "parts": 0.015625,
+       "med": 16.3,
+       "effN": 349,
+       "recur": 0.7479
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 278,
+       "share": 0.193593,
+       "parts": 0.014388,
+       "med": 19.1,
+       "effN": 248,
+       "recur": 0.4234
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 202,
+       "share": 0.140669,
+       "parts": 0.0,
+       "med": 29.8,
+       "effN": 168,
+       "recur": 0.3929
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 36,
+       "share": 0.02507,
+       "parts": 0.0,
+       "med": 17.0,
+       "effN": 36,
+       "recur": 0.7778
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 32,
+       "share": 0.022284,
+       "parts": 0.78125,
+       "med": 41.3,
+       "effN": 23,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 25,
+       "share": 0.017409,
+       "parts": 0.0,
+       "med": 42.0,
+       "effN": 23,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 15,
+       "share": 0.010446,
+       "parts": 0.0,
+       "med": 37.7,
+       "effN": 12,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 4,
+       "share": 0.002786,
+       "parts": 0.0,
+       "med": 15.0,
+       "effN": 2,
+       "recur": null
+      }
+     ]
+    }
+   ]
+  },
+  "Socket": {
+   "seg": "EVCS",
+   "total": 6007,
+   "win": 1730,
+   "week": 327,
+   "effN": 4861,
+   "recur": 0.5493,
+   "codes": [
+    {
+     "code": "A0101",
+     "qty": 841,
+     "hist": 3128,
+     "cur": 179,
+     "series": [
+      75,
+      128,
+      197,
+      44,
+      59,
+      159,
+      179
+     ],
+     "effN": 2652,
+     "recur": 0.7606,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 1021,
+       "share": 0.326407,
+       "parts": 0.001959,
+       "med": 19.2,
+       "effN": 824,
+       "recur": 0.7488
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 661,
+       "share": 0.211317,
+       "parts": 0.001513,
+       "med": 17.5,
+       "effN": 579,
+       "recur": 0.7565
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 605,
+       "share": 0.193414,
+       "parts": 0.0,
+       "med": 20.6,
+       "effN": 523,
+       "recur": 0.7878
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 476,
+       "share": 0.152174,
+       "parts": 0.002101,
+       "med": 21.0,
+       "effN": 430,
+       "recur": 0.9279
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 245,
+       "share": 0.078325,
+       "parts": 0.0,
+       "med": 33.6,
+       "effN": 212,
+       "recur": 0.4198
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 43,
+       "share": 0.013747,
+       "parts": 0.023256,
+       "med": 5.2,
+       "effN": 43,
+       "recur": 0.814
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 25,
+       "share": 0.007992,
+       "parts": 0.0,
+       "med": 19.3,
+       "effN": 18,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 7,
+       "share": 0.002238,
+       "parts": 0.0,
+       "med": 45.4,
+       "effN": 7,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 4,
+       "share": 0.001279,
+       "parts": 0.0,
+       "med": 38.9,
+       "effN": 3,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "CONNECTION_LOST",
+     "qty": 726,
+     "hist": 2119,
+     "cur": 123,
+     "series": [
+      51,
+      56,
+      57,
+      61,
+      43,
+      335,
+      123
+     ],
+     "effN": 1545,
+     "recur": 0.3036,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 527,
+       "share": 0.248702,
+       "parts": 0.0,
+       "med": 33.5,
+       "effN": 392,
+       "recur": 0.2883
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 485,
+       "share": 0.228882,
+       "parts": 0.008247,
+       "med": 20.9,
+       "effN": 378,
+       "recur": 0.3069
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 441,
+       "share": 0.208117,
+       "parts": 0.002268,
+       "med": 41.3,
+       "effN": 378,
+       "recur": 0.2963
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 260,
+       "share": 0.122699,
+       "parts": 0.023077,
+       "med": 30.6,
+       "effN": 160,
+       "recur": 0.375
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 167,
+       "share": 0.078811,
+       "parts": 0.005988,
+       "med": 32.8,
+       "effN": 95,
+       "recur": 0.2947
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 84,
+       "share": 0.039641,
+       "parts": 0.0,
+       "med": 23.3,
+       "effN": 72,
+       "recur": 0.3056
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 67,
+       "share": 0.031619,
+       "parts": 0.0,
+       "med": 16.6,
+       "effN": 35,
+       "recur": 0.3714
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 58,
+       "share": 0.027371,
+       "parts": 0.62069,
+       "med": 42.5,
+       "effN": 32,
+       "recur": 0.0938
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 5,
+       "share": 0.00236,
+       "parts": 0.0,
+       "med": 19.3,
+       "effN": 3,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "B0207",
+     "qty": 79,
+     "hist": 128,
+     "cur": 22,
+     "series": [
+      4,
+      4,
+      5,
+      8,
+      18,
+      18,
+      22
+     ],
+     "effN": 60,
+     "recur": 0.4,
+     "sols": [
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 40,
+       "share": 0.3125,
+       "parts": 0.0,
+       "med": 21.0,
+       "effN": 25,
+       "recur": 0.44
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 33,
+       "share": 0.257812,
+       "parts": 0.0,
+       "med": 27.7,
+       "effN": 20,
+       "recur": null
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 22,
+       "share": 0.171875,
+       "parts": 0.0,
+       "med": 26.6,
+       "effN": 9,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 20,
+       "share": 0.15625,
+       "parts": 0.05,
+       "med": 22.8,
+       "effN": 3,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 6,
+       "share": 0.046875,
+       "parts": 0.0,
+       "med": 63.0,
+       "effN": 2,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 2,
+       "share": 0.015625,
+       "parts": 0.5,
+       "med": 125.8,
+       "effN": 1,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "EC0014",
+     "qty": 44,
+     "hist": 229,
+     "cur": 2,
+     "series": [
+      20,
+      16,
+      2,
+      1,
+      1,
+      2,
+      2
+     ],
+     "effN": 223,
+     "recur": 0.1794,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 74,
+       "share": 0.323144,
+       "parts": 0.0,
+       "med": 47.2,
+       "effN": 73,
+       "recur": 0.2877
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 49,
+       "share": 0.213974,
+       "parts": 0.061224,
+       "med": 40.8,
+       "effN": 49,
+       "recur": 0.1837
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 33,
+       "share": 0.144105,
+       "parts": 0.0,
+       "med": 45.3,
+       "effN": 32,
+       "recur": 0.0625
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 33,
+       "share": 0.144105,
+       "parts": 0.0,
+       "med": 37.7,
+       "effN": 33,
+       "recur": 0.1212
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 22,
+       "share": 0.09607,
+       "parts": 0.0,
+       "med": 47.1,
+       "effN": 21,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 11,
+       "share": 0.048035,
+       "parts": 0.545455,
+       "med": 47.2,
+       "effN": 8,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 4,
+       "share": 0.017467,
+       "parts": 0.0,
+       "med": 48.0,
+       "effN": 4,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 2,
+       "share": 0.008734,
+       "parts": 0.0,
+       "med": 33.1,
+       "effN": 2,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A0106",
+     "qty": 12,
+     "hist": 255,
+     "cur": 1,
+     "series": [
+      1,
+      1,
+      0,
+      2,
+      1,
+      6,
+      1
+     ],
+     "effN": 245,
+     "recur": 0.3265,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 77,
+       "share": 0.301961,
+       "parts": 0.0,
+       "med": 18.5,
+       "effN": 74,
+       "recur": 0.5541
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 67,
+       "share": 0.262745,
+       "parts": 0.0,
+       "med": 35.6,
+       "effN": 66,
+       "recur": 0.3788
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 44,
+       "share": 0.172549,
+       "parts": 0.0,
+       "med": 15.4,
+       "effN": 41,
+       "recur": 0.122
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 35,
+       "share": 0.137255,
+       "parts": 0.0,
+       "med": 20.3,
+       "effN": 32,
+       "recur": 0.2188
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 28,
+       "share": 0.109804,
+       "parts": 0.0,
+       "med": 35.4,
+       "effN": 28,
+       "recur": 0.0714
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 3,
+       "share": 0.011765,
+       "parts": 1.0,
+       "med": 57.6,
+       "effN": 3,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 1,
+       "share": 0.003922,
+       "parts": 0.0,
+       "med": 3.3,
+       "effN": 1,
+       "recur": null
+      }
+     ]
+    }
+   ]
+  },
+  "BSS-06": {
+   "seg": "BSS",
+   "total": 22834,
+   "win": 18919,
+   "week": 5535,
+   "effN": 6412,
+   "recur": 0.2804,
+   "codes": [
+    {
+     "code": "B6029",
+     "qty": 3648,
+     "hist": 5814,
+     "cur": 299,
+     "series": [
+      431,
+      417,
+      367,
+      371,
+      410,
+      1353,
+      299
+     ],
+     "effN": 3300,
+     "recur": 0.347,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 1840,
+       "share": 0.316477,
+       "parts": 0.0125,
+       "med": 38.5,
+       "effN": 1240,
+       "recur": 0.3524
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 1055,
+       "share": 0.181459,
+       "parts": 0.120379,
+       "med": 33.3,
+       "effN": 557,
+       "recur": 0.3914
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 926,
+       "share": 0.159271,
+       "parts": 0.12095,
+       "med": 44.2,
+       "effN": 515,
+       "recur": 0.3165
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 569,
+       "share": 0.097867,
+       "parts": 0.043937,
+       "med": 44.0,
+       "effN": 274,
+       "recur": 0.3942
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 294,
+       "share": 0.050568,
+       "parts": 0.0,
+       "med": 70.4,
+       "effN": 240,
+       "recur": 0.3417
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 284,
+       "share": 0.048848,
+       "parts": 0.799296,
+       "med": 21.6,
+       "effN": 128,
+       "recur": 0.4844
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 197,
+       "share": 0.033884,
+       "parts": 0.050761,
+       "med": 41.4,
+       "effN": 138,
+       "recur": 0.2391
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 151,
+       "share": 0.025972,
+       "parts": 0.02649,
+       "med": 27.9,
+       "effN": 60,
+       "recur": 0.25
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 114,
+       "share": 0.019608,
+       "parts": 0.0,
+       "med": 47.0,
+       "effN": 43,
+       "recur": 0.2558
+      }
+     ]
+    },
+    {
+     "code": "A0112",
+     "qty": 3225,
+     "hist": 3319,
+     "cur": 1009,
+     "series": [
+      0,
+      0,
+      0,
+      4,
+      849,
+      1363,
+      1009
+     ],
+     "effN": 94,
+     "recur": 0.0426,
+     "sols": [
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 960,
+       "share": 0.289244,
+       "parts": 0.002083,
+       "med": 5.7,
+       "effN": 24,
+       "recur": null
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 768,
+       "share": 0.231395,
+       "parts": 0.002604,
+       "med": 25.7,
+       "effN": 2,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 605,
+       "share": 0.182284,
+       "parts": 0.008264,
+       "med": 12.3,
+       "effN": 24,
+       "recur": null
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 514,
+       "share": 0.154866,
+       "parts": 0.0,
+       "med": 17.5,
+       "effN": 31,
+       "recur": 0.0
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 238,
+       "share": 0.071708,
+       "parts": 0.0,
+       "med": 45.0,
+       "effN": 8,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 39,
+       "share": 0.011751,
+       "parts": 0.0,
+       "med": 54.9,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 25,
+       "share": 0.007532,
+       "parts": 0.52,
+       "med": 4.0,
+       "effN": 2,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 24,
+       "share": 0.007231,
+       "parts": 0.0,
+       "med": 5.2,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 20,
+       "share": 0.006026,
+       "parts": 0.0,
+       "med": 1.6,
+       "effN": 1,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C6029",
+     "qty": 2982,
+     "hist": 3072,
+     "cur": 1278,
+     "series": [
+      45,
+      43,
+      17,
+      34,
+      259,
+      1306,
+      1278
+     ],
+     "effN": 193,
+     "recur": 0.2798,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 932,
+       "share": 0.303385,
+       "parts": 0.005365,
+       "med": 31.0,
+       "effN": 98,
+       "recur": 0.3673
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 548,
+       "share": 0.178385,
+       "parts": 0.032847,
+       "med": 23.4,
+       "effN": 34,
+       "recur": 0.2647
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 491,
+       "share": 0.159831,
+       "parts": 0.002037,
+       "med": 41.2,
+       "effN": 11,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 342,
+       "share": 0.111328,
+       "parts": 0.05848,
+       "med": 30.9,
+       "effN": 28,
+       "recur": 0.1071
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 117,
+       "share": 0.038086,
+       "parts": 0.008547,
+       "med": 28.7,
+       "effN": 4,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 105,
+       "share": 0.03418,
+       "parts": 0.752381,
+       "med": 26.0,
+       "effN": 16,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 76,
+       "share": 0.02474,
+       "parts": 0.013158,
+       "med": 27.2,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 20,
+       "share": 0.00651,
+       "parts": 0.0,
+       "med": 30.3,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 14,
+       "share": 0.004557,
+       "parts": 0.0,
+       "med": 16.0,
+       "effN": 0,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C6030",
+     "qty": 2365,
+     "hist": 2389,
+     "cur": 1027,
+     "series": [
+      21,
+      23,
+      6,
+      8,
+      316,
+      964,
+      1027
+     ],
+     "effN": 73,
+     "recur": 0.2329,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 771,
+       "share": 0.322729,
+       "parts": 0.001297,
+       "med": 25.6,
+       "effN": 31,
+       "recur": 0.2581
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 496,
+       "share": 0.207618,
+       "parts": 0.014113,
+       "med": 18.9,
+       "effN": 16,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 308,
+       "share": 0.128924,
+       "parts": 0.035714,
+       "med": 24.5,
+       "effN": 18,
+       "recur": null
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 291,
+       "share": 0.121808,
+       "parts": 0.0,
+       "med": 38.8,
+       "effN": 6,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 68,
+       "share": 0.028464,
+       "parts": 0.0,
+       "med": 20.9,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 55,
+       "share": 0.023022,
+       "parts": 0.018182,
+       "med": 25.6,
+       "effN": 2,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 52,
+       "share": 0.021766,
+       "parts": 0.75,
+       "med": 27.2,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 19,
+       "share": 0.007953,
+       "parts": 0.0,
+       "med": 41.3,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 13,
+       "share": 0.005442,
+       "parts": 0.0,
+       "med": 20.7,
+       "effN": 0,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "EC0013",
+     "qty": 1262,
+     "hist": 1387,
+     "cur": 19,
+     "series": [
+      5,
+      454,
+      341,
+      269,
+      161,
+      13,
+      19
+     ],
+     "effN": 890,
+     "recur": 0.391,
+     "sols": [
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 456,
+       "share": 0.328767,
+       "parts": 0.111842,
+       "med": 23.9,
+       "effN": 251,
+       "recur": 0.3745
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 337,
+       "share": 0.24297,
+       "parts": 0.160237,
+       "med": 21.5,
+       "effN": 246,
+       "recur": 0.3902
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 263,
+       "share": 0.189618,
+       "parts": 0.04943,
+       "med": 18.9,
+       "effN": 193,
+       "recur": 0.4663
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 115,
+       "share": 0.082913,
+       "parts": 0.634783,
+       "med": 28.4,
+       "effN": 54,
+       "recur": 0.5185
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 67,
+       "share": 0.048306,
+       "parts": 0.044776,
+       "med": 21.2,
+       "effN": 43,
+       "recur": 0.2791
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 62,
+       "share": 0.044701,
+       "parts": 0.032258,
+       "med": 23.1,
+       "effN": 39,
+       "recur": 0.1538
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 51,
+       "share": 0.03677,
+       "parts": 0.0,
+       "med": 13.6,
+       "effN": 42,
+       "recur": 0.3095
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 13,
+       "share": 0.009373,
+       "parts": 0.0,
+       "med": 29.1,
+       "effN": 10,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 6,
+       "share": 0.004326,
+       "parts": 0.0,
+       "med": 27.0,
+       "effN": 6,
+       "recur": null
+      }
+     ]
+    }
+   ]
+  },
+  "BSS-12": {
+   "seg": "BSS",
+   "total": 3162,
+   "win": 3126,
+   "week": 980,
+   "effN": 97,
+   "recur": 0.1443,
+   "codes": [
+    {
+     "code": "A0112",
+     "qty": 1303,
+     "hist": 1304,
+     "cur": 378,
+     "series": [
+      0,
+      0,
+      0,
+      3,
+      456,
+      466,
+      378
+     ],
+     "effN": 1,
+     "recur": null,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 389,
+       "share": 0.298313,
+       "parts": 0.0,
+       "med": 16.8,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 263,
+       "share": 0.201687,
+       "parts": 0.003802,
+       "med": 35.6,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 209,
+       "share": 0.160276,
+       "parts": 0.0,
+       "med": 16.4,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 182,
+       "share": 0.139571,
+       "parts": 0.0,
+       "med": 21.3,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 164,
+       "share": 0.125767,
+       "parts": 0.0,
+       "med": 16.4,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 25,
+       "share": 0.019172,
+       "parts": 0.0,
+       "med": 54.8,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 6,
+       "share": 0.004601,
+       "parts": 0.0,
+       "med": 9.5,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 3,
+       "share": 0.002301,
+       "parts": 0.0,
+       "med": 26.9,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 1,
+       "share": 0.000767,
+       "parts": 0.0,
+       "med": 49.6,
+       "effN": 0,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "B6022",
+     "qty": 436,
+     "hist": 436,
+     "cur": 199,
+     "series": [
+      0,
+      0,
+      0,
+      0,
+      71,
+      166,
+      199
+     ],
+     "effN": 0,
+     "recur": null,
+     "sols": [
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 154,
+       "share": 0.353211,
+       "parts": 0.0,
+       "med": 37.3,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 93,
+       "share": 0.213303,
+       "parts": 0.0,
+       "med": 29.7,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 74,
+       "share": 0.169725,
+       "parts": 0.0,
+       "med": 18.8,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 57,
+       "share": 0.130734,
+       "parts": 0.0,
+       "med": 32.8,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 16,
+       "share": 0.036697,
+       "parts": 0.0,
+       "med": 32.5,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 7,
+       "share": 0.016055,
+       "parts": 0.0,
+       "med": 17.4,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 3,
+       "share": 0.006881,
+       "parts": 0.0,
+       "med": 16.2,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 2,
+       "share": 0.004587,
+       "parts": 0.0,
+       "med": 33.5,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 1,
+       "share": 0.002294,
+       "parts": 0.0,
+       "med": 47.6,
+       "effN": 0,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "B6029",
+     "qty": 272,
+     "hist": 283,
+     "cur": 30,
+     "series": [
+      3,
+      1,
+      4,
+      7,
+      61,
+      166,
+      30
+     ],
+     "effN": 18,
+     "recur": null,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 69,
+       "share": 0.243816,
+       "parts": 0.0,
+       "med": 46.5,
+       "effN": 11,
+       "recur": null
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 59,
+       "share": 0.208481,
+       "parts": 0.050847,
+       "med": 28.3,
+       "effN": 2,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 40,
+       "share": 0.141343,
+       "parts": 0.125,
+       "med": 37.5,
+       "effN": 2,
+       "recur": null
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 40,
+       "share": 0.141343,
+       "parts": 0.025,
+       "med": 47.2,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 15,
+       "share": 0.053004,
+       "parts": 0.0,
+       "med": 41.3,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 12,
+       "share": 0.042403,
+       "parts": 0.75,
+       "med": 15.0,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cắm lại / đấu nối lại",
+       "qty": 8,
+       "share": 0.028269,
+       "parts": 0.0,
+       "med": 30.5,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 3,
+       "share": 0.010601,
+       "parts": 0.0,
+       "med": 38.3,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 3,
+       "share": 0.010601,
+       "parts": 0.0,
+       "med": 26.4,
+       "effN": 0,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "A0106",
+     "qty": 127,
+     "hist": 127,
+     "cur": 34,
+     "series": [
+      0,
+      0,
+      0,
+      0,
+      57,
+      36,
+      34
+     ],
+     "effN": 0,
+     "recur": null,
+     "sols": [
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 33,
+       "share": 0.259843,
+       "parts": 0.0,
+       "med": 24.3,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 29,
+       "share": 0.228346,
+       "parts": 0.0,
+       "med": 30.4,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 16,
+       "share": 0.125984,
+       "parts": 0.0,
+       "med": 36.4,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Miễn trừ / nguyên nhân khách quan",
+       "qty": 15,
+       "share": 0.11811,
+       "parts": 0.0,
+       "med": 24.3,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 10,
+       "share": 0.07874,
+       "parts": 0.0,
+       "med": 45.8,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 1,
+       "share": 0.007874,
+       "parts": 0.0,
+       "med": 28.2,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 1,
+       "share": 0.007874,
+       "parts": 0.0,
+       "med": 47.7,
+       "effN": 0,
+       "recur": null
+      }
+     ]
+    },
+    {
+     "code": "C6030",
+     "qty": 112,
+     "hist": 112,
+     "cur": 41,
+     "series": [
+      1,
+      1,
+      0,
+      2,
+      19,
+      48,
+      41
+     ],
+     "effN": 2,
+     "recur": null,
+     "sols": [
+      {
+       "name": "Reset / clear lỗi",
+       "qty": 55,
+       "share": 0.491071,
+       "parts": 0.0,
+       "med": 37.2,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Kiểm tra tại chỗ, không nêu thao tác",
+       "qty": 15,
+       "share": 0.133929,
+       "parts": 0.0,
+       "med": 30.9,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Khác / chưa rõ",
+       "qty": 12,
+       "share": 0.107143,
+       "parts": 0.0,
+       "med": 36.3,
+       "effN": 1,
+       "recur": null
+      },
+      {
+       "name": "Không tồn lỗi khi tới nơi",
+       "qty": 12,
+       "share": 0.107143,
+       "parts": 0.0,
+       "med": 42.4,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Thay thế linh kiện",
+       "qty": 2,
+       "share": 0.017857,
+       "parts": 1.0,
+       "med": 26.4,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Cập nhật firmware / phần mềm",
+       "qty": 2,
+       "share": 0.017857,
+       "parts": 0.0,
+       "med": 36.8,
+       "effN": 0,
+       "recur": null
+      },
+      {
+       "name": "Vệ sinh / siết lại đấu nối",
+       "qty": 1,
+       "share": 0.008929,
+       "parts": 0.0,
+       "med": 146.7,
+       "effN": 0,
+       "recur": null
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "solOverview": {
+  "rows": [
+   {
+    "name": "Không tồn lỗi khi tới nơi",
+    "qty": 30304,
+    "share": 0.244277,
+    "parts": 0.010791,
+    "med": 28.4,
+    "effN": 16004,
+    "recur": 0.5151
+   },
+   {
+    "name": "Reset / clear lỗi",
+    "qty": 25413,
+    "share": 0.204851,
+    "parts": 0.005863,
+    "med": 25.5,
+    "effN": 12693,
+    "recur": 0.468
+   },
+   {
+    "name": "Khác / chưa rõ",
+    "qty": 24941,
+    "share": 0.201046,
+    "parts": 0.054649,
+    "med": 22.0,
+    "effN": 16590,
+    "recur": 0.6662
+   },
+   {
+    "name": "Kiểm tra tại chỗ, không nêu thao tác",
+    "qty": 24668,
+    "share": 0.198846,
+    "parts": 0.032471,
+    "med": 20.5,
+    "effN": 13395,
+    "recur": 0.4588
+   },
+   {
+    "name": "Thay thế linh kiện",
+    "qty": 6899,
+    "share": 0.055612,
+    "parts": 0.844035,
+    "med": 34.5,
+    "effN": 3108,
+    "recur": 0.3105
+   },
+   {
+    "name": "Miễn trừ / nguyên nhân khách quan",
+    "qty": 4588,
+    "share": 0.036983,
+    "parts": 0.005231,
+    "med": 24.5,
+    "effN": 3287,
+    "recur": 0.4977
+   },
+   {
+    "name": "Cập nhật firmware / phần mềm",
+    "qty": 3401,
+    "share": 0.027415,
+    "parts": 0.006175,
+    "med": 37.7,
+    "effN": 1786,
+    "recur": 0.4664
+   },
+   {
+    "name": "Vệ sinh / siết lại đấu nối",
+    "qty": 2130,
+    "share": 0.01717,
+    "parts": 0.007981,
+    "med": 22.4,
+    "effN": 1155,
+    "recur": 0.4372
+   },
+   {
+    "name": "Cắm lại / đấu nối lại",
+    "qty": 1712,
+    "share": 0.0138,
+    "parts": 0.015771,
+    "med": 28.7,
+    "effN": 789,
+    "recur": 0.3777
+   }
+  ],
+  "total": 124056,
+  "covered": 124056,
+  "labelled": 0.976527,
+  "recurDays": 30,
+  "minN": 25
+ },
  "disclaimAudit": {
   "EVCSW": {
    "Hạ tầng điện/mạng internet": {
@@ -43481,5 +46990,5 @@ const REPORT_DATA = {
   "source": "260717 Report W29 V3.xlsx"
  },
  "weekNote": "",
- "generatedAt": "2026-07-27 13:52"
+ "generatedAt": "2026-07-27 14:47"
 };

@@ -171,6 +171,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 #modalScroll{overflow-y:auto;padding:14px 18px 22px}
 #modalScroll section{margin-top:6px}
 #modalScroll section:first-child h2{margin-top:0}
+/* Bộ lọc dòng sản phẩm — thẻ được gắn data-seg lúc chạy (xem tagSegCards). */
+body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
 /* ===== bổ sung 25/07: bản lưu tuần, mục lục modal, trợ năng, in bản Nội bộ ===== */
 .hdWk{font-size:12px;color:var(--ink2);display:inline-flex;gap:5px;align-items:center}
 .hdWk select{font:12.5px inherit;padding:3px 6px;border:1px solid var(--axis);border-radius:7px;
@@ -213,6 +215,14 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <div class="seg" id="modeSeg" role="group" aria-label="Kỳ báo cáo">
     <button data-m="w" class="on" aria-pressed="true">Tuần</button>
     <button data-m="m" aria-pressed="false">Tháng</button>
+  </div>
+  <!-- Bộ lọc SẢN PHẨM (27/07): trước đây mọi mục đều bày EVCS và BSS cạnh nhau, hai khối
+       trông y hệt nhau nên đọc rất mệt. Chọn một sản phẩm thì trang chỉ nói chuyện của
+       sản phẩm đó. -->
+  <div class="seg" id="segSeg" title="Chỉ xem một dòng sản phẩm" role="group" aria-label="Dòng sản phẩm">
+    <button data-g="all" class="on" aria-pressed="true">Cả hai</button>
+    <button data-g="EVCS" aria-pressed="false">EVCS</button>
+    <button data-g="BSS" aria-pressed="false">BSS</button>
   </div>
   <div class="seg" id="srcSeg" title="Lọc theo luồng tạo ticket" role="group" aria-label="Nguồn tạo ticket">
     <button data-s="api" class="on" aria-pressed="true">API creation</button>
@@ -579,6 +589,27 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   </div>
 </section>
 
+<!-- Mã lỗi theo LOẠI TỦ + cách xử lý KTV + hiệu quả (27/07/2026, user yêu cầu).
+     Nối tiếp Sổ hành động: sổ hành động là kế hoạch DO NGƯỜI khai, mục này là thực tế
+     SUY TỪ DỮ LIỆU — KTV đang thực sự xử lý mã lỗi đó bằng cách gì và có ăn thua không. -->
+<section id="sec-model">
+  <h2>Mã lỗi theo loại tủ — top 5, KTV xử lý thế nào, có ăn thua không</h2>
+  <div class="seg" id="modelSeg" role="group" aria-label="Loại tủ"></div>
+  <p class="rcIntro">
+    <b>Tái phát</b> = CÙNG thiết bị đó, CÙNG mã lỗi đó quay lại trong <b>30 ngày</b>. Đây là
+    thước đo "sửa có ăn thua không" suy thẳng từ dữ liệu, không cần ai chấm điểm. Ticket tạo
+    trong 30 ngày cuối chưa đủ cửa sổ quan sát nên <b>bị loại khỏi phép tính</b> chứ không
+    tính là "không tái phát" — nếu không, kỳ gần nhất luôn đẹp giả tạo. Nhóm nào dưới
+    <b>25 ca</b> đủ cửa sổ thì ghi "—" thay vì cho ra một tỉ lệ vô nghĩa.
+    <span id="modelScopeNote"></span>
+  </p>
+  <div class="card"><div class="tblwrap"><table id="t_model"></table></div></div>
+
+  <h2 style="margin-top:18px">Mặt bằng chung — mỗi cách xử lý ăn thua tới đâu</h2>
+  <p class="rcIntro" id="solNote"></p>
+  <div class="card"><div class="tblwrap"><table id="t_sol"></table></div></div>
+</section>
+
 <!-- Sổ hành động theo mã lỗi — mang từ bản Điều hành sang 27/07/2026. Mắt xích còn thiếu:
      mọi mục khác dừng ở "nguyên nhân là gì", mục này theo dõi "đã sửa chưa, sửa có ăn thua
      không". Nội dung do user duy trì trong report_auto/config/actions.json. -->
@@ -723,6 +754,28 @@ const pctTick = { callback: v => (v*100).toFixed(0) + '%' };
 const pctTip = ctx => ` ${ctx.dataset.label ?? ctx.label}: ${pc(ctx.parsed.x ?? ctx.parsed.y ?? ctx.parsed)}`;
 
 let MODE = 'w'; // 'w' tuần | 'm' tháng
+let SEG = 'all'; // 'all' | 'EVCS' | 'BSS' — xem tagSegCards/applySeg
+
+/* Gắn data-seg cho thẻ chỉ nói về MỘT dòng sản phẩm, suy từ id của phần tử bên trong
+   (c_cls_evcs, t_res_bss, ...). Làm lúc chạy thay vì sửa tay 26 thẻ trong HTML: id đã
+   theo quy ước sẵn, và thẻ nào sinh động (alarm) cũng được gắn luôn sau mỗi lần vẽ. */
+function tagSegCards(){
+  document.querySelectorAll('#modalScroll .card, #modalScroll .grid2 > div').forEach(el=>{
+    if(el.dataset.seg) return;
+    const ids = [...el.querySelectorAll('[id]')].map(x=>x.id).join(' ') + ' ' +
+                (el.querySelector('h3')?.textContent || '');
+    const e = /evcs/i.test(ids), b = /bss/i.test(ids);
+    if(e && !b) el.dataset.seg = 'EVCS';
+    else if(b && !e) el.dataset.seg = 'BSS';
+  });
+}
+function applySeg(){
+  document.body.classList.toggle('seg-EVCS', SEG === 'EVCS');
+  document.body.classList.toggle('seg-BSS', SEG === 'BSS');
+  tagSegCards();
+  renderModelErrors();          // danh sách loại tủ phải theo dòng sản phẩm đang chọn
+  if(modalOpen()) resizeCharts();  // thẻ còn lại giãn ra full width -> chart phải vẽ lại cỡ
+}
 const mLbl = () => MODE==='w' ? ('tuần '+D.week) : ('tháng '+D.month);
 
 /* ================= WoW (tuần này vs tuần trước) ================= */
@@ -1199,6 +1252,7 @@ const GROUPS = {
   wh:   {title:'Kho & vật tư (tồn kho live)', ids:['sec-wh']},
   parts:{title:'Top vật tư sử dụng', ids:['sec-parts']},
   cost: {title:'Chi phí dịch vụ', ids:['sec-cost']},
+  model:{title:'Mã lỗi theo loại tủ & hiệu quả cách xử lý', ids:['sec-model']},
   action:{title:'Sổ hành động theo mã lỗi', ids:['sec-action']},
   fix:  {title:'Dữ liệu đã hiệu chỉnh (V3 vs V2)', ids:['sec-fix']},
   explain:{title:'Giải trình ticket Overdue (toàn quốc)', ids:['sec-overdue']},
@@ -1426,7 +1480,7 @@ function renderTiles(){
      không thì cái nhìn tổng thể theo tháng nằm sau một nút tên "Theo model", không ai mở. */
   const more = [['watch','Cảnh báo'],['cls','Disclaim'],
     ['trend', MODE==='m' ? '📅 So sánh các tháng' : 'Theo model'],['alarm','Alarm'],
-    ['cause','Nguyên nhân overdue'],['action','🔧 Sổ hành động'],
+    ['cause','Nguyên nhân overdue'],['model','🔩 Mã lỗi theo loại tủ'],['action','🔧 Sổ hành động'],
     ['asp','ASP'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
     ['explain','✍ Giải trình overdue']];
   const mb = document.getElementById('morebar');
@@ -1469,8 +1523,14 @@ function render(){
   resBlock('t_res_bss',  MODE==='w'?D.resBssW:D.resBssM);
   partsBlock('t_parts_evcs', MODE==='w'?D.partsEvcsW:D.partsEvcsM, MODE==='w'?D.partsTotal.evcsW:D.partsTotal.evcsM, 'pEvcsSub');
   partsBlock('t_parts_bss',  MODE==='w'?D.partsBssW:D.partsBssM,  MODE==='w'?D.partsTotal.bssW:D.partsTotal.bssM, 'pBssSub');
+  renderModelErrors();
+  renderSolOverview();
+  tagSegCards();     // thẻ vừa vẽ lại -> gắn nhãn sản phẩm để bộ lọc còn ăn
   if(modalOpen()) resizeCharts();   // đổi toggle khi modal đang mở -> chart trong modal co lại đúng cỡ
 }
+document.querySelectorAll('#segSeg button').forEach(b=> b.onclick = ()=>{
+  SEG = b.dataset.g; segOn('#segSeg', b); applySeg(); syncUrl();
+});
 document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   MODE = b.dataset.m;
   segOn('#modeSeg', b);
@@ -2111,6 +2171,94 @@ document.querySelectorAll('#moNorm button').forEach(b=> b.onclick = ()=>{
   MO_NORM = b.dataset.n; segOn('#moNorm', b); monthCompare();
 });
 
+/* ===== Mã lỗi theo LOẠI TỦ + cách xử lý KTV + hiệu quả (27/07/2026) =====
+   Đọc D.modelErrors / D.solOverview. Khác Sổ hành động ở chỗ: sổ hành động là kế hoạch
+   do NGƯỜI khai trong actions.json, mục này suy thẳng từ biên bản KTV đã gõ. */
+let MODEL_SEL = '';
+const recTxt = (v, n) => v == null
+  ? `<span class="muted" title="Chỉ ${n0(n)} ca đủ cửa sổ 30 ngày — dưới ngưỡng ${D.solOverview.minN} nên không kết luận">—</span>`
+  : `<span style="color:${v>=.6?'var(--crit)':v>=.35?'#b45309':'var(--good)'};font-weight:600">${pc(v,0)}</span>`;
+
+function renderModelErrors(){
+  const ME = D.modelErrors||{}, names = Object.keys(ME);
+  if(!names.length) return;
+  // chỉ hiện loại tủ thuộc segment đang chọn — đúng yêu cầu "chọn BSS thì chỉ nói về BSS"
+  const show = names.filter(k => SEG === 'all' || ME[k].seg === SEG);
+  if(!show.includes(MODEL_SEL)) MODEL_SEL = show[0] || '';
+  document.getElementById('modelSeg').innerHTML = show.map(k =>
+    `<button data-model="${escH(k)}"${k===MODEL_SEL?' class="on" aria-pressed="true"':' aria-pressed="false"'}>${escH(k)}</button>`).join('');
+  document.querySelectorAll('#modelSeg button').forEach(b=> b.onclick = ()=>{
+    MODEL_SEL = b.dataset.model; renderModelErrors();
+  });
+  const v = ME[MODEL_SEL];
+  const note = document.getElementById('modelScopeNote');
+  if(note) note.innerHTML = v
+    ? ` Phạm vi khối này: <b>mọi luồng tạo ticket</b> (không chỉ API creation) — tái phát là
+        thuộc tính của THIẾT BỊ, một ca quay lại qua luồng khác vẫn là tái phát; lọc riêng
+        luồng API còn làm BSS mất sạch lịch sử trước W29.`
+    : '';
+  if(!v){ document.getElementById('t_model').innerHTML = ''; return; }
+
+  const W = D.weeks;
+  document.getElementById('t_model').innerHTML =
+    `<tr><th colspan="8">${escH(MODEL_SEL)} · ${n0(v.win)} ticket trong 7 tuần · `+
+    `${n0(v.total)} ticket toàn lịch sử · tái phát chung `+
+    `${v.recur==null?'—':pc(v.recur,0)} (mẫu ${n0(v.effN)} ca)</th></tr>`+
+    `<tr><th>Mã lỗi</th><th>7 tuần (${W[0]}→${W[W.length-1]})</th><th>${W[W.length-1]}</th>`+
+    `<th>Δ tuần trước</th><th>Xu hướng</th><th title="Toàn bộ lịch sử kho — mẫu dùng để tính tái phát và bảng cách xử lý">Toàn lịch sử</th>`+
+    `<th>Tái phát 30 ngày</th><th></th></tr>` +
+    v.codes.map((c,i)=>{
+      const s = c.series, cur = s[s.length-1], prev = s[s.length-2];
+      const d = prev==null ? '—'
+        : `<span style="color:${cur>prev?'var(--crit)':cur<prev?'var(--good)':'inherit'}">`+
+          `${cur>prev?'▲':cur<prev?'▼':'='} ${n0(Math.abs(cur-prev))}</span>`;
+      return `<tr><td><b>${escH(c.code)}</b></td><td>${n0(c.qty)}</td><td>${n0(cur)}</td>`+
+        `<td>${d}</td><td>${sparkRates(s)}</td><td>${n0(c.hist)}</td><td>${recTxt(c.recur, c.effN)}</td>`+
+        `<td><button class="morebtn" style="padding:2px 7px" onclick="toggleCode(${i},this)">▸</button></td></tr>`+
+        `<tr id="coderow_${i}" style="display:none"><td colspan="8">${solTable(c)}</td></tr>`;
+    }).join('');
+}
+
+/* Bảng "KTV thường xử lý mã này bằng cách gì và có ăn thua không".
+   Gom trên TOÀN BỘ lịch sử chứ không riêng 7 tuần: gói trong 7 tuần thì phần lớn mã lỗi
+   tụt dưới ngưỡng 25 ca và cột hiệu quả rỗng trơn. Ghi rõ mẫu để không đọc nhầm sang
+   con số 7 tuần ở bảng trên. */
+function solTable(c){
+  const sols = c.sols;
+  if(!sols || !sols.length) return '<span class="muted">Không có biên bản xử lý nào đọc được.</span>';
+  return `<div class="muted" style="font-size:12px;margin-bottom:4px">Gom trên <b>toàn bộ `+
+    `${n0(c.hist)} ticket lịch sử</b> của mã ${escH(c.code)} (không phải ${n0(c.qty)} ticket của 7 tuần) — `+
+    `để đủ mẫu kết luận hiệu quả.</div>`+
+    '<table><tr><th>Cách xử lý (KTV tự gõ, đã gom nhóm)</th><th>Số ca</th><th>Tỉ trọng</th>'+
+    '<th>Tái phát 30 ngày</th><th>Có thay vật tư</th><th>Giờ xử lý (TV)</th></tr>' +
+    sols.map(s=>`<tr><td style="text-align:left">${escH(s.name)}</td><td>${n0(s.qty)}</td>`+
+      `<td>${pc(s.share,0)}</td><td>${recTxt(s.recur, s.effN)}</td>`+
+      `<td>${pc(s.parts,0)}</td><td>${s.med==null?'—':n2(s.med)+'h'}</td></tr>`).join('') + '</table>';
+}
+window.toggleCode = function(i, el){
+  const tr = document.getElementById('coderow_' + i);
+  const open = tr.style.display !== 'none';
+  tr.style.display = open ? 'none' : '';
+  el.textContent = open ? '▸' : '▾';
+};
+
+function renderSolOverview(){
+  const o = D.solOverview; if(!o) return;
+  document.getElementById('solNote').innerHTML =
+    `Gom từ biên bản KTV tự gõ trong CCTS (trường <i>Repair Descript</i>, thiếu thì lấy `+
+    `<i>Solution</i>/<i>Problem Analysis</i>) — đọc được <b>${pc(o.labelled,1)}</b> số ticket. `+
+    `Đây là chữ tự do chứ không phải trường có kiểm soát, nên bảng này đủ tin để so <b>tương `+
+    `đối</b> giữa các cách xử lý, KHÔNG dùng để chấm từng ca. Phép tự kiểm: nhóm `+
+    `<b>"Thay thế linh kiện"</b> phải có tỉ lệ thay vật tư cao hẳn so với các nhóm khác — `+
+    `đó là cờ <code>has_parts</code> của CCTS, độc lập với từ khóa.`;
+  document.getElementById('t_sol').innerHTML =
+    '<tr><th>Cách xử lý</th><th>Số ca</th><th>Tỉ trọng</th><th>Tái phát 30 ngày</th>'+
+    '<th>Có thay vật tư</th><th>Giờ xử lý (TV)</th></tr>' +
+    o.rows.map(r=>`<tr><td style="text-align:left">${escH(r.name)}</td><td>${n0(r.qty)}</td>`+
+      `<td>${pc(r.share,1)}</td><td>${recTxt(r.recur, r.effN)}</td>`+
+      `<td>${pc(r.parts,1)}</td><td>${r.med==null?'—':n2(r.med)+'h'}</td></tr>`).join('');
+}
+
 /* ===== Sổ hành động theo mã lỗi (mang từ bản Điều hành sang 27/07/2026) =====
    Luôn theo TUẦN kể cả khi trang đang ở chế độ Tháng: một kế hoạch xử lý được đánh giá
    theo nhịp deploy/tuần, không phải theo bucket tháng 20→19. */
@@ -2324,6 +2472,7 @@ function urlState(){
 function syncUrl(){
   const p = new URLSearchParams();
   if(MODE !== 'w') p.set('m', MODE);
+  if(SEG !== 'all') p.set('g', SEG);
   if(SRC !== 'api') p.set('src', SRC);
   if(OPEN_GRP) p.set('sec', OPEN_GRP);
   Object.entries(FURL).forEach(([k, key])=>{
@@ -2337,6 +2486,7 @@ function applyUrl(){
   const o = urlState(), q = s => document.querySelector(s);
   let redraw = false, refilter = false;
   if(o.m === 'm'){ MODE = 'm'; segOn('#modeSeg', q('#modeSeg [data-m="m"]')); redraw = true; }
+  if(o.g === 'EVCS' || o.g === 'BSS'){ SEG = o.g; segOn('#segSeg', q(`#segSeg [data-g="${o.g}"]`)); applySeg(); }
   if(o.src && o.src !== 'api' && D.variants && D.variants[o.src]){
     SRC = o.src; segOn('#srcSeg', q(`#srcSeg [data-s="${o.src}"]`));
     Object.assign(D, D.variants[SRC]); redraw = true;
