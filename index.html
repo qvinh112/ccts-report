@@ -171,8 +171,16 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 #modalScroll{overflow-y:auto;padding:14px 18px 22px}
 #modalScroll section{margin-top:6px}
 #modalScroll section:first-child h2{margin-top:0}
-/* Bộ lọc dòng sản phẩm — thẻ được gắn data-seg lúc chạy (xem tagSegCards). */
+/* Bộ lọc dòng sản phẩm — thẻ được gắn data-seg lúc chạy (xem tagSegCards).
+   Hai ô "Phân loại EVCS/BSS" trong cockpit CHÍNH LÀ nút chọn nên phải luôn hiện,
+   nếu ẩn thì chọn xong không có đường quay lại. tagSegCards chỉ gắn data-seg cho
+   thẻ trong #modalScroll nên #tiles nằm ngoài tầm quy tắc dưới đây. */
 body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
+.tile[data-pick]{position:relative}
+.tile.picked{border-color:var(--s1);box-shadow:0 0 0 2px rgba(42,120,214,.18)}
+.tile.picked .open-ico{color:var(--s1);font-weight:600}
+.tile[data-pick]:not(.picked){opacity:1}
+body.seg-EVCS .tile[data-pick="BSS"], body.seg-BSS .tile[data-pick="EVCS"]{opacity:.5}
 /* ===== bổ sung 25/07: bản lưu tuần, mục lục modal, trợ năng, in bản Nội bộ ===== */
 .hdWk{font-size:12px;color:var(--ink2);display:inline-flex;gap:5px;align-items:center}
 .hdWk select{font:12.5px inherit;padding:3px 6px;border:1px solid var(--axis);border-radius:7px;
@@ -215,14 +223,6 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
   <div class="seg" id="modeSeg" role="group" aria-label="Kỳ báo cáo">
     <button data-m="w" class="on" aria-pressed="true">Tuần</button>
     <button data-m="m" aria-pressed="false">Tháng</button>
-  </div>
-  <!-- Bộ lọc SẢN PHẨM (27/07): trước đây mọi mục đều bày EVCS và BSS cạnh nhau, hai khối
-       trông y hệt nhau nên đọc rất mệt. Chọn một sản phẩm thì trang chỉ nói chuyện của
-       sản phẩm đó. -->
-  <div class="seg" id="segSeg" title="Chỉ xem một dòng sản phẩm" role="group" aria-label="Dòng sản phẩm">
-    <button data-g="all" class="on" aria-pressed="true">Cả hai</button>
-    <button data-g="EVCS" aria-pressed="false">EVCS</button>
-    <button data-g="BSS" aria-pressed="false">BSS</button>
   </div>
   <div class="seg" id="srcSeg" title="Lọc theo luồng tạo ticket" role="group" aria-label="Nguồn tạo ticket">
     <button data-s="api" class="on" aria-pressed="true">API creation</button>
@@ -773,8 +773,17 @@ function applySeg(){
   document.body.classList.toggle('seg-EVCS', SEG === 'EVCS');
   document.body.classList.toggle('seg-BSS', SEG === 'BSS');
   tagSegCards();
+  kpis();                       // hàng KPI cũng bỏ sản phẩm không được chọn
+  renderTiles();                // ô RC / SLA / trạng thái "đang xem" phải theo sản phẩm
   renderModelErrors();          // danh sách loại tủ phải theo dòng sản phẩm đang chọn
   if(modalOpen()) resizeCharts();  // thẻ còn lại giãn ra full width -> chart phải vẽ lại cỡ
+}
+/* Bấm ô "Phân loại EVCS/BSS" -> cả trang chỉ còn sản phẩm đó; bấm lại ô đang chọn thì
+   quay về xem cả hai. Trước đây việc này nằm ở một cụm nút riêng trên header, nhưng
+   hai ô Phân loại đã là chỗ ai cũng bấm nên cụm nút kia chỉ là thao tác thừa. */
+function pickSeg(g){
+  SEG = (SEG === g) ? 'all' : g;
+  applySeg(); syncUrl();
 }
 const mLbl = () => MODE==='w' ? ('tuần '+D.week) : ('tháng '+D.month);
 
@@ -869,13 +878,15 @@ function kpis(){
   const cost = D.cost, i = cost.grandTotal.length - 1;
   const costM = (cost.months && cost.months[i]) || '';
   const ws = D.wowSeries || {};
+  /* Cột thứ 5 = dòng sản phẩm của KPI; chọn một sản phẩm thì hàng KPI cũng bỏ cái kia đi.
+     Chi phí lấy từ baseline chung, không tách được EVCS/BSS nên luôn giữ (seg = null). */
   const items = [
-    ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate), wowTag(ws.evcsQty, {higherIsBad:true})],
-    ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate), wowTag(ws.bssQty, {higherIsBad:true})],
-    ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket', wowTag(ws.evcsOvdRate, {isRate:true, higherIsBad:true})],
-    ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket', wowTag(ws.bssOvdRate, {isRate:true, higherIsBad:true})],
-    ['Chi phí ' + costM, usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị', ''],
-  ];
+    ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate), wowTag(ws.evcsQty, {higherIsBad:true}), 'EVCS'],
+    ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate), wowTag(ws.bssQty, {higherIsBad:true}), 'BSS'],
+    ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket', wowTag(ws.evcsOvdRate, {isRate:true, higherIsBad:true}), 'EVCS'],
+    ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket', wowTag(ws.bssOvdRate, {isRate:true, higherIsBad:true}), 'BSS'],
+    ['Chi phí ' + costM, usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị', '', null],
+  ].filter(x => SEG === 'all' || !x[4] || x[4] === SEG);
   document.getElementById('kpis').innerHTML = items.map(x =>
     `<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div>${x[3]||''}</div>`).join('');
 }
@@ -1442,19 +1453,25 @@ function renderWarehouse(){
 function renderTiles(){
   const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
   const cB = MODE==='w'?D.clsBssW:D.clsBssM,  cBt = MODE==='w'?D.clsBssW_total:D.clsBssM_total;
-  const rcE = MODE==='w'?D.rcEvcsW:D.rcEvcsM;
-  const sla = [].concat(MODE==='w'?D.slaEvcsW:D.slaEvcsM, MODE==='w'?D.slaBssW:D.slaBssM);
+  /* Ô RC và ô SLA đi theo sản phẩm đang chọn: đã bấm "chỉ xem BSS" thì cockpit cũng
+     không được bày số EVCS nữa. SEG='all' -> giữ nguyên như cũ (RC lấy EVCS, SLA gộp). */
+  const rcE = SEG==='BSS' ? (MODE==='w'?D.rcBssW:D.rcBssM) : (MODE==='w'?D.rcEvcsW:D.rcEvcsM);
+  const slaE = MODE==='w'?D.slaEvcsW:D.slaEvcsM, slaB = MODE==='w'?D.slaBssW:D.slaBssM;
+  const sla = SEG==='EVCS' ? slaE : SEG==='BSS' ? slaB : [].concat(slaE, slaB);
   const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
   const wk = D.weeks, sumWk = t => wk.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
   const te = sumWk(D.trendEvcs), tb = sumWk(D.trendBss);
   const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
+  /* Ghi đủ "Undefined yet" — viết tắt "Undefined" trông y như biến JS lỗi. */
+  const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Undefined yet" ${pc(undefShare(c))} · xu hướng 7 tuần`;
+  const pickHint = g => SEG===g ? '✓ đang xem · bấm để bỏ' : 'bấm để chỉ xem ' + g + ' ▸';
   const T = [
-    {grp:'cls', title:'Phân loại EVCS', mini:['donut',cE,cEt], spark:te,
-     sub:`${n0(cEt.qty)} ticket · Undefined ${pc(undefShare(cE))} · xu hướng 7 tuần`},
-    {grp:'cls', title:'Phân loại BSS',  mini:['donut',cB,cBt], spark:tb,
-     sub:`${n0(cBt.qty)} ticket · Undefined ${pc(undefShare(cB))} · xu hướng 7 tuần`},
-    {grp:'sla', title:'SLA / Overdue',  big:pc(settled?ovd/settled:0), sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()})`},
-    {grp:'rc',  title:'Nguyên nhân lỗi (RC)', mini:['rc',rcE], sub:'Top 5 nhóm nguyên nhân EVCS'},
+    {grp:'cls', pick:'EVCS', title:'Phân loại EVCS', mini:['donut',cE,cEt], spark:te, sub:clsSub(cEt,cE)},
+    {grp:'cls', pick:'BSS',  title:'Phân loại BSS',  mini:['donut',cB,cBt], spark:tb, sub:clsSub(cBt,cB)},
+    {grp:'sla', title:'SLA / Overdue',  big:pc(settled?ovd/settled:0),
+     sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()}${SEG==='all'?'':' · '+SEG})`},
+    {grp:'rc',  title:'Nguyên nhân lỗi (RC)', mini:['rc',rcE],
+     sub:'Top 5 nhóm nguyên nhân ' + (SEG==='BSS' ? 'BSS' : 'EVCS')},
     whTile(),
   ];
   const el = document.getElementById('tiles');
@@ -1463,11 +1480,20 @@ function renderTiles(){
       ? `<div class="big">${t.big}</div><div class="sub">${t.sub}</div>`
       : `<div class="cvmini"><canvas id="tile_${i}"></canvas></div><div class="sub">${t.sub}</div>`;
     const spark = t.spark ? `<div class="trendline"><canvas id="trend_${i}"></canvas></div>` : '';
-    return `<div class="tile" data-grp="${t.grp}" role="button" tabindex="0"><h4>${t.title}<span class="open-ico">bấm để xem ▸</span></h4>${inner}${spark}</div>`;
+    /* Ô Phân loại EVCS/BSS = nút CHỌN DÒNG SẢN PHẨM cho cả trang (không mở modal nữa).
+       Bảng chi tiết phân loại vẫn vào được qua nút "Phân loại & Disclaim" ở Xem thêm. */
+    const cls = 'tile' + (t.pick && SEG===t.pick ? ' picked' : '');
+    const ico = t.pick ? pickHint(t.pick) : 'bấm để xem ▸';
+    return `<div class="${cls}" data-grp="${t.grp}"${t.pick?` data-pick="${t.pick}"`:''} role="button" tabindex="0"`
+      + ` aria-pressed="${t.pick ? String(SEG===t.pick) : 'false'}">`
+      + `<h4>${t.title}<span class="open-ico">${ico}</span></h4>${inner}${spark}</div>`;
   }).join('');
   el.querySelectorAll('.tile').forEach(d=>{
-    d.onclick = ()=> openModal(d.dataset.grp);
-    d.onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openModal(d.dataset.grp); } };
+    const act = d.dataset.pick
+      ? ()=> pickSeg(d.dataset.pick)
+      : ()=> openModal(d.dataset.grp);
+    d.onclick = act;
+    d.onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } };
   });
   T.forEach((t,i)=>{
     if(t.spark) miniLine('trend_'+i, wk, t.spark, true);
@@ -1478,7 +1504,7 @@ function renderTiles(){
   });
   /* Ở chế độ Tháng, nhóm 'trend' còn chứa khối "So sánh các tháng" — phải ghi vào nhãn,
      không thì cái nhìn tổng thể theo tháng nằm sau một nút tên "Theo model", không ai mở. */
-  const more = [['watch','Cảnh báo'],['cls','Disclaim'],
+  const more = [['watch','Cảnh báo'],['cls','Phân loại & Disclaim'],
     ['trend', MODE==='m' ? '📅 So sánh các tháng' : 'Theo model'],['alarm','Alarm'],
     ['cause','Nguyên nhân overdue'],['model','🔩 Mã lỗi theo loại tủ'],['action','🔧 Sổ hành động'],
     ['asp','ASP'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
@@ -1528,9 +1554,6 @@ function render(){
   tagSegCards();     // thẻ vừa vẽ lại -> gắn nhãn sản phẩm để bộ lọc còn ăn
   if(modalOpen()) resizeCharts();   // đổi toggle khi modal đang mở -> chart trong modal co lại đúng cỡ
 }
-document.querySelectorAll('#segSeg button').forEach(b=> b.onclick = ()=>{
-  SEG = b.dataset.g; segOn('#segSeg', b); applySeg(); syncUrl();
-});
 document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
   MODE = b.dataset.m;
   segOn('#modeSeg', b);
@@ -2486,7 +2509,7 @@ function applyUrl(){
   const o = urlState(), q = s => document.querySelector(s);
   let redraw = false, refilter = false;
   if(o.m === 'm'){ MODE = 'm'; segOn('#modeSeg', q('#modeSeg [data-m="m"]')); redraw = true; }
-  if(o.g === 'EVCS' || o.g === 'BSS'){ SEG = o.g; segOn('#segSeg', q(`#segSeg [data-g="${o.g}"]`)); applySeg(); }
+  if(o.g === 'EVCS' || o.g === 'BSS'){ SEG = o.g; applySeg(); }   // ô Phân loại tự sáng qua renderTiles
   if(o.src && o.src !== 'api' && D.variants && D.variants[o.src]){
     SRC = o.src; segOn('#srcSeg', q(`#srcSeg [data-s="${o.src}"]`));
     Object.assign(D, D.variants[SRC]); redraw = true;
