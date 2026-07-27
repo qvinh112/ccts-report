@@ -176,11 +176,14 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
    nếu ẩn thì chọn xong không có đường quay lại. tagSegCards chỉ gắn data-seg cho
    thẻ trong #modalScroll nên #tiles nằm ngoài tầm quy tắc dưới đây. */
 body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
-.tile[data-pick]{position:relative}
 .tile.picked{border-color:var(--s1);box-shadow:0 0 0 2px rgba(42,120,214,.18)}
 .tile.picked .open-ico{color:var(--s1);font-weight:600}
-.tile[data-pick]:not(.picked){opacity:1}
-body.seg-EVCS .tile[data-pick="BSS"], body.seg-BSS .tile[data-pick="EVCS"]{opacity:.5}
+.segnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:7px 12px;
+  border:1px solid var(--s1);border-left-width:3px;border-radius:9px;background:rgba(42,120,214,.06);font-size:12.5px}
+.segnote b{color:var(--ink)}
+.segnote button{font:12.5px inherit;padding:3px 11px;border:1px solid var(--axis);border-radius:20px;
+  background:var(--surface);color:var(--ink2);cursor:pointer}
+.segnote button:hover{border-color:var(--s1);color:var(--ink)}
 /* ===== bổ sung 25/07: bản lưu tuần, mục lục modal, trợ năng, in bản Nội bộ ===== */
 .hdWk{font-size:12px;color:var(--ink2);display:inline-flex;gap:5px;align-items:center}
 .hdWk select{font:12.5px inherit;padding:3px 6px;border:1px solid var(--axis);border-radius:7px;
@@ -246,6 +249,9 @@ body.seg-EVCS .tile[data-pick="BSS"], body.seg-BSS .tile[data-pick="EVCS"]{opaci
 <div class="kpis" id="kpis"></div>
 
 <section id="cockpit">
+  <!-- Hiện khi đang lọc 1 dòng sản phẩm: bấm ô Phân loại là VÀO XEM chi tiết sản phẩm đó,
+       nên cần một lối quay lại rõ ràng thay vì bắt bấm lại đúng ô cũ. -->
+  <div class="segnote" id="segNote" style="display:none"></div>
   <div class="tiles" id="tiles"></div>
   <div class="morebar" id="morebar"><span class="mlbl">Xem thêm:</span></div>
 </section>
@@ -775,15 +781,30 @@ function applySeg(){
   tagSegCards();
   kpis();                       // hàng KPI cũng bỏ sản phẩm không được chọn
   renderTiles();                // ô RC / SLA / trạng thái "đang xem" phải theo sản phẩm
+  segNote();                    // dải nhắc "đang chỉ xem X" + lối quay lại
   renderModelErrors();          // danh sách loại tủ phải theo dòng sản phẩm đang chọn
   if(modalOpen()) resizeCharts();  // thẻ còn lại giãn ra full width -> chart phải vẽ lại cỡ
 }
-/* Bấm ô "Phân loại EVCS/BSS" -> cả trang chỉ còn sản phẩm đó; bấm lại ô đang chọn thì
-   quay về xem cả hai. Trước đây việc này nằm ở một cụm nút riêng trên header, nhưng
-   hai ô Phân loại đã là chỗ ai cũng bấm nên cụm nút kia chỉ là thao tác thừa. */
+/* Bấm ô "Phân loại EVCS/BSS" = VÀO XEM chi tiết sản phẩm đó: vẫn mở bảng chi tiết như
+   trước, chỉ khác là bên trong (và cả trang phía sau) chỉ còn sản phẩm vừa chọn thay vì
+   bày EVCS lẫn BSS cạnh nhau. Lối quay lại nằm ở dải #segNote phía trên các ô. */
 function pickSeg(g){
-  SEG = (SEG === g) ? 'all' : g;
+  SEG = g;
   applySeg(); syncUrl();
+  openModal('cls');
+}
+function clearSeg(){ SEG = 'all'; applySeg(); syncUrl(); }
+function segNote(){
+  const el = document.getElementById('segNote');
+  if(!el) return;
+  el.style.display = SEG === 'all' ? 'none' : '';
+  if(SEG === 'all') return;
+  const other = SEG === 'EVCS' ? 'BSS' : 'EVCS';
+  el.innerHTML = `<span>🔎 Đang chỉ xem <b>${SEG}</b> — mọi số và biểu đồ trên trang đều là của ${SEG}.</span>`
+    + `<button type="button" data-act="other">Chuyển sang ${other}</button>`
+    + `<button type="button" data-act="all">✕ Xem cả hai</button>`;
+  el.querySelector('[data-act="other"]').onclick = ()=>{ SEG = other; applySeg(); syncUrl(); };
+  el.querySelector('[data-act="all"]').onclick = clearSeg;
 }
 const mLbl = () => MODE==='w' ? ('tuần '+D.week) : ('tháng '+D.month);
 
@@ -1277,8 +1298,11 @@ function openModal(grp, keepUrl){
   lastFocus = document.activeElement;
   OPEN_GRP = grp;
   document.querySelectorAll('#modalScroll > section').forEach(s=> s.style.display = g.ids.includes(s.id)?'':'none');
+  /* Đang lọc sản phẩm thì mọi bảng trong modal chỉ còn sản phẩm đó — ghi thẳng vào tiêu đề,
+     không thì mở ra tưởng mất khối EVCS/BSS kia. */
   document.getElementById('modalTitle').textContent =
-    (grp==='trend' && MODE==='m') ? 'Tình trạng lỗi theo model & So sánh các tháng' : g.title;
+    ((grp==='trend' && MODE==='m') ? 'Tình trạng lỗi theo model & So sánh các tháng' : g.title)
+    + (SEG==='all' ? '' : ' — chỉ ' + SEG);
   host.classList.add('open');
   host.setAttribute('aria-hidden','false');   // trước đây kẹt 'true' -> trình đọc màn hình không thấy gì
   document.body.style.overflow='hidden';
@@ -1464,7 +1488,7 @@ function renderTiles(){
   const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
   /* Ghi đủ "Undefined yet" — viết tắt "Undefined" trông y như biến JS lỗi. */
   const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Undefined yet" ${pc(undefShare(c))} · xu hướng 7 tuần`;
-  const pickHint = g => SEG===g ? '✓ đang xem · bấm để bỏ' : 'bấm để chỉ xem ' + g + ' ▸';
+  const pickHint = g => 'bấm để xem ' + g + ' ▸';
   const T = [
     {grp:'cls', pick:'EVCS', title:'Phân loại EVCS', mini:['donut',cE,cEt], spark:te, sub:clsSub(cEt,cE)},
     {grp:'cls', pick:'BSS',  title:'Phân loại BSS',  mini:['donut',cB,cBt], spark:tb, sub:clsSub(cBt,cB)},
@@ -1480,8 +1504,8 @@ function renderTiles(){
       ? `<div class="big">${t.big}</div><div class="sub">${t.sub}</div>`
       : `<div class="cvmini"><canvas id="tile_${i}"></canvas></div><div class="sub">${t.sub}</div>`;
     const spark = t.spark ? `<div class="trendline"><canvas id="trend_${i}"></canvas></div>` : '';
-    /* Ô Phân loại EVCS/BSS = nút CHỌN DÒNG SẢN PHẨM cho cả trang (không mở modal nữa).
-       Bảng chi tiết phân loại vẫn vào được qua nút "Phân loại & Disclaim" ở Xem thêm. */
+    /* Ô Phân loại EVCS/BSS mở bảng chi tiết như mọi ô khác, chỉ khác là nó đồng thời
+       chốt dòng sản phẩm nên trong bảng (và cả trang) chỉ còn sản phẩm vừa bấm. */
     const cls = 'tile' + (t.pick && SEG===t.pick ? ' picked' : '');
     const ico = t.pick ? pickHint(t.pick) : 'bấm để xem ▸';
     return `<div class="${cls}" data-grp="${t.grp}"${t.pick?` data-pick="${t.pick}"`:''} role="button" tabindex="0"`
@@ -1552,6 +1576,7 @@ function render(){
   renderModelErrors();
   renderSolOverview();
   tagSegCards();     // thẻ vừa vẽ lại -> gắn nhãn sản phẩm để bộ lọc còn ăn
+  segNote();
   if(modalOpen()) resizeCharts();   // đổi toggle khi modal đang mở -> chart trong modal co lại đúng cỡ
 }
 document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
