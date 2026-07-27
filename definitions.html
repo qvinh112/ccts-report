@@ -26,6 +26,27 @@ p.en{color:var(--ink2);font-style:italic;font-size:13px;border-left:3px solid va
 <p style="color:var(--muted);font-size:12.5px">Mỗi chỉ số trên dashboard chỉ có MỘT nghĩa, chốt tại đây và không đổi giữa các tuần.
 · <i>Each metric has exactly ONE meaning, fixed here and unchanged week to week.</i></p>
 
+<section id="period"><h2>Kỳ báo cáo: tuần và tháng · Reporting period: week vs month</h2>
+<p><b>Hai kỳ này trả lời hai câu hỏi khác nhau, số của chúng không phải khớp nhau.</b>
+<b>Báo cáo tuần</b> (vd W31) so kết quả một tuần với các tuần liền trước — kỳ ngắn, luôn
+đúng 7 ngày nên so được. <b>Báo cáo tháng</b> là cái nhìn tổng thể qua nhiều tháng (xem
+khối "So sánh các tháng"), dùng nhìn xu thế dài hạn chứ không phải để đối chiếu với con
+số của một tuần.</p>
+<p>Bucket tháng chạy từ <b>ngày 20 sang ngày 19 tháng sau</b> (quy ước có sẵn của file
+Report gốc). Vì vậy bucket tháng đang chạy có lúc chỉ gồm đúng 1 tuần — khi đó chế độ
+Tháng ra số y hệt chế độ Tuần. Để tránh hiểu nhầm, kỳ báo cáo luôn lấy <b>kỳ TRỌN gần
+nhất</b>: tuần đủ 7 ngày, tháng đủ khoảng 30 ngày. Kỳ đang chạy dở được nêu tên trong
+ghi chú đầu trang nhưng không dùng làm kỳ báo cáo.</p>
+<p class="en">The two periods answer different questions and their numbers need not match.
+The <b>weekly</b> report (e.g. W31) compares one week against the preceding weeks — a short
+period, always exactly 7 days, so the comparison holds. The <b>monthly</b> report is a
+long-run view across many months (see "So sánh các tháng"); it is not meant to reconcile
+with any single week. Month buckets run from the 20th to the 19th of the next month (a
+convention inherited from the source Report workbook), so a running month bucket can
+contain just one week. To avoid that confusion the report always uses the <b>latest
+COMPLETE period</b>; the running period is named in the header note but never used as the
+reporting period.</p></section>
+
 <section id="evcs"><h2>Tỉ lệ lỗi EVCS · EVCS failure rate</h2>
 <p>Số thiết bị EVCS lỗi (đếm distinct theo thiết bị, loại trừ vé Disclaim) chia cho số thiết bị đang vận hành. Số thiết bị vận hành (fleet) là số tĩnh chốt tại W29 vì export CCTS không có nguồn fleet theo tuần. Phạm vi: vé luồng API creation, đã lọc phạm vi vận hành.</p>
 <p class="en">Distinct failed EVCS units (excluding Disclaim tickets) divided by units in service. Fleet size is a static W29 figure because the CCTS export carries no weekly fleet source. Scope: API-creation tickets, operations scope applied.</p></section>

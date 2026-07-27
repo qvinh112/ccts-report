@@ -256,7 +256,7 @@ tr.xmiss td{background:#fdf3f3}
 </head>
 <body>
 <header>
-  <h1>📊 Báo cáo tuần <span id="hdW"></span> — EVCS &amp; BSS</h1>
+  <h1>📊 <span id="hdTitle">Báo cáo tuần </span><span id="hdW"></span> — EVCS &amp; BSS</h1>
   <label class="hdWk" id="wkPick" style="display:none">Bản lưu
     <select id="wkSel" title="Xem lại báo cáo của tuần đã chốt"></select>
   </label>
@@ -474,7 +474,9 @@ tr.xmiss td{background:#fdf3f3}
 </section>
 
 <section id="sec-trend">
-  <h2>Xu hướng theo tuần W23 → W29 (loại trừ Disclaim)</h2>
+  <!-- Nhãn tuần đổ từ D.weeks; trước 27/07 viết cứng "W23 → W29" nên báo cáo tuần nào
+       cũng ghi W23→W29 dù biểu đồ vẽ 7 tuần khác. -->
+  <h2>Xu hướng theo tuần <span id="trendRange"></span> (loại trừ Disclaim)</h2>
   <div class="grid2">
     <div class="card"><h3>EVCS — Số ticket</h3><div class="cv"><canvas id="c_tr_evcs_t"></canvas></div></div>
     <div class="card"><h3>EVCS — Failure rate</h3><div class="cv"><canvas id="c_tr_evcs_r"></canvas></div></div>
@@ -484,6 +486,25 @@ tr.xmiss td{background:#fdf3f3}
   <!-- Ghi chú bất thường gắn theo tuần, đổ từ D.weekNote (build.py: WEEK_NOTES).
        Trước 25/07 viết cứng ghi chú của W29 nên tuần nào cũng hiện. -->
   <div class="note" id="weekNote" style="display:none"></div>
+
+  <!-- Chế độ Tháng: cái nhìn tổng thể NHIỀU tháng (D.monthSeries), khác hẳn 7 tuần ở trên. -->
+  <div id="monthCmp" style="display:none">
+    <h2>So sánh các tháng <span id="monthRange"></span></h2>
+    <div class="note">Bảng và biểu đồ dưới đây là <b>toàn bộ các tháng có dữ liệu</b>, không
+      phải một kỳ đơn lẻ — dùng để nhìn xu thế dài hạn. Bucket tháng chạy từ ngày 20 sang
+      ngày 19 tháng sau (quy ước sẵn có của báo cáo). Tháng đánh dấu <b>*</b> chưa trọn
+      khoảng ngày nên thấp hơn là do độ phủ dữ liệu, không phải do lỗi giảm.
+      <br><b>Đọc cột "Độ phủ luồng API" trước khi so tháng:</b> luồng <i>API creation</i>
+      (VOMS tự sinh ticket) — bộ lọc mặc định của báo cáo — chỉ được bật dần trong 2026, các
+      tháng đầu năm gần như chưa có. Tháng có độ phủ thấp ⚠ ra ít ticket là do <b>chưa bật
+      luồng</b>, không phải ít việc; muốn so công bằng các tháng đó thì chuyển bộ lọc nguồn
+      sang <i>Tất cả</i>.<span id="monthBssNote"></span></div>
+    <div class="grid2">
+      <div class="card"><h3>Số ticket theo tháng</h3><div class="cv"><canvas id="c_mo_qty"></canvas></div></div>
+      <div class="card"><h3>Overdue rate theo tháng</h3><div class="cv"><canvas id="c_mo_ovd"></canvas></div></div>
+    </div>
+    <div class="tblwrap"><table id="t_months"></table></div>
+  </div>
 </section>
 
 <section id="sec-alarm">
@@ -1198,7 +1219,8 @@ function openModal(grp, keepUrl){
   lastFocus = document.activeElement;
   OPEN_GRP = grp;
   document.querySelectorAll('#modalScroll > section').forEach(s=> s.style.display = g.ids.includes(s.id)?'':'none');
-  document.getElementById('modalTitle').textContent = g.title;
+  document.getElementById('modalTitle').textContent =
+    (grp==='trend' && MODE==='m') ? 'Tình trạng lỗi theo model & So sánh các tháng' : g.title;
   host.classList.add('open');
   host.setAttribute('aria-hidden','false');   // trước đây kẹt 'true' -> trình đọc màn hình không thấy gì
   document.body.style.overflow='hidden';
@@ -1407,7 +1429,10 @@ function renderTiles(){
     else if(t.mini[0]==='rc') miniRcBar('tile_'+i, t.mini[1]);
     else if(t.mini[0]==='line') miniLine('tile_'+i, t.mini[1], t.mini[2]);
   });
-  const more = [['watch','Cảnh báo'],['cls','Disclaim'],['trend','Theo model'],['alarm','Alarm'],
+  /* Ở chế độ Tháng, nhóm 'trend' còn chứa khối "So sánh các tháng" — phải ghi vào nhãn,
+     không thì cái nhìn tổng thể theo tháng nằm sau một nút tên "Theo model", không ai mở. */
+  const more = [['watch','Cảnh báo'],['cls','Disclaim'],
+    ['trend', MODE==='m' ? '📅 So sánh các tháng' : 'Theo model'],['alarm','Alarm'],
     ['cause','Nguyên nhân overdue'],
     ['asp','ASP'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
     ['explain','✍ Giải trình overdue']];
@@ -1462,6 +1487,8 @@ document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
      cần gom từ DOM trước khi vẽ lại. */
   render();
   monthCovNote();    // tháng có thể mới gồm 1 tuần -> phải nói rõ, xem monthCovNote()
+  monthCompare();    // khối "So sánh các tháng" chỉ có nghĩa ở chế độ Tháng
+  headLabels();
   syncUrl();
 });
 /* bật nút đang chọn + cập nhật aria-pressed (trước đây chỉ đổi class, đọc màn hình không thấy) */
@@ -2024,6 +2051,52 @@ function drawSourceCharts(){
   lineChart('c_tr_bss_r', D.weeks, D.trendBss.models, D.trendBss.failRate, true);
   lineChart('c_asp_evcs', D.weeks, D.aspEvcs.asps, D.aspEvcs.rate, true);
   lineChart('c_asp_bss', D.weeks, D.aspBss.asps, D.aspBss.rate, true);
+  monthCompare();
+}
+
+/* So sánh các tháng — chỉ hiện ở chế độ Tháng. D.monthSeries dùng đúng định nghĩa KPI
+   như D.wowSeries (chỉ đổi cột kỳ AW->AX) nên hai chế độ so được với nhau. */
+function monthCompare(){
+  const box = document.getElementById('monthCmp'), ms = D.monthSeries, mo = D.months||[];
+  if(!box) return;
+  if(!ms || mo.length < 2){ box.style.display='none'; return; }
+  box.style.display = MODE==='m' ? '' : 'none';
+  const rng = document.getElementById('monthRange');
+  if(rng) rng.textContent = mo[0] + ' → ' + mo[mo.length-1];
+  if(MODE!=='m') return;   // canvas ẩn -> Chart.js vẽ ra kích thước 0
+  const cov = D.monthsCov||{};
+  /* Tháng chưa trọn (vd M1 chỉ có 01→19/01 vì dữ liệu bắt đầu từ 01/01) tụt xuống trong
+     biểu đồ mà không phải do lỗi giảm — gắn dấu * để không đọc nhầm thành xu hướng. */
+  const lbl = mo.map(x => (cov[x]||{}).partial ? x+'*' : x);
+  lineChart('c_mo_qty', lbl, ['EVCS','BSS'], [ms.evcsQty, ms.bssQty], false);
+  lineChart('c_mo_ovd', lbl, ['EVCS','BSS'], [ms.evcsOvdRate, ms.bssOvdRate], true);
+  const src = D.monthSrcCov||{};
+  /* Đường BSS phẳng 0 ở các tháng đầu là ĐÚNG dữ liệu chứ không phải thiếu: ticket BSS-VH
+     có từ trước nhưng chỉ vào luồng API creation từ một tháng nhất định. Suy thẳng từ dữ
+     liệu thay vì viết cứng tên tháng, vì mốc này đổi theo bộ lọc nguồn đang chọn. */
+  const bn = document.getElementById('monthBssNote');
+  if(bn){
+    const k = ms.bssQty.findIndex(v=> v>0);
+    bn.innerHTML = (k > 0)
+      ? ` Đường <b>BSS</b> phẳng 0 tới <b>${escH(mo[k])}</b> vì ticket BSS chỉ vào luồng đang lọc từ tháng đó — BSS trước đó vẫn có việc, nằm trong cột "Tổng VH mọi nguồn".`
+      : '';
+  }
+  document.getElementById('t_months').innerHTML =
+    '<tr><th>Tháng</th><th>Khoảng ngày</th><th>EVCS — ticket</th><th>EVCS — overdue rate</th>' +
+    '<th>BSS — ticket</th><th>BSS — overdue rate</th>' +
+    '<th title="Toàn bộ ticket vận hành tháng đó, KHÔNG lọc luồng tạo">Tổng VH mọi nguồn</th>' +
+    '<th title="Tỉ lệ ticket vận hành đi qua luồng API creation — bộ lọc mặc định của báo cáo">Độ phủ luồng API</th></tr>' +
+    mo.map((x,i)=>{
+      const c = cov[x]||{}, s = src[x]||{};
+      const span = c.from ? `${c.from} → ${c.to}` + (c.partial ? ' <b>(chưa trọn)</b>' : '') : '—';
+      /* Độ phủ luồng thấp = tháng đó CCTS chưa bật API creation, KHÔNG phải ít việc. */
+      const low = s.all && s.share < .5;
+      return `<tr${x===D.month?' style="font-weight:600"':''}><td>${escH(x)}</td><td>${span}</td>` +
+        `<td>${nf.format(ms.evcsQty[i]||0)}</td><td>${pc(ms.evcsOvdRate[i])}</td>` +
+        `<td>${nf.format(ms.bssQty[i]||0)}</td><td>${pc(ms.bssOvdRate[i])}</td>` +
+        `<td>${nf.format(s.all||0)}</td>` +
+        `<td${low?' style="color:#b45309"':''}>${pc(s.share)}${low?' ⚠':''}</td></tr>`;
+    }).join('');
 }
 drawSourceCharts();
 costCharts();
@@ -2076,17 +2149,29 @@ function applyUrl(){
     Object.assign(D, D.variants[SRC]); redraw = true;
   }
   Object.entries(FURL).forEach(([k, key])=>{ if(o[k] != null){ F[key] = o[k]; refilter = true; } });
-  if(redraw){ render(); drawSourceCharts(); monthCovNote(); setTimeout(fixSizes, 60); }
+  if(redraw){ render(); drawSourceCharts(); monthCovNote(); headLabels(); setTimeout(fixSizes, 60); }
   if(refilter){ initOvdFilters(); renderOverdue(); renderOvdProgress(); }
   if(o.sec) openModal(o.sec, true);
 }
+/* Tiêu đề đổi theo chế độ: "Báo cáo tuần W31" và "Báo cáo tháng M7" là HAI báo cáo khác
+   mục đích (tuần: so các tuần với nhau; tháng: nhìn tổng thể nhiều tháng). Trước 27/07
+   tiêu đề luôn ghi "Báo cáo tuần W…" kể cả khi đang xem Tháng nên người đọc tưởng số
+   tháng và số tuần phải khớp nhau. */
+function headLabels(){
+  const isW = MODE === 'w', per = isW ? D.week : D.month;
+  document.title = (isW ? 'Báo cáo tuần ' : 'Báo cáo tháng ') + per + ' — EVCS & BSS';
+  const h1 = document.getElementById('hdTitle');
+  if(h1) h1.textContent = isW ? 'Báo cáo tuần ' : 'Báo cáo tháng ';
+  const hd = document.getElementById('hdW'); if(hd) hd.textContent = per;
+}
 /* nhãn động theo dữ liệu (báo cáo chạy hằng ngày -> tuần/tháng thay đổi) */
 (function(){
-  document.title = 'Báo cáo tuần ' + D.week + ' — EVCS & BSS';
-  const hd = document.getElementById('hdW'); if(hd) hd.textContent = D.week;
+  headLabels();
   const segs = document.querySelectorAll('#modeSeg button');
   if(segs[0]) segs[0].textContent = 'Tuần ('+D.week+')';
   if(segs[1]) segs[1].textContent = 'Tháng ('+D.month+')';
+  const tr = document.getElementById('trendRange'), wk = D.weeks||[];
+  if(tr && wk.length) tr.textContent = wk[0] + ' → ' + wk[wk.length-1];
   const cr = document.getElementById('costRange'), cm = (D.cost&&D.cost.months)||[];
   if(cr && cm.length) cr.textContent = cm[0] + ' → ' + cm[cm.length-1];
   const wn = document.getElementById('weekNote');
@@ -2135,24 +2220,33 @@ safe('khôi phục trạng thái từ URL', applyUrl);
 (function(){
   const ft=document.getElementById('freshTag');
   if(ft && D.generatedAt) ft.textContent = '🕒 Số liệu cập nhật: '+D.generatedAt;
-  const cov=D.coverage||{};
+  const cov=D.coverage||{}, pw=document.getElementById('partialWarn');
+  if(!pw) return;
   if(cov.partial){
-    const pw=document.getElementById('partialWarn');
-    if(pw){ pw.style.display=''; pw.textContent = `⚠ Tuần ${D.week} mới có ${cov.days}/7 ngày (${cov.from}→${cov.to}) — số tuần hiện tại chưa đủ, đừng so trực tiếp với các tuần đã trọn.`; }
+    pw.style.display=''; pw.textContent = `⚠ Tuần ${D.week} mới có ${cov.days}/7 ngày (${cov.from}→${cov.to}) — số tuần hiện tại chưa đủ, đừng so trực tiếp với các tuần đã trọn.`;
+  }else if(D.weekRunning){
+    /* Kỳ báo cáo tuần cố tình LÙI về tuần trọn gần nhất: tuần đang chạy dở luôn ít
+       ticket hơn nên đưa vào biểu đồ so tuần là sai. Nói rõ thay vì để người đọc
+       tưởng báo cáo chưa cập nhật. */
+    pw.style.display=''; pw.textContent = `ℹ Kỳ tuần = ${D.week} (tuần trọn gần nhất, ${cov.from}→${cov.to}). Tuần ${D.weekRunning} đang chạy dở nên chưa đưa vào để biểu đồ so tuần không lệch.`;
   }
 })();
-/* Vì sao chế độ Tháng có lúc ra số y hệt chế độ Tuần: bucket tháng (cột AX) tính ticket
-   từ ngày 20 sang tháng sau, nên đầu chu kỳ tháng nó chỉ chứa đúng tuần đang xem. Trước
-   đây trang im lặng nên người dùng tưởng nút Tháng hỏng — giờ nói thẳng. */
+/* Hai chế độ KHÁC MỤC ĐÍCH, không phải hai cách hiển thị cùng một con số:
+     Tuần  — so kết quả tuần này với các tuần trước (kỳ ngắn, cùng độ dài 7 ngày).
+     Tháng — nhìn tổng thể qua nhiều tháng (xu thế dài hạn), xem "So sánh các tháng".
+   Bucket tháng (cột AX) chạy từ ngày 20 sang ngày 19 tháng sau, nên bucket đang chạy có
+   lúc chỉ gồm đúng 1 tuần; build.py vì thế lấy tháng TRỌN gần nhất làm kỳ tháng. */
 function monthCovNote(){
   const mw = document.getElementById('monthWarn'), mc = D.monthCoverage;
   if(!mw) return;
   if(!mc || !mc.days || MODE !== 'm'){ mw.style.display='none'; return; }
-  const span = `${mc.from}→${mc.to}`;
+  const span = `${mc.from}→${mc.to}`, run = D.monthRunning, rc = (D.monthsCov||{})[run];
   mw.style.display = '';
   mw.textContent = mc.sameAsWeek
     ? `⚠ Tháng ${D.month} mới có ${mc.days} ngày (${span}) và hiện chỉ gồm đúng tuần ${D.week} — số liệu hai chế độ giống nhau là đúng, không phải lỗi. Chúng tách nhau khi sang tuần kế tiếp.`
-    : `ℹ Tháng ${D.month} gồm ${mc.weeks.join(', ')} (${span})${mc.partial ? ' — tháng chưa trọn' : ''}. Quy ước: ticket từ ngày 20 tính sang tháng sau.`;
+    : `ℹ Kỳ tháng = ${D.month} (${span}, gồm ${mc.weeks.join(', ')})${mc.partial ? ' — chưa trọn' : ''}.`
+      + (run && rc ? ` Tháng ${run} mới có ${rc.days} ngày (${rc.from}→${rc.to}) nên chưa làm kỳ báo cáo.` : '')
+      + ` Báo cáo tháng dùng để nhìn tổng thể nhiều tháng — xem "So sánh các tháng"; báo cáo tuần (${D.week}) dùng để so các tuần với nhau. Hai con số không phải khớp nhau.`;
 }
 monthCovNote();
 /* Nhãn "số tĩnh" cho các khối KHÔNG tính được từ export (cost/alarm/parts giá) — mốc lấy
