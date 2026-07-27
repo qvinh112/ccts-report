@@ -783,6 +783,7 @@ function applySeg(){
   renderTiles();                // ô RC / SLA / trạng thái "đang xem" phải theo sản phẩm
   segNote();                    // dải nhắc "đang chỉ xem X" + lối quay lại
   renderModelErrors();          // danh sách loại tủ phải theo dòng sản phẩm đang chọn
+  renderSolOverview();          // mặt bằng cách xử lý cũng phải cùng phạm vi
   if(modalOpen()) resizeCharts();  // thẻ còn lại giãn ra full width -> chart phải vẽ lại cỡ
 }
 /* Bấm ô "Phân loại EVCS/BSS" = VÀO XEM chi tiết sản phẩm đó: vẫn mở bảng chi tiết như
@@ -1273,7 +1274,9 @@ function costCharts(){
 
 /* ===== Cockpit: tiles tổng quan + modal drill-down ===== */
 const GROUPS = {
-  cls:  {title:'Phân loại ticket & Chi tiết Disclaim', ids:['sec-cls','sec-dis']},
+  /* 'Mã lỗi theo loại tủ' là TẬP CON của phân loại (phân loại nói nhóm lỗi, mục này đi tiếp
+     xuống từng mã lỗi của từng loại tủ) nên gộp vào đây thay vì đứng riêng ở Xem thêm. */
+  cls:  {title:'Phân loại ticket, Disclaim & Mã lỗi theo loại tủ', ids:['sec-cls','sec-dis','sec-model']},
   rc:   {title:'Nguyên nhân lỗi (RC)', ids:['sec-rc']},
   sla:  {title:'SLA / Overdue & Hiệu suất xử lý', ids:['sec-sla','sec-perf']},
   cause:{title:'Nguyên nhân Overdue', ids:['sec-cause','sec-ovdana']},
@@ -1284,7 +1287,6 @@ const GROUPS = {
   wh:   {title:'Kho & vật tư (tồn kho live)', ids:['sec-wh']},
   parts:{title:'Top vật tư sử dụng', ids:['sec-parts']},
   cost: {title:'Chi phí dịch vụ', ids:['sec-cost']},
-  model:{title:'Mã lỗi theo loại tủ & hiệu quả cách xử lý', ids:['sec-model']},
   action:{title:'Sổ hành động theo mã lỗi', ids:['sec-action']},
   fix:  {title:'Dữ liệu đã hiệu chỉnh (V3 vs V2)', ids:['sec-fix']},
   explain:{title:'Giải trình ticket Overdue (toàn quốc)', ids:['sec-overdue']},
@@ -1528,9 +1530,9 @@ function renderTiles(){
   });
   /* Ở chế độ Tháng, nhóm 'trend' còn chứa khối "So sánh các tháng" — phải ghi vào nhãn,
      không thì cái nhìn tổng thể theo tháng nằm sau một nút tên "Theo model", không ai mở. */
-  const more = [['watch','Cảnh báo'],['cls','Phân loại & Disclaim'],
+  const more = [['watch','Cảnh báo'],['cls','Phân loại · Disclaim · Mã lỗi theo loại tủ'],
     ['trend', MODE==='m' ? '📅 So sánh các tháng' : 'Theo model'],['alarm','Alarm'],
-    ['cause','Nguyên nhân overdue'],['model','🔩 Mã lỗi theo loại tủ'],['action','🔧 Sổ hành động'],
+    ['cause','Nguyên nhân overdue'],['action','🔧 Sổ hành động'],
     ['asp','ASP'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
     ['explain','✍ Giải trình overdue']];
   const mb = document.getElementById('morebar');
@@ -2291,8 +2293,14 @@ window.toggleCode = function(i, el){
 };
 
 function renderSolOverview(){
-  const o = D.solOverview; if(!o) return;
-  document.getElementById('solNote').innerHTML =
+  const O = D.solOverview; if(!O) return;
+  /* Mặt bằng phải cùng phạm vi với bảng mã lỗi ngay trên nó: đang chỉ xem EVCS mà mặt bằng
+     là số gộp cả BSS thì so sánh sai — tủ pin và trụ sạc hỏng khác nhau. */
+  const o = (SEG!=='all' && O.seg && O.seg[SEG]) ? Object.assign({}, O, O.seg[SEG]) : O;
+  const scope = SEG==='all'
+    ? `Tính trên <b>cả EVCS và BSS</b> (${n0(o.total)} ticket đọc được cách xử lý). `
+    : `Tính riêng <b>${SEG}</b> (${n0(o.total)} ticket đọc được cách xử lý). `;
+  document.getElementById('solNote').innerHTML = scope +
     `Gom từ biên bản KTV tự gõ trong CCTS (trường <i>Repair Descript</i>, thiếu thì lấy `+
     `<i>Solution</i>/<i>Problem Analysis</i>) — đọc được <b>${pc(o.labelled,1)}</b> số ticket. `+
     `Đây là chữ tự do chứ không phải trường có kiểm soát, nên bảng này đủ tin để so <b>tương `+

@@ -40838,7 +40838,185 @@ const REPORT_DATA = {
   "covered": 124056,
   "labelled": 0.976527,
   "recurDays": 30,
-  "minN": 25
+  "minN": 25,
+  "seg": {
+   "EVCS": {
+    "rows": [
+     {
+      "name": "Không tồn lỗi khi tới nơi",
+      "qty": 26534,
+      "share": 0.268305,
+      "parts": 0.010552,
+      "med": 27.3,
+      "effN": 15563,
+      "recur": 0.5214
+     },
+     {
+      "name": "Khác / chưa rõ",
+      "qty": 19984,
+      "share": 0.202073,
+      "parts": 0.051741,
+      "med": 20.8,
+      "effN": 15171,
+      "recur": 0.7047
+     },
+     {
+      "name": "Kiểm tra tại chỗ, không nêu thao tác",
+      "qty": 19060,
+      "share": 0.19273,
+      "parts": 0.02702,
+      "med": 20.1,
+      "effN": 12262,
+      "recur": 0.4724
+     },
+     {
+      "name": "Reset / clear lỗi",
+      "qty": 18317,
+      "share": 0.185217,
+      "parts": 0.004258,
+      "med": 24.1,
+      "effN": 10354,
+      "recur": 0.5109
+     },
+     {
+      "name": "Thay thế linh kiện",
+      "qty": 5897,
+      "share": 0.059629,
+      "parts": 0.864507,
+      "med": 36.0,
+      "effN": 2864,
+      "recur": 0.3045
+     },
+     {
+      "name": "Miễn trừ / nguyên nhân khách quan",
+      "qty": 3620,
+      "share": 0.036604,
+      "parts": 0.005801,
+      "med": 22.1,
+      "effN": 2987,
+      "recur": 0.5176
+     },
+     {
+      "name": "Cập nhật firmware / phần mềm",
+      "qty": 2962,
+      "share": 0.029951,
+      "parts": 0.006415,
+      "med": 36.4,
+      "effN": 1700,
+      "recur": 0.4806
+     },
+     {
+      "name": "Vệ sinh / siết lại đấu nối",
+      "qty": 1497,
+      "share": 0.015137,
+      "parts": 0.004676,
+      "med": 21.0,
+      "effN": 993,
+      "recur": 0.4612
+     },
+     {
+      "name": "Cắm lại / đấu nối lại",
+      "qty": 1024,
+      "share": 0.010354,
+      "parts": 0.011719,
+      "med": 28.0,
+      "effN": 529,
+      "recur": 0.4669
+     }
+    ],
+    "total": 98895,
+    "covered": 98895,
+    "labelled": 0.992942
+   },
+   "BSS": {
+    "rows": [
+     {
+      "name": "Reset / clear lỗi",
+      "qty": 7096,
+      "share": 0.282024,
+      "parts": 0.010006,
+      "med": 31.5,
+      "effN": 2339,
+      "recur": 0.2779
+     },
+     {
+      "name": "Kiểm tra tại chỗ, không nêu thao tác",
+      "qty": 5608,
+      "share": 0.222885,
+      "parts": 0.050999,
+      "med": 22.1,
+      "effN": 1133,
+      "recur": 0.3124
+     },
+     {
+      "name": "Khác / chưa rõ",
+      "qty": 4957,
+      "share": 0.197011,
+      "parts": 0.066371,
+      "med": 28.0,
+      "effN": 1419,
+      "recur": 0.2551
+     },
+     {
+      "name": "Không tồn lỗi khi tới nơi",
+      "qty": 3770,
+      "share": 0.149835,
+      "parts": 0.012467,
+      "med": 38.0,
+      "effN": 441,
+      "recur": 0.2902
+     },
+     {
+      "name": "Thay thế linh kiện",
+      "qty": 1002,
+      "share": 0.039824,
+      "parts": 0.723553,
+      "med": 25.0,
+      "effN": 244,
+      "recur": 0.3811
+     },
+     {
+      "name": "Miễn trừ / nguyên nhân khách quan",
+      "qty": 968,
+      "share": 0.038472,
+      "parts": 0.003099,
+      "med": 43.0,
+      "effN": 300,
+      "recur": 0.3
+     },
+     {
+      "name": "Cắm lại / đấu nối lại",
+      "qty": 688,
+      "share": 0.027344,
+      "parts": 0.021802,
+      "med": 29.9,
+      "effN": 260,
+      "recur": 0.1962
+     },
+     {
+      "name": "Vệ sinh / siết lại đấu nối",
+      "qty": 633,
+      "share": 0.025158,
+      "parts": 0.015798,
+      "med": 25.3,
+      "effN": 162,
+      "recur": 0.2901
+     },
+     {
+      "name": "Cập nhật firmware / phần mềm",
+      "qty": 439,
+      "share": 0.017448,
+      "parts": 0.004556,
+      "med": 46.6,
+      "effN": 86,
+      "recur": 0.186
+     }
+    ],
+    "total": 25161,
+    "covered": 25161,
+    "labelled": 0.916946
+   }
+  }
  },
  "disclaimAudit": {
   "EVCSW": {
@@ -46990,5 +47168,5 @@ const REPORT_DATA = {
   "source": "260717 Report W29 V3.xlsx"
  },
  "weekNote": "",
- "generatedAt": "2026-07-27 14:47"
+ "generatedAt": "2026-07-27 16:57"
 };
