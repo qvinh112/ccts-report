@@ -49,7 +49,32 @@ reporting period.</p></section>
 
 <section id="evcs"><h2>Tỉ lệ lỗi EVCS · EVCS failure rate</h2>
 <p>Số thiết bị EVCS lỗi (đếm distinct theo thiết bị, loại trừ vé Disclaim) chia cho số thiết bị đang vận hành. Số thiết bị vận hành (fleet) là số tĩnh chốt tại W29 vì export CCTS không có nguồn fleet theo tuần. Phạm vi: vé luồng API creation, đã lọc phạm vi vận hành.</p>
-<p class="en">Distinct failed EVCS units (excluding Disclaim tickets) divided by units in service. Fleet size is a static W29 figure because the CCTS export carries no weekly fleet source. Scope: API-creation tickets, operations scope applied.</p></section>
+<p class="en">Distinct failed EVCS units (excluding Disclaim tickets) divided by units in service. Fleet size is a static W29 figure because the CCTS export carries no weekly fleet source. Scope: API-creation tickets, operations scope applied.</p>
+<p><b>Giới hạn phải biết:</b> mẫu số tĩnh W29 áp cho MỌI kỳ, trong khi mạng lưới tăng nhanh
+trong 2026 (số trạm có vé: 1.888 tháng 1 → 9.152 tháng 7). Vì vậy tỉ lệ này so được giữa các
+TUẦN gần nhau, nhưng so giữa các THÁNG thì mẫu số sai. Khi so tháng, dùng hai chỉ số không
+phụ thuộc fleet ở ô chọn trên biểu đồ xu hướng: <b>thiết bị lỗi (distinct)</b> và
+<b>tần suất tái phát</b> = vé / thiết bị lỗi.</p>
+<p class="en"><b>Known limitation:</b> the static W29 denominator is applied to every period,
+while the network grew fast in 2026 (sites with tickets: 1,888 in Jan → 9,152 in Jul). The
+ratio is comparable across nearby WEEKS but not across MONTHS. For month comparisons use the
+two fleet-independent metrics offered on the trend chart: <b>distinct failed units</b> and
+<b>recurrence</b> = tickets per failed unit.</p></section>
+
+<section id="campaign"><h2>Lỗi tự nhiên vs chiến dịch · Natural faults vs campaigns</h2>
+<p>Vé thuộc đợt thay thế hàng loạt theo kế hoạch được tách thành dải riêng trên biểu đồ xu
+hướng, theo quy tắc khai báo (segment + khoảng tuần + mã lỗi chuẩn hóa). Không tách thì một
+đợt thay khóa đọc thành “chất lượng sản phẩm sụp đổ” — W30/2026 có <b>3.801 trong 7.639 vé
+BSS</b> là đợt thay khóa slot theo kế hoạch.</p>
+<p>Trên cùng các biểu đồ đó còn có <b>vạch dọc đánh dấu mốc segment vào luồng API creation</b>
+(BSS: W29). Trước mốc đó segment gần như không có vé trong phạm vi báo cáo — đường đi từ 0
+lên là <i>onboarding luồng</i>, không phải hỏng hàng loạt.</p>
+<p class="en">Tickets belonging to planned mass-replacement campaigns are split into a separate
+band on trend charts, via declared rules (segment + week range + normalised error code).
+Without the split, a lock-replacement campaign reads as a collapse in product quality — in
+W30/2026, <b>3,801 of 7,639 BSS tickets</b> were the planned slot-lock campaign. The same
+charts carry a <b>vertical marker for when a segment entered the API-creation flow</b> (BSS:
+W29); a line rising from zero before that marker is flow onboarding, not a failure spike.</p></section>
 
 <section id="bss"><h2>Tỉ lệ lỗi BSS · BSS failure rate</h2>
 <p>Như trên, cho trạm đổi pin (BSS-06, BSS-12).</p>

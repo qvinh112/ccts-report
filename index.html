@@ -476,12 +476,34 @@ tr.xmiss td{background:#fdf3f3}
 <section id="sec-trend">
   <!-- Nhãn tuần đổ từ D.weeks; trước 27/07 viết cứng "W23 → W29" nên báo cáo tuần nào
        cũng ghi W23→W29 dù biểu đồ vẽ 7 tuần khác. -->
-  <h2>Xu hướng theo tuần <span id="trendRange"></span> (loại trừ Disclaim)</h2>
+  <h2>Xu hướng theo <span id="trendUnit">tuần</span> <span id="trendRange"></span> (loại trừ Disclaim)</h2>
+  <!-- A1: "Failure rate" chia cho fleet ĐÓNG BĂNG ở W29 trong khi mạng lưới tăng gần 5 lần
+       trong 2026 -> so tỉ lệ giữa các THÁNG là so trên mẫu số sai. Cho chọn 2 chỉ số không
+       cần fleet: số thiết bị lỗi (distinct) và tần suất tái phát (ticket / thiết bị lỗi). -->
+  <div class="note" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <label>Chỉ số cột phải:
+      <select id="trMetric">
+        <option value="failRate">Failure rate (mẫu số fleet tĩnh W29)</option>
+        <option value="failed">Thiết bị lỗi — distinct (không cần fleet)</option>
+        <option value="freq">Tần suất tái phát — ticket / thiết bị lỗi</option>
+      </select>
+    </label>
+    <span id="trMetricNote"></span>
+  </div>
   <div class="grid2">
     <div class="card"><h3>EVCS — Số ticket</h3><div class="cv"><canvas id="c_tr_evcs_t"></canvas></div></div>
-    <div class="card"><h3>EVCS — Failure rate</h3><div class="cv"><canvas id="c_tr_evcs_r"></canvas></div></div>
+    <div class="card"><h3>EVCS — <span class="trMetricLbl"></span></h3><div class="cv"><canvas id="c_tr_evcs_r"></canvas></div></div>
     <div class="card"><h3>BSS — Số ticket</h3><div class="cv"><canvas id="c_tr_bss_t"></canvas></div></div>
-    <div class="card"><h3>BSS — Failure rate</h3><div class="cv"><canvas id="c_tr_bss_r"></canvas></div></div>
+    <div class="card"><h3>BSS — <span class="trMetricLbl"></span></h3><div class="cv"><canvas id="c_tr_bss_r"></canvas></div></div>
+  </div>
+
+  <!-- A2: nền vs chiến dịch. Không tách thì một đợt thay thế hàng loạt theo kế hoạch
+       (W30: ~50% ticket BSS là đợt thay khóa slot) đọc thành chất lượng sản phẩm sụp đổ. -->
+  <h2>Lỗi tự nhiên và chiến dịch thay thế hàng loạt</h2>
+  <div class="note" id="campNote"></div>
+  <div class="grid2">
+    <div class="card"><h3>EVCS</h3><div class="cv"><canvas id="c_camp_evcs"></canvas></div></div>
+    <div class="card"><h3>BSS</h3><div class="cv"><canvas id="c_camp_bss"></canvas></div></div>
   </div>
   <!-- Ghi chú bất thường gắn theo tuần, đổ từ D.weekNote (build.py: WEEK_NOTES).
        Trước 25/07 viết cứng ghi chú của W29 nên tuần nào cũng hiện. -->
@@ -499,8 +521,14 @@ tr.xmiss td{background:#fdf3f3}
       tháng đầu năm gần như chưa có. Tháng có độ phủ thấp ⚠ ra ít ticket là do <b>chưa bật
       luồng</b>, không phải ít việc; muốn so công bằng các tháng đó thì chuyển bộ lọc nguồn
       sang <i>Tất cả</i>.<span id="monthBssNote"></span></div>
+    <!-- A3: bucket tháng dài 19–31 ngày (chênh 63%) nên so SỐ TUYỆT ĐỐI giữa các tháng là
+         so sai; mặc định quy về /ngày, vẫn giữ nút xem số thô. -->
+    <div class="seg" id="moNorm" role="group" aria-label="Cách tính số ticket theo tháng">
+      <button data-n="day" class="on" aria-pressed="true">Trung bình / ngày</button>
+      <button data-n="abs" aria-pressed="false">Số tuyệt đối</button>
+    </div>
     <div class="grid2">
-      <div class="card"><h3>Số ticket theo tháng</h3><div class="cv"><canvas id="c_mo_qty"></canvas></div></div>
+      <div class="card"><h3>Số ticket theo tháng — <span id="moNormLbl"></span></h3><div class="cv"><canvas id="c_mo_qty"></canvas></div></div>
       <div class="card"><h3>Overdue rate theo tháng</h3><div class="cv"><canvas id="c_mo_ovd"></canvas></div></div>
     </div>
     <div class="tblwrap"><table id="t_months"></table></div>
@@ -549,6 +577,21 @@ tr.xmiss td{background:#fdf3f3}
       <div class="cv rc"><canvas id="c_perf_trend"></canvas></div></div>
   </div>
   <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_perf"></div></div>
+
+  <!-- B1/B2: overdue rate là nhị phân đạt/không-đạt, nó KHÔNG cho biết đội sửa nhanh lên
+       hay chậm đi. Ba chuỗi dưới đây trả lời đúng câu đó, và p90 quan trọng hơn trung vị
+       vì overdue sinh ra từ ĐUÔI phân bố. -->
+  <h2 style="margin-top:18px">Thời gian xử lý qua các <span class="perUnit">tuần</span> — nhanh lên hay chậm đi?</h2>
+  <p class="rcIntro">
+    <b>Trung vị</b> là ca điển hình; <b>p90</b> là ca xấu thứ 10% — overdue gần như luôn nằm
+    ở đây, nên p90 tăng mà trung vị đứng yên nghĩa là đuôi đang dài ra. <b>Ca &gt; 48h</b> đếm
+    tuyệt đối những ca kéo dài quá mốc SLA dài nhất. Chỉ tính ca ĐÃ có solution đầu tiên.
+  </p>
+  <div class="grid2">
+    <div class="card"><h3>Giờ tạo → solution đầu (toàn quốc)</h3><div class="cv"><canvas id="c_time_tr"></canvas></div></div>
+    <div class="card"><h3>Số ca kéo dài quá 48h</h3><div class="cv"><canvas id="c_time_slow"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:12px"><div class="tblwrap" id="t_timetr"></div></div>
 
   <h2 style="margin-top:18px">Thời gian xử lý &amp; Open→VOMS — soi bất thường</h2>
   <p class="rcIntro">
@@ -605,12 +648,14 @@ tr.xmiss td{background:#fdf3f3}
 <section id="sec-ovdana">
   <h2>Phân tích Overdue — hệ thống vs thực tế (luồng API)</h2>
   <div class="card">
-    <h3>So sánh theo tuần: hệ thống gắn overdue vs thực sự trễ (đã resolve mà vượt giờ)</h3>
+    <h3>Theo <span class="perUnit">tuần</span>: hệ thống gắn overdue vs thực sự trễ, tách theo loại</h3>
     <div class="cv tall"><canvas id="c_ovdweek"></canvas></div>
     <p style="font-size:13px;color:var(--ink2);margin:8px 0 0">
-      Khoảng cách giữa 2 cột = ticket <b>chưa xử lý xong</b> (hệ thống vẫn gắn overdue vì quá
-      deadline) + ca resolve trong hạn xử lý nhưng CCTS vẫn tính. Tuần gần nhất luôn nhiều
-      “chưa xong” hơn vì còn đang chạy.</p>
+      Cột trái tách overdue thành <b>đã xong nhưng trễ hạn</b> (chuyện năng lực sửa chữa) và
+      <b>chưa xong, đã quá hạn</b> (chuyện tồn đọng) — hai loại này đòi hai hành động khác
+      nhau nên không gộp chung. Cột phải là tổng hệ thống gắn; phần dôi ra so với cột trái là
+      ca resolve trong hạn xử lý nhưng CCTS vẫn tính overdue.</p>
+    <p class="note" id="ovdTargetNote" style="margin-top:8px"></p>
   </div>
   <div class="grid2">
     <div class="card"><h3>Thành phần overdue tuần <span class="hdW2"></span></h3>
@@ -768,7 +813,10 @@ const FIREBASE_CONFIG = {
 <script>
 /* ================= helpers ================= */
 const D = REPORT_DATA;
-const S = ['#2a78d6','#1baf7a','#eda100','#008300','#4a3aa7','#e34948','#e87ba4','#eb6834'];
+/* 12 màu: xu hướng nguyên nhân đang dùng đúng 8 nhóm = chạm trần bảng cũ, thêm nhóm thứ 9
+   là hai đường trùng màu mà không ai nhận ra. 4 màu bổ sung chọn lệch hẳn tông 8 màu đầu. */
+const S = ['#2a78d6','#1baf7a','#eda100','#008300','#4a3aa7','#e34948','#e87ba4','#eb6834',
+           '#00868b','#8e44ad','#a67c00','#5c6b7a'];
 const INK2 = '#52514e', MUTED = '#898781', GRID = '#e1e0d9';
 const nf = new Intl.NumberFormat('vi-VN');
 const n0 = v => v==null ? '—' : nf.format(Math.round(v));
@@ -1096,13 +1144,69 @@ function failBlock(canvas, tbl, rows){
 }
 
 /* ================= trends ================= */
-function lineChart(canvas, labels, seriesNames, seriesData, isPct){
+/* Vạch dọc đánh dấu MỐC (bật luồng, bắt đầu chiến dịch...). Không dùng thư viện annotation
+   ngoài — 20 dòng plugin đủ, và trang chỉ nạp đúng chart.js.
+   cfg: chart.options.plugins.vmark = [{at:<index nhãn>, text:'...', color:'#...'}] */
+const vmarkPlugin = {
+  id: 'vmark',
+  afterDatasetsDraw(ch, _a, opts){
+    const marks = (opts && opts.marks) || [];
+    if(!marks.length) return;
+    const x = ch.scales.x, ya = ch.chartArea, g = ch.ctx;
+    marks.forEach(mk0=>{
+      if(mk0.at == null || mk0.at < 0) return;
+      const px = x.getPixelForValue(mk0.at);
+      g.save();
+      g.strokeStyle = mk0.color || '#8e44ad'; g.lineWidth = 1.5; g.setLineDash([5,4]);
+      g.beginPath(); g.moveTo(px, ya.top); g.lineTo(px, ya.bottom); g.stroke();
+      g.setLineDash([]);
+      if(mk0.text){
+        g.font = '11px system-ui,sans-serif'; g.fillStyle = mk0.color || '#8e44ad';
+        const w = g.measureText(mk0.text).width;
+        // lệch trái nếu mốc nằm sát mép phải, không thì chữ tràn ra ngoài khung
+        g.fillText(mk0.text, Math.min(px + 4, ya.right - w - 2), ya.top + 11);
+      }
+      g.restore();
+    });
+  }
+};
+Chart.register(vmarkPlugin);
+
+/* Nhãn kỳ trên trục là "W31"/"M7"; khoảng ngày thật đưa vào TIÊU ĐỀ tooltip. Cần vì
+   AW = ISOWEEKNUM(ngày+7) nên "W31" thực ra là 20–26/07 = tuần ISO 30 — ai đối chiếu
+   lịch mà không có khoảng ngày sẽ lệch đúng một tuần. */
+function spanTitle(labels){
+  const src = MODE==='m' ? (D.monthsCov||{}) : (D.weekSpan||{});
+  return items=>{
+    const k = String(labels[items[0].dataIndex]||'').replace('*','');
+    const s = src[k];
+    return s && s.from ? `${k}  (${s.from} → ${s.to})` : k;
+  };
+}
+
+function lineChart(canvas, labels, seriesNames, seriesData, isPct, marks){
   mk(canvas, {type:'line',
-    data:{labels, datasets: seriesNames.map((nm,i)=>({label:nm, data:seriesData[i], borderColor:S[i], backgroundColor:S[i],
+    data:{labels, datasets: seriesNames.map((nm,i)=>({label:nm, data:seriesData[i],
+      borderColor:S[i%S.length], backgroundColor:S[i%S.length],
       borderWidth:2, pointRadius:2.5, pointHoverRadius:5, tension:.25}))},
     options:{maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
-      plugins:{legend:{position:'bottom'}, tooltip:{callbacks: isPct?{label:c=>` ${c.dataset.label}: ${pc(c.parsed.y)}`}:{}}},
+      plugins:{legend:{position:'bottom'}, vmark:{marks: marks||[]},
+        tooltip:{callbacks:Object.assign({title: spanTitle(labels)},
+          isPct?{label:c=>` ${c.dataset.label}: ${pc(c.parsed.y)}`}:{})}},
       scales:{y:{grid:{color:GRID}, ...(isPct?{ticks:pctTick}:{})}, x:{grid:{display:false}}}}});
+}
+
+/* Mốc "segment vào luồng API" cho biểu đồ xu hướng — xem build.flow_start().
+   `only` = giới hạn theo segment: biểu đồ EVCS mà vẽ mốc của BSS thì người đọc tưởng
+   EVCS có biến động ở đúng tuần đó. Bỏ trống = biểu đồ gộp, vẽ mốc của cả hai. */
+function flowMarks(labels, only){
+  const fs = (MODE==='m' ? D.flowStartM : D.flowStartW) || {};
+  const cl = {EVCS:'#2a78d6', BSS:'#1baf7a'};
+  return Object.entries(fs).map(([seg,p])=>{
+    if(only && seg !== only) return null;
+    const at = labels.findIndex(l => String(l).replace('*','') === p);
+    return at > 0 ? {at, text:`${seg} vào luồng API`, color:cl[seg]} : null;
+  }).filter(Boolean);
 }
 
 /* ================= alarms ================= */
@@ -1460,8 +1564,8 @@ function render(){
   renderRcCoverage();
   rcCross('t_rcx_evcs', (MODE==='w'?D.rcXclsEvcsW:D.rcXclsEvcsM)||[]);
   rcCross('t_rcx_bss',  (MODE==='w'?D.rcXclsBssW :D.rcXclsBssM )||[]);
-  rcTrend('c_rctr_evcs', D.rcTrendEvcs, D.weeks);
-  rcTrend('c_rctr_bss',  D.rcTrendBss,  D.weeks);
+  rcTrend('c_rctr_evcs', byMode(D.rcTrendEvcs, D.rcTrendEvcsM)||D.rcTrendEvcs, perLabels());
+  rcTrend('c_rctr_bss',  byMode(D.rcTrendBss, D.rcTrendBssM)||D.rcTrendBss,  perLabels());
   renderAlarmRca();
   renderRcAudit();
   disBlock('c_dis_evcs', MODE==='w'?D.disEvcsW:D.disEvcsM);
@@ -1487,7 +1591,10 @@ document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
      cần gom từ DOM trước khi vẽ lại. */
   render();
   monthCovNote();    // tháng có thể mới gồm 1 tuần -> phải nói rõ, xem monthCovNote()
-  monthCompare();    // khối "So sánh các tháng" chỉ có nghĩa ở chế độ Tháng
+  /* Từ 27/07 mọi biểu đồ XU HƯỚNG cũng đổi trục theo chế độ (7 tuần <-> các tháng), nên
+     đổi Tuần/Tháng phải vẽ lại cả nhóm này chứ không chỉ các khối một-kỳ trong render(). */
+  drawSourceCharts();
+  renderOvdWeek();
   headLabels();
   syncUrl();
 });
@@ -1765,19 +1872,35 @@ function applyExplainRemote(all){
   renderCause();       // cơ cấu nguyên nhân cũng đổi theo giải trình vừa nhận
 }
 
-/* ===== (A)+(B) So sánh overdue theo tuần: hệ thống vs thực sự trễ + rate ===== */
+/* ===== (A)+(B) So sánh overdue theo kỳ: hệ thống vs thực sự trễ + rate =====
+   B4: "Chưa xử lý xong" trước đây chỉ nằm trong tooltip, nhưng nó là thành phần ĐÒI HÀNH
+   ĐỘNG KHÁC HẲN với "đã xong nhưng trễ" (tồn đọng vs năng lực sửa chữa) nên phải là cột
+   riêng nhìn thấy được. Đường mục tiêu lấy từ report_auto/config/targets.json — chưa đặt
+   thì nói thẳng "chưa đặt mục tiêu" chứ không bịa một mốc đẹp. */
 function renderOvdWeek(){
-  const w = D.ovdByWeek||[];
+  const w = byMode(D.ovdByWeek, D.ovdByMonth) || D.ovdByWeek || [];
+  const L = w.map(r=>r.week);
+  const tg = ((D.targets||{}).overdue_rate||{}).target;
+  const ds = [
+    {label:'Đã xong nhưng trễ hạn', data:w.map(r=>r.breach), backgroundColor:'#d03b3b', borderRadius:4, maxBarThickness:26, order:2, stack:'ovd'},
+    {label:'Chưa xong, đã quá hạn', data:w.map(r=>r.open), backgroundColor:'#8894a6', borderRadius:4, maxBarThickness:26, order:2, stack:'ovd'},
+    {label:'Hệ thống gắn overdue (tổng)', data:w.map(r=>r.sys), backgroundColor:'#e0a13a', borderRadius:4, maxBarThickness:26, order:2, stack:'sys'},
+    {label:'Overdue rate (%)', data:w.map(r=>r.rate*100), type:'line', yAxisID:'y1', borderColor:'#2a78d6', backgroundColor:'#2a78d6', tension:.3, order:1, pointRadius:3}];
+  if(tg != null) ds.push({label:`Mục tiêu (${pc(tg)})`, data:w.map(()=>tg*100), type:'line',
+    yAxisID:'y1', borderColor:'#1baf7a', borderDash:[6,4], borderWidth:2, pointRadius:0, order:0});
   mk('c_ovdweek', {type:'bar',
-    data:{labels:w.map(r=>r.week), datasets:[
-      {label:'Hệ thống gắn overdue', data:w.map(r=>r.sys), backgroundColor:'#e0a13a', borderRadius:4, maxBarThickness:26, order:2},
-      {label:'Thực sự trễ (đã resolve, vượt giờ)', data:w.map(r=>r.breach), backgroundColor:'#d03b3b', borderRadius:4, maxBarThickness:26, order:2},
-      {label:'Overdue rate (%)', data:w.map(r=>r.rate*100), type:'line', yAxisID:'y1', borderColor:'#2a78d6', backgroundColor:'#2a78d6', tension:.3, order:1, pointRadius:3}]},
-    options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom'},
-      tooltip:{callbacks:{afterBody:it=>{ const r=w[it[0].dataIndex]; return `Chưa xử lý xong: ${n0(r.open)} ca`; }}}},
-      scales:{y:{grid:{color:GRID}, title:{display:true,text:'số ticket'}},
+    data:{labels:L, datasets:ds},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom'}, vmark:{marks: flowMarks(L)},
+      tooltip:{callbacks:{title: spanTitle(L),
+        afterBody:it=>{ const r=w[it[0].dataIndex];
+          return `Đã xong nhưng trễ: ${pc(r.breachRate)} · Chưa xong đã quá hạn: ${pc(r.openRate)}`; }}}},
+      scales:{y:{stacked:true, grid:{color:GRID}, title:{display:true,text:'số ticket'}},
         y1:{position:'right', grid:{display:false}, ticks:{callback:v=>v+'%'}, title:{display:true,text:'rate'}},
-        x:{grid:{display:false}}}}});
+        x:{stacked:true, grid:{display:false}}}}});
+  const tn = document.getElementById('ovdTargetNote');
+  if(tn) tn.innerHTML = tg == null
+    ? '⚠ <b>Chưa đặt mục tiêu overdue rate</b> — khai <code>targets.overdue_rate.target</code> trong <code>report_auto/config/targets.json</code> (ghi dạng thập phân, 5% → 0.05) thì trang vẽ đường mốc và mọi con số mới có chuẩn để đối chiếu.'
+    : `Đường mốc = mục tiêu cam kết <b>${pc(tg)}</b> (khai trong config/targets.json).`;
 }
 /* ===== (C) Thành phần overdue (doughnut 5 nhóm) ===== */
 const SCN_COL = {'Chưa resolve (còn Open)':'#8894a6','Xử lý muộn':'#d03b3b','Resolve muộn':'#eda100','Lỗi hệ thống':'#8e44ad','VOMS reject':'#16a085'};
@@ -1862,7 +1985,13 @@ function renderPerf(){
     `<th>Open→VOMS (TV)</th><th>Xu hướng ${D.weeks[0]}→${D.weeks[D.weeks.length-1]}</th></tr>`;
   let q=0, o=0;
   rows.forEach(r=>{ q+=r.qty; o+=r.ovd;
-    h += `<tr><td>${escH(r.k)}</td><td>${n0(r.qty)}</td><td>${n0(r.ovd)}</td><td>${badge(r.rate)}</td>`+
+    /* B3 — đơn vị dưới TIME_MIN_QTY ca thì tỉ lệ vô nghĩa thống kê (Hà Giang 1 ca = 100%
+       overdue đứng cùng thang với tỉnh 2.000 ca). Phần "soi bất thường" đã lọc ngưỡng này
+       từ trước, nhưng bảng xếp hạng thì chưa — làm mờ và ghi rõ thay vì giấu dòng đi. */
+    const thin = r.qty < TIME_MIN_QTY;
+    h += `<tr${thin?' style="opacity:.55" title="Mẫu quá nhỏ (<'+TIME_MIN_QTY+' ca) — tỉ lệ chỉ mang tính tham khảo"':''}>`+
+      `<td>${escH(r.k)}${thin?' <span style="font-size:11px;color:#b45309">mẫu nhỏ</span>':''}</td>`+
+      `<td>${n0(r.qty)}</td><td>${n0(r.ovd)}</td><td>${badge(r.rate)}</td>`+
       `<td>${delta(r.rate, r.series[r.series.length-2])}</td><td>${hrs(r.med)}</td>`+
       `<td>${r.ontime==null?'—':pc(r.ontime)}</td><td>${n0(r.open)}</td><td>${hrs(r.voms)}</td>`+
       `<td>${sparkRates(r.series)}</td></tr>`; });
@@ -2042,20 +2171,117 @@ ovdUserInp.onchange = ()=>{ ovdUser = ovdUserInp.value.trim(); localStorage.setI
   }catch(e){ ovdSyncStat(false,'Firebase chưa sẵn sàng'); }
 })();
 
+/* Kỳ đang vẽ trên MỌI biểu đồ xu hướng: chế độ Tuần -> 7 tuần, chế độ Tháng -> các tháng.
+   Trước 27/07 xu hướng luôn là 7 tuần kể cả khi đang ở chế độ Tháng, tức nút Tháng không
+   đổi được bất kỳ biểu đồ xu hướng nào. */
+const perLabels = () => MODE==='m' ? (D.months||[]) : (D.weeks||[]);
+const byMode = (w, m) => MODE==='m' ? m : w;
+
+const TR_METRIC = {
+  failRate:{lbl:'Failure rate', pct:true,
+    note:'⚠ Mẫu số là fleet <b>tĩnh chốt W29</b> (EVCS 25.354 · BSS 25.430) áp cho mọi kỳ, '+
+         'trong khi số trạm có ticket tăng 1.888 → 9.152 trong 7 tháng. Dùng để so giữa các '+
+         'TUẦN thì được; so giữa các THÁNG thì mẫu số sai — chọn 2 chỉ số dưới.'},
+  failed:{lbl:'Thiết bị lỗi (distinct)', pct:false,
+    note:'Số thiết bị khác nhau phát sinh lỗi trong kỳ. Tính 100% từ dữ liệu, không cần fleet.'},
+  freq:{lbl:'Tần suất tái phát (ticket / thiết bị)', pct:false,
+    note:'Trung bình một thiết bị đã lỗi sinh bao nhiêu ticket trong kỳ. Càng cao càng nhiều '+
+         'ca quay lại — đo chất lượng SỬA CHỮA, không phụ thuộc quy mô mạng lưới.'}
+};
+let TR_M = 'failRate';
+
 /* charts trend + ASP: phụ thuộc nguồn -> vẽ lại khi đổi nguồn */
 function drawSourceCharts(){
   renderPerf();   // bảng hiệu suất nằm trong live_blocks -> đổi theo nguồn
-  lineChart('c_tr_evcs_t', D.weeks, D.trendEvcs.models, D.trendEvcs.tickets, false);
-  lineChart('c_tr_evcs_r', D.weeks, D.trendEvcs.models, D.trendEvcs.failRate, true);
-  lineChart('c_tr_bss_t', D.weeks, D.trendBss.models, D.trendBss.tickets, false);
-  lineChart('c_tr_bss_r', D.weeks, D.trendBss.models, D.trendBss.failRate, true);
-  lineChart('c_asp_evcs', D.weeks, D.aspEvcs.asps, D.aspEvcs.rate, true);
-  lineChart('c_asp_bss', D.weeks, D.aspBss.asps, D.aspBss.rate, true);
+  const L = perLabels(), mkE = flowMarks(L, 'EVCS'), mkB = flowMarks(L, 'BSS');
+  const te = byMode(D.trendEvcs, D.trendEvcsM) || D.trendEvcs;
+  const tb = byMode(D.trendBss, D.trendBssM) || D.trendBss;
+  const ae = byMode(D.aspEvcs, D.aspEvcsM) || D.aspEvcs;
+  const ab = byMode(D.aspBss, D.aspBssM) || D.aspBss;
+  const cfg = TR_METRIC[TR_M];
+
+  document.querySelectorAll('.trMetricLbl').forEach(e=> e.textContent = cfg.lbl);
+  const tn = document.getElementById('trMetricNote'); if(tn) tn.innerHTML = cfg.note;
+  const tu = document.getElementById('trendUnit'); if(tu) tu.textContent = byMode('tuần','tháng');
+  const tr = document.getElementById('trendRange');
+  if(tr && L.length) tr.textContent = L[0] + ' → ' + L[L.length-1];
+
+  lineChart('c_tr_evcs_t', L, te.models, te.tickets, false, mkE);
+  lineChart('c_tr_evcs_r', L, te.models, te[TR_M]||te.failRate, cfg.pct, mkE);
+  lineChart('c_tr_bss_t', L, tb.models, tb.tickets, false, mkB);
+  lineChart('c_tr_bss_r', L, tb.models, tb[TR_M]||tb.failRate, cfg.pct, mkB);
+  lineChart('c_asp_evcs', L, ae.asps, ae.rate, true, mkE);
+  lineChart('c_asp_bss', L, ab.asps, ab.rate, true, mkB);
+  campaignCharts();
+  timeCharts();
   monthCompare();
+}
+document.getElementById('trMetric').onchange = e=>{ TR_M = e.target.value; drawSourceCharts(); };
+document.querySelectorAll('#moNorm button').forEach(b=> b.onclick = ()=>{
+  MO_NORM = b.dataset.n; segOn('#moNorm', b); monthCompare();
+});
+
+/* B1/B2 — xu hướng thời gian xử lý. Trước 27/07 trang chỉ có ảnh chụp trung vị của ĐÚNG
+   tuần hiện tại; chuỗi nhiều kỳ duy nhất là overdue rate, mà overdue rate không phân biệt
+   được "sửa nhanh hơn" với "SLA nới ra". */
+function timeCharts(){
+  const t = byMode(D.timeW, D.timeM), L = perLabels();
+  if(!t || !t.all) return;
+  const a = t.all, marks = flowMarks(L);
+  lineChart('c_time_tr', L, ['Trung vị','p90','Open→VOMS (TV)'], [a.med, a.p90, a.voms], false, marks);
+  mk('c_time_slow', {type:'bar',
+    data:{labels:L, datasets:[
+      {label:'EVCS', data:(t.EVCS||{}).slow||[], backgroundColor:'#2a78d6', borderRadius:4, maxBarThickness:34},
+      {label:'BSS', data:(t.BSS||{}).slow||[], backgroundColor:'#1baf7a', borderRadius:4, maxBarThickness:34}]},
+    options:{maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
+      plugins:{legend:{position:'bottom'}, vmark:{marks},
+        tooltip:{callbacks:{title: spanTitle(L)}}},
+      scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:GRID}}}}});
+  const u = byMode('Tuần','Tháng');
+  document.getElementById('t_timetr').innerHTML =
+    `<table><tr><th>${u}</th><th>Ca đã có solution</th><th>Trung vị (h)</th><th>p90 (h)</th>`+
+    `<th>Open→VOMS TV (h)</th><th>Ca &gt; 48h</th><th>% ca &gt; 48h</th></tr>` +
+    L.map((p,i)=>{
+      const dn = a.done[i]||0, sl = a.slow[i]||0;
+      return `<tr><td>${escH(p)}</td><td>${n0(dn)}</td><td>${n2(a.med[i])}</td>`+
+        `<td>${n2(a.p90[i])}</td><td>${n2(a.voms[i])}</td><td>${n0(sl)}</td>`+
+        `<td>${dn?pc(sl/dn):'—'}</td></tr>`;
+    }).join('') + '</table>';
+  document.querySelectorAll('.perUnit').forEach(e=> e.textContent = byMode('tuần','tháng'));
+}
+
+/* A2 — nền vs chiến dịch, cột chồng. Quy tắc nhận diện nằm ở report_auto/config/campaigns.json,
+   DÙNG CHUNG với bản Điều hành nên hai bản không đếm lệch nhau. */
+function campaignCharts(){
+  const c = byMode(D.campaignW, D.campaignM), L = perLabels();
+  const note = document.getElementById('campNote');
+  if(!c){ if(note) note.textContent=''; return; }
+  const rules = c.rules||[];
+  if(note){
+    note.innerHTML = c.cfgEmpty
+      ? 'Chưa khai quy tắc chiến dịch nào trong <code>config/campaigns.json</code> — mọi ticket đang được tính là lỗi tự nhiên.'
+      : 'Đang tách ' + rules.length + ' chiến dịch: ' + rules.map(r=>
+          `<b>${escH(r.label)}</b> (${escH(r.seg)}, ${escH((r.weeks||[]).join(', '))} — khớp ${n0((r.matched||[]).reduce((a,b)=>a+b,0))} ca)`
+        ).join(' · ') + '. Ticket không khớp quy tắc nào = lỗi tự nhiên.';
+  }
+  ['EVCS','BSS'].forEach(seg=>{
+    const s = (c.bySeg||{})[seg]; if(!s) return;
+    mk(seg==='EVCS'?'c_camp_evcs':'c_camp_bss', {type:'bar',
+      data:{labels:L, datasets:[
+        {label:'Lỗi tự nhiên', data:s.natural, backgroundColor:'#2a78d6', borderRadius:4, maxBarThickness:34},
+        {label:'Chiến dịch thay thế hàng loạt', data:s.campaign, backgroundColor:'#eda100', borderRadius:4, maxBarThickness:34}]},
+      options:{maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
+        plugins:{legend:{position:'bottom'}, vmark:{marks: flowMarks(L, seg)},
+          tooltip:{callbacks:{title: spanTitle(L),
+            afterBody:it=>{ const i=it[0].dataIndex, n=s.natural[i]||0, k=s.campaign[i]||0;
+              return (n+k) ? `Chiến dịch chiếm ${pc(k/(n+k))} tổng ticket kỳ này` : ''; }}}},
+        scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:GRID}}}}});
+  });
 }
 
 /* So sánh các tháng — chỉ hiện ở chế độ Tháng. D.monthSeries dùng đúng định nghĩa KPI
    như D.wowSeries (chỉ đổi cột kỳ AW->AX) nên hai chế độ so được với nhau. */
+let MO_NORM = 'day';   // mặc định /ngày — xem chú thích trong monthCompare()
 function monthCompare(){
   const box = document.getElementById('monthCmp'), ms = D.monthSeries, mo = D.months||[];
   if(!box) return;
@@ -2068,8 +2294,16 @@ function monthCompare(){
   /* Tháng chưa trọn (vd M1 chỉ có 01→19/01 vì dữ liệu bắt đầu từ 01/01) tụt xuống trong
      biểu đồ mà không phải do lỗi giảm — gắn dấu * để không đọc nhầm thành xu hướng. */
   const lbl = mo.map(x => (cov[x]||{}).partial ? x+'*' : x);
-  lineChart('c_mo_qty', lbl, ['EVCS','BSS'], [ms.evcsQty, ms.bssQty], false);
-  lineChart('c_mo_ovd', lbl, ['EVCS','BSS'], [ms.evcsOvdRate, ms.bssOvdRate], true);
+  /* A3 — bucket tháng dài 19–31 ngày; chia cho số ngày mới so được tháng với tháng.
+     Dùng SPAN (max-min+1) chứ không phải số ngày CÓ ticket, để tháng vắng việc không bị
+     nhân lên thành cao giả. */
+  const span = x => { const c = cov[x]||{};
+    return (c.from && c.to) ? ((new Date(c.to) - new Date(c.from))/864e5 + 1) : null; };
+  const norm = v => MO_NORM==='day' ? mo.map((x,i)=>{ const s=span(x); return s ? v[i]/s : null; }) : v;
+  const nl = document.getElementById('moNormLbl');
+  if(nl) nl.textContent = MO_NORM==='day' ? 'trung bình mỗi ngày' : 'tổng cả tháng';
+  lineChart('c_mo_qty', lbl, ['EVCS','BSS'], [norm(ms.evcsQty), norm(ms.bssQty)], false, flowMarks(lbl));
+  lineChart('c_mo_ovd', lbl, ['EVCS','BSS'], [ms.evcsOvdRate, ms.bssOvdRate], true, flowMarks(lbl));
   const src = D.monthSrcCov||{};
   /* Đường BSS phẳng 0 ở các tháng đầu là ĐÚNG dữ liệu chứ không phải thiếu: ticket BSS-VH
      có từ trước nhưng chỉ vào luồng API creation từ một tháng nhất định. Suy thẳng từ dữ
@@ -2149,7 +2383,7 @@ function applyUrl(){
     Object.assign(D, D.variants[SRC]); redraw = true;
   }
   Object.entries(FURL).forEach(([k, key])=>{ if(o[k] != null){ F[key] = o[k]; refilter = true; } });
-  if(redraw){ render(); drawSourceCharts(); monthCovNote(); headLabels(); setTimeout(fixSizes, 60); }
+  if(redraw){ render(); drawSourceCharts(); renderOvdWeek(); monthCovNote(); headLabels(); setTimeout(fixSizes, 60); }
   if(refilter){ initOvdFilters(); renderOverdue(); renderOvdProgress(); }
   if(o.sec) openModal(o.sec, true);
 }

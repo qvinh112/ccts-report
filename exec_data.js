@@ -18,7 +18,7 @@ const EXEC_DATA = {
   "from": "2026-07-20",
   "to": "2026-07-26"
  },
- "generatedAt": "2026-07-27 08:47",
+ "generatedAt": "2026-07-27 11:01",
  "kpis": {
   "evcsFail": {
    "cur": 0.04895,
