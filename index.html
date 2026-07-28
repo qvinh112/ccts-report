@@ -142,58 +142,76 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 .arleg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle}
 .kwtag.rc{background:#f5eefb;color:#6b3aa0;border-color:#ddc9ee}
 .kwtag.src{background:#fdf0e6;color:#9a5518;border-color:#f2d6bd}
-/* ===== Cockpit tiles + modal (1 màn hình, bấm ô mới hiện chi tiết) ===== */
+/* ===== Cockpit: 5 ô là TOÀN BỘ điều hướng (28/07 gỡ thanh "Xem thêm" ở đáy) ===== */
 #cockpit{margin:6px 0 2px}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.tile{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:12px 14px;cursor:pointer;
-  transition:box-shadow .15s,transform .12s;display:flex;flex-direction:column;min-height:158px}
-.tile:hover{box-shadow:0 4px 16px rgba(0,0,0,.10);transform:translateY(-2px);border-color:var(--axis)}
-.tile h4{margin:0 0 4px;font-size:12.5px;color:var(--ink2);font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:6px}
-.tile .open-ico{font-size:11px;color:var(--muted);font-weight:400;white-space:nowrap}
-.tile .big{font-size:24px;font-weight:700;color:var(--ink);line-height:1.15}
-.tile .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
-.tile .cvmini{flex:1;min-height:96px;position:relative;margin-top:4px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px}
+.tile{position:relative;background:var(--surface);border:1px solid var(--ring);border-radius:14px;
+  padding:14px 15px 12px;cursor:pointer;display:flex;flex-direction:column;overflow:hidden;
+  transition:box-shadow .18s ease,transform .14s ease,border-color .18s ease}
+/* Vạch màu trên đầu mỗi ô: 5 ô là 5 câu hỏi khác nhau, cần phân biệt được từ xa
+   thay vì năm khối trắng giống hệt nhau. Màu gán theo thứ tự ô, xem .tile:nth-child. */
+.tile::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--s1);opacity:.85}
+.tile:nth-child(2)::before{background:var(--s5)}
+.tile:nth-child(3)::before{background:var(--s3)}
+.tile:nth-child(4)::before{background:var(--s2)}
+.tile:nth-child(5)::before{background:var(--s8)}
+.tile:hover{box-shadow:0 8px 24px rgba(11,11,11,.11);transform:translateY(-3px);border-color:var(--axis)}
+.tile:hover .open-ico{color:var(--s1)}
+/* min-height = 2 dòng: tiêu đề 5 ô dài ngắn khác nhau, không chốt chiều cao thì phần thân
+   của 5 ô lệch nhau một dòng và nhìn như lỗi dựng trang. */
+.tile h4{margin:0 0 5px;min-height:38px;font-size:13.5px;color:var(--ink);font-weight:650;display:flex;
+  justify-content:space-between;align-items:flex-start;gap:8px;line-height:1.35}
+.tile .open-ico{font-size:11px;color:var(--muted);font-weight:400;white-space:nowrap;transition:color .18s;
+  line-height:1.7}
+.tile .big{font-size:30px;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:-.02em}
+.tile .sub{font-size:11.5px;color:var(--muted);margin-top:3px}
+/* Chiều cao CỐ ĐỊNH, không flex:1 — để flex thì ô có biểu đồ kéo cả hàng cao 464px và hai
+   ô chỉ có một con số thành hai khoảng trắng mênh mông. */
+.tile .cvmini{height:126px;flex:0 0 auto;position:relative;margin-top:4px}
 /* sparkline xu hướng 7 tuần gắn trong ô phân loại (thay ô "Xu hướng ticket lỗi" cũ).
    Tên riêng, không dùng lại .spark vì class đó là sparkline SVG trong bảng. */
 .tile .trendline{height:30px;position:relative;margin-top:4px}
-.morebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
-.morebar .mlbl{font-size:12px;color:var(--muted);margin-right:2px}
+/* Danh sách "ô này chứa gì" — thay cho 11 nút của thanh Xem thêm cũ. Không có nó thì
+   bỏ thanh kia đi là 19 mục nội dung thành vô hình. */
+.tile .has{margin-top:auto;padding-top:9px;border-top:1px dashed var(--grid);
+  display:flex;flex-wrap:wrap;gap:4px 5px}
+.tile .has i{font-style:normal;font-size:10.5px;line-height:1.5;color:var(--ink2);
+  background:var(--page);border:1px solid var(--grid);border-radius:5px;padding:1px 6px;white-space:nowrap}
 .morebtn{font-size:12.5px;padding:6px 13px;border:1px solid var(--grid);border-radius:20px;background:var(--surface);
   color:var(--ink2);cursor:pointer}
 .morebtn:hover{border-color:var(--axis);color:var(--ink)}
-#modalHost{position:fixed;inset:0;background:rgba(20,22,28,.55);z-index:60;display:none;padding:20px}
+#modalHost{position:fixed;inset:0;background:rgba(20,22,28,.5);backdrop-filter:blur(2px);
+  z-index:60;display:none;padding:20px}
 #modalHost.open{display:block}
-#modalCard{background:var(--page);max-width:1180px;margin:0 auto;border-radius:14px;max-height:calc(100vh - 40px);
-  display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-#modalBar{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;border-bottom:1px solid var(--grid);flex:0 0 auto}
-#modalBar h3{margin:0;font-size:16px}
-#modalClose{border:0;background:var(--grid);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;line-height:1}
-#modalScroll{overflow-y:auto;padding:14px 18px 22px}
+#modalCard{background:var(--page);max-width:1180px;margin:0 auto;border-radius:16px;max-height:calc(100vh - 40px);
+  display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.34)}
+#modalBar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 20px 11px;
+  background:var(--surface);border-bottom:1px solid var(--grid);flex:0 0 auto}
+#modalBar h3{margin:0;font-size:16.5px;font-weight:650;letter-spacing:-.01em}
+#modalBar .segtag{display:inline-block;margin-left:9px;padding:1px 9px;border-radius:99px;font-size:11.5px;
+  font-weight:700;vertical-align:2px;background:rgba(42,120,214,.12);color:var(--s1)}
+#modalClose{border:0;background:var(--grid);border-radius:9px;width:32px;height:32px;cursor:pointer;
+  font-size:16px;line-height:1;flex:0 0 auto;transition:background .15s}
+#modalClose:hover{background:var(--axis)}
+#modalScroll{overflow-y:auto;padding:14px 20px 24px}
 #modalScroll section{margin-top:6px}
 #modalScroll section:first-child h2{margin-top:0}
-/* Bộ lọc dòng sản phẩm — thẻ được gắn data-seg lúc chạy (xem tagSegCards).
-   Hai ô "Phân loại EVCS/BSS" trong cockpit CHÍNH LÀ nút chọn nên phải luôn hiện,
-   nếu ẩn thì chọn xong không có đường quay lại. tagSegCards chỉ gắn data-seg cho
-   thẻ trong #modalScroll nên #tiles nằm ngoài tầm quy tắc dưới đây. */
+/* Bộ lọc dòng sản phẩm — thẻ được gắn data-seg lúc chạy (xem tagSegCards). Bộ lọc chỉ
+   sống trong lúc modal mở (xem closeModal) nên không cần dải trạng thái nào ở trang nền. */
 body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
-.tile.picked{border-color:var(--s1);box-shadow:0 0 0 2px rgba(42,120,214,.18)}
-.tile.picked .open-ico{color:var(--s1);font-weight:600}
-.segnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:7px 12px;
-  border:1px solid var(--s1);border-left-width:3px;border-radius:9px;background:rgba(42,120,214,.06);font-size:12.5px}
-.segnote b{color:var(--ink)}
-.segnote button{font:12.5px inherit;padding:3px 11px;border:1px solid var(--axis);border-radius:20px;
-  background:var(--surface);color:var(--ink2);cursor:pointer}
-.segnote button:hover{border-color:var(--s1);color:var(--ink)}
 /* ===== bổ sung 25/07: bản lưu tuần, mục lục modal, trợ năng, in bản Nội bộ ===== */
 .hdWk{font-size:12px;color:var(--ink2);display:inline-flex;gap:5px;align-items:center}
 .hdWk select{font:12.5px inherit;padding:3px 6px;border:1px solid var(--axis);border-radius:7px;
   background:var(--surface);color:var(--ink)}
 .tile:focus-visible,.morebtn:focus-visible,.seg button:focus-visible,#modalClose:focus-visible,
 .btn:focus-visible,.jump a:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
-.jump{display:flex;gap:4px;flex-wrap:wrap;padding:6px 18px 0}
-.jump a{color:var(--ink2);text-decoration:none;padding:3px 8px;border-radius:6px;font-size:12px;
-  border:1px solid var(--grid)}
-.jump a:hover{background:var(--page);color:var(--ink)}
+/* Mục lục nằm NGOÀI vùng cuộn (#modalScroll) nên luôn thấy — nhóm giờ có tới 6 mục,
+   cuộn xuống giữa mà không có nó là mất phương hướng. */
+.jump{display:flex;gap:5px;flex-wrap:wrap;flex:0 0 auto;
+  padding:9px 20px;background:var(--surface);border-bottom:1px solid var(--grid)}
+.jump a{color:var(--ink2);text-decoration:none;padding:3px 9px;border-radius:20px;font-size:12px;
+  border:1px solid var(--grid);background:var(--page);white-space:nowrap;transition:all .15s}
+.jump a:hover{border-color:var(--s1);color:var(--s1);background:var(--surface)}
 .loadfail{max-width:640px;margin:60px auto;background:var(--surface);border:1px solid var(--ring);
   border-radius:12px;padding:20px 24px;line-height:1.6}
 .loadfail h2{border-left-color:var(--crit)}
@@ -249,11 +267,10 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
 <div class="kpis" id="kpis"></div>
 
 <section id="cockpit">
-  <!-- Hiện khi đang lọc 1 dòng sản phẩm: bấm ô Phân loại là VÀO XEM chi tiết sản phẩm đó,
-       nên cần một lối quay lại rõ ràng thay vì bắt bấm lại đúng ô cũ. -->
-  <div class="segnote" id="segNote" style="display:none"></div>
+  <!-- 5 ô này là TOÀN BỘ điều hướng của trang. Trước 28/07 còn một thanh "Xem thêm" 11 nút
+       ở đáy trang; user bỏ vì phải nhìn hai chỗ mới biết trang có những gì. Mọi mục nội
+       dung nay nằm sau một trong 5 ô, và mỗi ô tự liệt kê nó chứa gì (xem TILE_HAS). -->
   <div class="tiles" id="tiles"></div>
-  <div class="morebar" id="morebar"><span class="mlbl">Xem thêm:</span></div>
 </section>
 
 <div id="modalHost" aria-hidden="true">
@@ -779,33 +796,9 @@ function applySeg(){
   document.body.classList.toggle('seg-EVCS', SEG === 'EVCS');
   document.body.classList.toggle('seg-BSS', SEG === 'BSS');
   tagSegCards();
-  kpis();                       // hàng KPI cũng bỏ sản phẩm không được chọn
-  renderTiles();                // ô RC / SLA / trạng thái "đang xem" phải theo sản phẩm
-  segNote();                    // dải nhắc "đang chỉ xem X" + lối quay lại
   renderModelErrors();          // danh sách loại tủ phải theo dòng sản phẩm đang chọn
   renderSolOverview();          // mặt bằng cách xử lý cũng phải cùng phạm vi
   if(modalOpen()) resizeCharts();  // thẻ còn lại giãn ra full width -> chart phải vẽ lại cỡ
-}
-/* Bấm ô "Phân loại EVCS/BSS" = VÀO XEM chi tiết sản phẩm đó: vẫn mở bảng chi tiết như
-   trước, chỉ khác là bên trong (và cả trang phía sau) chỉ còn sản phẩm vừa chọn thay vì
-   bày EVCS lẫn BSS cạnh nhau. Lối quay lại nằm ở dải #segNote phía trên các ô. */
-function pickSeg(g){
-  SEG = g;
-  applySeg(); syncUrl();
-  openModal('cls');
-}
-function clearSeg(){ SEG = 'all'; applySeg(); syncUrl(); }
-function segNote(){
-  const el = document.getElementById('segNote');
-  if(!el) return;
-  el.style.display = SEG === 'all' ? 'none' : '';
-  if(SEG === 'all') return;
-  const other = SEG === 'EVCS' ? 'BSS' : 'EVCS';
-  el.innerHTML = `<span>🔎 Đang chỉ xem <b>${SEG}</b> — mọi số và biểu đồ trên trang đều là của ${SEG}.</span>`
-    + `<button type="button" data-act="other">Chuyển sang ${other}</button>`
-    + `<button type="button" data-act="all">✕ Xem cả hai</button>`;
-  el.querySelector('[data-act="other"]').onclick = ()=>{ SEG = other; applySeg(); syncUrl(); };
-  el.querySelector('[data-act="all"]').onclick = clearSeg;
 }
 const mLbl = () => MODE==='w' ? ('tuần '+D.week) : ('tháng '+D.month);
 
@@ -900,15 +893,13 @@ function kpis(){
   const cost = D.cost, i = cost.grandTotal.length - 1;
   const costM = (cost.months && cost.months[i]) || '';
   const ws = D.wowSeries || {};
-  /* Cột thứ 5 = dòng sản phẩm của KPI; chọn một sản phẩm thì hàng KPI cũng bỏ cái kia đi.
-     Chi phí lấy từ baseline chung, không tách được EVCS/BSS nên luôn giữ (seg = null). */
   const items = [
-    ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate), wowTag(ws.evcsQty, {higherIsBad:true}), 'EVCS'],
-    ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate), wowTag(ws.bssQty, {higherIsBad:true}), 'BSS'],
-    ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket', wowTag(ws.evcsOvdRate, {isRate:true, higherIsBad:true}), 'EVCS'],
-    ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket', wowTag(ws.bssOvdRate, {isRate:true, higherIsBad:true}), 'BSS'],
-    ['Chi phí ' + costM, usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị', '', null],
-  ].filter(x => SEG === 'all' || !x[4] || x[4] === SEG);
+    ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate), wowTag(ws.evcsQty, {higherIsBad:true})],
+    ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate), wowTag(ws.bssQty, {higherIsBad:true})],
+    ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket', wowTag(ws.evcsOvdRate, {isRate:true, higherIsBad:true})],
+    ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket', wowTag(ws.bssOvdRate, {isRate:true, higherIsBad:true})],
+    ['Chi phí ' + costM, usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị', ''],
+  ];
   document.getElementById('kpis').innerHTML = items.map(x =>
     `<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div>${x[3]||''}</div>`).join('');
 }
@@ -1273,38 +1264,30 @@ function costCharts(){
 }
 
 /* ===== Cockpit: tiles tổng quan + modal drill-down ===== */
+/* 28/07: gộp về ĐÚNG 4 nhóm, mỗi nhóm là một câu hỏi điều hành trọn vẹn — trước đó có 14
+   nhóm nhỏ nằm rải trên thanh "Xem thêm" ở đáy trang, người đọc phải tự ghép lại. Năm ô ở
+   cockpit giờ là TOÀN BỘ điều hướng; không còn thanh nào ở đáy.
+   Thứ tự hiện trong modal theo THỨ TỰ SECTION TRONG DOM, không theo mảng ids. */
 const GROUPS = {
-  /* 'Mã lỗi theo loại tủ' là TẬP CON của phân loại (phân loại nói nhóm lỗi, mục này đi tiếp
-     xuống từng mã lỗi của từng loại tủ) nên gộp vào đây thay vì đứng riêng ở Xem thêm. */
-  cls:  {title:'Phân loại ticket, Disclaim & Mã lỗi theo loại tủ', ids:['sec-cls','sec-dis','sec-model']},
-  rc:   {title:'Nguyên nhân lỗi (RC)', ids:['sec-rc']},
-  sla:  {title:'SLA / Overdue & Hiệu suất xử lý', ids:['sec-sla','sec-perf']},
-  cause:{title:'Nguyên nhân Overdue', ids:['sec-cause','sec-ovdana']},
-  trend:{title:'Tình trạng lỗi theo model & Xu hướng', ids:['sec-fail','sec-trend']},
-  watch:{title:'Cảnh báo sớm', ids:['sec-watch']},
-  alarm:{title:'Top alarm', ids:['sec-alarm']},
-  asp:  {title:'Overdue rate theo ASP', ids:['sec-asp']},
-  wh:   {title:'Kho & vật tư (tồn kho live)', ids:['sec-wh']},
-  parts:{title:'Top vật tư sử dụng', ids:['sec-parts']},
-  cost: {title:'Chi phí dịch vụ', ids:['sec-cost']},
-  action:{title:'Sổ hành động theo mã lỗi', ids:['sec-action']},
-  fix:  {title:'Dữ liệu đã hiệu chỉnh (V3 vs V2)', ids:['sec-fix']},
-  explain:{title:'Giải trình ticket Overdue (toàn quốc)', ids:['sec-overdue']},
+  cls:  {title:'Hỏng cái gì', ids:['sec-cls','sec-dis','sec-fail','sec-trend','sec-model','sec-fix']},
+  sla:  {title:'Xử lý có đúng hạn không', ids:['sec-sla','sec-perf','sec-cause','sec-ovdana','sec-asp','sec-overdue']},
+  rc:   {title:'Vì sao hỏng và đã làm gì', ids:['sec-watch','sec-rc','sec-alarm','sec-action']},
+  wh:   {title:'Vật tư, tồn kho & chi phí', ids:['sec-wh','sec-parts','sec-cost']},
 };
 function resizeCharts(){ requestAnimationFrame(()=> Object.values(charts).forEach(c=>{ try{c.resize()}catch(e){} })); }
 function modalOpen(){ return document.getElementById('modalHost').classList.contains('open'); }
 let OPEN_GRP = '', lastFocus = null;
-function openModal(grp, keepUrl){
+function openModal(grp, keepUrl, seg){
   const g = GROUPS[grp]; if(!g) return;
   const host = document.getElementById('modalHost');
   lastFocus = document.activeElement;
   OPEN_GRP = grp;
+  if(seg !== undefined && seg !== SEG){ SEG = seg; applySeg(); }
   document.querySelectorAll('#modalScroll > section').forEach(s=> s.style.display = g.ids.includes(s.id)?'':'none');
-  /* Đang lọc sản phẩm thì mọi bảng trong modal chỉ còn sản phẩm đó — ghi thẳng vào tiêu đề,
+  /* Đang lọc sản phẩm thì mọi bảng trong modal chỉ còn sản phẩm đó — phải ghi vào tiêu đề,
      không thì mở ra tưởng mất khối EVCS/BSS kia. */
-  document.getElementById('modalTitle').textContent =
-    ((grp==='trend' && MODE==='m') ? 'Tình trạng lỗi theo model & So sánh các tháng' : g.title)
-    + (SEG==='all' ? '' : ' — chỉ ' + SEG);
+  document.getElementById('modalTitle').innerHTML = escH(g.title) +
+    (SEG==='all' ? '' : `<span class="segtag">chỉ ${escH(SEG)}</span>`);
   host.classList.add('open');
   host.setAttribute('aria-hidden','false');   // trước đây kẹt 'true' -> trình đọc màn hình không thấy gì
   document.body.style.overflow='hidden';
@@ -1318,8 +1301,11 @@ function openModal(grp, keepUrl){
 function buildJump(g){
   const nav = document.getElementById('modalJump'); if(!nav) return;
   const links = [];
-  g.ids.forEach(id=>{
-    const sec = document.getElementById(id); if(!sec) return;
+  /* Theo THỨ TỰ TRONG DOM chứ không theo mảng g.ids: các mục hiện ra theo DOM, mục lục
+     xếp khác đi thì đọc lệch nhau. Chỉ lấy mục đang hiện, và bỏ mục bị bộ lọc sản phẩm ẩn. */
+  [...document.querySelectorAll('#modalScroll > section')]
+    .filter(s => g.ids.includes(s.id)).forEach(sec=>{
+    const id = sec.id;
     sec.querySelectorAll(':scope > h2').forEach((h,i)=>{
       const anchor = id + '-h' + i;
       h.id = anchor;
@@ -1335,6 +1321,11 @@ function closeModal(){
   host.setAttribute('aria-hidden','true');
   document.body.style.overflow='';
   OPEN_GRP = '';
+  /* Bộ lọc sản phẩm CHỈ sống trong lúc modal mở. Nếu để nó dai dẳng sau khi đóng thì trang
+     nền âm thầm thiếu số EVCS hoặc BSS mà không có gì báo — trước đây phải dựng hẳn một dải
+     "Đang chỉ xem BSS" để bù, mà dải đó chính là thứ user thấy thừa. Bỏ trạng thái ẩn thì
+     không cần dải nào cả: muốn xem sản phẩm nào thì bấm ô của sản phẩm đó. */
+  if(SEG !== 'all'){ SEG = 'all'; applySeg(); }
   if(lastFocus && lastFocus.focus) lastFocus.focus();
   syncUrl();
 }
@@ -1387,10 +1378,10 @@ const whLow = () => (WH ? WH.shortage.filter(r => r.cover != null && r.cover < W
 /* Headline là tỷ lệ vật tư lỗi: ở phạm vi toàn quốc thiếu hàng gần như không xảy ra,
    thứ đọng vốn thật là hàng lỗi nằm rải khắp 308 kho. */
 function whTile(){
-  if(!WH || !WH.total) return {grp:'wh', title:'Kho & vật tư', big:'—',
+  if(!WH || !WH.total) return {grp:'wh', title:'Vật tư, tồn kho & chi phí', big:'—',
     sub: WH ? 'warehouse_data.js không khớp phiên bản trang' : 'chưa có warehouse_data.js'};
   const t = WH.total;
-  return {grp:'wh', title:'Kho & vật tư', big:pc(t.rate),
+  return {grp:'wh', title:'Vật tư, tồn kho & chi phí', big:pc(t.rate),
     sub:`${n0(t.faulty)} / ${n0(t.units)} đv lỗi · ${n0(t.warehouses)} kho toàn quốc`};
 }
 /* Mốc theo thời gian đặt hàng thực tế: dưới 1 tuần là gấp, dưới 1 tháng là phải đặt. */
@@ -1476,28 +1467,31 @@ function renderWarehouse(){
     + ` <b>Mã lỗi × vật tư:</b> ${WH.meta.errPartsNote}`
     + ` Snapshot lúc ${WH.ts.replace('T',' ')} · đã lưu ${WH.snapshots} ngày.`;
 }
+/* Mỗi ô liệt kê SẴN những mục nằm bên trong. Đây là thứ thay cho thanh "Xem thêm" cũ ở
+   đáy trang: bỏ thanh đó mà không ghi gì thì 19 mục nội dung thành vô hình. */
+const TILE_HAS = {
+  cls: ['Phân loại', 'Disclaim', 'Lỗi theo model', 'Xu hướng', 'Mã lỗi theo loại tủ'],
+  sla: ['SLA theo trạng thái', 'Hiệu suất xử lý', 'Nguyên nhân overdue', 'ASP', 'Giải trình'],
+  rc:  ['Cảnh báo sớm', 'Nguyên nhân lỗi', 'Top alarm', 'Sổ hành động'],
+  wh:  ['Tồn kho live', 'Top vật tư', 'Chi phí dịch vụ'],
+};
 function renderTiles(){
   const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
   const cB = MODE==='w'?D.clsBssW:D.clsBssM,  cBt = MODE==='w'?D.clsBssW_total:D.clsBssM_total;
-  /* Ô RC và ô SLA đi theo sản phẩm đang chọn: đã bấm "chỉ xem BSS" thì cockpit cũng
-     không được bày số EVCS nữa. SEG='all' -> giữ nguyên như cũ (RC lấy EVCS, SLA gộp). */
-  const rcE = SEG==='BSS' ? (MODE==='w'?D.rcBssW:D.rcBssM) : (MODE==='w'?D.rcEvcsW:D.rcEvcsM);
-  const slaE = MODE==='w'?D.slaEvcsW:D.slaEvcsM, slaB = MODE==='w'?D.slaBssW:D.slaBssM;
-  const sla = SEG==='EVCS' ? slaE : SEG==='BSS' ? slaB : [].concat(slaE, slaB);
+  const rcE = MODE==='w'?D.rcEvcsW:D.rcEvcsM;
+  const sla = [].concat(MODE==='w'?D.slaEvcsW:D.slaEvcsM, MODE==='w'?D.slaBssW:D.slaBssM);
   const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
   const wk = D.weeks, sumWk = t => wk.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
   const te = sumWk(D.trendEvcs), tb = sumWk(D.trendBss);
   const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
   /* Ghi đủ "Undefined yet" — viết tắt "Undefined" trông y như biến JS lỗi. */
-  const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Undefined yet" ${pc(undefShare(c))} · xu hướng 7 tuần`;
-  const pickHint = g => 'bấm để xem ' + g + ' ▸';
+  const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Undefined yet" ${pc(undefShare(c))}`;
   const T = [
-    {grp:'cls', pick:'EVCS', title:'Phân loại EVCS', mini:['donut',cE,cEt], spark:te, sub:clsSub(cEt,cE)},
-    {grp:'cls', pick:'BSS',  title:'Phân loại BSS',  mini:['donut',cB,cBt], spark:tb, sub:clsSub(cBt,cB)},
-    {grp:'sla', title:'SLA / Overdue',  big:pc(settled?ovd/settled:0),
-     sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()}${SEG==='all'?'':' · '+SEG})`},
-    {grp:'rc',  title:'Nguyên nhân lỗi (RC)', mini:['rc',rcE],
-     sub:'Top 5 nhóm nguyên nhân ' + (SEG==='BSS' ? 'BSS' : 'EVCS')},
+    {grp:'cls', pick:'EVCS', title:'EVCS — hỏng cái gì', mini:['donut',cE,cEt], spark:te, sub:clsSub(cEt,cE)},
+    {grp:'cls', pick:'BSS',  title:'BSS — hỏng cái gì',  mini:['donut',cB,cBt], spark:tb, sub:clsSub(cBt,cB)},
+    {grp:'sla', title:'Xử lý có đúng hạn không', big:pc(settled?ovd/settled:0),
+     sub:`${n0(ovd)} overdue / ${n0(settled)} đã xử lý (${mLbl()})`},
+    {grp:'rc',  title:'Vì sao hỏng và đã làm gì', mini:['rc',rcE], sub:'Top 5 nhóm nguyên nhân EVCS'},
     whTile(),
   ];
   const el = document.getElementById('tiles');
@@ -1506,18 +1500,15 @@ function renderTiles(){
       ? `<div class="big">${t.big}</div><div class="sub">${t.sub}</div>`
       : `<div class="cvmini"><canvas id="tile_${i}"></canvas></div><div class="sub">${t.sub}</div>`;
     const spark = t.spark ? `<div class="trendline"><canvas id="trend_${i}"></canvas></div>` : '';
-    /* Ô Phân loại EVCS/BSS mở bảng chi tiết như mọi ô khác, chỉ khác là nó đồng thời
-       chốt dòng sản phẩm nên trong bảng (và cả trang) chỉ còn sản phẩm vừa bấm. */
-    const cls = 'tile' + (t.pick && SEG===t.pick ? ' picked' : '');
-    const ico = t.pick ? pickHint(t.pick) : 'bấm để xem ▸';
-    return `<div class="${cls}" data-grp="${t.grp}"${t.pick?` data-pick="${t.pick}"`:''} role="button" tabindex="0"`
-      + ` aria-pressed="${t.pick ? String(SEG===t.pick) : 'false'}">`
-      + `<h4>${t.title}<span class="open-ico">${ico}</span></h4>${inner}${spark}</div>`;
+    const has = (TILE_HAS[t.grp]||[]).map(x=>`<i>${x}</i>`).join('');
+    /* Ô EVCS/BSS mở cùng một nhóm nội dung, chỉ khác là chốt dòng sản phẩm nên bên trong
+       chỉ còn sản phẩm vừa bấm. Bộ lọc đó SỐNG THEO MODAL — đóng lại là hết, xem closeModal. */
+    return `<div class="tile" data-grp="${t.grp}"${t.pick?` data-pick="${t.pick}"`:''} role="button" tabindex="0">`
+      + `<h4>${t.title}<span class="open-ico">bấm để xem ▸</span></h4>${inner}${spark}`
+      + `<div class="has">${has}</div></div>`;
   }).join('');
   el.querySelectorAll('.tile').forEach(d=>{
-    const act = d.dataset.pick
-      ? ()=> pickSeg(d.dataset.pick)
-      : ()=> openModal(d.dataset.grp);
+    const act = ()=> openModal(d.dataset.grp, false, d.dataset.pick || 'all');
     d.onclick = act;
     d.onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } };
   });
@@ -1528,17 +1519,6 @@ function renderTiles(){
     else if(t.mini[0]==='rc') miniRcBar('tile_'+i, t.mini[1]);
     else if(t.mini[0]==='line') miniLine('tile_'+i, t.mini[1], t.mini[2]);
   });
-  /* Ở chế độ Tháng, nhóm 'trend' còn chứa khối "So sánh các tháng" — phải ghi vào nhãn,
-     không thì cái nhìn tổng thể theo tháng nằm sau một nút tên "Theo model", không ai mở. */
-  const more = [['watch','Cảnh báo'],['cls','Phân loại · Disclaim · Mã lỗi theo loại tủ'],
-    ['trend', MODE==='m' ? '📅 So sánh các tháng' : 'Theo model'],['alarm','Alarm'],
-    ['cause','Nguyên nhân overdue'],['action','🔧 Sổ hành động'],
-    ['asp','ASP'],['parts','Vật tư'],['cost','Chi phí'],['fix','Hiệu chỉnh'],
-    ['explain','✍ Giải trình overdue']];
-  const mb = document.getElementById('morebar');
-  mb.innerHTML = '<span class="mlbl">Xem thêm:</span>' +
-    more.map(([g,l])=>`<button class="morebtn" data-grp="${g}">${l}</button>`).join('');
-  mb.querySelectorAll('.morebtn').forEach(b=> b.onclick = ()=> openModal(b.dataset.grp));
 }
 
 /* ================= render theo mode ================= */
@@ -1578,7 +1558,6 @@ function render(){
   renderModelErrors();
   renderSolOverview();
   tagSegCards();     // thẻ vừa vẽ lại -> gắn nhãn sản phẩm để bộ lọc còn ăn
-  segNote();
   if(modalOpen()) resizeCharts();   // đổi toggle khi modal đang mở -> chart trong modal co lại đúng cỡ
 }
 document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
@@ -2542,7 +2521,7 @@ function applyUrl(){
   const o = urlState(), q = s => document.querySelector(s);
   let redraw = false, refilter = false;
   if(o.m === 'm'){ MODE = 'm'; segOn('#modeSeg', q('#modeSeg [data-m="m"]')); redraw = true; }
-  if(o.g === 'EVCS' || o.g === 'BSS'){ SEG = o.g; applySeg(); }   // ô Phân loại tự sáng qua renderTiles
+  if(o.g === 'EVCS' || o.g === 'BSS'){ SEG = o.g; applySeg(); }
   if(o.src && o.src !== 'api' && D.variants && D.variants[o.src]){
     SRC = o.src; segOn('#srcSeg', q(`#srcSeg [data-s="${o.src}"]`));
     Object.assign(D, D.variants[SRC]); redraw = true;
