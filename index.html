@@ -200,6 +200,12 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
    sống trong lúc modal mở (xem closeModal) nên không cần dải trạng thái nào ở trang nền. */
 body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
 /* ===== bổ sung 25/07: bản lưu tuần, mục lục modal, trợ năng, in bản Nội bộ ===== */
+/* Bộ chọn khoảng ngày — thay hẳn nút Tuần/Tháng từ 29/07 */
+.rangebar{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rangebar label{font-size:12px;color:var(--ink2);display:inline-flex;gap:4px;align-items:center}
+.rangebar input[type=date]{font:12.5px inherit;padding:4px 7px;border:1px solid var(--axis);
+  border-radius:7px;background:var(--surface);color:var(--ink)}
+.rangeInfo{font-size:12px;color:var(--muted)}
 .hdWk{font-size:12px;color:var(--ink2);display:inline-flex;gap:5px;align-items:center}
 .hdWk select{font:12.5px inherit;padding:3px 6px;border:1px solid var(--axis);border-radius:7px;
   background:var(--surface);color:var(--ink)}
@@ -238,12 +244,12 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
 <body>
 <header>
   <h1>📊 <span id="hdTitle">Báo cáo tuần </span><span id="hdW"></span> — EVCS &amp; BSS</h1>
-  <label class="hdWk" id="wkPick" style="display:none">Bản lưu
-    <select id="wkSel" title="Xem lại báo cáo của tuần đã chốt"></select>
-  </label>
-  <div class="seg" id="modeSeg" role="group" aria-label="Kỳ báo cáo">
-    <button data-m="w" class="on" aria-pressed="true">Tuần</button>
-    <button data-m="m" aria-pressed="false">Tháng</button>
+  <!-- 29/07: bỏ hẳn nút Tuần/Tháng (user chốt). Mọi con số nay tính từ bảng ticket theo
+       ĐÚNG khoảng ngày chọn ở đây — một ngày cũng được. -->
+  <div class="rangebar" id="rangeBar" role="group" aria-label="Khoảng ngày báo cáo">
+    <label>Từ <input type="date" id="dFrom"></label>
+    <label>Đến <input type="date" id="dTo"></label>
+    <span class="rangeInfo" id="rangeInfo"></span>
   </div>
   <div class="seg" id="srcSeg" title="Lọc theo luồng tạo ticket" role="group" aria-label="Nguồn tạo ticket">
     <button data-s="api" class="on" aria-pressed="true">API creation</button>
@@ -411,30 +417,6 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
        Trước 25/07 viết cứng ghi chú của W29 nên tuần nào cũng hiện. -->
   <div class="note" id="weekNote" style="display:none"></div>
 
-  <!-- Chế độ Tháng: cái nhìn tổng thể NHIỀU tháng (D.monthSeries), khác hẳn 7 tuần ở trên. -->
-  <div id="monthCmp" style="display:none">
-    <h2>So sánh các tháng <span id="monthRange"></span></h2>
-    <div class="note">Bảng và biểu đồ dưới đây là <b>toàn bộ các tháng có dữ liệu</b>, không
-      phải một kỳ đơn lẻ — dùng để nhìn xu thế dài hạn. Bucket tháng chạy từ ngày 20 sang
-      ngày 19 tháng sau (quy ước sẵn có của báo cáo). Tháng đánh dấu <b>*</b> chưa trọn
-      khoảng ngày nên thấp hơn là do độ phủ dữ liệu, không phải do lỗi giảm.
-      <br><b>Đọc cột "Độ phủ luồng API" trước khi so tháng:</b> luồng <i>API creation</i>
-      (VOMS tự sinh ticket) — bộ lọc mặc định của báo cáo — chỉ được bật dần trong 2026, các
-      tháng đầu năm gần như chưa có. Tháng có độ phủ thấp ⚠ ra ít ticket là do <b>chưa bật
-      luồng</b>, không phải ít việc; muốn so công bằng các tháng đó thì chuyển bộ lọc nguồn
-      sang <i>Tất cả</i>.<span id="monthBssNote"></span></div>
-    <!-- A3: bucket tháng dài 19–31 ngày (chênh 63%) nên so SỐ TUYỆT ĐỐI giữa các tháng là
-         so sai; mặc định quy về /ngày, vẫn giữ nút xem số thô. -->
-    <div class="seg" id="moNorm" role="group" aria-label="Cách tính số ticket theo tháng">
-      <button data-n="day" class="on" aria-pressed="true">Trung bình / ngày</button>
-      <button data-n="abs" aria-pressed="false">Số tuyệt đối</button>
-    </div>
-    <div class="grid2">
-      <div class="card"><h3>Số ticket theo tháng — <span id="moNormLbl"></span></h3><div class="cv"><canvas id="c_mo_qty"></canvas></div></div>
-      <div class="card"><h3>Overdue rate theo tháng</h3><div class="cv"><canvas id="c_mo_ovd"></canvas></div></div>
-    </div>
-    <div class="tblwrap"><table id="t_months"></table></div>
-  </div>
 </section>
 
 <section id="sec-alarm">
@@ -747,6 +729,10 @@ if (typeof REPORT_DATA === 'undefined' || !REPORT_DATA || !REPORT_DATA.week) {
   throw new Error('REPORT_DATA missing');
 }
 </script>
+<!-- Bảng ticket nén (1 dòng/ticket) + lớp đếm theo khoảng ngày. facts.js nặng ~7MB nên
+     để SAU data_latest.js: trang dựng được khung và báo lỗi tử tế trước khi chờ nó. -->
+<script src="facts.js"></script>
+<script src="agg.js"></script>
 <!-- Tồn kho vật tư (sinh bởi sla_monitor/warehouse_report.py). Thiếu file = ẩn ô Kho. -->
 <script src="warehouse_data.js"></script>
 <!-- Firebase (giải trình dùng chung node /dashboard/explain với dashboard điều hành) -->
@@ -767,6 +753,16 @@ const FIREBASE_CONFIG = {
 <script>
 /* ================= helpers ================= */
 const D = REPORT_DATA;
+/* facts.js nặng ~7MB nên có thể chưa tải xong / tải hỏng trong khi data_latest.js đã có.
+   Không có nó thì KHÔNG khối số nào dựng được, nên báo thẳng thay vì để trang trắng. */
+if (typeof REPORT_FACTS === 'undefined' || !REPORT_FACTS || !REPORT_FACTS.n) {
+  document.querySelector('main').innerHTML =
+    '<div class="loadfail"><h2>Chưa tải được bảng dữ liệu ticket</h2>' +
+    '<p>File <code>facts.js</code> (~7 MB) không tải được hoặc đang được ghi dở. ' +
+    'Mọi con số trên trang được tính từ file này theo khoảng ngày bạn chọn.</p>' +
+    '<p><button class="btn primary" onclick="location.reload()">Tải lại</button></p></div>';
+  throw new Error('REPORT_FACTS missing');
+}
 /* 12 màu: xu hướng nguyên nhân đang dùng đúng 8 nhóm = chạm trần bảng cũ, thêm nhóm thứ 9
    là hai đường trùng màu mà không ai nhận ra. 4 màu bổ sung chọn lệch hẳn tông 8 màu đầu. */
 const S = ['#2a78d6','#1baf7a','#eda100','#008300','#4a3aa7','#e34948','#e87ba4','#eb6834',
@@ -788,8 +784,26 @@ function mk(id, cfg){ if(charts[id]) charts[id].destroy(); charts[id] = new Char
 const pctTick = { callback: v => (v*100).toFixed(0) + '%' };
 const pctTip = ctx => ` ${ctx.dataset.label ?? ctx.label}: ${pc(ctx.parsed.x ?? ctx.parsed.y ?? ctx.parsed)}`;
 
-let MODE = 'w'; // 'w' tuần | 'm' tháng
+/* ===== Khoảng ngày đang xem =====
+   Thay hẳn biến MODE ('w'/'m') cũ. Mọi khối số lấy từ AGG (agg.js) đếm trên bảng
+   ticket theo đúng khoảng này; không còn khối nào nấu sẵn theo tuần/tháng.
+   BK = các cột thời gian của biểu đồ xu hướng, suy từ độ dài khoảng (xem AGG.buckets). */
+let RANGE = { from: '', to: '' };
+let BK = null;
 let SEG = 'all'; // 'all' | 'EVCS' | 'BSS' — xem tagSegCards/applySeg
+
+/* Fleet "q'ty on service" là SỐ TĨNH carry từ baseline (export CCTS không có), nên lấy
+   thẳng từ bảng fail của baseline thay vì tính lại. */
+const fleetOf = rows => Object.fromEntries(
+  (rows || []).filter(r => r.model !== 'Total').map(r => [r.model, r.onService]));
+const FLEET_E = fleetOf(D.failEvcsM), FLEET_B = fleetOf(D.failBssM);
+const sumV = o => Object.values(o).reduce((a, b) => a + b, 0);
+const FLEET_ET = sumV(FLEET_E), FLEET_BT = sumV(FLEET_B);
+AGG.init(REPORT_FACTS, D.enums);
+
+const dmy = iso => iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) + '/' + iso.slice(0, 4) : '';
+const rangeDays = () =>
+  Math.round((Date.parse(RANGE.to) - Date.parse(RANGE.from)) / 86400000) + 1;
 
 /* Gắn data-seg cho thẻ chỉ nói về MỘT dòng sản phẩm, suy từ id của phần tử bên trong
    (c_cls_evcs, t_res_bss, ...). Làm lúc chạy thay vì sửa tay 26 thẻ trong HTML: id đã
@@ -812,29 +826,79 @@ function applySeg(){
   renderSolOverview();          // mặt bằng cách xử lý cũng phải cùng phạm vi
   if(modalOpen()) resizeCharts();  // thẻ còn lại giãn ra full width -> chart phải vẽ lại cỡ
 }
-const mLbl = () => MODE==='w' ? ('tuần '+D.week) : ('tháng '+D.month);
+const mLbl = () => RANGE.from === RANGE.to
+  ? ('ngày ' + dmy(RANGE.from))
+  : (dmy(RANGE.from) + ' – ' + dmy(RANGE.to));
 
-/* ================= WoW (tuần này vs tuần trước) ================= */
-const prevW = () => D.weeks[D.weeks.length-2];
-// series: chuỗi 7 tuần. isRate=true -> so trực tiếp (chênh điểm %); false -> đếm, quy /ngày
-// vì tuần hiện tại thường cụt. higherIsBad -> tăng là xấu (đỏ) hay tốt (xanh).
-function wowTag(series, {isRate=false, higherIsBad=true}={}){
-  if(MODE!=='w' || !series || series.length<2) return '';
-  let cur=series[series.length-1], prev=series[series.length-2];
-  const cov=D.coverage||{}; let note='';
-  if(!isRate){
-    const cd = cov.partial ? (cov.days||7) : 7;
-    cur=cur/cd; prev=prev/7;
-    if(cov.partial) note=' · đã quy /ngày';
-  }
+/* ================= So với kỳ liền trước =================
+   Trước 29/07 đây là "tuần này vs tuần trước" (chuỗi 7 tuần nấu sẵn). Nay kỳ so sánh là
+   khoảng NGAY TRƯỚC khoảng đang chọn, DÀI BẰNG NHAU — chọn 3 ngày thì so với 3 ngày liền
+   trước. Nhờ dài bằng nhau nên không phải quy /ngày như trước nữa (tuần cụt cũ). */
+function prevRange(){
+  const d = rangeDays();
+  const to = new Date(Date.parse(RANGE.from) - 86400000);
+  const from = new Date(to.getTime() - (d - 1) * 86400000);
+  return { from: from.toISOString().slice(0, 10), to: to.toISOString().slice(0, 10) };
+}
+const prevW = () => { const p = prevRange(); return dmy(p.from) + '–' + dmy(p.to); };
+/* pair = [giá trị kỳ này, giá trị kỳ trước]. isRate=true -> chênh theo điểm %. */
+function wowTag(pair, {isRate=false, higherIsBad=true}={}){
+  if(!pair || pair.length<2 || pair[0]==null || pair[1]==null) return '';
+  const cur=pair[0], prev=pair[1];
   if(prev===0) return '';
   let val, disp;
-  if(isRate){ val=series[series.length-1]-series[series.length-2];
+  if(isRate){ val=cur-prev;
     disp=(val>=0?'▲ ':'▼ ')+Math.abs(val*100).toFixed(1).replace('.',',')+' pp'; }
   else { val=cur/prev-1; disp=(val>=0?'▲ ':'▼ ')+Math.abs(val*100).toFixed(0)+'%'; }
   const eps = isRate?0.005:0.02;
   const col = Math.abs(val)<eps ? MUTED : ((val>0)===higherIsBad ? '#d03b3b' : '#0ca30c');
-  return `<div class="wow" style="color:${col}" title="so với ${prevW()}${note}">${disp} vs ${prevW()}</div>`;
+  return `<div class="wow" style="color:${col}" title="so với ${prevW()}">${disp} vs kỳ trước</div>`;
+}
+
+/* ================= Số của khoảng đang chọn =================
+   Trước 29/07 mỗi khối là một khóa nấu sẵn trong data_latest.js (*W cho tuần, *M cho
+   tháng). Nay AGG đếm tại chỗ theo khoảng ngày; gom kết quả vào V một lần mỗi lần vẽ để
+   các hàm vẽ chỉ phải đổi CHỖ LẤY dữ liệu chứ không đổi cách vẽ.
+   Khối nào không suy được từ bảng ticket (mẫu ticket kèm mô tả, giá vật tư, alarm baseline)
+   vẫn nằm ở D và được dán nhãn rõ là không đổi theo khoảng ngày. */
+let V = {};
+function computeView(){
+  AGG.select(RANGE.from, RANGE.to, SRC);
+  BK = AGG.buckets(RANGE.from, RANGE.to);
+  const [clsE, clsEt] = AGG.classification('EVCS', FLEET_ET);
+  const [clsB, clsBt] = AGG.classification('BSS', FLEET_BT);
+  V = {
+    clsEvcs: clsE, clsEvcsTotal: clsEt, clsBss: clsB, clsBssTotal: clsBt,
+    bdSrcEvcs: AGG.bdSource('EVCS'), bdSrcBss: AGG.bdSource('BSS'),
+    undefEvcs: AGG.undefBreakdown('EVCS'), undefBss: AGG.undefBreakdown('BSS'),
+    rcEvcs: AGG.rootcause('EVCS'), rcBss: AGG.rootcause('BSS'),
+    rcCovEvcs: AGG.rcCoverage('EVCS'), rcCovBss: AGG.rcCoverage('BSS'),
+    rcXclsEvcs: AGG.rcCross('EVCS'), rcXclsBss: AGG.rcCross('BSS'),
+    alarmRcaEvcs: AGG.alarmRca('EVCS'), alarmRcaBss: AGG.alarmRca('BSS'),
+    disEvcs: AGG.disclaim('EVCS'), disBss: AGG.disclaim('BSS'),
+    failEvcs: AGG.fail(D.enums.evcsModels, FLEET_E),
+    failBss: AGG.fail(D.enums.bssModels, FLEET_B),
+    slaEvcs: AGG.slaTable('EVCS'), slaBss: AGG.slaTable('BSS'),
+    trendEvcs: AGG.trend(D.enums.evcsModels, FLEET_E, BK),
+    trendBss: AGG.trend(D.enums.bssModels, FLEET_B, BK),
+    rcTrendEvcs: AGG.rcTrend('EVCS', BK), rcTrendBss: AGG.rcTrend('BSS', BK),
+    aspEvcs: AGG.aspBlock('EVCS', BK), aspBss: AGG.aspBlock('BSS', BK),
+    time: AGG.timeSeries(BK), perf: AGG.perf(BK),
+    ovdByBucket: AGG.overdueByBucket(BK), scenario: AGG.scenarioBreak(),
+    srcSplit: AGG.sourceSplit(),
+  };
+  V.resEvcs = AGG.resourceTable(V.slaEvcs);
+  V.resBss = AGG.resourceTable(V.slaBss);
+  /* Badge "so kỳ trước": đếm lại đúng khoảng liền trước, dài bằng nhau. */
+  const p = prevRange(), cur = { from: RANGE.from, to: RANGE.to };
+  AGG.select(p.from, p.to, SRC);
+  const [pE, pEt] = AGG.classification('EVCS', FLEET_ET);
+  const [pB, pBt] = AGG.classification('BSS', FLEET_BT);
+  const pSlaE = AGG.slaTable('EVCS'), pSlaB = AGG.slaTable('BSS');
+  const gr = t => { const g = t[t.length - 1]; return g.total ? g.overdue / g.total : 0; };
+  V.prev = { evcsQty: pEt.qty, bssQty: pBt.qty, evcsOvdRate: gr(pSlaE), bssOvdRate: gr(pSlaB) };
+  AGG.select(cur.from, cur.to, SRC);   // trả lát cắt về khoảng đang xem
+  return V;
 }
 
 /* ================= Watchlist ================= */
@@ -875,8 +939,10 @@ function daSamples(samples){
   }).join('');
 }
 function renderDisclaimAudit(){
-  const key = DIS_AUDIT_SEG + (MODE==='w' ? 'W' : 'M');
-  const data = (D.disclaimAudit || {})[key] || {};
+  /* Khối MẪU: cần nguyên văn mô tả ticket, mà mô tả không nằm trong bảng facts (quá
+     nặng) nên vẫn là bản nấu sẵn của TUẦN BÁO CÁO — không đổi theo khoảng ngày đang
+     chọn. Nhãn ở dưới nói rõ điều đó để không ai đọc nhầm là số của khoảng đã chọn. */
+  const data = (D.disclaimAudit || {})[DIS_AUDIT_SEG + 'W'] || {};
   let h = '<table class="ovd"><tr><th>Nhóm lý do (BE)</th><th>Số ticket</th><th></th></tr>';
   Object.entries(data).forEach(([reason, info], i)=>{
     h += `<tr><td><b>${reason}</b></td><td>${n0(info.total)}</td>
@@ -896,20 +962,18 @@ function renderDisclaimAudit(){
 
 /* ================= KPI ================= */
 function kpis(){
-  const cw = D.clsEvcsW_total, cm = D.clsEvcsM_total, bw = D.clsBssW_total, bm = D.clsBssM_total;
-  const se = MODE==='w' ? D.slaEvcsW : D.slaEvcsM, sb = MODE==='w' ? D.slaBssW : D.slaBssM;
-  const gse = se[se.length-1], gsb = sb[sb.length-1];
-  const c = MODE==='w' ? cw : cm, b = MODE==='w' ? bw : bm;
+  const c = V.clsEvcsTotal, b = V.clsBssTotal;
+  const gse = V.slaEvcs[V.slaEvcs.length-1], gsb = V.slaBss[V.slaBss.length-1];
   // Chi phí là khối TĨNH lấy từ baseline: luôn đọc tháng cuối cùng có trong bảng thay vì
   // chốt cứng chỉ số 5 (= M6) — baseline dài thêm là KPI tự đi theo.
   const cost = D.cost, i = cost.grandTotal.length - 1;
   const costM = (cost.months && cost.months[i]) || '';
-  const ws = D.wowSeries || {};
+  const p = V.prev || {};
   const items = [
-    ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate), wowTag(ws.evcsQty, {higherIsBad:true})],
-    ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate), wowTag(ws.bssQty, {higherIsBad:true})],
-    ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket', wowTag(ws.evcsOvdRate, {isRate:true, higherIsBad:true})],
-    ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket', wowTag(ws.bssOvdRate, {isRate:true, higherIsBad:true})],
+    ['Ticket EVCS ' + mLbl(), n0(c.qty), 'ticket rate ' + pc(c.rate), wowTag([c.qty, p.evcsQty], {higherIsBad:true})],
+    ['Ticket BSS ' + mLbl(), n0(b.qty), 'ticket rate ' + pc(b.rate), wowTag([b.qty, p.bssQty], {higherIsBad:true})],
+    ['Overdue EVCS', pc(gse.overdue/gse.total), n0(gse.overdue) + ' / ' + n0(gse.total) + ' ticket', wowTag([gse.total?gse.overdue/gse.total:0, p.evcsOvdRate], {isRate:true, higherIsBad:true})],
+    ['Overdue BSS', pc(gsb.overdue/gsb.total), n0(gsb.overdue) + ' / ' + n0(gsb.total) + ' ticket', wowTag([gsb.total?gsb.overdue/gsb.total:0, p.bssOvdRate], {isRate:true, higherIsBad:true})],
     ['Chi phí ' + costM, usd(cost.grandTotal[i]), '$' + n2(cost.costPerEquip[i]) + ' / thiết bị', ''],
   ];
   document.getElementById('kpis').innerHTML = items.map(x =>
@@ -935,7 +999,6 @@ function clsBlock(canvas, tbl, rows, total, subId){
 function renderBdSrc(){
   const el = document.getElementById('bdSrcWrap');
   if(!el) return;
-  const k = MODE==='w' ? ['bdSrcEvcsW','bdSrcBssW'] : ['bdSrcEvcsM','bdSrcBssM'];
   const COL = {'Từ khóa mô tả':S[0], 'Mã lỗi':S[1], 'Nhóm nguyên nhân':S[4], 'Chưa xác định':'#c3c2b7'};
   const one = (lbl, b) => {
     if(!b || !b.total) return '';
@@ -949,14 +1012,13 @@ function renderBdSrc(){
       <div class="arbar">${segs}</div><div class="arleg">${leg}</div></div>`;
   };
   el.innerHTML = '<div class="grid2" style="margin-top:12px">'+
-    one('EVCS', D[k[0]]) + one('BSS', D[k[1]]) + '</div>';
+    one('EVCS', V.bdSrcEvcs) + one('BSS', V.bdSrcBss) + '</div>';
 }
 
 // PA3 — phân rã khối "Undefined yet" theo họ mã lỗi (chỉ hiện tượng, KHÔNG đoán HW/SW)
 function renderUndef(){
   const el = document.getElementById('undefWrap');
   if(!el) return;
-  const k = MODE==='w' ? ['undefEvcsW','undefBssW'] : ['undefEvcsM','undefBssM'];
   const COL = {'Truyền thông/Kết nối':'#7e8aa2','Door Access (mở cửa)':'#b08968',
     'Điện lưới/Cách điện/Khói':'#c9a227','Mã lỗi khác':'#9aa0a6','Chưa có mã lỗi':'#c3c2b7'};
   const one = (lbl, b) => {
@@ -969,7 +1031,7 @@ function renderUndef(){
     return `<div class="card"><h3>${lbl} — khối “Undefined yet” thực chất là gì (${n0(b.total)} ticket)</h3>
       <div class="arbar">${segs}</div><div class="arleg">${leg}</div></div>`;
   };
-  const body = one('EVCS', D[k[0]]) + one('BSS', D[k[1]]);
+  const body = one('EVCS', V.undefEvcs) + one('BSS', V.undefBss);
   el.innerHTML = body ? ('<p class="rcIntro" style="margin:14px 0 4px">Khối xám “Undefined yet” '+
     'gần như đều <b>có mã lỗi</b> nhưng thuộc họ chưa đủ chắc để gán Hardware/Software '+
     '(truyền thông, mở cửa, điện lưới…). Tách theo <b>họ mã lỗi</b> để thấy hiện tượng — '+
@@ -1022,15 +1084,15 @@ function rcTrend(canvas, blk, weeks){
 }
 
 function renderRcCoverage(){
-  const cv = D.rcCoverage||{}, k = MODE==='w' ? ['evcsW','bssW'] : ['evcsM','bssM'];
+  const cv = { e: V.rcCovEvcs, b: V.rcCovBss };
   const el = document.getElementById('rcCovWrap');
   if(!el) return;
   // Ticket vừa tạo chưa có Solution/Additional info -> "Chưa xác định" vì THIẾU dữ liệu,
   // không phải vì không phân loại được. Phải nói rõ, nếu không tuần đang chạy trông như
   // cả nghìn ca không rõ nguyên nhân.
   const pill = (lbl,c)=> c ? `<span class="covpill${c.rate<0.5?' low':''}">${lbl}: có mô tả ${n0(c.withText)}/${n0(c.total)} (${pc(c.rate)})</span>` : '';
-  let h = '<div class="covbar">'+pill('EVCS',cv[k[0]])+pill('BSS',cv[k[1]])+'</div>';
-  const worst = Math.min(cv[k[0]]?.rate ?? 1, cv[k[1]]?.rate ?? 1);
+  let h = '<div class="covbar">'+pill('EVCS',cv.e)+pill('BSS',cv.b)+'</div>';
+  const worst = Math.min(cv.e?.rate ?? 1, cv.b?.rate ?? 1);
   if(worst < 0.5) h += `<div class="note">⚠ Kỳ này còn nhiều ticket <b>chưa có mô tả</b> (Solution/Additional information) trong dữ liệu đã nạp, nên rơi vào “Chưa xác định” vì <b>thiếu dữ liệu</b> chứ không phải không phân loại được. Số sẽ tự đầy sau lần export kế tiếp — hãy đọc tỷ trọng trên phần <i>đã có mô tả</i>.</div>`;
   el.innerHTML = h;
 }
@@ -1038,8 +1100,7 @@ function renderRcCoverage(){
 /* ---- RCA theo mã lỗi ---- */
 let ALARM_SEG = 'BSS';
 function renderAlarmRca(){
-  const key = 'alarmRca' + (ALARM_SEG==='BSS'?'Bss':'Evcs') + (MODE==='w'?'W':'M');
-  const rows = D[key] || [];
+  const rows = (ALARM_SEG==='BSS' ? V.alarmRcaBss : V.alarmRcaEvcs) || [];
   const el = document.getElementById('alarmRcaBody');
   if(!el) return;
   let h = '<table class="ovd"><tr><th>Mã lỗi</th><th>Ticket</th><th>Có mô tả</th>'+
@@ -1073,8 +1134,8 @@ function rcSamples(samples){
   }).join('');
 }
 function renderRcAudit(){
-  const key = RC_AUDIT_SEG + (MODE==='w' ? 'W' : 'M');
-  const data = (D.rcAudit || {})[key] || {};
+  // Cùng lý do với renderDisclaimAudit: khối mẫu bám tuần báo cáo, không theo khoảng ngày.
+  const data = (D.rcAudit || {})[RC_AUDIT_SEG + 'W'] || {};
   const ent = Object.entries(data).sort((a,b)=>b[1].total-a[1].total);
   let h = '<table class="ovd"><tr><th>Nhóm nguyên nhân</th><th>Số ticket</th><th></th></tr>';
   if(!ent.length) h += '<tr><td colspan="3" class="muted">Chưa có dữ liệu cho kỳ này.</td></tr>';
@@ -1149,15 +1210,15 @@ const vmarkPlugin = {
 };
 Chart.register(vmarkPlugin);
 
-/* Nhãn kỳ trên trục là "W31"/"M7"; khoảng ngày thật đưa vào TIÊU ĐỀ tooltip. Cần vì
-   AW = ISOWEEKNUM(ngày+7) nên "W31" thực ra là 20–26/07 = tuần ISO 30 — ai đối chiếu
-   lịch mà không có khoảng ngày sẽ lệch đúng một tuần. */
+/* Nhãn trục là ngày/tuần/tháng của cột (xem AGG.buckets); tooltip nói rõ cột đó gồm
+   những ngày nào — cột "tuần" gộp 7 ngày nên không nói thì không biết đang đọc mốc nào. */
 function spanTitle(labels){
-  const src = MODE==='m' ? (D.monthsCov||{}) : (D.weekSpan||{});
   return items=>{
-    const k = String(labels[items[0].dataIndex]||'').replace('*','');
-    const s = src[k];
-    return s && s.from ? `${k}  (${s.from} → ${s.to})` : k;
+    const i = items[0].dataIndex, b = BK && BK.list[i];
+    if(!b) return String(labels[i] || '');
+    const days = AGG.days();
+    const from = days[b.from], to = days[b.to - 1];
+    return from === to ? dmy(from) : `${dmy(from)} → ${dmy(to)}`;
   };
 }
 
@@ -1173,15 +1234,18 @@ function lineChart(canvas, labels, seriesNames, seriesData, isPct, marks){
       scales:{y:{grid:{color:GRID}, ...(isPct?{ticks:pctTick}:{})}, x:{grid:{display:false}}}}});
 }
 
-/* Mốc "segment vào luồng API" cho biểu đồ xu hướng — xem build.flow_start().
-   `only` = giới hạn theo segment: biểu đồ EVCS mà vẽ mốc của BSS thì người đọc tưởng
-   EVCS có biến động ở đúng tuần đó. Bỏ trống = biểu đồ gộp, vẽ mốc của cả hai. */
+/* Mốc "segment vào luồng API" cho biểu đồ xu hướng.
+   BSS chỉ vào luồng API creation từ cuối tháng 7 — trước đó đường BSS bằng 0, ai không
+   biết sẽ đọc thành "BSS hỏng loạt" đúng cột đó. Mốc suy tại chỗ: cột ĐẦU TIÊN trong
+   khoảng đang xem mà segment đó đạt ngưỡng ticket luồng API.
+   `only` = giới hạn theo segment: biểu đồ EVCS mà vẽ mốc của BSS thì đọc nhầm sang EVCS. */
+const FLOW_MIN = 50;
 function flowMarks(labels, only){
-  const fs = (MODE==='m' ? D.flowStartM : D.flowStartW) || {};
+  if(!BK) return [];
   const cl = {EVCS:'#2a78d6', BSS:'#1baf7a'};
-  return Object.entries(fs).map(([seg,p])=>{
+  return ['EVCS','BSS'].map(seg=>{
     if(only && seg !== only) return null;
-    const at = labels.findIndex(l => String(l).replace('*','') === p);
+    const at = BK.list.findIndex(b=> AGG.rowsOf(seg, AGG.slice(b.from, b.to, 'api')).length >= FLOW_MIN);
     return at > 0 ? {at, text:`${seg} vào luồng API`, color:cl[seg]} : null;
   }).filter(Boolean);
 }
@@ -1191,7 +1255,9 @@ function alarms(){
   const wrap = document.getElementById('alarmCards');
   wrap.innerHTML = '';
   Object.entries(D.alarms).forEach(([grp, obj], gi)=>{
-    const rows = (MODE==='w'?obj.w:obj.m).slice(0,10);
+    // D.alarms là khối TĨNH carry từ baseline W29 (staticKeys) — không suy được từ bảng
+    // ticket nên không đổi theo khoảng ngày; luôn đọc bản tuần.
+    const rows = obj.w.slice(0,10);
     const id = 'c_al_' + gi;
     const card = document.createElement('div');
     card.className = 'card';
@@ -1488,13 +1554,12 @@ const TILE_HAS = {
   wh:  ['Tồn kho live', 'Top vật tư', 'Chi phí dịch vụ'],
 };
 function renderTiles(){
-  const cE = MODE==='w'?D.clsEvcsW:D.clsEvcsM, cEt = MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total;
-  const cB = MODE==='w'?D.clsBssW:D.clsBssM,  cBt = MODE==='w'?D.clsBssW_total:D.clsBssM_total;
-  const rcE = MODE==='w'?D.rcEvcsW:D.rcEvcsM;
-  const sla = [].concat(MODE==='w'?D.slaEvcsW:D.slaEvcsM, MODE==='w'?D.slaBssW:D.slaBssM);
+  const cE = V.clsEvcs, cEt = V.clsEvcsTotal, cB = V.clsBss, cBt = V.clsBssTotal;
+  const rcE = V.rcEvcs;
+  const sla = [].concat(V.slaEvcs, V.slaBss);
   const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
-  const wk = D.weeks, sumWk = t => wk.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
-  const te = sumWk(D.trendEvcs), tb = sumWk(D.trendBss);
+  const sumBk = t => BK.list.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
+  const te = sumBk(V.trendEvcs), tb = sumBk(V.trendBss);
   const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
   /* Ghi đủ "Undefined yet" — viết tắt "Undefined" trông y như biến JS lỗi. */
   const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Undefined yet" ${pc(undefShare(c))}`;
@@ -1525,7 +1590,7 @@ function renderTiles(){
     d.onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } };
   });
   T.forEach((t,i)=>{
-    if(t.spark) miniLine('trend_'+i, wk, t.spark, true);
+    if(t.spark) miniLine('trend_'+i, BK.labels, t.spark, true);
     if(!t.mini) return;
     if(t.mini[0]==='donut') miniDonut('tile_'+i, t.mini[1], t.mini[2]);
     else if(t.mini[0]==='rc') miniRcBar('tile_'+i, t.mini[1]);
@@ -1533,7 +1598,7 @@ function renderTiles(){
   });
 }
 
-/* ================= render theo mode ================= */
+/* ================= vẽ lại theo khoảng ngày ================= */
 function render(){
   document.querySelectorAll('.modeLbl').forEach(e=> e.textContent = mLbl());
   kpis();
@@ -1541,52 +1606,61 @@ function render(){
   /* Khối Kho đọc file sinh riêng — lỗi ở đó không được phép kéo sập phần còn lại. */
   try{ renderWarehouse(); }catch(err){ console.warn('Bỏ qua khối Kho:', err); }
   renderWatch();
-  clsBlock('c_cls_evcs','t_cls_evcs', MODE==='w'?D.clsEvcsW:D.clsEvcsM, MODE==='w'?D.clsEvcsW_total:D.clsEvcsM_total, 'clsEvcsSub');
-  clsBlock('c_cls_bss','t_cls_bss', MODE==='w'?D.clsBssW:D.clsBssM, MODE==='w'?D.clsBssW_total:D.clsBssM_total, 'clsBssSub');
+  clsBlock('c_cls_evcs','t_cls_evcs', V.clsEvcs, V.clsEvcsTotal, 'clsEvcsSub');
+  clsBlock('c_cls_bss','t_cls_bss', V.clsBss, V.clsBssTotal, 'clsBssSub');
   renderBdSrc();
   renderUndef();
-  const rcCv = D.rcCoverage||{};
-  rcBlock('c_rc_evcs', MODE==='w'?D.rcEvcsW:D.rcEvcsM, 'rcEvcsSub', MODE==='w'?rcCv.evcsW:rcCv.evcsM);
-  rcBlock('c_rc_bss',  MODE==='w'?D.rcBssW :D.rcBssM,  'rcBssSub',  MODE==='w'?rcCv.bssW :rcCv.bssM);
+  rcBlock('c_rc_evcs', V.rcEvcs, 'rcEvcsSub', V.rcCovEvcs);
+  rcBlock('c_rc_bss',  V.rcBss,  'rcBssSub',  V.rcCovBss);
   renderRcCoverage();
-  rcCross('t_rcx_evcs', (MODE==='w'?D.rcXclsEvcsW:D.rcXclsEvcsM)||[]);
-  rcCross('t_rcx_bss',  (MODE==='w'?D.rcXclsBssW :D.rcXclsBssM )||[]);
-  rcTrend('c_rctr_evcs', byMode(D.rcTrendEvcs, D.rcTrendEvcsM)||D.rcTrendEvcs, perLabels());
-  rcTrend('c_rctr_bss',  byMode(D.rcTrendBss, D.rcTrendBssM)||D.rcTrendBss,  perLabels());
+  rcCross('t_rcx_evcs', V.rcXclsEvcs);
+  rcCross('t_rcx_bss',  V.rcXclsBss);
+  rcTrend('c_rctr_evcs', V.rcTrendEvcs, BK.labels);
+  rcTrend('c_rctr_bss',  V.rcTrendBss,  BK.labels);
   renderAlarmRca();
   renderRcAudit();
-  disBlock('c_dis_evcs', MODE==='w'?D.disEvcsW:D.disEvcsM);
-  disBlock('c_dis_bss',  MODE==='w'?D.disBssW:D.disBssM);
+  disBlock('c_dis_evcs', V.disEvcs);
+  disBlock('c_dis_bss',  V.disBss);
   renderDisclaimAudit();
-  failBlock('c_fail_evcs','t_fail_evcs', MODE==='w'?D.failEvcsW:D.failEvcsM);
-  failBlock('c_fail_bss','t_fail_bss', MODE==='w'?D.failBssW:D.failBssM);
+  failBlock('c_fail_evcs','t_fail_evcs', V.failEvcs);
+  failBlock('c_fail_bss','t_fail_bss', V.failBss);
   alarms();
-  slaBlock('c_sla_evcs', MODE==='w'?D.slaEvcsW:D.slaEvcsM, 'slaEvcsSub');
-  slaBlock('c_sla_bss',  MODE==='w'?D.slaBssW:D.slaBssM,  'slaBssSub');
-  resBlock('t_res_evcs', MODE==='w'?D.resEvcsW:D.resEvcsM);
-  resBlock('t_res_bss',  MODE==='w'?D.resBssW:D.resBssM);
-  partsBlock('t_parts_evcs', MODE==='w'?D.partsEvcsW:D.partsEvcsM, MODE==='w'?D.partsTotal.evcsW:D.partsTotal.evcsM, 'pEvcsSub');
-  partsBlock('t_parts_bss',  MODE==='w'?D.partsBssW:D.partsBssM,  MODE==='w'?D.partsTotal.bssW:D.partsTotal.bssM, 'pBssSub');
+  slaBlock('c_sla_evcs', V.slaEvcs, 'slaEvcsSub');
+  slaBlock('c_sla_bss',  V.slaBss,  'slaBssSub');
+  resBlock('t_res_evcs', V.resEvcs);
+  resBlock('t_res_bss',  V.resBss);
+  // parts + cost là khối TĨNH carry từ baseline (export không có giá vật tư) -> bản tuần.
+  partsBlock('t_parts_evcs', D.partsEvcsW, D.partsTotal.evcsW, 'pEvcsSub');
+  partsBlock('t_parts_bss',  D.partsBssW,  D.partsTotal.bssW,  'pBssSub');
   renderModelErrors();
   renderSolOverview();
   tagSegCards();     // thẻ vừa vẽ lại -> gắn nhãn sản phẩm để bộ lọc còn ăn
-  if(modalOpen()) resizeCharts();   // đổi toggle khi modal đang mở -> chart trong modal co lại đúng cỡ
+  if(modalOpen()) resizeCharts();   // đổi khoảng khi modal đang mở -> chart co lại đúng cỡ
 }
-document.querySelectorAll('#modeSeg button').forEach(b=> b.onclick = ()=>{
-  MODE = b.dataset.m;
-  segOn('#modeSeg', b);
-  /* Bỏ collectGt(): hàm này bị gỡ cùng mục "Hiệu suất CSE & Giải trình" (commit 141dd99)
-     nhưng lời gọi còn sót -> mỗi lần bấm Tuần/Tháng ném ReferenceError NGAY TRƯỚC render(),
-     nên nút Tháng không đổi được số. Giải trình giờ lưu thẳng qua saveExplain nên không
-     cần gom từ DOM trước khi vẽ lại. */
+
+/* Đổi khoảng ngày: đếm lại rồi vẽ lại TOÀN BỘ, kể cả nhóm biểu đồ xu hướng (trục thời
+   gian của chúng cũng suy từ khoảng đang chọn, xem AGG.buckets). */
+function applyRange(from, to, opt){
+  opt = opt || {};
+  const days = AGG.days();
+  if(from > to){ const t = from; from = to; to = t; }
+  RANGE = { from: from < days[0] ? days[0] : from,
+            to:   to > days[days.length-1] ? days[days.length-1] : to };
+  document.getElementById('dFrom').value = RANGE.from;
+  document.getElementById('dTo').value = RANGE.to;
+  computeView();
   render();
-  monthCovNote();    // tháng có thể mới gồm 1 tuần -> phải nói rõ, xem monthCovNote()
-  /* Từ 27/07 mọi biểu đồ XU HƯỚNG cũng đổi trục theo chế độ (7 tuần <-> các tháng), nên
-     đổi Tuần/Tháng phải vẽ lại cả nhóm này chứ không chỉ các khối một-kỳ trong render(). */
-  drawSourceCharts();
+  drawSourceCharts();   // gồm cả renderPerf + xu hướng + ASP + thời gian
   renderOvdWeek();
+  renderScenario();
+  renderCause();
   headLabels();
-  syncUrl();
+  rangeNote();
+  if(!opt.keepUrl) syncUrl();
+}
+['dFrom','dTo'].forEach(id=>{
+  document.getElementById(id).onchange = ()=>
+    applyRange(document.getElementById('dFrom').value, document.getElementById('dTo').value);
 });
 /* bật nút đang chọn + cập nhật aria-pressed (trước đây chỉ đổi class, đọc màn hình không thấy) */
 function segOn(sel, btn){
@@ -1868,8 +1942,8 @@ function applyExplainRemote(all){
    riêng nhìn thấy được. Đường mục tiêu lấy từ report_auto/config/targets.json — chưa đặt
    thì nói thẳng "chưa đặt mục tiêu" chứ không bịa một mốc đẹp. */
 function renderOvdWeek(){
-  const w = byMode(D.ovdByWeek, D.ovdByMonth) || D.ovdByWeek || [];
-  const L = w.map(r=>r.week);
+  const w = (V.ovdByBucket) || [];
+  const L = BK ? BK.labels : w.map(r=>r.week);
   const tg = ((D.targets||{}).overdue_rate||{}).target;
   const ds = [
     {label:'Đã xong nhưng trễ hạn', data:w.map(r=>r.breach), backgroundColor:'#d03b3b', borderRadius:4, maxBarThickness:26, order:2, stack:'ovd'},
@@ -1895,7 +1969,7 @@ function renderOvdWeek(){
 /* ===== (C) Thành phần overdue (doughnut 5 nhóm) ===== */
 const SCN_COL = {'Chưa resolve (còn Open)':'#8894a6','Xử lý muộn':'#d03b3b','Resolve muộn':'#eda100','Lỗi hệ thống':'#8e44ad','VOMS reject':'#16a085'};
 function renderScenario(){
-  const s = D.scenario||[];
+  const s = V.scenario||[];
   const tot = s.reduce((a,r)=>a+r.qty,0)||1;
   mk('c_scenario', {type:'doughnut',
     data:{labels:s.map(r=>`${r.name} (${(r.qty/tot*100).toFixed(0)}%)`),
@@ -1948,7 +2022,7 @@ const delta = (cur, prev) => (cur==null||prev==null) ? '<span class="muted">—<
   (Math.abs(cur-prev) < .005 ? '<span class="muted">≈</span>' :
    `<span style="color:${cur>prev?'var(--crit)':'var(--good)'};font-weight:600">${cur>prev?'▲':'▼'} ${pc(Math.abs(cur-prev),1)}</span>`);
 function renderPerf(){
-  const rows = ((D.perf||{})[PERF_DIM]) || [];
+  const rows = ((V.perf||{})[PERF_DIM]) || [];
   document.querySelectorAll('.perfLbl').forEach(e=> e.textContent = PERF_LBL[PERF_DIM]);
   const top = rows.slice(0, 12);
   mk('c_perf', {type:'bar',
@@ -1964,15 +2038,16 @@ function renderPerf(){
         x:{grid:{display:false}, ticks:{font:{size:10.5}}}}}});
   const t8 = rows.slice(0, 8);
   mk('c_perf_trend', {type:'line',
-    data:{labels: D.weeks, datasets: t8.map((r,i)=>({label:r.k,
+    data:{labels: BK.labels, datasets: t8.map((r,i)=>({label:r.k,
       data:r.series.map(v=> v==null?null:v*100), borderColor:S[i%S.length], backgroundColor:S[i%S.length],
       tension:.3, pointRadius:2, borderWidth:2, spanGaps:true}))},
     options:{maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10.5}}},
       tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y==null?'—':c.parsed.y.toFixed(1)+'%'}`}}},
       scales:{y:{grid:{color:GRID}, ticks:{callback:v=>v+'%'}}, x:{grid:{display:false}}}}});
+  const per = BK.unit === 'day' ? 'ngày' : (BK.unit === 'week' ? 'tuần' : 'tháng');
   let h = `<table><tr><th>${PERF_LBL[PERF_DIM]}</th><th>Ticket</th><th>Overdue</th><th>Rate</th>`+
-    `<th>Δ tuần trước</th><th>Giờ xử lý (TV)</th><th>% trong hạn</th><th>Chưa xong</th>`+
-    `<th>Open→VOMS (TV)</th><th>Xu hướng ${D.weeks[0]}→${D.weeks[D.weeks.length-1]}</th></tr>`;
+    `<th>Δ ${per} trước</th><th>Giờ xử lý (TV)</th><th>% trong hạn</th><th>Chưa xong</th>`+
+    `<th>Open→VOMS (TV)</th><th>Xu hướng ${escH(BK.labels[0]||'')}→${escH(BK.labels[BK.labels.length-1]||'')}</th></tr>`;
   let q=0, o=0;
   rows.forEach(r=>{ q+=r.qty; o+=r.ovd;
     /* B3 — đơn vị dưới TIME_MIN_QTY ca thì tỉ lệ vô nghĩa thống kê (Hà Giang 1 ca = 100%
@@ -2006,7 +2081,7 @@ function timeFlags(r, base){
   return f;
 }
 function renderTime(rows){
-  const base = ((D.perf||{}).all||[])[0] || {med:null, voms:null};
+  const base = ((V.perf||{}).all||[])[0] || {med:null, voms:null};
   const bm=document.getElementById('baseMed'), bv=document.getElementById('baseVoms');
   if(bm) bm.textContent = hrs(base.med);
   if(bv) bv.textContent = hrs(base.voms);
@@ -2164,9 +2239,6 @@ ovdUserInp.onchange = ()=>{ ovdUser = ovdUserInp.value.trim(); localStorage.setI
 /* Kỳ đang vẽ trên MỌI biểu đồ xu hướng: chế độ Tuần -> 7 tuần, chế độ Tháng -> các tháng.
    Trước 27/07 xu hướng luôn là 7 tuần kể cả khi đang ở chế độ Tháng, tức nút Tháng không
    đổi được bất kỳ biểu đồ xu hướng nào. */
-const perLabels = () => MODE==='m' ? (D.months||[]) : (D.weeks||[]);
-const byMode = (w, m) => MODE==='m' ? m : w;
-
 const TR_METRIC = {
   failRate:{lbl:'Failure rate', pct:true,
     note:'⚠ Mẫu số là fleet <b>tĩnh chốt W29</b> (EVCS 25.354 · BSS 25.430) áp cho mọi kỳ, '+
@@ -2182,17 +2254,15 @@ let TR_M = 'failRate';
 
 /* charts trend + ASP: phụ thuộc nguồn -> vẽ lại khi đổi nguồn */
 function drawSourceCharts(){
-  renderPerf();   // bảng hiệu suất nằm trong live_blocks -> đổi theo nguồn
-  const L = perLabels(), mkE = flowMarks(L, 'EVCS'), mkB = flowMarks(L, 'BSS');
-  const te = byMode(D.trendEvcs, D.trendEvcsM) || D.trendEvcs;
-  const tb = byMode(D.trendBss, D.trendBssM) || D.trendBss;
-  const ae = byMode(D.aspEvcs, D.aspEvcsM) || D.aspEvcs;
-  const ab = byMode(D.aspBss, D.aspBssM) || D.aspBss;
+  renderPerf();   // bảng hiệu suất cũng đổi theo nguồn + khoảng ngày
+  const L = BK.labels, mkE = flowMarks(L, 'EVCS'), mkB = flowMarks(L, 'BSS');
+  const te = V.trendEvcs, tb = V.trendBss, ae = V.aspEvcs, ab = V.aspBss;
   const cfg = TR_METRIC[TR_M];
+  const unit = BK.unit === 'day' ? 'ngày' : (BK.unit === 'week' ? 'tuần' : 'tháng');
 
   document.querySelectorAll('.trMetricLbl').forEach(e=> e.textContent = cfg.lbl);
   const tn = document.getElementById('trMetricNote'); if(tn) tn.innerHTML = cfg.note;
-  const tu = document.getElementById('trendUnit'); if(tu) tu.textContent = byMode('tuần','tháng');
+  const tu = document.getElementById('trendUnit'); if(tu) tu.textContent = unit;
   const tr = document.getElementById('trendRange');
   if(tr && L.length) tr.textContent = L[0] + ' → ' + L[L.length-1];
 
@@ -2204,13 +2274,9 @@ function drawSourceCharts(){
   lineChart('c_asp_bss', L, ab.asps, ab.rate, true, mkB);
   campaignCharts();
   timeCharts();
-  monthCompare();
   renderActions();   // sổ hành động join theo mã lỗi, luôn theo tuần & luồng API
 }
 document.getElementById('trMetric').onchange = e=>{ TR_M = e.target.value; drawSourceCharts(); };
-document.querySelectorAll('#moNorm button').forEach(b=> b.onclick = ()=>{
-  MO_NORM = b.dataset.n; segOn('#moNorm', b); monthCompare();
-});
 
 /* ===== Mã lỗi theo LOẠI TỦ + cách xử lý KTV + hiệu quả (27/07/2026) =====
    Đọc D.modelErrors / D.solOverview. Khác Sổ hành động ở chỗ: sổ hành động là kế hoạch
@@ -2380,7 +2446,7 @@ window.toggleAct = function(i, el){
    tuần hiện tại; chuỗi nhiều kỳ duy nhất là overdue rate, mà overdue rate không phân biệt
    được "sửa nhanh hơn" với "SLA nới ra". */
 function timeCharts(){
-  const t = byMode(D.timeW, D.timeM), L = perLabels();
+  const t = V.time, L = BK.labels;
   if(!t || !t.all) return;
   const a = t.all, marks = flowMarks(L);
   lineChart('c_time_tr', L, ['Trung vị','p90','Open→VOMS (TV)'], [a.med, a.p90, a.voms], false, marks);
@@ -2392,7 +2458,8 @@ function timeCharts(){
       plugins:{legend:{position:'bottom'}, vmark:{marks},
         tooltip:{callbacks:{title: spanTitle(L)}}},
       scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:GRID}}}}});
-  const u = byMode('Tuần','Tháng');
+  const unit = BK.unit === 'day' ? 'ngày' : (BK.unit === 'week' ? 'tuần' : 'tháng');
+  const u = unit.charAt(0).toUpperCase() + unit.slice(1);
   document.getElementById('t_timetr').innerHTML =
     `<table><tr><th>${u}</th><th>Ca đã có solution</th><th>Trung vị (h)</th><th>p90 (h)</th>`+
     `<th>Open→VOMS TV (h)</th><th>Ca &gt; 48h</th><th>% ca &gt; 48h</th></tr>` +
@@ -2402,22 +2469,27 @@ function timeCharts(){
         `<td>${n2(a.p90[i])}</td><td>${n2(a.voms[i])}</td><td>${n0(sl)}</td>`+
         `<td>${dn?pc(sl/dn):'—'}</td></tr>`;
     }).join('') + '</table>';
-  document.querySelectorAll('.perUnit').forEach(e=> e.textContent = byMode('tuần','tháng'));
+  document.querySelectorAll('.perUnit').forEach(e=> e.textContent = unit);
 }
 
 /* A2 — nền vs chiến dịch, cột chồng. Quy tắc nhận diện nằm ở report_auto/config/campaigns.json,
    DÙNG CHUNG với bản Điều hành nên hai bản không đếm lệch nhau. */
 function campaignCharts(){
-  const c = byMode(D.campaignW, D.campaignM), L = perLabels();
+  /* Quy tắc nhận diện chiến dịch nằm ở config/campaigns.json phía server và khai theo
+     TUẦN, nên khối này giữ trục 7 tuần nấu sẵn — KHÔNG đổi theo khoảng ngày đang chọn.
+     Nói rõ trong chú thích để không ai đọc nhầm là số của khoảng đã chọn. */
+  const c = D.campaignW, L = D.weeks || [];
   const note = document.getElementById('campNote');
   if(!c){ if(note) note.textContent=''; return; }
   const rules = c.rules||[];
   if(note){
-    note.innerHTML = c.cfgEmpty
+    note.innerHTML = '<b>Khối này theo 7 tuần cố định</b> (quy tắc chiến dịch khai theo tuần ở '
+      + '<code>config/campaigns.json</code>), không đổi theo khoảng ngày đang chọn. '
+      + (c.cfgEmpty
       ? 'Chưa khai quy tắc chiến dịch nào trong <code>config/campaigns.json</code> — mọi ticket đang được tính là lỗi tự nhiên.'
       : 'Đang tách ' + rules.length + ' chiến dịch: ' + rules.map(r=>
           `<b>${escH(r.label)}</b> (${escH(r.seg)}, ${escH((r.weeks||[]).join(', '))} — khớp ${n0((r.matched||[]).reduce((a,b)=>a+b,0))} ca)`
-        ).join(' · ') + '. Ticket không khớp quy tắc nào = lỗi tự nhiên.';
+        ).join(' · ') + '. Ticket không khớp quy tắc nào = lỗi tự nhiên.');
   }
   ['EVCS','BSS'].forEach(seg=>{
     const s = (c.bySeg||{})[seg]; if(!s) return;
@@ -2426,69 +2498,15 @@ function campaignCharts(){
         {label:'Lỗi tự nhiên', data:s.natural, backgroundColor:'#2a78d6', borderRadius:4, maxBarThickness:34},
         {label:'Chiến dịch thay thế hàng loạt', data:s.campaign, backgroundColor:'#eda100', borderRadius:4, maxBarThickness:34}]},
       options:{maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
-        plugins:{legend:{position:'bottom'}, vmark:{marks: flowMarks(L, seg)},
-          tooltip:{callbacks:{title: spanTitle(L),
+        plugins:{legend:{position:'bottom'},
+          tooltip:{callbacks:{
             afterBody:it=>{ const i=it[0].dataIndex, n=s.natural[i]||0, k=s.campaign[i]||0;
               return (n+k) ? `Chiến dịch chiếm ${pc(k/(n+k))} tổng ticket kỳ này` : ''; }}}},
         scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:GRID}}}}});
   });
 }
 
-/* So sánh các tháng — chỉ hiện ở chế độ Tháng. D.monthSeries dùng đúng định nghĩa KPI
-   như D.wowSeries (chỉ đổi cột kỳ AW->AX) nên hai chế độ so được với nhau. */
-let MO_NORM = 'day';   // mặc định /ngày — xem chú thích trong monthCompare()
-function monthCompare(){
-  const box = document.getElementById('monthCmp'), ms = D.monthSeries, mo = D.months||[];
-  if(!box) return;
-  if(!ms || mo.length < 2){ box.style.display='none'; return; }
-  box.style.display = MODE==='m' ? '' : 'none';
-  const rng = document.getElementById('monthRange');
-  if(rng) rng.textContent = mo[0] + ' → ' + mo[mo.length-1];
-  if(MODE!=='m') return;   // canvas ẩn -> Chart.js vẽ ra kích thước 0
-  const cov = D.monthsCov||{};
-  /* Tháng chưa trọn (vd M1 chỉ có 01→19/01 vì dữ liệu bắt đầu từ 01/01) tụt xuống trong
-     biểu đồ mà không phải do lỗi giảm — gắn dấu * để không đọc nhầm thành xu hướng. */
-  const lbl = mo.map(x => (cov[x]||{}).partial ? x+'*' : x);
-  /* A3 — bucket tháng dài 19–31 ngày; chia cho số ngày mới so được tháng với tháng.
-     Dùng SPAN (max-min+1) chứ không phải số ngày CÓ ticket, để tháng vắng việc không bị
-     nhân lên thành cao giả. */
-  const span = x => { const c = cov[x]||{};
-    return (c.from && c.to) ? ((new Date(c.to) - new Date(c.from))/864e5 + 1) : null; };
-  const norm = v => MO_NORM==='day' ? mo.map((x,i)=>{ const s=span(x); return s ? v[i]/s : null; }) : v;
-  const nl = document.getElementById('moNormLbl');
-  if(nl) nl.textContent = MO_NORM==='day' ? 'trung bình mỗi ngày' : 'tổng cả tháng';
-  lineChart('c_mo_qty', lbl, ['EVCS','BSS'], [norm(ms.evcsQty), norm(ms.bssQty)], false, flowMarks(lbl));
-  lineChart('c_mo_ovd', lbl, ['EVCS','BSS'], [ms.evcsOvdRate, ms.bssOvdRate], true, flowMarks(lbl));
-  const src = D.monthSrcCov||{};
-  /* Đường BSS phẳng 0 ở các tháng đầu là ĐÚNG dữ liệu chứ không phải thiếu: ticket BSS-VH
-     có từ trước nhưng chỉ vào luồng API creation từ một tháng nhất định. Suy thẳng từ dữ
-     liệu thay vì viết cứng tên tháng, vì mốc này đổi theo bộ lọc nguồn đang chọn. */
-  const bn = document.getElementById('monthBssNote');
-  if(bn){
-    const k = ms.bssQty.findIndex(v=> v>0);
-    bn.innerHTML = (k > 0)
-      ? ` Đường <b>BSS</b> phẳng 0 tới <b>${escH(mo[k])}</b> vì ticket BSS chỉ vào luồng đang lọc từ tháng đó — BSS trước đó vẫn có việc, nằm trong cột "Tổng VH mọi nguồn".`
-      : '';
-  }
-  document.getElementById('t_months').innerHTML =
-    '<tr><th>Tháng</th><th>Khoảng ngày</th><th>EVCS — ticket</th><th>EVCS — overdue rate</th>' +
-    '<th>BSS — ticket</th><th>BSS — overdue rate</th>' +
-    '<th title="Toàn bộ ticket vận hành tháng đó, KHÔNG lọc luồng tạo">Tổng VH mọi nguồn</th>' +
-    '<th title="Tỉ lệ ticket vận hành đi qua luồng API creation — bộ lọc mặc định của báo cáo">Độ phủ luồng API</th></tr>' +
-    mo.map((x,i)=>{
-      const c = cov[x]||{}, s = src[x]||{};
-      const span = c.from ? `${c.from} → ${c.to}` + (c.partial ? ' <b>(chưa trọn)</b>' : '') : '—';
-      /* Độ phủ luồng thấp = tháng đó CCTS chưa bật API creation, KHÔNG phải ít việc. */
-      const low = s.all && s.share < .5;
-      return `<tr${x===D.month?' style="font-weight:600"':''}><td>${escH(x)}</td><td>${span}</td>` +
-        `<td>${nf.format(ms.evcsQty[i]||0)}</td><td>${pc(ms.evcsOvdRate[i])}</td>` +
-        `<td>${nf.format(ms.bssQty[i]||0)}</td><td>${pc(ms.bssOvdRate[i])}</td>` +
-        `<td>${nf.format(s.all||0)}</td>` +
-        `<td${low?' style="color:#b45309"':''}>${pc(s.share)}${low?' ⚠':''}</td></tr>`;
-    }).join('');
-}
-drawSourceCharts();
-costCharts();
+costCharts();   // khối chi phí là số TĨNH từ baseline -> vẽ 1 lần, không theo khoảng ngày
 /* Bảng phân công CSE là HẰNG SỐ theo file phân công — không đổi theo tuần/tháng hay
    nguồn tạo ticket, nên vẽ một lần ở đây thay vì nằm trong render(). */
 function renderAreas(){
@@ -2509,14 +2527,14 @@ function renderAreas(){
     `Nguồn: ${A.source} · phân công ngày ${A.asOf}. ${A.note}`;
 }
 renderAreas();
-/* Đổi nguồn (API / khác / tất cả): ghi đè các khối live trên D bằng variant tương ứng
-   rồi vẽ lại. List giải trình GIỮ NGUYÊN (luôn luồng API, toàn quốc) — nó là công cụ điền tay riêng. */
+/* Đổi nguồn (API / khác / tất cả). Trước 29/07 build.py phải nấu sẵn CẢ BA biến thể
+   (`D.variants`) vì trang không tự đếm được; nay `source` là một cột của bảng ticket nên
+   chỉ cần đếm lại cùng khoảng ngày với bộ lọc nguồn mới.
+   List giải trình GIỮ NGUYÊN (luôn luồng API) — nó là công cụ điền tay riêng. */
 let SRC = 'api';
 function applySrc(mode){
-  if(!D.variants || !D.variants[mode]) return;
   SRC = mode;
-  Object.assign(D, D.variants[SRC]);
-  render(); drawSourceCharts();
+  applyRange(RANGE.from, RANGE.to, {keepUrl:true});
   setTimeout(fixSizes, 60);
 }
 document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
@@ -2538,13 +2556,13 @@ function urlState(){
 }
 function syncUrl(){
   const p = new URLSearchParams();
-  if(MODE !== 'w') p.set('m', MODE);
+  if(RANGE.from) p.set('from', RANGE.from);
+  if(RANGE.to) p.set('to', RANGE.to);
   if(SEG !== 'all') p.set('g', SEG);
   if(SRC !== 'api') p.set('src', SRC);
   if(OPEN_GRP) p.set('sec', OPEN_GRP);
   Object.entries(FURL).forEach(([k, key])=>{
-    const def = key === 'w' ? D.week : '';
-    if((F[key] || '') !== def) p.set(k, F[key] || '');
+    if(F[key]) p.set(k, F[key]);
   });
   const s = p.toString();
   history.replaceState(null, '', location.pathname + location.search + (s ? '#' + s : ''));
@@ -2552,36 +2570,28 @@ function syncUrl(){
 function applyUrl(){
   const o = urlState(), q = s => document.querySelector(s);
   let redraw = false, refilter = false;
-  if(o.m === 'm'){ MODE = 'm'; segOn('#modeSeg', q('#modeSeg [data-m="m"]')); redraw = true; }
   if(o.g === 'EVCS' || o.g === 'BSS'){ SEG = o.g; applySeg(); }
-  if(o.src && o.src !== 'api' && D.variants && D.variants[o.src]){
-    SRC = o.src; segOn('#srcSeg', q(`#srcSeg [data-s="${o.src}"]`));
-    Object.assign(D, D.variants[SRC]); redraw = true;
+  if(o.src && (o.src === 'other' || o.src === 'all')){
+    SRC = o.src; segOn('#srcSeg', q(`#srcSeg [data-s="${o.src}"]`)); redraw = true;
   }
+  /* Khoảng ngày trên URL phải áp SAU nguồn: applyRange đếm lại theo SRC hiện hành. */
+  if(o.from && o.to){ applyRange(o.from, o.to, {keepUrl:true}); redraw = false; }
   Object.entries(FURL).forEach(([k, key])=>{ if(o[k] != null){ F[key] = o[k]; refilter = true; } });
-  if(redraw){ render(); drawSourceCharts(); renderOvdWeek(); monthCovNote(); headLabels(); setTimeout(fixSizes, 60); }
+  if(redraw){ applyRange(RANGE.from, RANGE.to, {keepUrl:true}); setTimeout(fixSizes, 60); }
   if(refilter){ initOvdFilters(); renderOverdue(); renderOvdProgress(); }
   if(o.sec) openModal(o.sec, true);
 }
-/* Tiêu đề đổi theo chế độ: "Báo cáo tuần W31" và "Báo cáo tháng M7" là HAI báo cáo khác
-   mục đích (tuần: so các tuần với nhau; tháng: nhìn tổng thể nhiều tháng). Trước 27/07
-   tiêu đề luôn ghi "Báo cáo tuần W…" kể cả khi đang xem Tháng nên người đọc tưởng số
-   tháng và số tuần phải khớp nhau. */
+/* Tiêu đề nói đúng khoảng đang xem — trước 29/07 luôn là "Báo cáo tuần W…". */
 function headLabels(){
-  const isW = MODE === 'w', per = isW ? D.week : D.month;
-  document.title = (isW ? 'Báo cáo tuần ' : 'Báo cáo tháng ') + per + ' — EVCS & BSS';
+  document.title = 'Báo cáo ' + mLbl() + ' — EVCS & BSS';
   const h1 = document.getElementById('hdTitle');
-  if(h1) h1.textContent = isW ? 'Báo cáo tuần ' : 'Báo cáo tháng ';
-  const hd = document.getElementById('hdW'); if(hd) hd.textContent = per;
+  if(h1) h1.textContent = 'Báo cáo ';
+  const hd = document.getElementById('hdW'); if(hd) hd.textContent = mLbl();
 }
-/* nhãn động theo dữ liệu (báo cáo chạy hằng ngày -> tuần/tháng thay đổi) */
+/* nhãn động theo dữ liệu (báo cáo chạy hằng ngày -> khoảng dữ liệu thay đổi).
+   headLabels() KHÔNG gọi ở đây: lúc này RANGE còn rỗng nên tiêu đề sẽ ra "Báo cáo ngày —".
+   Nó được gọi trong applyRange, sau khi đã có khoảng thật. */
 (function(){
-  headLabels();
-  const segs = document.querySelectorAll('#modeSeg button');
-  if(segs[0]) segs[0].textContent = 'Tuần ('+D.week+')';
-  if(segs[1]) segs[1].textContent = 'Tháng ('+D.month+')';
-  const tr = document.getElementById('trendRange'), wk = D.weeks||[];
-  if(tr && wk.length) tr.textContent = wk[0] + ' → ' + wk[wk.length-1];
   const cr = document.getElementById('costRange'), cm = (D.cost&&D.cost.months)||[];
   if(cr && cm.length) cr.textContent = cm[0] + ' → ' + cm[cm.length-1];
   const wn = document.getElementById('weekNote');
@@ -2608,12 +2618,29 @@ function bootAll(){
   safe('bộ lọc giải trình', initOvdFilters);
   safe('bảng giải trình', renderOverdue);
   safe('tiến độ giải trình', renderOvdProgress);
-  safe('overdue theo tuần', renderOvdWeek);
+  safe('overdue theo kỳ', renderOvdWeek);
   safe('thành phần overdue', renderScenario);
   safe('lý do xử lý muộn', renderLateReason);
   safe('nguyên nhân overdue', renderCause);
 }
+/* Khoảng mặc định = TUẦN BÁO CÁO gần nhất, để mở trang lên vẫn thấy đúng thứ như trước
+   khi có bộ chọn ngày. Người dùng đổi sang một ngày / khoảng bất kỳ tùy ý. */
+safe('khởi tạo khoảng ngày', function(){
+  const days = AGG.days();
+  const span = (D.weekSpan || {})[D.week];
+  const from = (span && span.from) || days[Math.max(0, days.length - 7)];
+  const to = (span && span.to) || days[days.length - 1];
+  const el = document.getElementById('dFrom'), et = document.getElementById('dTo');
+  el.min = et.min = days[0];
+  el.max = et.max = days[days.length - 1];
+  RANGE = { from: from, to: to };
+  el.value = from; et.value = to;
+  computeView();
+  headLabels();
+});
 bootAll();
+safe('biểu đồ theo nguồn', drawSourceCharts);
+safe('ghi chú khoảng ngày', rangeNote);
 safe('khôi phục trạng thái từ URL', applyUrl);
 /* Phạm vi dữ liệu: nói rõ báo cáo CHỈ gồm ticket vận hành và đã loại những luồng nào.
    Trước đây mỗi khối lọc một kiểu (bảng phân loại lọc VH, còn SLA/ASP/CSE thì không),
@@ -2626,39 +2653,30 @@ safe('khôi phục trạng thái từ URL', applyUrl);
     `<b>${n0(s.kept)}</b> ticket. Đã loại <b>${n0(s.dropped)}</b>/${n0(s.total)} `+
     `(${pc(s.dropped/s.total)}) khỏi <i>toàn bộ</i> các bảng trên trang: ${reasons}`;
 })();
-/* Ngày làm mới + cảnh báo tuần chưa đủ 7 ngày (báo cáo chạy giữa tuần) */
+/* Ngày làm mới */
 (function(){
   const ft=document.getElementById('freshTag');
   if(ft && D.generatedAt) ft.textContent = '🕒 Số liệu cập nhật: '+D.generatedAt;
-  const cov=D.coverage||{}, pw=document.getElementById('partialWarn');
-  if(!pw) return;
-  if(cov.partial){
-    pw.style.display=''; pw.textContent = `⚠ Tuần ${D.week} mới có ${cov.days}/7 ngày (${cov.from}→${cov.to}) — số tuần hiện tại chưa đủ, đừng so trực tiếp với các tuần đã trọn.`;
-  }else if(D.weekRunning){
-    /* Kỳ báo cáo tuần cố tình LÙI về tuần trọn gần nhất: tuần đang chạy dở luôn ít
-       ticket hơn nên đưa vào biểu đồ so tuần là sai. Nói rõ thay vì để người đọc
-       tưởng báo cáo chưa cập nhật. */
-    pw.style.display=''; pw.textContent = `ℹ Kỳ tuần = ${D.week} (tuần trọn gần nhất, ${cov.from}→${cov.to}). Tuần ${D.weekRunning} đang chạy dở nên chưa đưa vào để biểu đồ so tuần không lệch.`;
-  }
 })();
-/* Hai chế độ KHÁC MỤC ĐÍCH, không phải hai cách hiển thị cùng một con số:
-     Tuần  — so kết quả tuần này với các tuần trước (kỳ ngắn, cùng độ dài 7 ngày).
-     Tháng — nhìn tổng thể qua nhiều tháng (xu thế dài hạn), xem "So sánh các tháng".
-   Bucket tháng (cột AX) chạy từ ngày 20 sang ngày 19 tháng sau, nên bucket đang chạy có
-   lúc chỉ gồm đúng 1 tuần; build.py vì thế lấy tháng TRỌN gần nhất làm kỳ tháng. */
-function monthCovNote(){
-  const mw = document.getElementById('monthWarn'), mc = D.monthCoverage;
-  if(!mw) return;
-  if(!mc || !mc.days || MODE !== 'm'){ mw.style.display='none'; return; }
-  const span = `${mc.from}→${mc.to}`, run = D.monthRunning, rc = (D.monthsCov||{})[run];
-  mw.style.display = '';
-  mw.textContent = mc.sameAsWeek
-    ? `⚠ Tháng ${D.month} mới có ${mc.days} ngày (${span}) và hiện chỉ gồm đúng tuần ${D.week} — số liệu hai chế độ giống nhau là đúng, không phải lỗi. Chúng tách nhau khi sang tuần kế tiếp.`
-    : `ℹ Kỳ tháng = ${D.month} (${span}, gồm ${mc.weeks.join(', ')})${mc.partial ? ' — chưa trọn' : ''}.`
-      + (run && rc ? ` Tháng ${run} mới có ${rc.days} ngày (${rc.from}→${rc.to}) nên chưa làm kỳ báo cáo.` : '')
-      + ` Báo cáo tháng dùng để nhìn tổng thể nhiều tháng — xem "So sánh các tháng"; báo cáo tuần (${D.week}) dùng để so các tuần với nhau. Hai con số không phải khớp nhau.`;
+/* Ghi chú về khoảng đang chọn. Hai bẫy phải nói rõ, vì bộ chọn ngày cho phép chọn cả
+   những khoảng mà trước đây trang không bao giờ hiển thị:
+     - NGÀY CUỐI của kho thường mới có dữ liệu tới giờ chạy export (06:20) nên luôn thấp;
+     - khoảng quá ngắn thì mẫu nhỏ, mọi tỉ lệ đều nhiễu. */
+function rangeNote(){
+  const pw = document.getElementById('partialWarn');
+  const info = document.getElementById('rangeInfo');
+  const days = AGG.days(), last = days[days.length-1];
+  const n = AGG.size(), d = rangeDays();
+  if(info) info.textContent = `${n0(n)} ticket · ${d} ngày`;
+  if(!pw) return;
+  const msg = [];
+  if(RANGE.to === last)
+    msg.push(`Ngày cuối (${dmy(last)}) mới có dữ liệu tới lúc chạy export ${escH(D.generatedAt||'')} nên thấp hơn thực tế.`);
+  if(d <= 2)
+    msg.push('Khoảng rất ngắn — mọi tỉ lệ trên trang đều tính trên mẫu nhỏ, đọc số tuyệt đối sẽ chắc hơn.');
+  if(msg.length){ pw.style.display=''; pw.textContent = '⚠ ' + msg.join(' '); }
+  else pw.style.display='none';
 }
-monthCovNote();
 /* Nhãn "số tĩnh" cho các khối KHÔNG tính được từ export (cost/alarm/parts giá) — mốc lấy
    từ baseline trong dữ liệu, không viết cứng tuần vào HTML nữa. */
 (function(){
@@ -2672,59 +2690,9 @@ monthCovNote();
       k.insertAdjacentHTML('beforeend','<span class="staticTag">tĩnh</span>');
   });
 })();
-/* ===== Bản lưu theo tuần =====
-   data_latest.js bị ghi đè mỗi lần build nên báo cáo tuần trước trước đây biến mất. build.py
-   giữ thêm 8 tuần trong data/. `?w=W30` -> nạp bản đó rồi dựng lại trang bằng chính D. */
-function loadArchive(w){
-  const tag = document.getElementById('archTag');
-  if(tag){ tag.style.display=''; tag.textContent = `⏳ Đang tải bản lưu tuần ${w}…`; }
-  return fetch('data/' + encodeURIComponent(w) + '.js')
-    .then(r=> r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)))
-    .then(t=>{
-      const j = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1));
-      if(!j.week) throw new Error('file lưu không hợp lệ');
-      Object.assign(D, j);            // giữ nguyên tham chiếu D mà mọi hàm đang dùng
-      OVD_ROWS = unpackOvdRows();
-      Object.assign(F, {w:D.week, reg:'', prov:'', cse:'', asp:'', seg:'', st:'', q:''});
-      SRC = 'api'; segOn('#srcSeg', document.querySelector('#srcSeg [data-s="api"]'));
-      document.getElementById('hdW').textContent = D.week;
-      document.title = 'Báo cáo tuần ' + D.week + ' — EVCS & BSS';
-      document.querySelectorAll('#modeSeg button')[0].textContent = 'Tuần ('+D.week+')';
-      document.querySelectorAll('#modeSeg button')[1].textContent = 'Tháng ('+D.month+')';
-      bootAll(); monthCovNote(); syncWeekLabels(); setTimeout(fixSizes, 60);
-      if(tag) tag.innerHTML = `📁 Đang xem bản lưu tuần <b>${escH(D.week)}</b> (chốt ${escH(D.generatedAt||'')}) — <a href="./">về bản mới nhất</a>`;
-    })
-    .catch(e=>{
-      if(tag) tag.innerHTML = `⚠ Không tải được bản lưu tuần ${escH(w)} (${escH(e.message)}) — đang hiển thị bản mới nhất. <a href="./">Bỏ lọc tuần</a>`;
-    });
-}
-safe('bản lưu theo tuần', function(){
-  const sel = document.getElementById('wkSel'), pick = document.getElementById('wkPick');
-  const cur = new URLSearchParams(location.search).get('w') || '';
-  if(cur && /^W\d+$/.test(cur) && cur !== D.week) loadArchive(cur);
-  fetch('data/index.js').then(r=> r.ok ? r.text() : Promise.reject())
-    .then(t=>{
-      const list = JSON.parse(t.slice(t.indexOf('['), t.lastIndexOf(']') + 1));
-      if(!list.length || !sel) return;
-      sel.innerHTML = `<option value="">mới nhất</option>` +
-        list.slice().reverse().map(w=>`<option value="${escH(w)}"${w===cur?' selected':''}>${escH(w)}</option>`).join('');
-      pick.style.display = '';
-      sel.onchange = ()=>{ location.search = sel.value ? '?w='+encodeURIComponent(sel.value) : ''; };
-    }).catch(()=>{});   // chưa có thư mục lưu (build cũ) -> ẩn luôn ô chọn
-});
-/* đồng bộ nhãn tuần trong các tiêu đề TĨNH của HTML shell (KPI, tên section) theo D.week.
-   Chỉ sửa text-node hiển thị, không đụng script/thuộc tính. Nhãn tháng của khối chi phí
-   không đụng tới vì là dữ liệu tháng carry từ baseline (xem kpis()). */
-function syncWeekLabels(){
-  const reps = [[/tuần W\d+/g, 'tuần '+D.week],
-                [/W\d+\s*→\s*W\d+/g, D.weeks[0]+' → '+D.week]];
-  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const ns = []; let n; while(n = w.nextNode()) ns.push(n);
-  ns.forEach(t => { let s = t.nodeValue;
-    reps.forEach(([rx, v]) => s = s.replace(rx, v));
-    if(s !== t.nodeValue) t.nodeValue = s; });
-}
-safe('đồng bộ nhãn tuần', syncWeekLabels);
+/* Bản lưu theo tuần (`?w=W30`) đã GỠ 29/07: bộ chọn khoảng ngày phủ toàn bộ kho từ
+   01/01 nên muốn xem lại tuần nào thì chọn thẳng khoảng ngày của tuần đó. build.py vẫn
+   ghi data/W*.js để giữ lịch sử số đã chốt, trang không còn nạp nữa. */
 // một số canvas có thể bị đo width=0 trong lần layout đầu — ép resize lại
 function fixSizes(){ Object.values(charts).forEach(c=>{ if(c.canvas.width===0) c.resize(); }); }
 window.addEventListener('load', ()=>{ fixSizes(); setTimeout(fixSizes, 250); setTimeout(fixSizes, 1000); });
