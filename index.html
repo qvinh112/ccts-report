@@ -711,6 +711,18 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
       <div class="tblwrap" id="t_ovd_reg"></div></div>
   </div>
 </section>
+
+<section id="sec-area">
+  <h2>Phân công CSE theo khu vực</h2>
+  <p class="rcIntro">
+    Đây <b>chính là</b> bảng dùng để quy ticket về CSE ở mọi mục phía trên: mã trạm cho ra
+    mã tỉnh, tra bảng này theo <b>tỉnh × dòng sản phẩm</b> ra người phụ trách. Trạm nằm ở
+    tổ hợp bảng chưa có thì mới lấy tên CSE đứng đầu chuỗi Ticket Owner của ticket đó.
+    Đổi phân công thì sinh lại bảng và <b>cả 7 tuần lịch sử tự chấm lại</b> theo phân công mới.
+  </p>
+  <div class="card"><div class="tblwrap" id="t_area"></div></div>
+  <p id="areaNote" style="font-size:12.5px;color:var(--muted);margin:8px 0 0"></p>
+</section>
   </div>
  </div>
 </div>
@@ -1270,7 +1282,7 @@ function costCharts(){
    Thứ tự hiện trong modal theo THỨ TỰ SECTION TRONG DOM, không theo mảng ids. */
 const GROUPS = {
   cls:  {title:'Hỏng cái gì', ids:['sec-cls','sec-dis','sec-fail','sec-trend','sec-model','sec-fix']},
-  sla:  {title:'Xử lý có đúng hạn không', ids:['sec-sla','sec-perf','sec-cause','sec-ovdana','sec-asp','sec-overdue']},
+  sla:  {title:'Xử lý có đúng hạn không', ids:['sec-sla','sec-perf','sec-cause','sec-ovdana','sec-asp','sec-overdue','sec-area']},
   rc:   {title:'Vì sao hỏng và đã làm gì', ids:['sec-watch','sec-rc','sec-alarm','sec-action']},
   wh:   {title:'Vật tư, tồn kho & chi phí', ids:['sec-wh','sec-parts','sec-cost']},
 };
@@ -1471,7 +1483,7 @@ function renderWarehouse(){
    đáy trang: bỏ thanh đó mà không ghi gì thì 19 mục nội dung thành vô hình. */
 const TILE_HAS = {
   cls: ['Phân loại', 'Disclaim', 'Lỗi theo model', 'Xu hướng', 'Mã lỗi theo loại tủ'],
-  sla: ['SLA theo trạng thái', 'Hiệu suất xử lý', 'Nguyên nhân overdue', 'ASP', 'Giải trình'],
+  sla: ['SLA theo trạng thái', 'Hiệu suất xử lý', 'Nguyên nhân overdue', 'ASP', 'Giải trình', 'Phân công CSE'],
   rc:  ['Cảnh báo sớm', 'Nguyên nhân lỗi', 'Top alarm', 'Sổ hành động'],
   wh:  ['Tồn kho live', 'Top vật tư', 'Chi phí dịch vụ'],
 };
@@ -2477,6 +2489,26 @@ function monthCompare(){
 }
 drawSourceCharts();
 costCharts();
+/* Bảng phân công CSE là HẰNG SỐ theo file phân công — không đổi theo tuần/tháng hay
+   nguồn tạo ticket, nên vẽ một lần ở đây thay vì nằm trong render(). */
+function renderAreas(){
+  const A = D.cseAreas, el = document.getElementById('t_area');
+  if(!el) return;
+  if(!A || !A.rows){ el.innerHTML = '<p class="muted">Chưa có bảng phân công trong dữ liệu.</p>'; return; }
+  const cell = list => list.length
+    ? `<b>${list.length}</b> tỉnh · <span class="muted">${list.map(escH).join(', ')}</span>`
+    : '<span class="muted">—</span>';
+  const TH = '<th style="text-align:left">';
+  let h = `<table><tr>${TH}CSE</th>${TH}EVCS (OTD)</th>${TH}BSS</th></tr>`;
+  A.rows.forEach(r=>{
+    h += `<tr><td class="l"><b>${escH(r.cse)}</b></td>`
+       + `<td class="l">${cell(r.evcs)}</td><td class="l">${cell(r.bss)}</td></tr>`;
+  });
+  el.innerHTML = h + '</table>';
+  document.getElementById('areaNote').textContent =
+    `Nguồn: ${A.source} · phân công ngày ${A.asOf}. ${A.note}`;
+}
+renderAreas();
 /* Đổi nguồn (API / khác / tất cả): ghi đè các khối live trên D bằng variant tương ứng
    rồi vẽ lại. List giải trình GIỮ NGUYÊN (luôn luồng API, toàn quốc) — nó là công cụ điền tay riêng. */
 let SRC = 'api';
