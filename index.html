@@ -301,11 +301,52 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
   <div id="undefWrap"></div>
 </section>
 
+<!-- Phân loại bằng AI — thêm 30/07/2026. Đặt NGAY SAU sec-cls để đọc liền mạch:
+     bảng trên là bộ luật từ khóa, bảng này là DeepSeek đọc cùng dữ liệu đó.
+     Số liệu đi theo bộ chọn khoảng ngày (gộp từ ai_phanloai_data.js theo NGÀY), nên
+     không phải khối tĩnh và KHÔNG cần .staticTag. -->
+<section id="sec-ai">
+  <h2>Phân loại bằng AI — đối chiếu với bộ luật (<span class="modeLbl"></span>)</h2>
+  <p class="rcIntro">
+    Bộ luật từ khóa để <b>hơn một nửa ticket ở “Chưa phân loại”</b> (xem thẻ bên dưới cho
+    khoảng đang chọn) vì không-tồn-lỗi cộng không-thay-vật-tư thì không suy ra được lớp
+    nào. Khối này cho <b>DeepSeek</b>
+    (<code>temperature=0</code>) đọc lại cùng dữ liệu: <b>mã lỗi</b>, <b>mô tả sự cố lúc mở
+    ticket</b>, <b>cách xử lý của KTV</b>, cờ <b>đã thay vật tư</b>, kèm tri thức mã lỗi trích
+    từ wiki kỹ thuật nội bộ. Thêm một lớp <b>“Không tồn lỗi”</b> mà bộ luật không có.
+    <br>
+    Cột <code>BD</code> của bộ luật <b>giữ nguyên</b> — mọi con số khác trên trang này vẫn do
+    bộ luật tính. Đây là bảng để đối chiếu trước khi quyết định có chuyển sang dùng AI.
+  </p>
+  <div id="aiKpi" class="kpis"></div>
+  <div class="grid2">
+    <div class="card"><h3>Phân bố lớp — <span id="aiCmpSub"></span></h3>
+      <div class="cv"><canvas id="c_ai_cmp"></canvas></div>
+      <div class="tblwrap" id="t_ai_cmp"></div></div>
+    <div class="card"><h3>Độ tự tin do AI tự chấm</h3>
+      <div class="cv"><canvas id="c_ai_conf"></canvas></div>
+      <p class="note" id="aiConfNote"></p></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Luật (hàng) ↔ AI (cột) — ô càng đậm càng nhiều ticket</h3>
+    <p class="note">Ô ngoài đường chéo là chỗ hai bên <b>kết luận khác nhau</b> — đó là phần
+      cần người đọc phán lại. Toàn kho, không theo khoảng ngày.</p>
+    <div class="tblwrap" id="t_ai_matrix"></div>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="card"><h3>Nhóm nguyên nhân AI chỉ ra (toàn kho)</h3>
+      <div class="tblwrap" id="t_ai_rc"></div></div>
+    <div class="card"><h3>Lý do Disclaim theo AI (toàn kho)</h3>
+      <div class="tblwrap" id="t_ai_be"></div></div>
+  </div>
+  <p class="note" id="aiFoot"></p>
+</section>
+
 <section id="sec-rc">
   <h2>Nguyên nhân lỗi đến từ đâu (<span class="modeLbl"></span>)</h2>
   <p class="rcIntro">
     Tầng này đọc <b>ngôn từ</b> của ticket để chỉ ra cụm gây lỗi, áp cho <b>mọi</b> ticket —
-    kể cả khối “Undefined yet” của bảng phân loại. Thứ tự tin cậy của bằng chứng:
+    kể cả khối “Chưa phân loại” của bảng phân loại. Thứ tự tin cậy của bằng chứng:
     ① <b>danh mục lỗi CCTS</b> (<code>Error: Nhóm/Lỗi cụ thể</code> trong Additional information,
     do KTV chọn tay) → ② <b>Solution</b> (mô tả cách xử lý nói đúng nguyên nhân thật hơn
     triệu chứng ban đầu) → ③ Problem Analysis → ④ phần mô tả tự do của Additional information.
@@ -735,6 +776,9 @@ if (typeof REPORT_DATA === 'undefined' || !REPORT_DATA || !REPORT_DATA.week) {
 <script src="agg.js"></script>
 <!-- Tồn kho vật tư (sinh bởi sla_monitor/warehouse_report.py). Thiếu file = ẩn ô Kho. -->
 <script src="warehouse_data.js"></script>
+<!-- Nhãn phân loại AI (sinh bởi report_auto/build_ai_page.py). CHỈ số đếm tổng hợp —
+     repo này PUBLIC nên không bao giờ chứa mô tả ticket. Thiếu file thì khối AI tự ẩn. -->
+<script src="ai_phanloai_data.js"></script>
 <!-- Firebase (giải trình dùng chung node /dashboard/explain với dashboard điều hành) -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -824,6 +868,7 @@ function applySeg(){
   tagSegCards();
   renderModelErrors();          // danh sách loại tủ phải theo dòng sản phẩm đang chọn
   renderSolOverview();          // mặt bằng cách xử lý cũng phải cùng phạm vi
+  safe('phân loại AI', renderAi);   // aiSum() lọc theo SEG -> đổi sản phẩm là phải gộp lại
   if(modalOpen()) resizeCharts();  // thẻ còn lại giãn ra full width -> chart phải vẽ lại cỡ
 }
 const mLbl = () => RANGE.from === RANGE.to
@@ -990,12 +1035,12 @@ function clsBlock(canvas, tbl, rows, total, subId){
       plugins:{legend:{position:'right'},
         tooltip:{callbacks:{label: c => ` ${c.label}: ${n0(c.parsed)} (${pc(c.parsed/total.qty)})`}}}}});
   document.getElementById(tbl).innerHTML = '<table><tr><th>Nhóm</th><th>Phân loại</th><th>Ticket</th><th>Tỷ trọng</th><th>Ticket rate</th></tr>' +
-    rows.map(r=>`<tr><td>${r.name}</td><td>${r.name==='Disclaim'?'Not by ChargeCore':(r.name==='Undefined yet'?'Undefined':'By ChargeCore')}</td><td>${n0(r.qty)}</td><td>${pc(r.share)}</td><td>${pc(r.rate,2)}</td></tr>`).join('') +
+    rows.map(r=>`<tr><td>${r.name}</td><td>${r.name==='Disclaim'?'Not by ChargeCore':(r.name==='Chưa phân loại'?'Undefined':'By ChargeCore')}</td><td>${n0(r.qty)}</td><td>${pc(r.share)}</td><td>${pc(r.rate,2)}</td></tr>`).join('') +
     `<tr class="total"><td>Grand total</td><td></td><td>${n0(total.qty)}</td><td>100%</td><td>${pc(total.rate,2)}</td></tr></table>`;
 }
 
-/* Nguồn quyết định nhãn phân loại — 'Undefined yet' đã được lấp bằng 2 lớp suy thêm
-   (mã lỗi, rồi nhóm nguyên nhân), nên phải nói rõ phần nào là công thức Excel gốc. */
+/* Nguồn quyết định nhãn phân loại — nhóm nguyên nhân (ngôn từ), dòng thay vật tư thật,
+   hay mã lỗi CCTS. Không nói rõ thì người đọc tưởng nhãn nào cũng chắc như nhau. */
 function renderBdSrc(){
   const el = document.getElementById('bdSrcWrap');
   if(!el) return;
@@ -1015,7 +1060,7 @@ function renderBdSrc(){
     one('EVCS', V.bdSrcEvcs) + one('BSS', V.bdSrcBss) + '</div>';
 }
 
-// PA3 — phân rã khối "Undefined yet" theo họ mã lỗi (chỉ hiện tượng, KHÔNG đoán HW/SW)
+// PA3 — phân rã khối "Chưa phân loại" theo họ mã lỗi (chỉ hiện tượng, KHÔNG đoán HW/FW)
 function renderUndef(){
   const el = document.getElementById('undefWrap');
   if(!el) return;
@@ -1028,20 +1073,148 @@ function renderUndef(){
          title="${escH(r.name)}: ${n0(r.qty)} (${pc(r.share)})"></span>`).join('');
     const leg = b.rows.map(r=>
       `<span><i style="background:${COL[r.name]||'#c3c2b7'}"></i>${escH(r.name)} ${n0(r.qty)} · ${pc(r.share)}</span>`).join('');
-    return `<div class="card"><h3>${lbl} — khối “Undefined yet” thực chất là gì (${n0(b.total)} ticket)</h3>
+    return `<div class="card"><h3>${lbl} — khối “Chưa phân loại” thực chất là gì (${n0(b.total)} ticket)</h3>
       <div class="arbar">${segs}</div><div class="arleg">${leg}</div></div>`;
   };
   const body = one('EVCS', V.undefEvcs) + one('BSS', V.undefBss);
-  el.innerHTML = body ? ('<p class="rcIntro" style="margin:14px 0 4px">Khối xám “Undefined yet” '+
-    'gần như đều <b>có mã lỗi</b> nhưng thuộc họ chưa đủ chắc để gán Hardware/Software '+
+  el.innerHTML = body ? ('<p class="rcIntro" style="margin:14px 0 4px">Khối xám “Chưa phân loại” '+
+    'gần như đều <b>có mã lỗi</b> nhưng thuộc họ chưa đủ chắc để gán HW/FW '+
     '(truyền thông, mở cửa, điện lưới…). Tách theo <b>họ mã lỗi</b> để thấy hiện tượng — '+
     'BD giữ nguyên, không đoán bừa.</p><div class="grid2">'+ body +'</div>') : '';
 }
 
 /* ================= nguyên nhân (RC) =================
    Màu theo LỚP suy ra của nhóm để nhìn là biết cụm nào là lỗi thiết bị, cụm nào không. */
-const RC_CLS_COLOR = {Hardware:S[0], Software:S[2], Disclaim:S[5]};
+/* Nhóm có lớp DỨT KHOÁT mới tô màu; nhóm "tùy vật tư" (Mạng/Kết nối, Không tồn lỗi) để
+   xám vì lớp thật phụ thuộc từng ticket có thay vật tư hay không. */
+const RC_CLS_COLOR = {HW:S[0], FW:S[2], Disclaim:S[5]};
 const RC_UNK = '#c3c2b7';
+
+/* ================= phân loại bằng AI (thêm 30/07/2026) =================
+   Nguồn: window.AI_DATA (report_auto/build_ai_page.py) — CHỈ số đếm tổng hợp, repo public.
+   Cố tình KHÔNG đi qua AGG/facts.js: nhồi nhãn AI vào facts.js buộc phải sửa build.py +
+   agg.js + verify_agg.js, tức đụng cửa đối chiếu 25/25. Khối này tự gộp theo NGÀY từ dữ
+   liệu riêng, nên vẫn đi theo RANGE mà không chạm mã đang được verify.
+   Hai màu #2a78d6 / #eb6834 đã chạy validator (PASS cả light lẫn dark). */
+const AI_COL = {'Disclaim':S[5], 'HW':S[0], 'FW':S[2], 'Không tồn lỗi':S[1], 'Chưa phân loại':RC_UNK};
+
+function aiSum(){
+  /* Gộp theo khoảng ngày đang chọn + bộ lọc sản phẩm SEG. Trả {ai, luat, tong}. */
+  const A = window.AI_DATA, ai = {}, luat = {};
+  A.lopAI.forEach(k => ai[k] = 0);
+  A.lopLuat.forEach(k => luat[k] = 0);
+  const segOk = s => SEG === 'all' || s === SEG;
+  for(const d in A.theoNgay){
+    if(d < RANGE.from || d > RANGE.to) continue;
+    for(const s in A.theoNgay[d]) if(segOk(s))
+      A.theoNgay[d][s].forEach((v,i) => ai[A.lopAI[i]] += v);
+  }
+  for(const d in A.theoNgayLuat){
+    if(d < RANGE.from || d > RANGE.to) continue;
+    for(const s in A.theoNgayLuat[d]) if(segOk(s))
+      A.theoNgayLuat[d][s].forEach((v,i) => luat[A.lopLuat[i]] += v);
+  }
+  const tong = A.lopAI.reduce((a,k)=>a+ai[k], 0);
+  return {ai, luat, tong};
+}
+
+function renderAi(){
+  const A = window.AI_DATA;
+  const host = document.getElementById('sec-ai');
+  if(!A){ if(host) host.style.display='none'; return; }   // thiếu file -> ẩn, không làm vỡ trang
+  const {ai, luat, tong} = aiSum();
+  const tongLuat = A.lopLuat.reduce((a,k)=>a+luat[k], 0);
+
+  /* KPI: điểm mấu chốt là khối "Chưa phân loại" co lại bao nhiêu. */
+  const cpAi = ai['Chưa phân loại'], cpLuat = luat['Chưa phân loại'];
+  document.getElementById('aiKpi').innerHTML = [
+    ['Ticket trong khoảng', n0(tong), 'đã có nhãn AI 100%'],
+    ['Chưa phân loại — luật', pc(tongLuat?cpLuat/tongLuat:0), n0(cpLuat) + ' ticket'],
+    ['Chưa phân loại — AI', pc(tong?cpAi/tong:0), n0(cpAi) + ' ticket'],
+    ...(function(){
+      /* Vì sao còn sót: ticket CHƯA ĐÓNG thì chưa có mô tả xử lý, không có gì để đọc.
+         Đo được 4.730/4.767 ca chưa phân loại đang ở trạng thái chưa đóng. Không nói ra
+         thì người đọc tưởng AI yếu — trong khi khoảng chọn càng gần hôm nay tỷ lệ này
+         càng cao vì ticket còn đang chạy. */
+      const c = A.chuaPhanLoai;
+      return c ? [['Trong đó ticket chưa đóng', pc(c.tong?c.chuaDong/c.tong:0),
+        n0(c.chuaDong) + '/' + n0(c.tong) + ' — chưa có mô tả xử lý để đọc']] : [];
+    })(),
+    ['Lớp “Không tồn lỗi”', pc(tong?ai['Không tồn lỗi']/tong:0), n0(ai['Không tồn lỗi']) + ' ticket — lớp luật không có'],
+  ].map(x=>`<div class="kpi"><div class="lbl">${x[0]}</div><div class="val">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join('');
+
+  /* Cột kép: cùng 5 lớp, 2 nguồn. Luật không có lớp "Không tồn lỗi" -> để null (khuyết
+     cột) chứ không phải 0, vì 0 nghĩa là "đếm được 0 ca", khác hẳn "không có khái niệm này". */
+  document.getElementById('aiCmpSub').textContent = n0(tong) + ' ticket';
+  mk('c_ai_cmp', {type:'bar',
+    data:{labels: A.lopAI,
+      datasets:[
+        {label:'Bộ luật', data: A.lopAI.map(k => A.lopLuat.includes(k) ? luat[k] : null),
+         backgroundColor:'#2a78d6', borderRadius:4, borderSkipped:false},
+        {label:'AI', data: A.lopAI.map(k => ai[k]),
+         backgroundColor:'#eb6834', borderRadius:4, borderSkipped:false}]},
+    options:{maintainAspectRatio:false,
+      scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grid:{color:GRID}, ticks:{callback:v=>n0(v)}}},
+      plugins:{legend:{position:'top'},
+        tooltip:{callbacks:{label: c => c.parsed.y==null ? ' (bộ luật không có lớp này)'
+          : ` ${c.dataset.label}: ${n0(c.parsed.y)}`}}}}});
+
+  document.getElementById('t_ai_cmp').innerHTML =
+    '<table><tr><th>Lớp</th><th>Bộ luật</th><th>AI</th><th>Chênh</th></tr>' +
+    A.lopAI.map(k=>{
+      const l = A.lopLuat.includes(k) ? luat[k] : null, a = ai[k];
+      const d = l==null ? '—' : (a-l>0?'+':'') + n0(a-l);
+      return `<tr><td>${k}</td><td>${l==null?'<i>không có lớp</i>':n0(l)}</td><td>${n0(a)}</td><td>${d}</td></tr>`;
+    }).join('') +
+    `<tr class="total"><td>Tổng</td><td>${n0(tongLuat)}</td><td>${n0(tong)}</td><td></td></tr></table>`;
+
+  /* Độ tự tin — thang THỨ BẬC nên dùng 3 bước cùng một hue (xanh), đậm = chắc hơn.
+     Bước nhạt nhất vẫn phải đọc được trên nền sáng nên không nhạt hơn step 250. */
+  const cf = A.doTuTin, cfTot = Object.values(cf).reduce((a,b)=>a+b,0);
+  mk('c_ai_conf', {type:'bar',
+    data:{labels: Object.keys(cf),
+      datasets:[{data: Object.values(cf), backgroundColor:['#1c5cab','#3987e5','#86b6ef'],
+        borderRadius:4, borderSkipped:false}]},
+    options:{indexAxis:'y', maintainAspectRatio:false,
+      scales:{x:{beginAtZero:true, grid:{color:GRID}, ticks:{callback:v=>n0(v)}}, y:{grid:{display:false}}},
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label: c => ` ${n0(c.parsed.x)} (${pc(c.parsed.x/cfTot)})`}}}}});
+  document.getElementById('aiConfNote').textContent =
+    'Toàn kho ' + n0(cfTot) + ' ticket. AI tự chấm độ chắc chắn của chính nó — nhóm “thấp” ('
+    + pc(cf['thấp']/cfTot) + ') là chỗ nên soi tay trước.';
+
+  /* Ma trận: thang tuần tự một hue theo tỷ lệ trên TỔNG (không phải theo hàng) để ô lớn
+     nổi lên. Chữ luôn là ink, không phải màu series. */
+  const cells = A.lopLuat.map(r => A.lopAI.map(c => A.maTran[r+'|'+c] || 0));
+  const maxV = Math.max(...cells.flat());
+  document.getElementById('t_ai_matrix').innerHTML =
+    '<table><tr><th>luật ↓ / AI →</th>' + A.lopAI.map(c=>`<th>${c}</th>`).join('') + '<th>Tổng</th></tr>' +
+    A.lopLuat.map((r,ri)=>{
+      const tot = cells[ri].reduce((a,b)=>a+b,0);
+      return `<tr><td><b>${r}</b></td>` + cells[ri].map((v,ci)=>{
+        const same = r === A.lopAI[ci];
+        const alpha = maxV ? (v/maxV)*0.85 : 0;
+        return `<td style="background:rgba(42,120,214,${alpha.toFixed(3)});`
+          + `${same?'outline:2px solid '+MUTED+';outline-offset:-2px;':''}text-align:right;`
+          + `font-variant-numeric:tabular-nums">${v?n0(v):''}</td>`;
+      }).join('') + `<td style="text-align:right"><b>${n0(tot)}</b></td></tr>`;
+    }).join('') + '</table>';
+
+  const rcRows = A.nguyenNhanAI, rcTot = rcRows.reduce((a,r)=>a+r.n,0);
+  document.getElementById('t_ai_rc').innerHTML =
+    '<table><tr><th>Nhóm nguyên nhân</th><th>Ticket</th><th>Tỷ trọng</th></tr>' +
+    rcRows.map(r=>`<tr><td>${r.ten}</td><td>${n0(r.n)}</td><td>${pc(r.n/rcTot)}</td></tr>`).join('') + '</table>';
+
+  const beRows = A.lyDoDisclaim, beTot = beRows.reduce((a,r)=>a+r.n,0);
+  document.getElementById('t_ai_be').innerHTML =
+    '<table><tr><th>Lý do</th><th>Ticket</th><th>Tỷ trọng</th></tr>' +
+    beRows.map(r=>`<tr><td>${r.ten}</td><td>${n0(r.n)}</td><td>${pc(r.n/beTot)}</td></tr>`).join('') + '</table>';
+
+  document.getElementById('aiFoot').innerHTML =
+    `Mô hình <b>${A.model}</b> · ${n0(A.coNhan)}/${n0(A.tongTicket)} ticket có nhãn · cập nhật ${A.capNhat}. `
+    + 'Trang này chỉ hiện <b>số đếm</b>; muốn xem bằng chứng từng ticket thì dùng file nội bộ '
+    + '(<code>ai_classify.py --export</code>) — mô tả ticket có dữ liệu khách hàng nên không đưa lên web.';
+}
 
 function rcBlock(canvas, rows, subId, cov){
   const sorted = [...rows].sort((a,b)=>b.qty-a.qty);
@@ -1060,13 +1233,13 @@ function rcBlock(canvas, rows, subId, cov){
       scales:{x:{grid:{color:GRID}}, y:{grid:{display:false}, ticks:{autoSkip:false, font:{size:11}}}}}});
 }
 
-/* Chéo RC × BD: cho thấy khối "Undefined yet" của bảng phân loại thực chất là gì. */
+/* Chéo RC × BD: cho thấy khối "Chưa phân loại" của bảng phân loại thực chất là gì. */
 function rcCross(tbl, rows){
-  const CL = ['Disclaim','Hardware','Software','Undefined yet'];
+  const CL = ['Disclaim','HW','FW','Chưa phân loại'];
   document.getElementById(tbl).innerHTML =
     '<table><tr><th>Nhóm nguyên nhân</th><th>Ticket</th>' + CL.map(c=>`<th>${c}</th>`).join('') + '</tr>' +
     rows.map(r=>`<tr><td>${r.name}</td><td><b>${n0(r.qty)}</b></td>` +
-      CL.map(c=>`<td${c==='Undefined yet'&&r[c]?' style="font-weight:600"':''}>${r[c]?n0(r[c]):'—'}</td>`).join('') +
+      CL.map(c=>`<td${c==='Chưa phân loại'&&r[c]?' style="font-weight:600"':''}>${r[c]?n0(r[c]):'—'}</td>`).join('') +
       '</tr>').join('') + '</table>';
 }
 
@@ -1347,7 +1520,7 @@ function costCharts(){
    cockpit giờ là TOÀN BỘ điều hướng; không còn thanh nào ở đáy.
    Thứ tự hiện trong modal theo THỨ TỰ SECTION TRONG DOM, không theo mảng ids. */
 const GROUPS = {
-  cls:  {title:'Hỏng cái gì', ids:['sec-cls','sec-dis','sec-fail','sec-trend','sec-model','sec-fix']},
+  cls:  {title:'Hỏng cái gì', ids:['sec-cls','sec-ai','sec-dis','sec-fail','sec-trend','sec-model','sec-fix']},
   sla:  {title:'Xử lý có đúng hạn không', ids:['sec-sla','sec-perf','sec-cause','sec-ovdana','sec-asp','sec-overdue','sec-area']},
   rc:   {title:'Vì sao hỏng và đã làm gì', ids:['sec-watch','sec-rc','sec-alarm','sec-action']},
   wh:   {title:'Vật tư, tồn kho & chi phí', ids:['sec-wh','sec-parts','sec-cost']},
@@ -1560,9 +1733,8 @@ function renderTiles(){
   const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
   const sumBk = t => BK.list.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
   const te = sumBk(V.trendEvcs), tb = sumBk(V.trendBss);
-  const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
-  /* Ghi đủ "Undefined yet" — viết tắt "Undefined" trông y như biến JS lỗi. */
-  const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Undefined yet" ${pc(undefShare(c))}`;
+  const undefShare = c => { const u=c.find(r=>r.name==='Chưa phân loại'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
+  const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Chưa phân loại" ${pc(undefShare(c))}`;
   const T = [
     {grp:'cls', pick:'EVCS', title:'EVCS — hỏng cái gì', mini:['donut',cE,cEt], spark:te, sub:clsSub(cEt,cE)},
     {grp:'cls', pick:'BSS',  title:'BSS — hỏng cái gì',  mini:['donut',cB,cBt], spark:tb, sub:clsSub(cBt,cB)},
@@ -1654,6 +1826,7 @@ function applyRange(from, to, opt){
   renderOvdWeek();
   renderScenario();
   renderCause();
+  safe('phân loại AI', renderAi);   // khối AI gộp theo RANGE nên phải vẽ lại cùng lúc
   headLabels();
   rangeNote();
   if(!opt.keepUrl) syncUrl();
@@ -2622,6 +2795,7 @@ function bootAll(){
   safe('thành phần overdue', renderScenario);
   safe('lý do xử lý muộn', renderLateReason);
   safe('nguyên nhân overdue', renderCause);
+  safe('phân loại AI', renderAi);
 }
 /* Khoảng mặc định = TUẦN BÁO CÁO gần nhất, để mở trang lên vẫn thấy đúng thứ như trước
    khi có bộ chọn ngày. Người dùng đổi sang một ngày / khoảng bất kỳ tùy ý. */
