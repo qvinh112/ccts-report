@@ -303,12 +303,17 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
 
 <section id="sec-rc">
   <h2>Nguyên nhân lỗi đến từ đâu (<span class="modeLbl"></span>)</h2>
+  <!-- 30/07/2026: nhóm nguyên nhân chuyển sang do AI gán. Đoạn cũ tả tầng luật từ khóa với
+       thứ tự bằng chứng ①-④ — vẫn còn nhưng chỉ là lưới đỡ, không còn là nguồn chính. -->
   <p class="rcIntro">
-    Tầng này đọc <b>ngôn từ</b> của ticket để chỉ ra cụm gây lỗi, áp cho <b>mọi</b> ticket —
-    kể cả khối “Undefined yet” của bảng phân loại. Thứ tự tin cậy của bằng chứng:
-    ① <b>danh mục lỗi CCTS</b> (<code>Error: Nhóm/Lỗi cụ thể</code> trong Additional information,
-    do KTV chọn tay) → ② <b>Solution</b> (mô tả cách xử lý nói đúng nguyên nhân thật hơn
-    triệu chứng ban đầu) → ③ Problem Analysis → ④ phần mô tả tự do của Additional information.
+    Tầng này chỉ ra cụm gây lỗi cho <b>mọi</b> ticket — kể cả khối chưa phân loại của bảng trên.
+    Nguồn chính là <b>AI (DeepSeek, temperature=0)</b>: đọc <b>Problem Description</b> +
+    <b>mã lỗi</b> (đối chiếu tri thức mã lỗi trong wiki nội bộ) + <b>Solution</b>, rồi chọn một
+    nhóm trong danh mục nguyên nhân có sẵn. Ticket <b>mới chưa qua AI</b> thì rơi về tầng luật
+    từ khóa cũ theo thứ tự bằng chứng ① <b>danh mục lỗi CCTS</b>
+    (<code>Error: Nhóm/Lỗi cụ thể</code>, do KTV chọn tay) → ② <b>Solution</b> →
+    ③ Problem Analysis → ④ phần mô tả tự do của Additional information. Dải
+    “nhãn phân loại đến từ đâu” ở bảng trên cho biết tỷ lệ mỗi nguồn.
   </p>
   <div id="rcCovWrap"></div>
   <div class="grid2">
@@ -981,16 +986,27 @@ function kpis(){
 }
 
 /* ================= phân loại ================= */
+/* Màu cố định theo TÊN lớp phân loại. Disclaim đỏ (lỗi ngoài trụ), HW xanh dương, FW vàng,
+   Không tồn lỗi xanh lá (không phải hỏng hóc), Chưa phân loại xám. */
+const CLS_COL = {'Disclaim':S[5], 'HW':S[0], 'FW':S[2], 'Không tồn lỗi':S[1], 'Chưa phân loại':'#c3c2b7'};
+/* Nhãn tiếng Anh trong bảng. "Không tồn lỗi" KHÔNG phải 'By ChargeCore' — thiết bị không
+   hỏng, KTV đến nơi thấy chạy bình thường; xếp vào lỗi của hãng là quy sai trách nhiệm. */
+const CLS_EN = {'Disclaim':'Not by ChargeCore', 'Không tồn lỗi':'No fault found',
+                'Chưa phân loại':'Undefined', 'Undefined yet':'Undefined'};
+
 function clsBlock(canvas, tbl, rows, total, subId){
   document.getElementById(subId).textContent = n0(total.qty) + ' ticket, ticket rate ' + pc(total.rate);
   mk(canvas, {type:'doughnut',
     data:{labels: rows.map(r=>r.name),
-      datasets:[{data: rows.map(r=>r.qty), backgroundColor:[S[5],S[0],S[1],'#c3c2b7'], borderColor:'#fcfcfb', borderWidth:2}]},
+      /* Màu tra theo TÊN lớp, không theo vị trí: từ 30/07/2026 có thêm lớp "Không tồn lỗi"
+         (AI gán) nên mảng 4 màu cũ lệch một bậc và tô sai toàn bộ. Tra theo tên thì thêm
+         hay bớt lớp đều không sai màu, và mỗi lớp giữ đúng một màu ở mọi biểu đồ. */
+      datasets:[{data: rows.map(r=>r.qty), backgroundColor: rows.map(r=>CLS_COL[r.name] || '#c3c2b7'), borderColor:'#fcfcfb', borderWidth:2}]},
     options:{maintainAspectRatio:false, cutout:'55%',
       plugins:{legend:{position:'right'},
         tooltip:{callbacks:{label: c => ` ${c.label}: ${n0(c.parsed)} (${pc(c.parsed/total.qty)})`}}}}});
   document.getElementById(tbl).innerHTML = '<table><tr><th>Nhóm</th><th>Phân loại</th><th>Ticket</th><th>Tỷ trọng</th><th>Ticket rate</th></tr>' +
-    rows.map(r=>`<tr><td>${r.name}</td><td>${r.name==='Disclaim'?'Not by ChargeCore':(r.name==='Undefined yet'?'Undefined':'By ChargeCore')}</td><td>${n0(r.qty)}</td><td>${pc(r.share)}</td><td>${pc(r.rate,2)}</td></tr>`).join('') +
+    rows.map(r=>`<tr><td>${r.name}</td><td>${CLS_EN[r.name]||'By ChargeCore'}</td><td>${n0(r.qty)}</td><td>${pc(r.share)}</td><td>${pc(r.rate,2)}</td></tr>`).join('') +
     `<tr class="total"><td>Grand total</td><td></td><td>${n0(total.qty)}</td><td>100%</td><td>${pc(total.rate,2)}</td></tr></table>`;
 }
 
@@ -999,15 +1015,19 @@ function clsBlock(canvas, tbl, rows, total, subId){
 function renderBdSrc(){
   const el = document.getElementById('bdSrcWrap');
   if(!el) return;
-  const COL = {'Từ khóa mô tả':S[0], 'Mã lỗi':S[1], 'Nhóm nguyên nhân':S[4], 'Chưa xác định':'#c3c2b7'};
+  /* Tra theo TÊN nguồn. 30/07/2026 thêm 'AI (DeepSeek)' — nguồn chính từ nay. Cũng lấp
+     'Có thay vật tư' (thêm 29/07 mà quên bên này nên vẽ ra dải trong suốt) và bỏ
+     'Từ khóa mô tả' (đã gỡ 29/07). Có màu chốt cuối để nguồn mới không bao giờ mất tích. */
+  const COL = {'AI (DeepSeek)':S[0], 'Nhóm nguyên nhân':S[4], 'Có thay vật tư':S[7],
+               'Mã lỗi':S[1], 'Chưa xác định':'#c3c2b7'};
   const one = (lbl, b) => {
     if(!b || !b.total) return '';
     const rows = b.rows.filter(r=>r.qty);
     const segs = rows.map(r=>
-      `<span class="arseg" style="width:${(r.share*100).toFixed(1)}%;background:${COL[r.name]}"
+      `<span class="arseg" style="width:${(r.share*100).toFixed(1)}%;background:${COL[r.name]||'#c3c2b7'}"
          title="${escH(r.name)}: ${n0(r.qty)} (${pc(r.share)})"></span>`).join('');
     const leg = rows.map(r=>
-      `<span><i style="background:${COL[r.name]}"></i>${escH(r.name)} ${pc(r.share)}</span>`).join('');
+      `<span><i style="background:${COL[r.name]||'#c3c2b7'}"></i>${escH(r.name)} ${pc(r.share)}</span>`).join('');
     return `<div class="card"><h3>${lbl} — nhãn phân loại đến từ đâu</h3>
       <div class="arbar">${segs}</div><div class="arleg">${leg}</div></div>`;
   };
@@ -1028,14 +1048,18 @@ function renderUndef(){
          title="${escH(r.name)}: ${n0(r.qty)} (${pc(r.share)})"></span>`).join('');
     const leg = b.rows.map(r=>
       `<span><i style="background:${COL[r.name]||'#c3c2b7'}"></i>${escH(r.name)} ${n0(r.qty)} · ${pc(r.share)}</span>`).join('');
-    return `<div class="card"><h3>${lbl} — khối “Undefined yet” thực chất là gì (${n0(b.total)} ticket)</h3>
+    return `<div class="card"><h3>${lbl} — khối “${escH(D.enums.bdUndef)}” thực chất là gì (${n0(b.total)} ticket)</h3>
       <div class="arbar">${segs}</div><div class="arleg">${leg}</div></div>`;
   };
   const body = one('EVCS', V.undefEvcs) + one('BSS', V.undefBss);
-  el.innerHTML = body ? ('<p class="rcIntro" style="margin:14px 0 4px">Khối xám “Undefined yet” '+
-    'gần như đều <b>có mã lỗi</b> nhưng thuộc họ chưa đủ chắc để gán Hardware/Software '+
-    '(truyền thông, mở cửa, điện lưới…). Tách theo <b>họ mã lỗi</b> để thấy hiện tượng — '+
-    'BD giữ nguyên, không đoán bừa.</p><div class="grid2">'+ body +'</div>') : '';
+  /* 30/07/2026: lời giải thích cũ là lý lẽ của bộ luật từ khóa ("họ mã lỗi chưa đủ chắc").
+     Từ khi AI thành nguồn chính, nguyên nhân thật đã đo được: đây gần như toàn bộ là ticket
+     CHƯA ĐÓNG nên chưa có mô tả xử lý để đọc — 93,7% trên toàn kho, 100% trong T7/2026. */
+  el.innerHTML = body ? ('<p class="rcIntro" style="margin:14px 0 4px">Khối xám là ticket AI '+
+    '<b>chưa kết luận được</b>, và gần như toàn bộ vì <b>ticket chưa đóng</b> — chưa có mô tả '+
+    'xử lý để đọc, chứ không phải đọc rồi mà không phân được. Chúng vẫn <b>có mã lỗi</b>, nên '+
+    'tách theo <b>họ mã lỗi</b> để thấy hiện tượng; phân loại giữ nguyên, không đoán bừa.'+
+    '</p><div class="grid2">'+ body +'</div>') : '';
 }
 
 /* ================= nguyên nhân (RC) =================
@@ -1060,13 +1084,16 @@ function rcBlock(canvas, rows, subId, cov){
       scales:{x:{grid:{color:GRID}}, y:{grid:{display:false}, ticks:{autoSkip:false, font:{size:11}}}}}});
 }
 
-/* Chéo RC × BD: cho thấy khối "Undefined yet" của bảng phân loại thực chất là gì. */
+/* Chéo RC × BD: cho thấy khối chưa phân loại của bảng phân loại thực chất là gì.
+   30/07/2026: cột lấy từ D.enums.classes. Trước đây chốt tay ['Disclaim','Hardware',
+   'Software','Undefined yet'] mà build.py xuất khóa theo CLASSES ('HW','FW',…), nên 3/4 cột
+   luôn hiện "—" và lớp "Không tồn lỗi" không có cột nào. */
 function rcCross(tbl, rows){
-  const CL = ['Disclaim','Hardware','Software','Undefined yet'];
+  const CL = D.enums.classes, UN = D.enums.bdUndef;
   document.getElementById(tbl).innerHTML =
-    '<table><tr><th>Nhóm nguyên nhân</th><th>Ticket</th>' + CL.map(c=>`<th>${c}</th>`).join('') + '</tr>' +
+    '<table><tr><th>Nhóm nguyên nhân</th><th>Ticket</th>' + CL.map(c=>`<th>${escH(c)}</th>`).join('') + '</tr>' +
     rows.map(r=>`<tr><td>${r.name}</td><td><b>${n0(r.qty)}</b></td>` +
-      CL.map(c=>`<td${c==='Undefined yet'&&r[c]?' style="font-weight:600"':''}>${r[c]?n0(r[c]):'—'}</td>`).join('') +
+      CL.map(c=>`<td${c===UN&&r[c]?' style="font-weight:600"':''}>${r[c]?n0(r[c]):'—'}</td>`).join('') +
       '</tr>').join('') + '</table>';
 }
 
@@ -1560,9 +1587,11 @@ function renderTiles(){
   const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
   const sumBk = t => BK.list.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
   const te = sumBk(V.trendEvcs), tb = sumBk(V.trendBss);
-  const undefShare = c => { const u=c.find(r=>r.name==='Undefined yet'); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
-  /* Ghi đủ "Undefined yet" — viết tắt "Undefined" trông y như biến JS lỗi. */
-  const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "Undefined yet" ${pc(undefShare(c))}`;
+  /* Tên lớp lấy từ D.enums, KHÔNG viết tay: chốt cứng 'Undefined yet' ở đây làm thẻ trang
+     chủ in 0,0% suốt từ lúc classify.py đổi tên lớp, trong khi số thật là 9-17%. */
+  const UNDEF = D.enums.bdUndef;
+  const undefShare = c => { const u=c.find(r=>r.name===UNDEF); const t=c.reduce((s,r)=>s+r.qty,0); return t&&u?u.qty/t:0; };
+  const clsSub = (tot, c) => `${n0(tot.qty)} ticket · "${UNDEF}" ${pc(undefShare(c))}`;
   const T = [
     {grp:'cls', pick:'EVCS', title:'EVCS — hỏng cái gì', mini:['donut',cE,cEt], spark:te, sub:clsSub(cEt,cE)},
     {grp:'cls', pick:'BSS',  title:'BSS — hỏng cái gì',  mini:['donut',cB,cBt], spark:tb, sub:clsSub(cBt,cB)},

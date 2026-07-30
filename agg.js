@@ -174,7 +174,7 @@ function bdSource(seg, sel) {
 }
 
 function undefBreakdown(seg, sel) {
-  var rows = rowsOf(seg, sel), un = ix('BD', 'Undefined yet');
+  var rows = rowsOf(seg, sel), un = ix('BD', E.bdUndef);
   var sub = [], bd = F.cols.BD;
   for (var k = 0; k < rows.length; k++) if (bd[rows[k]] === un) sub.push(rows[k]);
   var total = sub.length, by = countBy(sub, 'ufam'), out = [];
