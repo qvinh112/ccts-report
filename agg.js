@@ -26,7 +26,7 @@ var IX = {};       // từ điển đảo: IX.BD['Disclaim'] -> số
 var DAY = null;    // ngày (chỉ số) của từng dòng, dựng lại từ dayStart
 var SEL = null;    // Int32Array chỉ số dòng đang chọn
 var LIMH = null;   // lim_h đã ép về số, tra theo chỉ số từ điển
-var STATE = { from: '', to: '', src: 'api' };
+var STATE = { from: '', to: '', src: 'api', slaRule: 'zone' };
 
 /* ---- khởi tạo ---------------------------------------------------------- */
 function init(facts, enums) {
@@ -44,6 +44,7 @@ function init(facts, enums) {
     for (var i = F.dayStart[d]; i < F.dayStart[d + 1]; i++) DAY[i] = d;
   }
   LIMH = F.dicts.lim_h.map(function (v) { return parseFloat(v); });
+  OVD_I = ix('ovdf', 'Overdue'); ON_I = ix('ovdf', 'Ontime');
   return API;
 }
 
@@ -64,7 +65,9 @@ function dayIndex(iso) {
 
 /* ---- chọn khoảng ngày + luồng tạo ticket -------------------------------- */
 function select(from, to, src) {
-  STATE = { from: from, to: to, src: src || 'api' };
+  /* Giữ slaRule: select() bị gọi lại mỗi lần đổi khoảng ngày / so kỳ trước, gán đè
+     cả object sẽ âm thầm trả luật về 'zone' giữa chừng một lần vẽ. */
+  STATE = { from: from, to: to, src: src || 'api', slaRule: STATE.slaRule };
   var a = dayIndex(from), b = dayIndex(to);
   if (b < F.days.length && F.days[b] === to) b += 1;   // 'to' tính CẢ ngày đó
   var lo = F.dayStart[Math.min(a, F.days.length)] || 0;
@@ -140,6 +143,47 @@ function pct(vals, q) {                 // giống build._pct (làm tròn 1 ch�
   return Math.round(v[i] * 10) / 10;
 }
 var div = function (a, b) { return b ? a / b : 0; };
+
+/* ---- LUẬT CHẤM SLA -------------------------------------------------------
+   'zone' (mặc định) = luật báo cáo đang chạy: SLA nhanh theo vùng 3h/4h/7h cho trạm
+     HN + Tự doanh luồng API, phần còn lại dùng thẳng cờ SLA của CCTS (cột `ovdf`).
+     Đây là luật build.py nấu sẵn các khối *W, nên verify_agg.js chỉ đúng ở chế độ này.
+   'h48' (user chốt 30/07/2026) = MỘT ngưỡng duy nhất cho mọi tỉnh/nguồn:
+     Open -> Solution ĐẦU TIÊN <= 48h là Đạt, > 48h là Quá hạn (quy lỗi KTV).
+     * Ticket CHƯA CÓ solution KHÔNG vào mẫu số — nó là tồn đọng, không phải phép đo
+       tốc độ xử lý. Vì thế mới có hasVerdict(): khối lượng ticket giữ nguyên, chỉ
+       MẪU SỐ của tỉ lệ quá hạn co lại.
+     * VOMS reject / lỗi hệ thống được chấp nhận là Đạt, nhưng chỉ khi solution đầu còn
+       trong 48h — mà ca <=48h thì vốn đã Đạt, nên mệnh đề này không đổi con số. Ca đã
+       quá 48h vẫn tính lỗi KTV: VOMS chỉ reject SAU khi KTV nộp solution, trễ đã xảy ra
+       trước đó. Giữ nguyên quyết định này khi sửa, đừng "sửa lại cho nhất quán".
+   Toàn bộ trang đọc SLA qua 3 hàm dưới đây — thêm chỗ đếm mới thì cũng phải đi qua
+   chúng, đừng đọc thẳng F.cols.ovdf. */
+var SLA_H48 = 48;
+var SYS_STATUS = ['Pending for others', 'Pending for closure'];
+var OVD_I = -1, ON_I = -1;
+
+function isOvd(i) {
+  if (STATE.slaRule === 'h48') { var p = F.nums.proc_h[i]; return p !== null && p > SLA_H48; }
+  return F.cols.ovdf[i] === OVD_I;
+}
+function isOn(i) {
+  if (STATE.slaRule === 'h48') { var p = F.nums.proc_h[i]; return p !== null && p <= SLA_H48; }
+  return F.cols.ovdf[i] === ON_I;
+}
+/* Ticket có được chấm hay không. Chế độ 'zone' LUÔN trả true để mẫu số y hệt trước đây
+   (verify_agg.js 25/25 phụ thuộc vào điều này). */
+function hasVerdict(i) {
+  return STATE.slaRule === 'h48' ? F.nums.proc_h[i] !== null : true;
+}
+/* Hạn của chính ticket đó — dùng cho cột "% ca trong hạn" của bảng hiệu suất. */
+function limOf(i) {
+  return STATE.slaRule === 'h48' ? SLA_H48 : LIMH[F.cols.lim_h[i]];
+}
+function setSlaRule(rule) {
+  STATE.slaRule = rule === 'h48' ? 'h48' : 'zone';
+  return STATE.slaRule;
+}
 
 /* ---- các khối số (hình dạng khớp build.py) ------------------------------ */
 function classification(seg, fleetTotal, sel) {
@@ -262,16 +306,32 @@ function fail(models, fleet, sel) {
   return out;
 }
 
+/* Đây là bảng DUY NHẤT mà mẫu số co lại ở chế độ h48: cột Total chính là mẫu số của
+   Ontime/Overdue, để nguyên ticket chưa có solution thì ontime + overdue != total và
+   bảng trông như tính sai. Số ticket bị loại ra được nói riêng ở dải chú thích. */
+/* Danh sách trạng thái của bảng SLA.
+   'zone': đúng 13 trạng thái theo bố cục sheet Report gốc (build.SLA_STATUSES) — ticket
+     ngoài 13 nhóm cố tình không được đếm, xem build.py:sla_table.
+   'h48': luật 48h KHÔNG phụ thuộc trạng thái ticket, nên giữ nguyên phép loại trừ đó là
+     sai — riêng 'Pending for VOMS confirm' đã là ~19% kho và những ticket đó có solution,
+     chấm được bình thường. Lấy danh sách từ CHÍNH dữ liệu (không chép cứng, đúng quy ước
+     "danh mục lấy từ D.enums hoặc từ kho, không viết tay trong file này"). */
+function statusList() {
+  if (STATE.slaRule !== 'h48') return E.slaStatuses;
+  return F.dicts.status.filter(function (s) { return s; }).slice().sort();
+}
+
 function slaTable(seg, sel) {
-  var rows = rowsOf(seg, sel), on = ix('ovdf', 'Ontime');
+  var rows = rowsOf(seg, sel);
   var grand = 0, tO = 0, tOn = 0, stat = [];
-  E.slaStatuses.forEach(function (st) {
+  statusList().forEach(function (st) {
     var want = ix('status', st), total = 0, ontime = 0;
     for (var k = 0; k < rows.length; k++) {
       var i = rows[k];
       if (F.cols.status[i] !== want) continue;
+      if (!hasVerdict(i)) continue;
       total++;
-      if (F.cols.ovdf[i] === on) ontime++;
+      if (isOn(i)) ontime++;
     }
     grand += total; tOn += ontime; tO += total - ontime;
     stat.push([st, total, ontime, total - ontime]);
@@ -286,13 +346,26 @@ function slaTable(seg, sel) {
 
 function resourceTable(slaRows) {
   var by = {}; slaRows.forEach(function (r) { by[r.status] = r; });
-  var g = by['Grand total'], out = [];
+  var g = by['Grand total'], out = [], covered = 0;
   Object.keys(E.resources).forEach(function (res) {
     var t = 0, on = 0, ov = 0;
-    E.resources[res].forEach(function (s) { t += by[s].total; on += by[s].ontime; ov += by[s].overdue; });
+    E.resources[res].forEach(function (s) {
+      var r = by[s]; if (!r) return;
+      t += r.total; on += r.ontime; ov += r.overdue;
+    });
+    covered += t;
     out.push({ res: res, total: t, ontime: on, overdue: ov,
                rate: div(ov, t), share: div(ov, g.total) });
   });
+  /* Ở chế độ h48 bảng SLA phủ nhiều trạng thái hơn 13 nhóm resource (xem statusList),
+     nên phần dư phải hiện thành một dòng, nếu không các dòng cộng lại không ra Grand
+     total và bảng trông như tính thiếu. Chế độ 'zone' phần dư luôn = 0 -> không thêm. */
+  if (g.total - covered > 0) {
+    var rt = g.total - covered, ron = g.ontime, rov = g.overdue;
+    out.forEach(function (r) { ron -= r.ontime; rov -= r.overdue; });
+    out.push({ res: 'Ngoài các nhóm trên', total: rt, ontime: ron, overdue: rov,
+               rate: div(rov, rt), share: div(rov, g.total) });
+  }
   out.push({ res: 'Grand total', total: g.total, ontime: g.ontime, overdue: g.overdue,
              rate: div(g.overdue, g.total), share: div(g.overdue, g.total) });
   return out;
@@ -350,21 +423,24 @@ function trend(models, fleet, bk, srcMode) {
   return { models: models, tickets: tickets, failRate: failrate, failed: faileds, freq: freqs };
 }
 
+/* `total` là KHỐI LƯỢNG ticket nên không phụ thuộc luật SLA; chỉ mẫu số của `rate` mới
+   co lại ở chế độ h48. Ở chế độ 'zone' d === t nên số ra y hệt trước đây. */
 function aspBlock(seg, bk) {
-  var ovd = ix('ovdf', 'Overdue');
   var per = bk.list.map(function (b) { return rowsOf(seg, bucketRows(b)); });
   var total = [], overdue = [], rate = [];
   E.asps.forEach(function (asp) {
     var want = ix('asp', asp), tr = [], or = [], rr = [];
     per.forEach(function (rows) {
-      var t = 0, o = 0;
+      var t = 0, o = 0, d = 0;
       for (var k = 0; k < rows.length; k++) {
         var i = rows[k];
         if (F.cols.asp[i] !== want) continue;
         t++;
-        if (F.cols.ovdf[i] === ovd) o++;
+        if (!hasVerdict(i)) continue;
+        d++;
+        if (isOvd(i)) o++;
       }
-      tr.push(t); or.push(o); rr.push(div(o, t));
+      tr.push(t); or.push(o); rr.push(div(o, d));
     });
     total.push(tr); overdue.push(or); rate.push(rr);
   });
@@ -411,16 +487,16 @@ function timeSeries(bk) {
 /* ---- hiệu suất: chỉ tính được khi có từng ticket (trung vị không cộng được) */
 function perf(bk) {
   var dims = { team: 'bf', asp: 'asp', prov: 'prov' };
-  var acc = {}, ovd = ix('ovdf', 'Overdue');
+  var acc = {};
   function bump(dim, key, bi, i) {
     var k = dim + ' ' + key + ' ' + bi;
-    var c = acc[k] || (acc[k] = { dim: dim, key: key, bi: bi, qty: 0, ovd: 0, open: 0,
-                                  ontime: 0, proc: [], voms: [] });
-    c.qty++;
-    if (F.cols.ovdf[i] === ovd) c.ovd++;
+    var c = acc[k] || (acc[k] = { dim: dim, key: key, bi: bi, qty: 0, den: 0, ovd: 0,
+                                  open: 0, ontime: 0, proc: [], voms: [] });
+    c.qty++;                                   // khối lượng — không phụ thuộc luật SLA
+    if (hasVerdict(i)) { c.den++; if (isOvd(i)) c.ovd++; }
     var p = F.nums.proc_h[i];
     if (p === null) c.open++;
-    else { c.proc.push(p); if (p <= LIMH[F.cols.lim_h[i]]) c.ontime++; }
+    else { c.proc.push(p); if (p <= limOf(i)) c.ontime++; }
     var r = F.nums.round1h[i];
     if (r !== null) c.voms.push(r);
   }
@@ -446,10 +522,10 @@ function perf(bk) {
       if (!cur || !cur.qty) return;
       var series = bk.list.map(function (_b, bi) {
         var c = acc[dim + ' ' + key + ' ' + bi];
-        return c && c.qty ? Math.round(c.ovd / c.qty * 1e4) / 1e4 : null;
+        return c && c.den ? Math.round(c.ovd / c.den * 1e4) / 1e4 : null;
       });
       rows.push({ k: key, qty: cur.qty, ovd: cur.ovd, open: cur.open,
-                  rate: Math.round(cur.ovd / cur.qty * 1e4) / 1e4,
+                  rate: cur.den ? Math.round(cur.ovd / cur.den * 1e4) / 1e4 : 0,
                   med: cur.proc.length ? pct(cur.proc, .5) : null,
                   ontime: cur.proc.length ? Math.round(cur.ontime / cur.proc.length * 1e4) / 1e4 : null,
                   voms: cur.voms.length ? pct(cur.voms, .5) : null,
@@ -467,18 +543,23 @@ function provName(code) {
 }
 
 /* ---- overdue: theo kỳ, tình huống, danh sách giải trình ------------------ */
+/* Ở chế độ h48, `open` là ticket CHƯA có solution — đã bị loại khỏi mẫu số `total`, nên
+   nó đứng cạnh biểu đồ như phần tồn đọng chứ không còn là một lát của overdue. Và vì
+   quá hạn h48 nghĩa là p > 48 nên `breach` trùng `sys`: hai đường chồng nhau là ĐÚNG,
+   không phải lỗi vẽ — luật này không tách được "đã xong nhưng trễ" khỏi "chưa xong". */
 function overdueByBucket(bk) {
-  var ovd = ix('ovdf', 'Overdue');
   return bk.list.map(function (b, i) {
-    var rows = bucketRows(b, 'api'), total = rows.length;
+    var rows = bucketRows(b, 'api'), total = 0;
     var sys = 0, breach = 0, open = 0;
     for (var k = 0; k < rows.length; k++) {
       var r = rows[k];
-      if (F.cols.ovdf[r] !== ovd) continue;
+      if (!hasVerdict(r)) { open++; continue; }
+      total++;
+      if (!isOvd(r)) continue;
       sys++;
       var p = F.nums.proc_h[r];
       if (p === null) { open++; continue; }
-      var lim = LIMH[F.cols.lim_h[r]], v = F.nums.round1h[r];
+      var lim = limOf(r), v = F.nums.round1h[r];
       if (p > lim || (v !== null && v > lim)) breach++;
     }
     return { week: bk.labels[i], total: total, sys: sys, breach: breach, open: open,
@@ -486,18 +567,33 @@ function overdueByBucket(bk) {
   });
 }
 
+/* Cột `scn` do build.py chấm theo luật vùng và CHỈ điền cho ticket vùng-overdue, nên ở
+   chế độ h48 nó vô nghĩa (tập overdue khác hẳn, phần lớn để rỗng). Luật h48 lại khiến
+   mọi ca quá hạn đều là "Xử lý muộn" theo đúng định nghĩa, nên thay vì vẽ một chiếc bánh
+   một màu, chia theo việc ca đó có kèm cờ khách quan hay không — đúng bảng "Đối chiếu
+   luật" của file giải trình Excel. */
+var H48_SCN = ['Quá 48h — không có tình tiết khác',
+               'Quá 48h + VOMS reject',
+               'Quá 48h + lỗi hệ thống'];
+
 function scenarioBreak() {
   var rows = slice(dayIndex(STATE.from), endDay(), 'api');
-  var ovd = ix('ovdf', 'Overdue'), cnt = {};
-  E.scenarios.forEach(function (s) { cnt[s] = 0; });
+  var cnt = {}, order = STATE.slaRule === 'h48' ? H48_SCN : E.scenarios;
+  order.forEach(function (s) { cnt[s] = 0; });
   for (var k = 0; k < rows.length; k++) {
     var i = rows[k];
-    if (F.cols.ovdf[i] !== ovd) continue;
-    var s = F.dicts.scn[F.cols.scn[i]];
-    if (s in cnt) cnt[s]++;
+    if (!isOvd(i)) continue;
+    if (STATE.slaRule === 'h48') {
+      var st = F.dicts.status[F.cols.status[i]];
+      cnt[F.flags.rejected[i] === 1 ? H48_SCN[1]
+          : SYS_STATUS.indexOf(st) >= 0 ? H48_SCN[2] : H48_SCN[0]]++;
+    } else {
+      var s = F.dicts.scn[F.cols.scn[i]];
+      if (s in cnt) cnt[s]++;
+    }
   }
-  return E.scenarios.filter(function (s) { return cnt[s]; })
-                    .map(function (s) { return { name: s, qty: cnt[s] }; });
+  return order.filter(function (s) { return cnt[s]; })
+              .map(function (s) { return { name: s, qty: cnt[s] }; });
 }
 
 function endDay() {
@@ -508,12 +604,13 @@ function endDay() {
 
 function sourceSplit() {
   var lo = F.dayStart[dayIndex(STATE.from)], hi = F.dayStart[Math.min(endDay(), F.days.length)];
-  var apiIx = ix('source', E.srcApi), ovd = ix('ovdf', 'Overdue');
+  var apiIx = ix('source', E.srcApi);
   var o = { api: { total: 0, ovd: 0 }, other: { total: 0, ovd: 0 } };
   for (var i = lo; i < hi; i++) {
+    if (!hasVerdict(i)) continue;
     var b = F.cols.source[i] === apiIx ? o.api : o.other;
     b.total++;
-    if (F.cols.ovdf[i] === ovd) b.ovd++;
+    if (isOvd(i)) b.ovd++;
   }
   o.api.rate = div(o.api.ovd, o.api.total);
   o.other.rate = div(o.other.ovd, o.other.total);
@@ -523,18 +620,24 @@ function sourceSplit() {
 /* Số ticket + overdue rate theo bucket — nguồn của badge so kỳ và cảnh báo sớm. */
 function segSeries(seg, bk, fleetTotal) {
   var qty = [], rate = [], tot = [];
-  var ovd = ix('ovdf', 'Overdue');
   bk.list.forEach(function (b) {
-    var rows = rowsOf(seg, bucketRows(b)), n = rows.length, o = 0;
-    for (var k = 0; k < rows.length; k++) if (F.cols.ovdf[rows[k]] === ovd) o++;
+    /* n = khối lượng (giữ nguyên mọi luật); d = mẫu số của tỉ lệ quá hạn. */
+    var rows = rowsOf(seg, bucketRows(b)), n = rows.length, o = 0, d = 0;
+    for (var k = 0; k < rows.length; k++) {
+      var i = rows[k];
+      if (!hasVerdict(i)) continue;
+      d++;
+      if (isOvd(i)) o++;
+    }
     qty.push(fleetTotal ? div(n, fleetTotal) : n);
-    tot.push(n); rate.push(div(o, n));
+    tot.push(n); rate.push(div(o, d));
   });
   return { qty: qty, rate: rate, total: tot };
 }
 
 var API = {
   init: init, select: select, slice: slice, buckets: buckets, state: function () { return STATE; },
+  setSlaRule: setSlaRule, slaRule: function () { return STATE.slaRule; }, SLA_H48: SLA_H48,
   days: function () { return F.days; }, size: function () { return SEL ? SEL.length : 0; },
   rowsOf: rowsOf, dayIndex: dayIndex, endDay: endDay, provName: provName,
   classification: classification, disclaim: disclaim, bdSource: bdSource,

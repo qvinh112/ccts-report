@@ -115,6 +115,11 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 .watchcard .wa{color:var(--muted)}
 .watchcard .wvol{font-size:11.5px;color:var(--muted);margin-top:2px}
 .okbar{background:#eaf7ea;border:1px solid #bfe3bf;color:#1c6b1c;border-radius:10px;padding:9px 14px;font-size:13px}
+/* Dải nói rõ đang chấm SLA bằng luật nào — bắt buộc hiện, vì hai luật ra hai con số
+   khác nhau trên CÙNG một khoảng ngày và người đọc không có cách nào đoán được. */
+.slaRuleNote{border-radius:10px;padding:9px 14px;font-size:12.5px;margin-bottom:10px;line-height:1.55}
+.slaRuleNote.zone{background:#eef3fb;border:1px solid #c6d6ee;color:#20395e}
+.slaRuleNote.h48{background:#fff4d1;border:1px solid #f0d98a;color:#7a5c00}
 /* Kiểm chứng Disclaim */
 #disAuditSeg{margin:6px 0 10px}
 .da-btn{padding:3px 10px;font-size:12px}
@@ -255,6 +260,12 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
     <button data-s="api" class="on" aria-pressed="true">API creation</button>
     <button data-s="other" aria-pressed="false">Nguồn khác</button>
     <button data-s="all" aria-pressed="false">Tất cả</button>
+  </div>
+  <!-- Luật chấm SLA (chốt 30/07/2026). Mặc định GIỮ luật vùng để mọi báo cáo đã phát
+       hành không đổi số; luật 48h là chế độ xem thứ hai, xem dải giải thích ở #sec-sla. -->
+  <div class="seg" id="slaRuleSeg" title="Cách chấm đúng hạn / quá hạn" role="group" aria-label="Luật chấm SLA">
+    <button data-r="zone" class="on" aria-pressed="true">SLA vùng (3h/4h/7h/48h)</button>
+    <button data-r="h48" aria-pressed="false">48h Open→Solution</button>
   </div>
   <!-- definitions.html trước đây chỉ vào được từ bản Điều hành; gỡ bản đó thì trang định
        nghĩa mất lối vào nên đưa link lên header bản Nội bộ. -->
@@ -430,6 +441,7 @@ body.seg-EVCS [data-seg="BSS"], body.seg-BSS [data-seg="EVCS"]{display:none}
 </section>
 
 <section id="sec-sla">
+  <div class="slaRuleNote" id="slaRuleNote"></div>
   <h2>SLA Overdue theo trạng thái ticket (<span class="modeLbl"></span>)</h2>
   <div class="grid2">
     <div class="card"><h3>EVCS — <span id="slaEvcsSub"></span></h3>
@@ -868,6 +880,9 @@ function wowTag(pair, {isRate=false, higherIsBad=true}={}){
    vẫn nằm ở D và được dán nhãn rõ là không đổi theo khoảng ngày. */
 let V = {};
 function computeView(){
+  /* Đặt luật TRƯỚC mọi phép đếm của lượt vẽ này — kể cả nhánh "so kỳ trước" ở cuối hàm,
+     nếu không badge so kỳ sẽ được chấm bằng luật khác với các khối chính. */
+  AGG.setSlaRule(SLARULE);
   AGG.select(RANGE.from, RANGE.to, SRC);
   BK = AGG.buckets(RANGE.from, RANGE.to);
   const [clsE, clsEt] = AGG.classification('EVCS', FLEET_ET);
@@ -1583,8 +1598,12 @@ const TILE_HAS = {
 function renderTiles(){
   const cE = V.clsEvcs, cEt = V.clsEvcsTotal, cB = V.clsBss, cBt = V.clsBssTotal;
   const rcE = V.rcEvcs;
-  const sla = [].concat(V.slaEvcs, V.slaBss);
-  const ovd = sla.reduce((a,r)=>a+r.overdue,0), settled = sla.reduce((a,r)=>a+r.overdue+r.ontime,0);
+  /* Lấy ĐÚNG dòng 'Grand total' của mỗi bảng. Trước 30/07 chỗ này cộng TẤT CẢ dòng của
+     cả hai bảng, mà mỗi bảng đã có sẵn dòng Grand total ở cuối -> hai con số tuyệt đối
+     trên thẻ bị nhân đôi. Tỉ lệ vẫn đúng (tử lẫn mẫu cùng gấp đôi) nên lỗi không lộ ra. */
+  const grandOf = t => (t && t.length) ? t[t.length-1] : {overdue:0, ontime:0};
+  const gE = grandOf(V.slaEvcs), gB = grandOf(V.slaBss);
+  const ovd = gE.overdue + gB.overdue, settled = ovd + gE.ontime + gB.ontime;
   const sumBk = t => BK.list.map((_,i)=> t.tickets.reduce((s,m)=>s+(m[i]||0),0));
   const te = sumBk(V.trendEvcs), tb = sumBk(V.trendBss);
   /* Tên lớp lấy từ D.enums, KHÔNG viết tay: chốt cứng 'Undefined yet' ở đây làm thẻ trang
@@ -1683,6 +1702,7 @@ function applyRange(from, to, opt){
   renderOvdWeek();
   renderScenario();
   renderCause();
+  renderSlaRuleNote();   // sau computeView: dải này in mẫu số/quá hạn lấy từ V
   headLabels();
   rangeNote();
   if(!opt.keepUrl) syncUrl();
@@ -1996,7 +2016,10 @@ function renderOvdWeek(){
     : `Đường mốc = mục tiêu cam kết <b>${pc(tg)}</b> (khai trong config/targets.json).`;
 }
 /* ===== (C) Thành phần overdue (doughnut 5 nhóm) ===== */
-const SCN_COL = {'Chưa resolve (còn Open)':'#8894a6','Xử lý muộn':'#d03b3b','Resolve muộn':'#eda100','Lỗi hệ thống':'#8e44ad','VOMS reject':'#16a085'};
+/* 5 nhóm của luật vùng + 3 nhóm của luật 48h (agg.H48_SCN) — cùng bảng màu để đổi luật
+   không làm đổi ý nghĩa màu: đỏ = lỗi khâu sửa chữa, tím = hệ thống, xanh = VOMS reject. */
+const SCN_COL = {'Chưa resolve (còn Open)':'#8894a6','Xử lý muộn':'#d03b3b','Resolve muộn':'#eda100','Lỗi hệ thống':'#8e44ad','VOMS reject':'#16a085',
+  'Quá 48h — không có tình tiết khác':'#d03b3b','Quá 48h + VOMS reject':'#16a085','Quá 48h + lỗi hệ thống':'#8e44ad'};
 function renderScenario(){
   const s = V.scenario||[];
   const tot = s.reduce((a,r)=>a+r.qty,0)||1;
@@ -2571,6 +2594,49 @@ document.querySelectorAll('#srcSeg button').forEach(b=> b.onclick = ()=>{
   applySrc(b.dataset.s);
   syncUrl();
 });
+/* ===== Luật chấm SLA (chốt 30/07/2026) =====
+   'zone' = luật đang phát hành: SLA nhanh 3h/4h/7h cho trạm HN + Tự doanh luồng API,
+     còn lại theo cờ SLA của CCTS. Đây là số của mọi báo cáo đã gửi đi, nên là MẶC ĐỊNH.
+   'h48'  = Open -> Solution đầu, một ngưỡng 48h cho toàn quốc; ticket chưa có solution
+     ra khỏi mẫu số. Khớp file data/SLA48_GiaiTrinh_*.xlsx do report_auto/sla48_giaitrinh.py
+     sinh — sửa luật một bên thì phải sửa bên kia, hai bên phải ra cùng con số. */
+let SLARULE = 'zone';
+function applySlaRule(rule){
+  SLARULE = (rule === 'h48') ? 'h48' : 'zone';
+  applyRange(RANGE.from, RANGE.to, {keepUrl:true});
+  setTimeout(fixSizes, 60);
+}
+document.querySelectorAll('#slaRuleSeg button').forEach(b=> b.onclick = ()=>{
+  segOn('#slaRuleSeg', b);
+  applySlaRule(b.dataset.r);
+  syncUrl();
+});
+/* Dải giải thích: cùng một khoảng ngày mà hai luật ra hai con số, không nói rõ thì người
+   đọc tưởng dữ liệu sai. Số ticket bị loại khỏi mẫu số cũng phải nêu thành con số. */
+function renderSlaRuleNote(){
+  const el = document.getElementById('slaRuleNote');
+  if(!el) return;
+  el.className = 'slaRuleNote ' + SLARULE;
+  if(SLARULE === 'zone'){
+    el.innerHTML = '<b>Luật đang áp: SLA theo vùng.</b> Trạm Hà Nội + Tự doanh đi luồng '
+      + 'API chấm theo hạn nhanh 3h/4h (thay linh kiện 7h); phần còn lại của cả nước lấy '
+      + 'thẳng cờ SLA của CCTS (48h). Đây là luật của mọi báo cáo đã phát hành.';
+    return;
+  }
+  const g = t => t && t.length ? t[t.length-1] : null;
+  const ge = g(V.slaEvcs), gb = g(V.slaBss);
+  const den = (ge?ge.total:0) + (gb?gb.total:0);
+  const ovd = (ge?ge.overdue:0) + (gb?gb.overdue:0);
+  el.innerHTML = '<b>Luật đang áp: 48h Open → Solution đầu.</b> Một ngưỡng duy nhất cho '
+    + 'mọi tỉnh và mọi nguồn — không dùng hạn nhanh theo vùng, không dùng cờ SLA của CCTS. '
+    + '<br>Ticket <b>chưa có solution</b> nằm NGOÀI mẫu số (là tồn đọng, không phải phép đo '
+    + 'tốc độ xử lý). Mẫu số hiện tại <b>' + n0(den) + '</b> ticket, quá hạn <b>' + n0(ovd)
+    + '</b> (' + pc(den ? ovd/den : 0) + ').'
+    + '<br>VOMS reject và lỗi hệ thống được tính Đạt, nhưng chỉ khi solution đầu còn trong '
+    + '48h — ca đã quá 48h vẫn quy lỗi KTV, vì VOMS chỉ reject sau khi KTV nộp solution. '
+    + '<br>Ngưỡng đo theo bước 0,1 giờ, nên ca vượt 48h dưới ~3 phút được tính là Đạt. '
+    + 'Khớp file <code>data/SLA48_GiaiTrinh_*.xlsx</code> dùng cho CSE giải trình.';
+}
 /* ===== Trạng thái xem nằm trên URL =====
    Gói chế độ tuần/tháng, nguồn, mục đang mở và bộ lọc giải trình vào hash, ví dụ
    #m=m&src=all&sec=sla&fcse=dinhnguyen — F5 hay gửi link vẫn đúng chỗ đang xem.
@@ -2589,6 +2655,7 @@ function syncUrl(){
   if(RANGE.to) p.set('to', RANGE.to);
   if(SEG !== 'all') p.set('g', SEG);
   if(SRC !== 'api') p.set('src', SRC);
+  if(SLARULE !== 'zone') p.set('sla', SLARULE);
   if(OPEN_GRP) p.set('sec', OPEN_GRP);
   Object.entries(FURL).forEach(([k, key])=>{
     if(F[key]) p.set(k, F[key]);
@@ -2602,6 +2669,9 @@ function applyUrl(){
   if(o.g === 'EVCS' || o.g === 'BSS'){ SEG = o.g; applySeg(); }
   if(o.src && (o.src === 'other' || o.src === 'all')){
     SRC = o.src; segOn('#srcSeg', q(`#srcSeg [data-s="${o.src}"]`)); redraw = true;
+  }
+  if(o.sla === 'h48'){
+    SLARULE = 'h48'; segOn('#slaRuleSeg', q('#slaRuleSeg [data-r="h48"]')); redraw = true;
   }
   /* Khoảng ngày trên URL phải áp SAU nguồn: applyRange đếm lại theo SRC hiện hành. */
   if(o.from && o.to){ applyRange(o.from, o.to, {keepUrl:true}); redraw = false; }
@@ -2670,6 +2740,7 @@ safe('khởi tạo khoảng ngày', function(){
 bootAll();
 safe('biểu đồ theo nguồn', drawSourceCharts);
 safe('ghi chú khoảng ngày', rangeNote);
+safe('dải luật SLA', renderSlaRuleNote);
 safe('khôi phục trạng thái từ URL', applyUrl);
 /* Phạm vi dữ liệu: nói rõ báo cáo CHỈ gồm ticket vận hành và đã loại những luồng nào.
    Trước đây mỗi khối lọc một kiểu (bảng phân loại lọc VH, còn SLA/ASP/CSE thì không),

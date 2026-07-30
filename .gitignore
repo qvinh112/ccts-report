@@ -1,0 +1,20 @@
+# Repo này PUBLIC, và `run_daily.py --deploy` chạy `git add -A` NGAY TRONG thư mục này
+# (REPORT_DEPLOY_DIR trỏ thẳng vào đây). Nghĩa là mọi file lạ nằm ở đây sẽ tự được
+# commit + push lúc 06:20 mà không ai kịp xem. Thêm 30/07/2026 sau khi phát hiện
+# thư mục chưa từng có .gitignore.
+
+# ghi chú nội bộ cho agent — không phải nội dung trang
+CLAUDE.md
+
+# bản sao lưu tay khi sửa file dễ vỡ (agg.js chứa byte NUL)
+*.bak
+*.bak-*
+
+# export CCTS / file nháp lỡ để vào đây: có mô tả ticket, tên và số điện thoại khách
+*.xlsx
+*.xls
+*.csv
+Tickets*.json
+
+.env
+__pycache__/
