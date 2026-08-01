@@ -3,122 +3,339 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Định nghĩa chỉ số — CCVN Weekly Executive</title>
+<title>Định nghĩa chỉ số — Báo cáo vận hành CCTS</title>
 <style>
-:root{--surface:#fcfcfb;--page:#f9f9f7;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--s1:#2a78d6}
+/* Cập nhật 31/07/2026 cùng đợt dựng lại index.html theo scope công việc.
+   Mỗi mục ở đây phải ứng với một chỉ số có thật trên trang; mục nào không còn
+   trên trang thì xóa, đừng để lại — người đọc sẽ đi tìm thứ không tồn tại. */
+:root{--surface:#fcfcfb;--page:#f9f9f7;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;
+      --grid:#e1e0d9;--s1:#2a78d6;--new:#1baf7a}
+@media (prefers-color-scheme:dark){
+  :root{--surface:#1c2026;--page:#14171b;--ink:#e8eaed;--ink2:#b6bcc4;--muted:#9aa2ad;
+        --grid:#2c323a;--s1:#4d94ff}
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--page);color:var(--ink);font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-header{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--grid);padding:10px 16px;display:flex;gap:10px;align-items:center}
+header{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--grid);
+  padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 h1{font-size:16px;margin:0}
 a.back{color:var(--s1);text-decoration:none;font-weight:600}
-main{max-width:860px;margin:0 auto;padding:16px 16px 60px}
-section{background:var(--surface);border:1px solid var(--grid);border-radius:10px;padding:14px 16px;margin-bottom:12px;scroll-margin-top:60px}
+main{max-width:880px;margin:0 auto;padding:16px 16px 60px}
+section{background:var(--surface);border:1px solid var(--grid);border-radius:10px;
+  padding:14px 16px;margin-bottom:12px;scroll-margin-top:60px}
 h2{font-size:14px;margin:0 0 6px}
 p{margin:6px 0}
 p.en{color:var(--ink2);font-style:italic;font-size:13px;border-left:3px solid var(--grid);padding-left:10px}
 :target{outline:2px solid var(--s1)}
-@media print{header{position:static}section{break-inside:avoid}}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;
+  border-radius:99px;padding:1px 7px;margin-left:6px;vertical-align:2px;
+  background:rgba(27,175,122,.14);color:var(--new);border:1px solid rgba(27,175,122,.35)}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0}
+th,td{border:1px solid var(--grid);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--page);font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+nav.toc{font-size:12.5px;color:var(--muted);padding:0 16px 10px}
+nav.toc a{color:var(--s1);text-decoration:none;margin-right:10px;white-space:nowrap}
+@media print{header{position:static}section{break-inside:avoid}nav.toc{display:none}}
 </style>
 </head>
 <body>
-<header><a class="back" href="./">← Dashboard</a><h1>Định nghĩa chỉ số · Metric definitions</h1></header>
+<header><a class="back" href="./">← Báo cáo</a><h1>Định nghĩa chỉ số · Metric definitions</h1></header>
+<nav class="toc">
+  <a href="#tiers">Ba tầng chỉ số</a><a href="#period">Kỳ báo cáo</a><a href="#ripe">Độ chín kỳ</a>
+  <a href="#cls">Phân loại ticket</a><a href="#rate">Tỉ lệ lỗi</a><a href="#top">Top lỗi</a>
+  <a href="#parts">Spare part</a><a href="#ovd">SLA overdue</a><a href="#h48">Luật 48h</a>
+  <a href="#rank">ASP &amp; CSE</a><a href="#cause">Nhóm nguyên nhân</a>
+  <a href="#repeat">Thiết bị tái phát</a><a href="#coverage">Chất lượng dữ liệu</a>
+  <a href="#action">Sổ hành động</a><a href="#campaign">Vé chiến dịch</a>
+</nav>
 <main>
-<p style="color:var(--muted);font-size:12.5px">Mỗi chỉ số trên dashboard chỉ có MỘT nghĩa, chốt tại đây và không đổi giữa các tuần.
-· <i>Each metric has exactly ONE meaning, fixed here and unchanged week to week.</i></p>
+<p style="color:var(--muted);font-size:12.5px">Mỗi chỉ số trên trang chỉ có MỘT nghĩa, chốt tại đây và không đổi giữa các kỳ.
+· <i>Each metric has exactly ONE meaning, fixed here and unchanged period to period.</i></p>
 
-<section id="period"><h2>Kỳ báo cáo: tuần và tháng · Reporting period: week vs month</h2>
-<p><b>Hai kỳ này trả lời hai câu hỏi khác nhau, số của chúng không phải khớp nhau.</b>
-<b>Báo cáo tuần</b> (vd W31) so kết quả một tuần với các tuần liền trước — kỳ ngắn, luôn
-đúng 7 ngày nên so được. <b>Báo cáo tháng</b> là cái nhìn tổng thể qua nhiều tháng (xem
-khối "So sánh các tháng"), dùng nhìn xu thế dài hạn chứ không phải để đối chiếu với con
-số của một tuần.</p>
-<p>Bucket tháng chạy từ <b>ngày 20 sang ngày 19 tháng sau</b> (quy ước có sẵn của file
-Report gốc). Vì vậy bucket tháng đang chạy có lúc chỉ gồm đúng 1 tuần — khi đó chế độ
-Tháng ra số y hệt chế độ Tuần. Để tránh hiểu nhầm, kỳ báo cáo luôn lấy <b>kỳ TRỌN gần
-nhất</b>: tuần đủ 7 ngày, tháng đủ khoảng 30 ngày. Kỳ đang chạy dở được nêu tên trong
-ghi chú đầu trang nhưng không dùng làm kỳ báo cáo.</p>
-<p class="en">The two periods answer different questions and their numbers need not match.
-The <b>weekly</b> report (e.g. W31) compares one week against the preceding weeks — a short
-period, always exactly 7 days, so the comparison holds. The <b>monthly</b> report is a
-long-run view across many months (see "So sánh các tháng"); it is not meant to reconcile
-with any single week. Month buckets run from the 20th to the 19th of the next month (a
-convention inherited from the source Report workbook), so a running month bucket can
-contain just one week. To avoid that confusion the report always uses the <b>latest
-COMPLETE period</b>; the running period is named in the header note but never used as the
-reporting period.</p></section>
+<section id="tiers"><h2>Ba tầng chỉ số<span class="tag">chốt 31/07/2026</span> · The three metric tiers</h2>
+<p><b>Một ticket không đồng nghĩa với một thiết bị hỏng.</b> Trước 31/07/2026 báo cáo đếm lỗi
+bằng công thức <b>BD ≠ Disclaim</b>, tức là gộp cả vé “Không tồn lỗi” (KTV ra tận nơi, kiểm tra,
+không thấy gì, không thay gì) và vé “Chưa phân loại” vào tử số. Đo trên tháng M7, cách đó cho
+tử số gấp <b>×1,87</b> số lỗi thật ở EVCS (8.942 so với 4.789) và <b>×2,31</b> ở BSS (11.100 so
+với 4.803). Nay tách làm ba tầng, mỗi tầng trả lời một câu hỏi khác nhau:</p>
+<table>
+<tr><th>Tầng</th><th>Định nghĩa</th><th>Dùng để</th></tr>
+<tr><td><b>1 · Tải vận hành</b></td><td>mọi ticket trong kỳ</td>
+    <td>bố trí nhân sự, chấm SLA, đánh giá ASP/CSE</td></tr>
+<tr><td><b>2 · Lỗi thiết bị xác nhận</b></td><td><b>BD ∈ {HW, FW}</b></td>
+    <td>chất lượng sản phẩm, làm việc với NCC, đặt mốc nền chiến dịch</td></tr>
+<tr><td><b>3 · Vé không phải lỗi</b></td><td>hạ tầng · khách quan · vệ sinh/bảo dưỡng · không tồn lỗi</td>
+    <td>ngưỡng cảnh báo VOMS/FW, và bài toán vận hành hiện trường</td></tr>
+</table>
+<p>Trang luôn hiện <b>cả hai cách đếm</b>: tầng 2 là số mới, và ghi chú đỏ ngay dưới nói rõ cách
+đếm cũ ra bao nhiêu, gấp bao nhiêu lần. Giữ cả hai là cố ý — cách đếm cũ là cầu nối với mọi báo
+cáo đã phát hành, bỏ nó đi là mất khả năng so với lịch sử.</p>
+<p><b>Nhóm lý do ở tầng 3</b>: <i>hạ tầng</i> = hạ tầng điện/mạng internet, tắt nguồn/ngắt CB.
+<i>khách quan</i> = lỗi thao tác người dùng, móp vỡ/đâm đụng, trùng lặp/sai thông tin, chưa lắp
+đặt/nghiệm thu, nhả nút dừng khẩn cấp, không phát hiện lỗi. <i>vệ sinh/bảo dưỡng</i> tách riêng
+vì đó là việc theo kế hoạch, không phải sự cố. Lý do nào chưa được xếp nhóm sẽ hiện thành cảnh
+báo trên trang thay vì âm thầm gộp vào “lý do khác”.</p>
+<p class="en"><b>One ticket is not one broken device.</b> Before 2026-07-30 the report counted
+faults as <b>BD ≠ Disclaim</b>, which swept in "no fault found" tickets (technician attended,
+inspected, found nothing, replaced nothing) and unclassified tickets. Measured on month M7 that
+numerator was <b>×1.87</b> the confirmed-fault count for EVCS (8,942 vs 4,789) and <b>×2.31</b>
+for BSS (11,100 vs 4,803). It is now split into three tiers: <b>1 · operational load</b> (every
+ticket — staffing, SLA, ASP/CSE); <b>2 · confirmed device faults</b> (BD ∈ {HW, FW} — product
+quality, supplier discussions, campaign baselines); <b>3 · non-fault tickets</b> (infrastructure,
+external, maintenance, no-fault-found — alarm thresholds and field operations). Both counts stay
+on the page: the old one is the bridge to every report already issued.</p></section>
 
-<section id="evcs"><h2>Tỉ lệ lỗi EVCS · EVCS failure rate</h2>
-<p>Số thiết bị EVCS lỗi (đếm distinct theo thiết bị, loại trừ vé Disclaim) chia cho số thiết bị đang vận hành. Số thiết bị vận hành (fleet) là số tĩnh chốt tại W29 vì export CCTS không có nguồn fleet theo tuần. Phạm vi: vé luồng API creation, đã lọc phạm vi vận hành.</p>
-<p class="en">Distinct failed EVCS units (excluding Disclaim tickets) divided by units in service. Fleet size is a static W29 figure because the CCTS export carries no weekly fleet source. Scope: API-creation tickets, operations scope applied.</p>
-<p><b>Giới hạn phải biết:</b> mẫu số tĩnh W29 áp cho MỌI kỳ, trong khi mạng lưới tăng nhanh
-trong 2026 (số trạm có vé: 1.888 tháng 1 → 9.152 tháng 7). Vì vậy tỉ lệ này so được giữa các
-TUẦN gần nhau, nhưng so giữa các THÁNG thì mẫu số sai. Khi so tháng, dùng hai chỉ số không
-phụ thuộc fleet ở ô chọn trên biểu đồ xu hướng: <b>thiết bị lỗi (distinct)</b> và
-<b>tần suất tái phát</b> = vé / thiết bị lỗi.</p>
-<p class="en"><b>Known limitation:</b> the static W29 denominator is applied to every period,
-while the network grew fast in 2026 (sites with tickets: 1,888 in Jan → 9,152 in Jul). The
-ratio is comparable across nearby WEEKS but not across MONTHS. For month comparisons use the
-two fleet-independent metrics offered on the trend chart: <b>distinct failed units</b> and
-<b>recurrence</b> = tickets per failed unit.</p></section>
+<section id="period"><h2>Kỳ báo cáo · Reporting period</h2>
+<p>Trang chọn <b>khoảng ngày bất kỳ</b>; nút “Tuần báo cáo” nhảy về tuần trọn gần nhất. Độ gộp
+của biểu đồ tự suy từ độ dài khoảng: <b>≤21 ngày → theo ngày</b>, <b>≤130 ngày → theo tuần</b>,
+dài hơn → theo tháng. Bucket tháng chạy từ <b>ngày 20 sang ngày 19 tháng sau</b> (quy ước có sẵn
+của file Report gốc), nên bucket tháng đang chạy có lúc chỉ gồm đúng một tuần.</p>
+<p>Badge “so kỳ trước” lấy <b>khoảng liền kề, cùng độ dài</b> ngay trước khoảng đang xem — không
+phải tuần trước theo lịch. Chọn 9 ngày thì so với 9 ngày trước đó.</p>
+<p class="en">The page takes an <b>arbitrary date range</b>; the "Tuần báo cáo" preset jumps to
+the latest complete week. Chart bucketing follows range length: ≤21 days → daily, ≤130 days →
+weekly, longer → monthly. Month buckets run 20th-to-19th (inherited from the source Report
+workbook). The "vs previous period" badge compares against the <b>immediately preceding range of
+equal length</b>, not the previous calendar week.</p></section>
 
-<section id="campaign"><h2>Lỗi tự nhiên vs chiến dịch · Natural faults vs campaigns</h2>
-<p>Vé thuộc đợt thay thế hàng loạt theo kế hoạch được tách thành dải riêng trên biểu đồ xu
-hướng, theo quy tắc khai báo (segment + khoảng tuần + mã lỗi chuẩn hóa). Không tách thì một
-đợt thay khóa đọc thành “chất lượng sản phẩm sụp đổ” — W30/2026 có <b>3.801 trong 7.639 vé
-BSS</b> là đợt thay khóa slot theo kế hoạch.</p>
-<p>Trên cùng các biểu đồ đó còn có <b>vạch dọc đánh dấu mốc segment vào luồng API creation</b>
-(BSS: W29). Trước mốc đó segment gần như không có vé trong phạm vi báo cáo — đường đi từ 0
-lên là <i>onboarding luồng</i>, không phải hỏng hàng loạt.</p>
-<p class="en">Tickets belonging to planned mass-replacement campaigns are split into a separate
-band on trend charts, via declared rules (segment + week range + normalised error code).
-Without the split, a lock-replacement campaign reads as a collapse in product quality — in
-W30/2026, <b>3,801 of 7,639 BSS tickets</b> were the planned slot-lock campaign. The same
-charts carry a <b>vertical marker for when a segment entered the API-creation flow</b> (BSS:
-W29); a line rising from zero before that marker is flow onboarding, not a failure spike.</p></section>
+<section id="ripe"><h2>Độ chín của kỳ<span class="tag">mới</span> · Period maturity</h2>
+<p><b>Kỳ vừa khép lại luôn trông “ít lỗi” một cách giả tạo.</b> Một vé chỉ phân loại được sau khi
+có solution, nên vé mới chưa xử lý xong sẽ nằm ở “Chưa phân loại” chứ không vào HW/FW. Đo thực tế:</p>
+<table>
+<tr><th>Tuần</th><th>Vé chưa có solution</th><th>Chưa phân loại</th><th>HW+FW</th></tr>
+<tr><td>W25</td><td>0,3%</td><td>3,8%</td><td>43,5%</td></tr>
+<tr><td>W31</td><td>7,2%</td><td>11,2%</td><td>34,2%</td></tr>
+<tr><td>W32 (cụt)</td><td><b>48,5%</b></td><td><b>49,5%</b></td><td>25,1%</td></tr>
+</table>
+<p>Vì vậy trang đo <b>tỉ lệ vé đã có solution</b> cho mọi khoảng đang xem. Dưới <b>95%</b> thì
+header gắn nhãn <b>“kỳ chưa chín”</b> và mục Chất lượng dữ liệu nói thẳng bằng lời. Thấy nhãn đó
+thì <b>đừng kết luận xu hướng từ kỳ này</b> — phần giảm có thể chỉ là vé chưa chín, không phải
+lỗi giảm thật.</p>
+<p class="en"><b>A period that just closed always looks artificially fault-free.</b> A ticket can
+only be classified once it has a solution, so unresolved tickets sit in "unclassified" rather
+than HW/FW. The page therefore measures the <b>share of tickets that already have a solution</b>
+for whatever range is selected; below <b>95%</b> the header shows <b>"kỳ chưa chín"</b> (period
+not mature). When that flag is up, do not read a trend from the period — the apparent drop may
+be immaturity, not improvement.</p></section>
 
-<section id="bss"><h2>Tỉ lệ lỗi BSS · BSS failure rate</h2>
-<p>Như trên, cho trạm đổi pin (BSS-06, BSS-12).</p>
-<p class="en">Same as above, for battery-swap stations (BSS-06, BSS-12).</p></section>
+<section id="cls"><h2>Phân loại ticket · Ticket classification</h2>
+<p><b>Năm lớp (chốt 30/07/2026):</b> <b>HW</b> — hỏng phần cứng, phải thay/sửa linh kiện.
+<b>FW</b> — cần can thiệp phần mềm trên trụ: cập nhật firmware/FOTA, nạp SW, cấu hình,
+restart/reset/đồng bộ; không thay linh kiện. <b>Disclaim</b> — lỗi không xuất phát từ trụ: hạ
+tầng điện/mạng của khách, hoặc yếu tố khách quan bên ngoài (khách thao tác, xe đâm, thiên tai,
+sai thông tin). <b>Không tồn lỗi</b> — KTV đến kiểm tra thì thiết bị chạy bình thường, không tái
+hiện được lỗi và không thay/sửa gì; thiết bị KHÔNG hỏng nên đây không phải lỗi của hãng, cũng
+không phải Disclaim. <b>Chưa phân loại</b> — mô tả rỗng hoặc không đủ căn cứ; thà để đây còn hơn
+đoán bừa.</p>
+<p>Chỉ <b>HW + FW</b> vào tầng 2. “Không tồn lỗi” chiếm khoảng <b>một phần ba</b> tổng vé —
+đây là khối lớn nhất bị cách đếm cũ tính nhầm thành trụ hỏng.</p>
+<p><b>Ai gán nhãn (từ 30/07/2026):</b> nguồn chính là <b>AI (DeepSeek, temperature=0)</b>, đọc
+<b>Problem Description</b> + <b>mã lỗi</b> (đối chiếu tri thức mã lỗi trong wiki nội bộ) +
+<b>Solution</b> + dấu hiệu <b>đã thay vật tư</b> trong CCTS. Bộ luật từ khóa cũ vẫn còn nhưng chỉ
+là lưới đỡ cho ticket mới chưa qua AI — bộ luật đó <b>không nhận ra “Không tồn lỗi”</b> và đếm
+thừa HW, nên độ phủ AI tụt là số liệu lệch.</p>
+<p class="en"><b>Five classes (fixed 2026-07-30):</b> <b>HW</b> — hardware failure requiring part
+replacement. <b>FW</b> — software intervention on the charger (firmware/FOTA, SW flash, config,
+restart/resync), no parts. <b>Disclaim</b> — not originating from the charger: customer
+power/network infrastructure or external factors. <b>Không tồn lỗi / no fault found</b> — the
+technician inspected the device, found it working, could not reproduce the fault and replaced
+nothing; neither a manufacturer fault nor a Disclaim. <b>Chưa phân loại</b> — empty or
+insufficient description; left undecided rather than guessed. Only HW + FW enter tier 2.
+No-fault-found is roughly <b>one third</b> of all tickets — the largest block the old formula
+miscounted as broken hardware. Labels come from <b>AI (DeepSeek, temperature=0)</b>; the legacy
+keyword rules survive only as a fallback and cannot detect no-fault-found at all.</p></section>
 
-<section id="ovd"><h2>SLA overdue toàn mạng · Network SLA overdue</h2>
-<p><b>Định nghĩa chốt:</b> số vé mang cờ Overdue theo bộ luật SLA tinh (3h/4h/7h/48h tùy vùng, nguồn tạo vé, có thay vật tư hay không) chia cho tổng số vé thuộc 13 trạng thái SLA, gộp EVCS+BSS. Con số này GỒM cả vé chưa xử lý xong (đã quá hạn mà còn Open) — nó đo trải nghiệm khách hàng, không phải chỉ đo vé đã đóng. Đây là cùng một con số với trang phân tích nội bộ, không có phiên bản "đã trừ" nào khác.</p>
-<p class="en"><b>Fixed definition:</b> tickets flagged Overdue by the refined SLA rules (3h/4h/7h/48h depending on region, ticket source, parts replacement) divided by all tickets in the 13 SLA statuses, EVCS+BSS combined. This INCLUDES unresolved tickets already past their deadline — it measures customer experience, not just closed tickets. Identical to the internal analyst page; there is no alternative "adjusted" version.</p></section>
+<section id="rate"><h2>Tỉ lệ lỗi EVCS &amp; BSS · Failure rate</h2>
+<p>Bảng có <b>hai chế độ đếm</b>, chuyển bằng nút ngay trên bảng:
+<b>Đếm lỗi thật (HW+FW)</b> — mặc định, ứng với tầng 2; và <b>Cách đếm cũ (≠ Disclaim)</b> — giữ
+để đối chiếu với báo cáo cũ. Cùng một mẫu số, chỉ khác tử số.</p>
+<p><b>Cột nào tin được:</b> <b>“Thiết bị lỗi”</b> = số thiết bị khác nhau (distinct theo cpid)
+phát sinh lỗi trong kỳ — tính 100% từ dữ liệu, <b>không cần fleet</b>. <b>“Tỉ lệ lỗi”</b> chia
+cho fleet, mà fleet là <b>số tĩnh chốt tại W29</b> vì export CCTS không có nguồn fleet theo kỳ.</p>
+<p><b>Giới hạn phải biết:</b> mẫu số tĩnh W29 áp cho MỌI kỳ trong khi mạng lưới tăng nhanh trong
+2026 — số <b>thiết bị phát sinh vé</b> đi từ <b>4.078</b> (01–19/01) lên <b>15.051</b> (bucket
+tháng M7), tức gấp <b>3,7 lần</b>. Tỉ lệ này so được giữa các TUẦN gần nhau,
+nhưng so giữa các THÁNG thì mẫu số sai. Khi so tháng, dùng cột <b>thiết bị lỗi</b> và
+<b>vé / thiết bị</b> (tần suất tái phát) — cả hai không phụ thuộc fleet.</p>
+<p class="en">The table has <b>two counting modes</b>, toggled above it: <b>confirmed faults
+(HW+FW)</b> — the default, matching tier 2; and <b>the legacy count (≠ Disclaim)</b>, kept for
+reconciliation with earlier reports. Same denominator, different numerator. <b>"Thiết bị lỗi"</b>
+(distinct failed units by cpid) is computed entirely from the data and needs no fleet figure.
+<b>"Tỉ lệ lỗi"</b> divides by a <b>static W29 fleet</b> because the CCTS export carries no
+per-period fleet source; applied to every period while the network grew fast in 2026 — devices
+raising tickets went from <b>4,078</b> (1–19 Jan) to <b>15,051</b> (M7 bucket), a <b>3.7×</b>
+increase — it is comparable across nearby WEEKS but not across MONTHS. For month comparisons use
+the two fleet-independent columns.</p></section>
 
-<section id="cc"><h2>Vé do ChargeCore · ChargeCore-attributable</h2>
-<p>Tử số: vé phân loại HW + FW. Mẫu số: vé ĐÃ phân định trách nhiệm (HW + FW + Disclaim). Vé "Chưa phân loại" hiển thị thành dải riêng trên ô KPI và KHÔNG nằm trong mẫu số — không giấu, không đổ oan.</p>
-<p class="en">Numerator: HW + FW tickets. Denominator: tickets with responsibility already classified (HW + FW + Disclaim). "Chưa phân loại" (unclassified) tickets appear as a separate band on the KPI tile and are NOT in the denominator — neither hidden nor presumed.</p>
-<p><b>Bốn lớp (chốt 30/07/2026):</b> <b>Disclaim</b> — lỗi không xuất phát từ trụ: hạ tầng điện/mạng của khách, hoặc yếu tố khách quan bên ngoài (khách thao tác, xe đâm, thiên tai, sai thông tin). <b>HW</b> — hỏng phần cứng, phải thay thế linh kiện. <b>FW</b> — cần can thiệp phần mềm trên trụ: cập nhật firmware/FOTA, nạp SW, cấu hình, restart/reset/đồng bộ. <b>Không tồn lỗi</b> — KTV đến kiểm tra thì thiết bị chạy bình thường, không tái hiện được lỗi và không thay/sửa gì; thiết bị KHÔNG hỏng nên đây không phải lỗi của hãng, cũng không phải Disclaim.</p>
-<p class="en"><b>The four classes (fixed 2026-07-30):</b> <b>Disclaim</b> — not originating from the charger: customer power/network infrastructure, or external factors (user action, vehicle impact, weather, wrong ticket data). <b>HW</b> — hardware failure requiring part replacement. <b>FW</b> — requires software intervention on the charger: firmware/FOTA update, SW flash, configuration, restart/reset/resync. <b>Không tồn lỗi / No fault found</b> — the technician inspected the device, found it working, could not reproduce the fault and replaced nothing; the device is NOT broken, so this is neither a manufacturer fault nor a Disclaim.</p>
-<p><b>Ai gán nhãn (từ 30/07/2026):</b> nguồn chính là <b>AI (DeepSeek, temperature=0)</b>, đọc <b>Problem Description</b> + <b>mã lỗi</b> (đối chiếu tri thức mã lỗi trong wiki nội bộ) + <b>Solution</b> + dấu hiệu <b>đã thay vật tư</b> trong CCTS. Bộ luật từ khóa cũ vẫn còn nhưng chỉ là lưới đỡ cho ticket mới chưa qua AI. Dải "nhãn phân loại đến từ đâu" trong báo cáo cho biết tỷ lệ mỗi nguồn, nên luôn kiểm được phần nào do AI.</p>
-<p class="en"><b>Who assigns the label (since 2026-07-30):</b> the primary source is <b>AI (DeepSeek, temperature=0)</b>, reading <b>Problem Description</b> + <b>error code</b> (cross-referenced against the internal wiki's error-code knowledge) + <b>Solution</b> + whether CCTS recorded a <b>spare-part replacement</b>. The former keyword rules remain only as a fallback for newly imported tickets not yet seen by the AI. The "label source" band in the report shows the split, so the AI share is always auditable.</p></section>
+<section id="top"><h2>Top lỗi<span class="tag">đổi cách xếp hạng</span> · Top error codes</h2>
+<p><b>Xếp hạng theo lỗi thiết bị xác nhận, không theo số vé thô.</b> Mã lỗi hay báo giả sinh rất
+nhiều vé mà rất ít lỗi thật, nên đếm vé sẽ đẩy tiếng ồn lên đầu bảng. Ví dụ trên BSS tháng M7:
+<b>A0112 (Door Access)</b> đứng <b>hạng 1 theo vé</b> (3.141 vé) nhưng chỉ <b>hạng 4 theo lỗi
+thật</b> (583 vé, 19%); ngược lại <b>B6029</b> hạng 2 theo vé lại là <b>hạng 1 thật</b> (1.090).</p>
+<p>Bảng hiện cả hai thứ hạng cùng lúc, kèm mũi tên cho biết mã đó lên/xuống bao nhiêu bậc khi
+chuyển cách đếm. Ba cột <b>% thật · % không tồn lỗi · % disclaim</b> cho biết cơ cấu từng mã.</p>
+<p><b>Cờ “nghi cảnh báo giả”</b> bật khi một mã có <b>≥40% vé là “không tồn lỗi”</b> và đủ
+<b>≥30 vé</b> để tỉ lệ có nghĩa. Đó là tín hiệu KTV bị điều đi vô ích: bài toán nằm ở
+<b>ngưỡng cảnh báo của VOMS/FW</b>, không phải ở phần cứng, nên phải chuyển cho đúng đội.</p>
+<p>Mã lỗi được <b>chuẩn hóa về token đầu</b> trước khi đếm (VOMS phát cùng một alarm dưới nhiều
+cách viết: <i>A0112 (Door Access Detected)</i> và <i>A0112 (DoorAccessDetected)</i> về cùng
+<b>A0112</b>). Vé không có mã lỗi không vào bảng này — số đó theo dõi ở mục Chất lượng dữ liệu.</p>
+<p class="en"><b>Ranked by confirmed device faults, not raw ticket count.</b> Noisy alarm codes
+generate many tickets and few real faults, so counting tickets promotes noise. On BSS in M7,
+<b>A0112 (Door Access)</b> ranks <b>1st by tickets</b> (3,141) but only <b>4th by real faults</b>
+(583, 19%), while <b>B6029</b> is 2nd by tickets and <b>1st by real faults</b> (1,090). Both ranks
+are shown side by side. The <b>"suspected false alarm"</b> flag fires at <b>≥40% no-fault-found</b>
+with <b>≥30 tickets</b> — a signal that technicians are being dispatched for nothing, which is a
+<b>VOMS/FW alarm-threshold</b> problem, not a hardware one. Codes are normalised to their first
+token before counting, since VOMS emits one alarm under several spellings.</p></section>
 
-<section id="backlog"><h2>Vé tồn chưa xử lý xong · Unresolved backlog</h2>
-<p>Vé tạo trong tuần chưa có solution đầu tiên tại thời điểm chốt số liệu. Đây là chỉ số thay cho "chi phí vật tư trong tuần" — export CCTS không có Material Code/giá nên chi phí tuần chưa có nguồn dữ liệu trung thực.</p>
-<p class="en">Tickets created this week with no first solution at data cut-off. This tile replaces "weekly parts cost" — the CCTS export has no material codes/prices, so an honest weekly cost figure has no data source yet.</p></section>
+<section id="parts"><h2>Top Spare Part<span class="tag">số tĩnh</span> · Spare parts</h2>
+<p>Vật tư đã xuất trong kỳ nền, kèm đơn giá và thành tiền. <b>Đây là số tĩnh</b>: nó đến từ khối
+nấu sẵn của kỳ nền và <b>không đổi theo khoảng ngày đang chọn</b> — nhãn “số tĩnh” cạnh tiêu đề
+ghi rõ kỳ nền là kỳ nào. Lý do: export CCTS không mang Material Code theo từng vé, nên không dựng
+được bảng vật tư theo khoảng ngày bất kỳ.</p>
+<p class="en">Parts issued in the baseline period with unit price and cost. <b>This block is
+static</b> — it comes from the pre-cooked baseline and does <b>not</b> follow the selected date
+range; the tag next to the heading names the baseline period. The CCTS export carries no
+per-ticket material code, so a range-aware parts table has no data source.</p></section>
 
-<section id="total"><h2>Tổng số vé · Total tickets</h2>
-<p>Mọi vé EVCS+BSS tạo trong tuần, luồng API creation, đã lọc phạm vi vận hành (loại vé lắp đặt/nghiệm thu/REWORK...). Tuần hiện tại thường chưa đủ 7 ngày — trang ghi chú rõ và mọi so sánh tuần-trước đều quy về /ngày.</p>
-<p class="en">All EVCS+BSS tickets created this week, API-creation flow, operations scope applied (installation/acceptance/REWORK tickets excluded). The current week is often partial — the page says so and week-over-week deltas are per-day normalized.</p></section>
+<section id="ovd"><h2>SLA overdue · SLA overdue</h2>
+<p>Trang có <b>công tắc chọn luật SLA</b> trên header. Luật <b>Theo vùng</b> là mặc định và là
+luật của <b>mọi báo cáo đã phát hành</b>.</p>
+<p><b>Luật theo vùng:</b> trạm Hà Nội + tự doanh đi luồng API creation chấm theo hạn nhanh
+<b>3h/4h</b> (có thay linh kiện: <b>7h</b>); phần còn lại của cả nước lấy thẳng <b>cờ SLA của
+CCTS</b> (48h). Tử số là vé mang cờ Overdue, mẫu số là toàn bộ vé thuộc <b>13 trạng thái SLA</b>
+theo bố cục sheet Report gốc. Con số này <b>gồm cả vé chưa xử lý xong</b> (đã quá hạn mà còn
+Open) — nó đo trải nghiệm khách hàng, không phải chỉ đo vé đã đóng.</p>
+<p><b>Lưu ý về mẫu số:</b> 13 trạng thái đó <b>không gồm “Pending for VOMS confirm”</b>. Đó là bố
+cục kế thừa từ sheet gốc, không phải quyết định phân tích — nên hai mục báo cáo cùng kỳ có thể ra
+hai tỉ lệ overdue khác nhau nếu một bên dùng mẫu số khác. <b>Phần bị loại không nhỏ và rất lệch
+theo sản phẩm</b>: đo trên tháng M7 là <b>21,9% với BSS</b> nhưng chỉ <b>3,1% với EVCS</b>; riêng
+tuần báo cáo trên luồng API là <b>23,0%</b>. Tính trên cả kho từ đầu năm thì là 5,1%. Nói cách
+khác, tỉ lệ overdue của BSS ở các kỳ gần đây đang bỏ ra ngoài mẫu số khoảng một phần năm số vé.</p>
+<p class="en">A <b>rule switch</b> sits in the header; <b>zone</b> is the default and is the rule
+behind every report already issued. Hanoi + self-operated stations on the API-creation flow are
+scored against a fast <b>3h/4h</b> deadline (<b>7h</b> when parts are replaced); everywhere else
+takes CCTS's own SLA flag (48h). The denominator is the <b>13 SLA statuses</b> of the original
+Report sheet, which <b>excludes "Pending for VOMS confirm"</b> — an inherited layout, not an
+analytical decision. The excluded slice is large and very uneven by product: on M7 it is
+<b>21.9% for BSS</b> against <b>3.1% for EVCS</b>, and 23.0% for the report week on the API flow
+(5.1% across the whole year-to-date warehouse). The figure <b>includes unresolved tickets</b> past
+their deadline: it measures customer experience, not just closed tickets.</p></section>
 
-<section id="coverage"><h2>Độ phủ dữ liệu · Data coverage</h2>
-<p>Tách hai loại: (1) vé ĐANG xử lý (Open/Appointment) — trạng thái bình thường của vé mới; (2) vé mang trạng thái ngoài 13 nhóm SLA (ví dụ "Pending for VOMS confirm") — lỗi dữ liệu thật của workbook, các vé này không được đếm vào bảng SLA. Độ phủ (%) chấm trên vé đã có solution đầu tiên. Kèm theo: số vé chưa có mã lỗi, số mã lỗi phải gộp nhiều cách viết (VOMS phát cùng một alarm dưới nhiều chính tả).</p>
-<p class="en">Two kinds are separated: (1) tickets IN PROGRESS (Open/Appointment) — the normal state of fresh tickets; (2) tickets whose status falls outside the 13 SLA statuses (e.g. "Pending for VOMS confirm") — a genuine workbook data issue; those tickets are excluded from the SLA table. Coverage (%) is scored on tickets that have a first solution. Also listed: tickets without an error code, and codes merged across spelling variants (VOMS emits the same alarm under several spellings).</p></section>
+<section id="h48"><h2>Luật 48h Open → Solution đầu<span class="tag">chốt 30/07/2026</span> · The 48h rule</h2>
+<p>Phép chấm <b>song song</b> để giải trình, chọn bằng công tắc “48h” trên header. Một ngưỡng duy
+nhất cho <b>mọi tỉnh, mọi nguồn</b>: từ lúc Open đến <b>solution đầu tiên</b> ≤ 48h là Đạt, quá
+là Quá hạn. Không dùng hạn nhanh theo vùng, không dùng cờ SLA thô của CCTS.</p>
+<p><b>Ba điều khác biệt so với luật theo vùng:</b> (1) vé <b>chưa có solution</b> nằm <b>ngoài
+mẫu số</b> — đó là tồn đọng, không phải phép đo tốc độ xử lý; (2) <b>VOMS reject và lỗi hệ
+thống</b> được tính Đạt, nhưng <b>chỉ khi</b> solution đầu còn trong 48h — ca đã quá 48h vẫn quy
+lỗi KTV, vì VOMS chỉ reject SAU khi KTV nộp solution, tức trễ đã xảy ra trước khi bị reject;
+(3) luật này <b>không phụ thuộc trạng thái ticket</b>, nên danh sách trạng thái lấy thẳng từ dữ
+liệu chứ không dùng 13 nhóm cố định — mẫu số vì thế lớn hơn.</p>
+<p>Ngưỡng đo theo bước <b>0,1 giờ</b>, nên ca vượt 48h dưới khoảng 3 phút vẫn tính Đạt. Số của
+chế độ này khớp file <b>SLA48_GiaiTrinh_*.xlsx</b> mà CSE dùng để giải trình.</p>
+<p class="en">A <b>parallel</b> scoring mode for explanation work, selected by the "48h" switch.
+One threshold for every province and every source: Open → <b>first solution</b> ≤ 48h is on time.
+Tickets with <b>no solution yet are excluded from the denominator</b> — that is backlog, not a
+measure of handling speed. VOMS rejects and system faults count as on time <b>only if</b> the
+first solution was still inside 48h, since VOMS can only reject after the technician submitted
+one. The rule is status-independent, so the status list is derived from the data rather than the
+fixed 13 groups. Measured in 0.1 h steps, so cases under ~3 minutes over 48h still pass. Matches
+<b>SLA48_GiaiTrinh_*.xlsx</b>.</p></section>
 
-<section id="campaign"><h2>Tách vé chiến dịch · Campaign split</h2>
-<p>Vé thuộc đợt thay thế hàng loạt theo kế hoạch (ví dụ đợt thay khóa slot BSS từ W29) được nhận diện bằng quy tắc khai báo (mã lỗi chuẩn hóa + khoảng tuần + dòng sản phẩm) và tách thành đường riêng trên mọi biểu đồ xu hướng. Không tách thì một đợt thay khóa đọc thành "chất lượng sản phẩm sụp đổ".</p>
-<p class="en">Tickets from planned mass-replacement drives (e.g. the BSS slot-lock campaign from W29) are identified by declared rules (normalized error code + week range + product line) and plotted as a separate series on every trend chart. Without the split, a lock-replacement drive reads as a product-quality collapse.</p></section>
+<section id="rank"><h2>SLA theo ASP &amp; CSE · ASP &amp; CSE performance</h2>
+<p><b>“med (h)”</b> = <b>TRUNG VỊ</b> giờ từ tạo vé đến solution đầu tiên — dùng trung vị vì vài
+ca treo hàng trăm giờ kéo lệch trung bình. <b>“voms (h)”</b> = trung vị giờ từ lúc VOMS mở vé đến
+khi KTV đẩy “Pending for VOMS confirm” vòng đầu; hai mốc này neo khác nhau nên hiệu của chúng có
+thể lệch nhẹ. <b>“Còn Open”</b> = vé quá hạn mà chưa có solution.</p>
+<p>Bảng CSE gắn nhãn <b>“ngoài roster”</b> cho người có vé nhưng không nằm trong danh sách CSE
+đã khai — thường là vé gán nhầm hoặc người mới chưa cập nhật danh sách, cần rà chứ đừng bỏ qua.</p>
+<p class="en"><b>"med (h)"</b> is the <b>MEDIAN</b> hours from ticket creation to first solution
+(median because a few hundred-hour stragglers skew the mean). <b>"voms (h)"</b> is the median
+from VOMS opening the ticket to the technician's first "Pending for VOMS confirm" — different
+anchors, so the difference can drift. <b>"Còn Open"</b> counts overdue tickets with no solution.
+The CSE table flags <b>"ngoài roster"</b> for people holding tickets who are not on the declared
+CSE list — usually misassignment or a roster not yet updated.</p></section>
 
 <section id="cause"><h2>Nhóm nguyên nhân · Cause groups</h2>
-<p>Suy từ ngôn từ xử lý thật của vé (Solution / Problem Analysis / Additional info) theo bộ luật từ khóa, cùng bộ với trang phân tích nội bộ. "Chưa xác minh" phần lớn là vé mới chưa có mô tả — không phải "không rõ nguyên nhân". Trách nhiệm (do ChargeCore / không do CC / chưa phân định) được giữ ở MỌI cấp drill: dòng sản phẩm → nhóm nguyên nhân → ASP/tỉnh.</p>
-<p class="en">Derived from the tickets' actual resolution text (Solution / Problem Analysis / Additional info) via keyword rules — the same engine as the internal analyst page. "Unverified" is mostly fresh tickets without notes yet, not "cause unknown". The responsibility split (ChargeCore / not CC / unclassified) is preserved at EVERY drill level: product line → cause group → ASP/province.</p></section>
+<p>Suy từ ngôn từ xử lý thật của vé (Solution / Problem Analysis / Additional info), do AI gán
+cùng lượt với nhãn phân loại. <b>“Chưa xác định”</b> phần lớn là vé mới chưa có mô tả — không
+phải “không rõ nguyên nhân”.</p>
+<p>Bảng <b>Mã lỗi × nguyên nhân</b> cho biết mỗi mã lỗi lớn thực tế được xử lý vì lý do gì. Cột
+“Có mô tả” là mẫu số thật của các tỉ lệ đó; mã nào quá ít mô tả bị gắn nhãn <b>“ít mô tả”</b> vì
+phần trăm trên vài chục vé không đáng đọc.</p>
+<p class="en">Derived from the tickets' actual resolution text (Solution / Problem Analysis /
+Additional info), assigned by the AI in the same pass as the class label. <b>"Chưa xác định"</b>
+is mostly fresh tickets without notes yet, not "cause unknown". The <b>error code × cause</b>
+table shows what each major code actually turned out to be; the "có mô tả" column is the real
+denominator, and thin codes are flagged because percentages over a few dozen tickets do not read.</p></section>
 
-<section id="rank"><h2>Xếp hạng ASP & khu vực · ASP & region ranking</h2>
-<p>Chỉ đơn vị ≥ 20 vé/tuần mới lên bảng (1 vé / 1 trễ = 100% là vô nghĩa thống kê). Mặc định xếp theo SỐ VÉ TRỄ tuyệt đối — người quản lý cần biết sửa chỗ nào giảm được nhiều nhất; có nút chuyển sang tỉ lệ. "Giờ xử lý TV" = TRUNG VỊ giờ từ tạo vé đến solution đầu tiên (trung vị vì vài ca treo hàng trăm giờ kéo lệch trung bình). "Open→VOMS TV" = trung vị giờ từ lúc VOMS mở vé đến khi kỹ thuật viên đẩy "Pending for VOMS confirm" vòng đầu — hai mốc này khác nhau nên hiệu của chúng có thể lệch nhẹ.</p>
-<p class="en">Only units with ≥ 20 tickets/week are listed (1 ticket / 1 late = 100% is statistically meaningless). Default sort is ABSOLUTE overdue count — managers need to know where fixing helps most; a toggle switches to rate. "Median proc. h" = MEDIAN hours from ticket creation to first solution (median because a few hundred-hour stragglers skew the mean). "Median Open→VOMS h" = median hours from VOMS opening the ticket to the technician's first "Pending for VOMS confirm" — different anchors, so their difference can drift slightly.</p></section>
+<section id="repeat"><h2>Thiết bị tái phát<span class="tag">mới</span> · Repeat-offender devices</h2>
+<p>Trả lời câu hỏi “những đầu trụ đấy có vấn đề gì không”. <b>Đếm bằng lỗi thật (HW+FW)</b>, vì
+một trụ bị báo mở cửa 10 lần không phải một trụ hỏng.</p>
+<p>Đo trên tháng M7: <b>763 trụ EVCS có ≥2 lỗi thật gánh 46,9%</b> toàn bộ lỗi thật; 82 trụ có ≥5
+lỗi gánh 12,5%. Bên BSS, 801 tủ có ≥2 lỗi gánh 42,0%. Tức là gần một nửa khối lượng lỗi nằm ở
+<b>13,2% số thiết bị phát sinh vé</b> (763 trên 5.794) — đây là danh sách hành động ngắn nhất
+có thể có.</p>
+<p><b>Cờ “lặp mã”</b> bật khi <b>cùng một mã lỗi</b> tái phát trên <b>cùng một thiết bị</b> trong
+kỳ. Đó là tín hiệu khác hẳn “trụ hỏng nhiều thứ”: nó gợi ý <b>sửa chưa dứt điểm</b> hoặc linh
+kiện kém, và là ứng viên cho thay cụm hoặc rà lại tay nghề sửa.</p>
+<p class="en">Answers "is there actually something wrong with those chargers". <b>Counted by
+confirmed faults (HW+FW)</b> — a charger reporting a door alarm ten times is not a broken charger.
+On M7: <b>763 EVCS units with ≥2 real faults carry 46.9%</b> of all real faults; 82 units with ≥5
+carry 12.5%. On BSS, 801 cabinets with ≥2 carry 42.0%. Nearly half the fault volume sits in about
+an eighth of the devices. The <b>"lặp mã"</b> flag fires when the <b>same error code</b> recurs on
+the <b>same device</b> within the period — a different signal from "many different faults",
+suggesting an incomplete repair or a weak part.</p></section>
+
+<section id="coverage"><h2>Chất lượng dữ liệu · Data quality</h2>
+<p>Bốn chỉ số, tất cả đều là thứ đội <b>tự sửa được</b>, khác với phần còn lại vốn phụ thuộc
+thiết bị: <b>vé đã có solution</b> (xem mục Độ chín kỳ), <b>chưa phân loại</b>,
+<b>không có mã lỗi</b>, <b>nguyên nhân chưa xác định</b>.</p>
+<p>Vé <b>không có mã lỗi</b> rơi khỏi <b>mọi</b> phân tích top lỗi — nó không xuất hiện ở bất kỳ
+dòng nào của bảng Top lỗi, nên tỉ lệ này càng cao thì bảng đó càng thiếu đại diện. Bảng
+<b>chất lượng ghi chép theo CSE</b> bên dưới quy con số đó về từng người; ô đỏ là trên 20%.</p>
+<p class="en">Four indicators, all of them things the team <b>can fix themselves</b>, unlike the
+rest which depend on the hardware: tickets with a solution (see Period maturity), unclassified,
+missing error code, and undetermined cause. Tickets <b>without an error code</b> drop out of
+<b>every</b> top-error analysis, so the higher this share, the less representative that table is.
+The per-CSE table below attributes it to individuals; red marks above 20%.</p></section>
 
 <section id="action"><h2>Sổ hành động · Action register</h2>
-<p>Mỗi mã lỗi lớn có một bản ghi: nguyên nhân gốc, giải pháp, loại (firmware/phần cứng/quy trình/đào tạo), trạng thái, người phụ trách, hạn, mục tiêu. Biểu đồ 7 tuần của từng mã có vạch đánh dấu ngày deploy — sau deploy vé có giảm thật không là thứ kiểm chứng được, không phải lời hứa. Cảnh báo tự động khi quá hạn chưa deploy, hoặc deploy ≥3 tuần mà vé không giảm. Mã lỗi lớn chưa có bản ghi bị đánh dấu "chưa có kế hoạch".</p>
-<p class="en">Each major error code carries one record: root cause, solution, type (firmware/hardware/process/training), status, owner, due date, target. Each code's 7-week chart marks the deployment date — whether tickets actually dropped after deploy is verifiable, not a promise. Automatic alerts fire when a due date passes without deployment, or ≥3 weeks after deploy with no decrease. Major codes without a record are flagged "no plan yet".</p></section>
+<p>Mỗi mã lỗi lớn một bản ghi: nguyên nhân gốc, giải pháp, loại (firmware/phần cứng/quy
+trình/đào tạo), trạng thái, người phụ trách, hạn, mục tiêu, và <b>ngày triển khai</b>. Nội dung do
+người duy trì tay ở <code>report_auto/config/actions.json</code>; mã lỗi lớn chưa có bản ghi bị
+đánh dấu <b>“chưa có kế hoạch”</b> thay vì vắng mặt lặng lẽ.</p>
+<p><b>Cột “mốc nền theo LỖI THẬT” là cột phải dùng khi đặt mục tiêu.</b> Lấy mốc nền bằng số vé
+thô sẽ khiến chiến dịch <b>tự động trông như thành công</b> chỉ vì tiếng ồn cảnh báo dao động.
+Ví dụ chiến dịch Fanfail (C0116) trên EVCS tháng M7: 629 vé nhưng chỉ <b>303 lỗi thật</b> — đặt
+mốc 629 là tự thưởng cho mình 326 vé không liên quan đến phần cứng.</p>
+<p>Hai cảnh báo tự sinh: <b>quá hạn chưa triển khai</b> (qua hạn mà <code>deployed_on</code> còn
+trống) và <b>chưa cải thiện</b> (đã triển khai mà vé không giảm so với kỳ trước). Chưa điền
+<code>deployed_on</code> thì <b>không đo được hiệu quả chiến dịch nào</b> — đó là điều kiện cần.</p>
+<p class="en">One record per major error code: root cause, solution, type, status, owner, due date,
+target and <b>deployment date</b>, hand-maintained in <code>report_auto/config/actions.json</code>;
+major codes without a record are flagged "no plan yet". <b>The "baseline by REAL faults" column is
+the one to set targets against</b> — using raw ticket counts makes a campaign <b>look successful
+automatically</b> as alarm noise fluctuates. The EVCS Fanfail campaign (C0116) in M7 shows 629
+tickets but only <b>303 real faults</b>. Two alerts fire automatically: due date passed without
+deployment, and deployed but tickets did not fall. Without <code>deployed_on</code> filled in, no
+campaign effect can be measured at all.</p></section>
+
+<section id="campaign"><h2>Vé chiến dịch vs lỗi tự nhiên · Campaign vs natural faults</h2>
+<p>Vé thuộc đợt thay thế hàng loạt <b>theo kế hoạch</b> được nhận diện bằng quy tắc khai báo
+(dòng sản phẩm + khoảng tuần + mã lỗi chuẩn hóa) ở <code>report_auto/config/campaigns.json</code>.
+Không tách thì một đợt thay khóa đọc thành “chất lượng sản phẩm sụp đổ” — W30/2026 có
+<b>3.798 trong 7.640 vé BSS</b> là đợt thay khóa slot theo kế hoạch, tức <b>một nửa</b>.</p>
+<p><b>Phải chốt tuần kết thúc chiến dịch.</b> Nếu để mở, mốc nền của các tháng sau sẽ so với một
+đỉnh do chính chiến dịch tạo ra, và mọi so sánh sau đó đều lệch.</p>
+<p class="en">Tickets from <b>planned</b> mass-replacement drives are identified by declared rules
+(product line + week range + normalised error code) in
+<code>report_auto/config/campaigns.json</code>. Without the split, a lock-replacement drive reads
+as a collapse in product quality — in W30/2026, <b>3,798 of 7,640 BSS tickets</b> (half) were the
+planned slot-lock campaign. <b>The campaign's end week must be pinned</b>, or later baselines
+compare against a peak the campaign itself created.</p></section>
 
 </main>
 </body>
