@@ -250,6 +250,76 @@ function failByModel(models, fleet, sel) {
   return out;
 }
 
+/* ---- SLA cắt theo DÒNG TRỤ (cột AT) ------------------------------------- */
+/* Bảng SLA của build.py/agg.js chỉ cắt theo trạng thái ticket, nên "Kern chậm hơn AC"
+   hay "BSS-12 quá hạn gấp đôi BSS-06" không đọc được ở đâu cả. Đây là ĐỊNH NGHĨA MỚI
+   (build.py chưa từng tính) nên nằm ở scope.js — xem đầu file.
+
+   Hai tỉ lệ khác nhau, cố tình bày cạnh nhau, đừng gộp:
+     `rate`    = quá hạn / VÉ      — đo khối lượng việc trễ.
+     `devRate` = thiết bị từng bị quá hạn / thiết bị từng có vé — đo ĐỘ PHỦ: một trụ
+                 hỏng đi hỏng lại 10 lần chỉ là 1 thiết bị, nên `rate` cao mà `devRate`
+                 thấp nghĩa là trễ dồn vào vài trụ, không phải cả dòng trụ có vấn đề.
+
+   Chấm qua A.hasVerdict/A.isOn, KHÔNG đọc F.cols.ovdf: ở chế độ h48 vé chưa có
+   solution phải rơi khỏi mẫu số y như bảng SLA chính, nếu không hai bảng lệch nhau.
+   Overdue = total − ontime (giống build.sla_table), không dùng isOvd: vé có cờ SLA
+   rỗng vẫn phải nằm ở một phía, và bảng gốc xếp chúng vào quá hạn.
+
+   ⚠ Phải lặp lại phép LỌC TRẠNG THÁI của agg.statusList(), không chỉ hasVerdict():
+   luật 'zone' cố tình chỉ đếm 13 trạng thái theo bố cục sheet Report gốc (bỏ
+   'Pending for VOMS confirm'…). Bỏ qua phép lọc đó thì cùng một mục SLA, bảng theo
+   trạng thái ra 7.572 vé còn bảng này ra 8.691 (đo trên W32 luồng API) — người đọc
+   không có cách nào biết vì sao. Luật 'h48' không phụ thuộc trạng thái nên nhận hết,
+   đúng như statusList() làm. */
+function slaByModel(seg, sel) {
+  var rs = rows(seg, sel);
+  var at = R.F.cols.AT, dAT = R.F.dicts.AT, cp = R.F.cols.cpid, dCp = R.F.dicts.cpid;
+  var st = R.F.cols.status, dSt = R.F.dicts.status, keepSt = null;
+  if (A.slaRule() !== 'h48') {
+    keepSt = Object.create(null);
+    (R.E.slaStatuses || []).forEach(function (s) { keepSt[s] = 1; });
+  }
+  var acc = Object.create(null);
+  for (var k = 0; k < rs.length; k++) {
+    var i = rs[k];
+    if (!A.hasVerdict(i)) continue;
+    if (keepSt && !keepSt[dSt[st[i]]]) continue;
+    var mdl = dAT[at[i]] || 'Khác';
+    var a = acc[mdl] || (acc[mdl] = { model: mdl, total: 0, ontime: 0,
+                                      _dev: Object.create(null) });
+    a.total++;
+    var on = A.isOn(i);
+    if (on) a.ontime++;
+    var id = dCp[cp[i]];
+    if (id) {
+      var d = a._dev[id];
+      if (d === undefined) a._dev[id] = on ? 0 : 1;
+      else if (!on) a._dev[id] = 1;
+    }
+  }
+  var out = Object.keys(acc).map(function (m) {
+    var a = acc[m], ids = Object.keys(a._dev), bad = 0;
+    ids.forEach(function (id) { if (a._dev[id]) bad++; });
+    return { model: a.model, total: a.total, ontime: a.ontime,
+             overdue: a.total - a.ontime, rate: div(a.total - a.ontime, a.total),
+             devices: ids.length, ovdDevices: bad, devRate: div(bad, ids.length) };
+  });
+  /* Xếp nhiều -> ít, bằng điểm theo tên — giống AGG.ranked()/build._ranked(). */
+  out.sort(function (x, y) {
+    return y.total - x.total || (x.model < y.model ? -1 : x.model > y.model ? 1 : 0);
+  });
+  var t = out.reduce(function (s, r) {
+    s.total += r.total; s.ontime += r.ontime; s.overdue += r.overdue;
+    s.devices += r.devices; s.ovdDevices += r.ovdDevices; return s;
+  }, { model: 'Total', total: 0, ontime: 0, overdue: 0, devices: 0, ovdDevices: 0 });
+  /* `devices` cộng dồn được vì một thiết bị chỉ thuộc MỘT dòng trụ. */
+  t.rate = div(t.overdue, t.total);
+  t.devRate = div(t.ovdDevices, t.devices);
+  out.push(t);
+  return out;
+}
+
 /* ---- Độ chín của kỳ ----------------------------------------------------- */
 /* Vé phải có solution rồi mới phân loại được, nên kỳ vừa khép lại luôn "ít lỗi" một
    cách giả tạo. Đo trước, rồi mới cho phép so sánh. W32 từng có 48,5% vé chưa có
@@ -473,7 +543,7 @@ var API = {
   init: init, refresh: refresh,
   tiers: tiers, notFaultBreakdown: notFaultBreakdown, tierSeries: tierSeries,
   topCodes: topCodes, repeatDevices: repeatDevices, maturity: maturity,
-  failByModel: failByModel, errorCards: errorCards,
+  failByModel: failByModel, slaByModel: slaByModel, errorCards: errorCards,
   dataGaps: dataGaps, gapsByCse: gapsByCse,
   GROUP_LABEL: GROUP_LABEL, BE_GROUP: BE_GROUP, NOISE_KTL: NOISE_KTL,
   CLS_FAULT: CLS_FAULT

@@ -647,6 +647,10 @@ var API = {
   timeSeries: timeSeries,
   perf: perf, overdueByBucket: overdueByBucket, scenarioBreak: scenarioBreak,
   sourceSplit: sourceSplit, segSeries: segSeries, countBy: countBy, countEq: countEq,
+  /* Mở 3 hàm chấm SLA cho scope.js: luật nằm ở ĐÂY, khối đếm mới bên đó phải đi qua
+     chúng chứ không đọc thẳng F.cols.ovdf, nếu không nó vẫn chấm theo luật 'zone'
+     trong khi cả trang đã chuyển sang 'h48'. Chỉ là export — không đổi công thức nào. */
+  isOvd: isOvd, isOn: isOn, hasVerdict: hasVerdict,
   raw: function () { return { F: F, E: E, SEL: SEL, DAY: DAY, LIMH: LIMH, ix: ix }; }
 };
 global.AGG = API;

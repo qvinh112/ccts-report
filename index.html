@@ -243,6 +243,12 @@ td.l,th.l{text-align:left}
     </div>
     <h3 style="font-size:13px;margin:18px 0 8px">SLA theo trạng thái ticket</h3>
     <div class="tblWrap"><table id="tSla"></table></div>
+
+    <h3 style="font-size:13px;margin:18px 0 8px">SLA theo dòng trụ</h3>
+    <div class="sub">Cùng mẫu số với bảng trên, chỉ đổi chiều cắt. <b>% vé quá hạn</b> đo
+      khối lượng việc trễ; <b>% trụ dính quá hạn</b> đo độ phủ — chênh nhau nhiều nghĩa là
+      trễ dồn vào một số trụ chứ không phải cả dòng trụ.</div>
+    <div class="tblWrap"><table id="tSlaModel"></table></div>
   </section>
 
   <section id="sec-asp">
@@ -610,6 +616,18 @@ function renderSla() {
       scales:{x:{beginAtZero:true,ticks:{font:{size:10}}},y:{ticks:{font:{size:10}}}}}});
 
   tbl('tSla', ['Trạng thái', 'Tổng', 'Đúng hạn', 'Quá hạn', '% quá hạn'], rows);
+
+  /* KHÔNG lọc theo modelsOf(SEG): dòng Total cộng mọi model, lọc bớt dòng thì các cột
+     không cộng ra tổng nữa. Giá trị AT lạ ('Other', rỗng -> 'Khác') cứ để hiện — cùng
+     lý do với `tiers().unmapped`: thứ chưa khai phải lộ ra, không được biến mất im lặng.
+     Bản thân slaByModel đã lọc theo segment qua rowsOf() nên xem EVCS không lòi dòng BSS. */
+  tbl('tSlaModel',
+    ['Dòng trụ', 'Vé chấm SLA', 'Đúng hạn', 'Quá hạn', '% vé quá hạn',
+     'Trụ có vé', 'Trụ dính quá hạn', '% trụ dính quá hạn'],
+    S.slaByModel(segArg()).map(function (r) {
+      return {__tot: r.model === 'Total',
+        c:[escH(r.model === 'Total' ? 'Tổng' : r.model), n0(r.total), n0(r.ontime),
+           n0(r.overdue), pc(r.rate), n0(r.devices), n0(r.ovdDevices), pc(r.devRate)]}; }));
 }
 
 function renderAsp() {
