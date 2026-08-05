@@ -1,0 +1,35 @@
+Tuần W32 = 2026-07-27 → 2026-08-02
+Lát cắt: 9949 ticket (luồng API)
+
+— Phân loại —
+  ✔ clsEvcsW
+  ✔ clsEvcsW_total
+  ✔ clsBssW
+  ✔ clsBssW_total
+— Disclaim / nguồn nhãn / khối xám —
+  ✔ disEvcsW
+  ✔ disBssW
+  ✔ bdSrcEvcsW
+  ✔ bdSrcBssW
+  ✔ undefEvcsW
+  ✔ undefBssW
+— Nguyên nhân —
+  ✔ rcEvcsW
+  ✔ rcBssW
+  ✔ rcCoverage.evcsW
+  ✔ rcCoverage.bssW
+  ✔ rcXclsEvcsW
+  ✔ rcXclsBssW
+  ✔ alarmRcaEvcsW
+  ✔ alarmRcaBssW
+— Fail rate / SLA / Resource —
+  ✔ failEvcsW
+  ✔ failBssW
+  ✔ slaEvcsW
+  ✔ slaBssW
+  ✔ resEvcsW
+  ✔ resBssW
+— Tình huống overdue —
+  ✔ scenario
+
+KẾT QUẢ: 25 khớp / 0 lệch
