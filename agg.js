@@ -297,12 +297,15 @@ function fail(models, fleet, sel) {
     }
     var failed = distinct(nondis, 'cpid', true), tickets = nondis.length;
     var on = fleet[mdl] || 0;
+    // 29/08/2026 — ticketsPerUnit: VÉ / máy đang vận hành (khác failRate = MÁY hỏng /
+    // máy vận hành). Phải khớp build.fail() từng khóa, verify_agg so cả object.
     out.push({ model: mdl, onService: on, failed: failed, failRate: div(failed, on),
-               tickets: tickets, freq: div(tickets, failed) });
+               tickets: tickets, ticketsPerUnit: div(tickets, on),
+               freq: div(tickets, failed) });
     tS += on; tF += failed; tT += tickets;
   });
   out.push({ model: 'Total', onService: tS, failed: tF, failRate: div(tF, tS),
-             tickets: tT, freq: div(tT, tF) });
+             tickets: tT, ticketsPerUnit: div(tT, tS), freq: div(tT, tF) });
   return out;
 }
 
@@ -402,11 +405,11 @@ function buckets(from, to) {
 function bucketRows(b, srcMode) { return slice(b.from, b.to, srcMode || STATE.src); }
 
 function trend(models, fleet, bk, srcMode) {
-  var tickets = [], failrate = [], faileds = [], freqs = [];
+  var tickets = [], failrate = [], faileds = [], freqs = [], tpus = [];
   var per = bk.list.map(function (b) { return bucketRows(b, srcMode); });
   var dis = ix('BD', 'Disclaim'), at = F.cols.AT, bd = F.cols.BD;
   models.forEach(function (mdl) {
-    var want = ix('AT', mdl), tr = [], fr = [], dr = [], qr = [];
+    var want = ix('AT', mdl), tr = [], fr = [], dr = [], qr = [], ur = [];
     var on = fleet[mdl] || 0;
     per.forEach(function (rows) {
       var sub = [];
@@ -417,10 +420,12 @@ function trend(models, fleet, bk, srcMode) {
       var failed = distinct(sub, 'cpid', true);
       tr.push(sub.length); dr.push(failed);
       fr.push(div(failed, on)); qr.push(div(sub.length, failed));
+      ur.push(div(sub.length, on));
     });
-    tickets.push(tr); failrate.push(fr); faileds.push(dr); freqs.push(qr);
+    tickets.push(tr); failrate.push(fr); faileds.push(dr); freqs.push(qr); tpus.push(ur);
   });
-  return { models: models, tickets: tickets, failRate: failrate, failed: faileds, freq: freqs };
+  return { models: models, tickets: tickets, failRate: failrate, failed: faileds,
+           freq: freqs, ticketsPerUnit: tpus };
 }
 
 /* `total` là KHỐI LƯỢNG ticket nên không phụ thuộc luật SLA; chỉ mẫu số của `rate` mới

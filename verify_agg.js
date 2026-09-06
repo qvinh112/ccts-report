@@ -27,10 +27,43 @@ const n = AGG.select(span.from, span.to, 'api');
 console.log(`Lát cắt: ${n} ticket (luồng API)\n`);
 
 let pass = 0, fail = 0;
+
+/* So SÂU thay vì so chuỗi JSON. Lý do (30/08/2026): số nguyên và chuỗi vẫn phải trùng
+ * TUYỆT ĐỐI, nhưng số thực thì so chuỗi là sai bản chất — Python làm tròn kiểu ngân hàng
+ * (round-half-to-even) còn JS làm tròn nửa lên, nên đúng những giá trị rơi vào .5 ở chữ số
+ * thứ 7 là hai bên ra khác nhau 1 đơn vị cuối dù dữ liệu y hệt.
+ *
+ * Vấp thật: tuần W35 có Disclaim BSS = 512 vé. 512 là lũy thừa của 2 nên mọi tỉ trọng
+ * qty/512 là phân số nhị phân ĐÚNG và hay kết thúc bằng .5 ở chữ số thứ 7 — 4/512 =
+ * 0,0078125, Python ghi 0,007812 còn JS tính 0,007813. Toàn bộ `qty` khớp, chỉ `share`
+ * lệch, và gate báo 24/25 như thể aggregation hỏng. Mẫu số khác đi (492 vé tuần trước)
+ * thì không có ô nào rơi đúng .5 và lỗi này ẩn hoàn toàn.
+ *
+ * build.py chỉ ghi 6 chữ số thập phân, nên so số thực chặt hơn 1e-6 là vô nghĩa. */
+function sanhSau(a, b) {
+  if (typeof a === 'number' && typeof b === 'number') {
+    if (Number.isInteger(a) !== Number.isInteger(b)) return false;
+    return Number.isInteger(a) ? a === b : Math.abs(a - b) <= 1e-6;
+  }
+  if (Array.isArray(a) || Array.isArray(b)) {
+    if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+    return a.every((x, i) => sanhSau(x, b[i]));
+  }
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    const ka = Object.keys(a), kb = Object.keys(b);
+    if (ka.length !== kb.length) return false;
+    return ka.every(k => k in b && sanhSau(a[k], b[k]));
+  }
+  return a === b;
+}
+
 function cmp(label, got, want) {
-  const a = JSON.stringify(round(got)), b = JSON.stringify(round(want));
-  if (a === b) { pass++; console.log(`  ✔ ${label}`); return; }
+  /* So trên giá trị GỐC, không làm tròn trước: build.py ghi 6 chữ số còn agg.js giữ đủ độ
+   * chính xác, nên hai bên lệch tối đa 5e-7 — nằm gọn trong dung sai. Làm tròn trước rồi
+   * mới so là tự đẩy sai số lên đúng bằng ngưỡng rồi thua ở phép so bằng. */
+  if (sanhSau(got, want)) { pass++; console.log(`  ✔ ${label}`); return; }
   fail++;
+  const a = JSON.stringify(round(got)), b = JSON.stringify(round(want));
   console.log(`  ✘ ${label}`);
   console.log(`      agg : ${a.slice(0, 300)}`);
   console.log(`      build: ${b.slice(0, 300)}`);

@@ -18,3 +18,17 @@ Tickets*.json
 
 .env
 __pycache__/
+
+# 26/08/2026: cùng cơ chế git add -A ở trên đã đẩy công khai deck nội bộ CCVN
+# (260731_CCVN_Monthly_Report_M07_Jamie_EN_final.pptx, commit 98624e3 ngày 02/08/2026,
+# vẫn còn trên origin/master) và 2 file log của verify_agg.js (verify2.log,
+# verify_w32.log). Allowlist theo đuôi cũ không chặn nổi vì không ai liệt kê hết —
+# chặn thẳng các đuôi không phải file trang web hay lọt vào đây do nháp/xuất thủ công.
+*.log
+*.pptx
+*.ppt
+*.pdf
+*.docx
+*.doc
+*.7z
+*.zip
