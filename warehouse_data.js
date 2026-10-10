@@ -1,11 +1,11 @@
 const WAREHOUSE_DATA = {
- "ts": "2026-10-09T05:53:58",
- "snapshots": 70,
+ "ts": "2026-10-10T05:54:39",
+ "snapshots": 71,
  "total": {
-  "units": 530663,
-  "good": 486013,
-  "faulty": 44650,
-  "rate": 0.0841,
+  "units": 524389,
+  "good": 481835,
+  "faulty": 42554,
+  "rate": 0.0811,
   "groups": 17,
   "warehouses": 514,
   "codes": 401
@@ -14,32 +14,32 @@ const WAREHOUSE_DATA = {
   {
    "group": "CCVN_DuyNam EW",
    "kind": "Kho trung tâm",
-   "total": 255813,
-   "good": 244542,
-   "faulty": 11271,
-   "rate": 0.0441,
+   "total": 254171,
+   "good": 242842,
+   "faulty": 11329,
+   "rate": 0.0446,
    "warehouses": 4,
    "acct": 3
   },
   {
    "group": "VN_ES",
    "kind": "ASP",
-   "total": 78745,
-   "good": 70604,
-   "faulty": 8141,
-   "rate": 0.1034,
+   "total": 75532,
+   "good": 69603,
+   "faulty": 5929,
+   "rate": 0.0785,
    "warehouses": 103,
    "acct": 63
   },
   {
    "group": "VN_EC",
    "kind": "ASP",
-   "total": 66235,
-   "good": 59825,
-   "faulty": 6410,
-   "rate": 0.0968,
+   "total": 64229,
+   "good": 57810,
+   "faulty": 6419,
+   "rate": 0.0999,
    "warehouses": 113,
-   "acct": 77
+   "acct": 76
   },
   {
    "group": "VN_FPT",
@@ -54,40 +54,40 @@ const WAREHOUSE_DATA = {
   {
    "group": "VN_ITS",
    "kind": "ASP",
-   "total": 35971,
-   "good": 25051,
-   "faulty": 10920,
-   "rate": 0.3036,
+   "total": 35975,
+   "good": 25021,
+   "faulty": 10954,
+   "rate": 0.3045,
    "warehouses": 64,
    "acct": 47
   },
   {
    "group": "VN_CCHCM Site Engineer",
    "kind": "Site Engineer (Nam)",
-   "total": 24016,
-   "good": 21431,
-   "faulty": 2585,
-   "rate": 0.1076,
+   "total": 24126,
+   "good": 21506,
+   "faulty": 2620,
+   "rate": 0.1086,
    "warehouses": 55,
    "acct": 45
   },
   {
    "group": "VN_SS",
    "kind": "ASP",
-   "total": 12953,
-   "good": 12622,
-   "faulty": 331,
-   "rate": 0.0256,
+   "total": 13181,
+   "good": 12849,
+   "faulty": 332,
+   "rate": 0.0252,
    "warehouses": 12,
    "acct": 10
   },
   {
    "group": "VN_CCHNO Site Engineer",
    "kind": "Khác",
-   "total": 5170,
-   "good": 3165,
-   "faulty": 2005,
-   "rate": 0.3878,
+   "total": 5232,
+   "good": 3292,
+   "faulty": 1940,
+   "rate": 0.3708,
    "warehouses": 40,
    "acct": 33
   },
@@ -104,10 +104,10 @@ const WAREHOUSE_DATA = {
   {
    "group": "VN_HTE",
    "kind": "Khác",
-   "total": 3796,
-   "good": 2834,
-   "faulty": 962,
-   "rate": 0.2534,
+   "total": 3915,
+   "good": 2969,
+   "faulty": 946,
+   "rate": 0.2416,
    "warehouses": 114,
    "acct": 61
   },
@@ -134,10 +134,10 @@ const WAREHOUSE_DATA = {
   {
    "group": "VN_Hardware RD",
    "kind": "Nội bộ",
-   "total": 1020,
+   "total": 1080,
    "good": 2,
-   "faulty": 1018,
-   "rate": 0.998,
+   "faulty": 1078,
+   "rate": 0.9981,
    "warehouses": 1,
    "acct": 0
   },
@@ -154,10 +154,10 @@ const WAREHOUSE_DATA = {
   {
    "group": "VN_PSE",
    "kind": "Nội bộ",
-   "total": 187,
-   "good": 101,
+   "total": 191,
+   "good": 105,
    "faulty": 86,
-   "rate": 0.4599,
+   "rate": 0.4503,
    "warehouses": 1,
    "acct": 0
   },
@@ -185,57 +185,57 @@ const WAREHOUSE_DATA = {
  "region": {
   "south": {
    "group": "VN_CCHCM Site Engineer",
-   "total": 24016,
-   "faulty": 2585,
-   "rate": 0.1076,
+   "total": 24126,
+   "faulty": 2620,
+   "rate": 0.1086,
    "acct": 45,
-   "acctTotal": 13468,
-   "acctFaulty": 2016
+   "acctTotal": 13142,
+   "acctFaulty": 1686
   }
  },
  "acctTotal": {
-  "n": 339,
-  "total": 353553,
-  "good": 321864,
-  "faulty": 31689,
-  "rate": 0.0896
+  "n": 338,
+  "total": 353437,
+  "good": 324185,
+  "faulty": 29252,
+  "rate": 0.0828
  },
  "accts": [
   {
    "name": "cc_phuongtri warehouse",
    "group": "CCVN_DuyNam EW",
-   "total": 12620,
+   "total": 12678,
    "good": 1914,
-   "faulty": 10706,
-   "rate": 0.8483,
+   "faulty": 10764,
+   "rate": 0.849,
    "codes": 195
   },
   {
    "name": "es-khomientay",
    "group": "VN_ES",
-   "total": 4450,
-   "good": 1422,
-   "faulty": 3028,
-   "rate": 0.6804,
-   "codes": 6
+   "total": 7397,
+   "good": 5871,
+   "faulty": 1526,
+   "rate": 0.2063,
+   "codes": 5
   },
   {
    "name": "es-khomientrung",
    "group": "VN_ES",
-   "total": 15004,
-   "good": 13876,
-   "faulty": 1128,
-   "rate": 0.0752,
+   "total": 14368,
+   "good": 13104,
+   "faulty": 1264,
+   "rate": 0.088,
    "codes": 115
   },
   {
    "name": "levantoan",
    "group": "VN_EC",
-   "total": 2506,
-   "good": 1676,
-   "faulty": 830,
-   "rate": 0.3312,
-   "codes": 102
+   "total": 2516,
+   "good": 1683,
+   "faulty": 833,
+   "rate": 0.3311,
+   "codes": 103
   },
   {
    "name": "cc_longhung warehouse",
@@ -249,46 +249,46 @@ const WAREHOUSE_DATA = {
   {
    "name": "nguyentruonggiang",
    "group": "VN_EC",
-   "total": 725,
-   "good": 187,
-   "faulty": 538,
-   "rate": 0.7421,
-   "codes": 66
+   "total": 727,
+   "good": 188,
+   "faulty": 539,
+   "rate": 0.7414,
+   "codes": 68
   },
   {
    "name": "its_hcm warehouse",
    "group": "VN_ITS",
-   "total": 2706,
-   "good": 2222,
-   "faulty": 484,
-   "rate": 0.1789,
+   "total": 2713,
+   "good": 2210,
+   "faulty": 503,
+   "rate": 0.1854,
    "codes": 105
   },
   {
    "name": "its_engineer 18",
    "group": "VN_ITS",
    "total": 2728,
-   "good": 2324,
-   "faulty": 404,
-   "rate": 0.1481,
+   "good": 2310,
+   "faulty": 418,
+   "rate": 0.1532,
    "codes": 53
   },
   {
    "name": "its_engineer 1",
    "group": "VN_ITS",
    "total": 1978,
-   "good": 1599,
-   "faulty": 379,
-   "rate": 0.1916,
+   "good": 1611,
+   "faulty": 367,
+   "rate": 0.1855,
    "codes": 14
   },
   {
    "name": "miennam",
    "group": "VN_EC",
-   "total": 1210,
-   "good": 918,
+   "total": 1302,
+   "good": 1010,
    "faulty": 292,
-   "rate": 0.2413,
+   "rate": 0.2243,
    "codes": 114
   },
   {
@@ -301,22 +301,13 @@ const WAREHOUSE_DATA = {
    "codes": 50
   },
   {
-   "name": "caovanloc",
-   "group": "VN_ES",
-   "total": 619,
-   "good": 340,
-   "faulty": 279,
-   "rate": 0.4507,
-   "codes": 48
-  },
-  {
    "name": "dauminhdat",
    "group": "VN_EC",
-   "total": 503,
-   "good": 227,
-   "faulty": 276,
-   "rate": 0.5487,
-   "codes": 40
+   "total": 511,
+   "good": 233,
+   "faulty": 278,
+   "rate": 0.544,
+   "codes": 45
   },
   {
    "name": "its_engineer 30",
@@ -337,67 +328,40 @@ const WAREHOUSE_DATA = {
    "codes": 36
   },
   {
-   "name": "haiphong",
+   "name": "caovanloc",
    "group": "VN_ES",
-   "total": 888,
-   "good": 679,
-   "faulty": 209,
-   "rate": 0.2354,
-   "codes": 27
-  },
-  {
-   "name": "tuannt",
-   "group": "VN_ES",
-   "total": 386,
-   "good": 196,
-   "faulty": 190,
-   "rate": 0.4922,
-   "codes": 22
-  },
-  {
-   "name": "es_nguyenvietdinh",
-   "group": "VN_ES",
-   "total": 202,
-   "good": 14,
-   "faulty": 188,
-   "rate": 0.9307,
-   "codes": 6
-  },
-  {
-   "name": "doanquockhanh",
-   "group": "VN_ES",
-   "total": 338,
-   "good": 154,
-   "faulty": 184,
-   "rate": 0.5444,
-   "codes": 36
+   "total": 549,
+   "good": 339,
+   "faulty": 210,
+   "rate": 0.3825,
+   "codes": 48
   },
   {
    "name": "leanhquang",
    "group": "VN_EC",
-   "total": 205,
-   "good": 22,
+   "total": 203,
+   "good": 20,
    "faulty": 183,
-   "rate": 0.8927,
+   "rate": 0.9015,
    "codes": 30
+  },
+  {
+   "name": "its_engineer 41",
+   "group": "VN_ITS",
+   "total": 1744,
+   "good": 1563,
+   "faulty": 181,
+   "rate": 0.1038,
+   "codes": 3
   },
   {
    "name": "ec_nguyenminhhieu",
    "group": "VN_EC",
-   "total": 187,
-   "good": 15,
-   "faulty": 172,
-   "rate": 0.9198,
-   "codes": 16
-  },
-  {
-   "name": "leminhtien",
-   "group": "VN_ES",
-   "total": 718,
-   "good": 549,
-   "faulty": 169,
-   "rate": 0.2354,
-   "codes": 6
+   "total": 196,
+   "good": 22,
+   "faulty": 174,
+   "rate": 0.8878,
+   "codes": 25
   },
   {
    "name": "hoangxuanthang",
@@ -409,22 +373,22 @@ const WAREHOUSE_DATA = {
    "codes": 69
   },
   {
-   "name": "its_engineer 41",
-   "group": "VN_ITS",
-   "total": 1744,
-   "good": 1575,
-   "faulty": 169,
-   "rate": 0.0969,
-   "codes": 3
+   "name": "es_nguyenvietdinh",
+   "group": "VN_ES",
+   "total": 166,
+   "good": 14,
+   "faulty": 152,
+   "rate": 0.9157,
+   "codes": 6
   },
   {
    "name": "tranvanhinh",
    "group": "VN_EC",
-   "total": 934,
-   "good": 787,
-   "faulty": 147,
-   "rate": 0.1574,
-   "codes": 48
+   "total": 936,
+   "good": 788,
+   "faulty": 148,
+   "rate": 0.1581,
+   "codes": 49
   },
   {
    "name": "its_engineer 35",
@@ -436,49 +400,22 @@ const WAREHOUSE_DATA = {
    "codes": 8
   },
   {
-   "name": "es_nguyensonnam",
-   "group": "VN_ES",
-   "total": 312,
-   "good": 168,
-   "faulty": 144,
-   "rate": 0.4615,
-   "codes": 4
-  },
-  {
-   "name": "tuanhuynh",
-   "group": "VN_CCHCM Site Engineer",
-   "total": 174,
-   "good": 38,
-   "faulty": 136,
-   "rate": 0.7816,
-   "codes": 26
-  },
-  {
    "name": "nguyenquach",
    "group": "VN_CCHNO Site Engineer",
    "total": 228,
-   "good": 97,
-   "faulty": 131,
-   "rate": 0.5746,
+   "good": 96,
+   "faulty": 132,
+   "rate": 0.5789,
    "codes": 31
   },
   {
    "name": "thanghoang",
    "group": "VN_CCHNO Site Engineer",
    "total": 143,
-   "good": 12,
-   "faulty": 131,
-   "rate": 0.9161,
+   "good": 11,
+   "faulty": 132,
+   "rate": 0.9231,
    "codes": 16
-  },
-  {
-   "name": "huynhdangtukha",
-   "group": "VN_ES",
-   "total": 462,
-   "good": 332,
-   "faulty": 130,
-   "rate": 0.2814,
-   "codes": 50
   },
   {
    "name": "dattran",
@@ -490,76 +427,139 @@ const WAREHOUSE_DATA = {
    "codes": 13
   },
   {
-   "name": "nguyenhainguyen",
-   "group": "VN_ES",
-   "total": 1625,
-   "good": 1500,
-   "faulty": 125,
-   "rate": 0.0769,
-   "codes": 24
-  },
-  {
-   "name": "vunguyen",
-   "group": "VN_CCHCM Site Engineer",
-   "total": 321,
-   "good": 196,
-   "faulty": 125,
-   "rate": 0.3894,
-   "codes": 10
-  },
-  {
    "name": "ninhbinh7_wh_bangtd",
    "group": "VN_HTE",
    "total": 141,
    "good": 18,
    "faulty": 123,
    "rate": 0.8723,
-   "codes": 11
+   "codes": 14
   },
   {
    "name": "vuvandien",
    "group": "VN_EC",
-   "total": 253,
-   "good": 131,
+   "total": 250,
+   "good": 128,
    "faulty": 122,
-   "rate": 0.4822,
+   "rate": 0.488,
    "codes": 52
   },
   {
-   "name": "truonggiangvl",
+   "name": "leminhtien",
    "group": "VN_ES",
-   "total": 293,
-   "good": 175,
-   "faulty": 118,
-   "rate": 0.4027,
-   "codes": 25
+   "total": 670,
+   "good": 549,
+   "faulty": 121,
+   "rate": 0.1806,
+   "codes": 6
   },
   {
-   "name": "phatle",
-   "group": "VN_CCHCM Site Engineer",
-   "total": 1338,
-   "good": 1220,
+   "name": "huynhdangtukha",
+   "group": "VN_ES",
+   "total": 450,
+   "good": 332,
    "faulty": 118,
-   "rate": 0.0882,
-   "codes": 41
-  },
-  {
-   "name": "khoimai",
-   "group": "VN_CCHCM Site Engineer",
-   "total": 124,
-   "good": 8,
-   "faulty": 116,
-   "rate": 0.9355,
-   "codes": 5
+   "rate": 0.2622,
+   "codes": 50
   },
   {
    "name": "nhatle",
    "group": "VN_CCHNO Site Engineer",
-   "total": 318,
-   "good": 204,
-   "faulty": 114,
-   "rate": 0.3585,
-   "codes": 41
+   "total": 192,
+   "good": 74,
+   "faulty": 118,
+   "rate": 0.6146,
+   "codes": 40
+  },
+  {
+   "name": "nguyenhainguyen",
+   "group": "VN_ES",
+   "total": 1614,
+   "good": 1501,
+   "faulty": 113,
+   "rate": 0.07,
+   "codes": 25
+  },
+  {
+   "name": "haiphong",
+   "group": "VN_ES",
+   "total": 792,
+   "good": 679,
+   "faulty": 113,
+   "rate": 0.1427,
+   "codes": 27
+  },
+  {
+   "name": "doanquockhanh",
+   "group": "VN_ES",
+   "total": 273,
+   "good": 160,
+   "faulty": 113,
+   "rate": 0.4139,
+   "codes": 38
+  },
+  {
+   "name": "ec_luvandanh",
+   "group": "VN_EC",
+   "total": 147,
+   "good": 37,
+   "faulty": 110,
+   "rate": 0.7483,
+   "codes": 15
+  },
+  {
+   "name": "hoangvanquan",
+   "group": "VN_EC",
+   "total": 478,
+   "good": 370,
+   "faulty": 108,
+   "rate": 0.2259,
+   "codes": 43
+  },
+  {
+   "name": "phuocpham",
+   "group": "VN_CCHCM Site Engineer",
+   "total": 143,
+   "good": 35,
+   "faulty": 108,
+   "rate": 0.7552,
+   "codes": 14
+  },
+  {
+   "name": "longle",
+   "group": "VN_CCHNO Site Engineer",
+   "total": 119,
+   "good": 11,
+   "faulty": 108,
+   "rate": 0.9076,
+   "codes": 13
+  },
+  {
+   "name": "tuannt",
+   "group": "VN_ES",
+   "total": 302,
+   "good": 196,
+   "faulty": 106,
+   "rate": 0.351,
+   "codes": 22
+  },
+  {
+   "name": "tranvanvinh",
+   "group": "VN_EC",
+   "total": 1259,
+   "good": 1154,
+   "faulty": 105,
+   "rate": 0.0834,
+   "codes": 52
+  },
+  {
+   "name": "huynhly",
+   "group": "VN_CCHCM Site Engineer",
+   "total": 314,
+   "good": 212,
+   "faulty": 102,
+   "rate": 0.3248,
+   "codes": 12
   }
  ],
  "shortage": [
@@ -569,7 +569,7 @@ const WAREHOUSE_DATA = {
    "month": 365,
    "week": 53,
    "good": 8,
-   "faulty": 973,
+   "faulty": 987,
    "inTransit": 5,
    "acct": 8,
    "holders": 108,
@@ -582,10 +582,10 @@ const WAREHOUSE_DATA = {
    "month": 134,
    "week": 31,
    "good": 60,
-   "faulty": 481,
+   "faulty": 480,
    "inTransit": 0,
    "acct": 47,
-   "holders": 99,
+   "holders": 98,
    "cover": 13.4,
    "price": 39.0
   },
@@ -594,12 +594,12 @@ const WAREHOUSE_DATA = {
    "name": "DC Charging Cable - Core mini 60/80Kw",
    "month": 33,
    "week": 6,
-   "good": 17,
-   "faulty": 327,
+   "good": 16,
+   "faulty": 332,
    "inTransit": 1,
    "acct": 16,
-   "holders": 52,
-   "cover": 15.5,
+   "holders": 56,
+   "cover": 14.5,
    "price": 291.43
   },
   {
@@ -633,12 +633,12 @@ const WAREHOUSE_DATA = {
    "name": "COREmini QT Screen (Excluded PCBA)",
    "month": 131,
    "week": 26,
-   "good": 100,
-   "faulty": 177,
+   "good": 99,
+   "faulty": 186,
    "inTransit": 0,
-   "acct": 57,
-   "holders": 84,
-   "cover": 22.9,
+   "acct": 56,
+   "holders": 88,
+   "cover": 22.7,
    "price": 150.43
   },
   {
@@ -646,12 +646,12 @@ const WAREHOUSE_DATA = {
    "name": "QT Board (Compatible with CORE, COREmini, Kern)",
    "month": 15,
    "week": 0,
-   "good": 14,
-   "faulty": 12,
+   "good": 13,
+   "faulty": 13,
    "inTransit": 0,
-   "acct": 14,
+   "acct": 13,
    "holders": 15,
-   "cover": 28.0,
+   "cover": 26.0,
    "price": 55.71
   },
   {
@@ -676,7 +676,7 @@ const WAREHOUSE_DATA = {
    "faulty": 205,
    "inTransit": 0,
    "acct": 15,
-   "holders": 34,
+   "holders": 35,
    "cover": 39.5,
    "price": 985.88
   },
@@ -686,10 +686,10 @@ const WAREHOUSE_DATA = {
    "month": 121,
    "week": 36,
    "good": 233,
-   "faulty": 1024,
-   "inTransit": 3,
+   "faulty": 1025,
+   "inTransit": 2,
    "acct": 173,
-   "holders": 162,
+   "holders": 161,
    "cover": 57.8,
    "price": 33.1
   },
@@ -711,12 +711,12 @@ const WAREHOUSE_DATA = {
    "name": "CORE120 only QT screen",
    "month": 9,
    "week": 0,
-   "good": 21,
-   "faulty": 23,
+   "good": 20,
+   "faulty": 25,
    "inTransit": 0,
-   "acct": 16,
-   "holders": 33,
-   "cover": 70.0,
+   "acct": 15,
+   "holders": 34,
+   "cover": 66.7,
    "price": 150.44
   },
   {
@@ -724,12 +724,12 @@ const WAREHOUSE_DATA = {
    "name": "Battery Compartment Lock - Shengjiu gen3 | BSS",
    "month": 292,
    "week": 31,
-   "good": 770,
-   "faulty": 4414,
-   "inTransit": 1,
-   "acct": 533,
+   "good": 772,
+   "faulty": 4427,
+   "inTransit": 0,
+   "acct": 535,
    "holders": 191,
-   "cover": 79.1,
+   "cover": 79.3,
    "price": 9.57
   },
   {
@@ -763,12 +763,12 @@ const WAREHOUSE_DATA = {
    "name": "OCPP AC 7kw and AC 22Kw (New Version)",
    "month": 82,
    "week": 11,
-   "good": 327,
-   "faulty": 852,
+   "good": 323,
+   "faulty": 855,
    "inTransit": 9,
-   "acct": 288,
-   "holders": 170,
-   "cover": 119.6,
+   "acct": 284,
+   "holders": 172,
+   "cover": 118.2,
    "price": 18.01
   },
   {
@@ -779,8 +779,8 @@ const WAREHOUSE_DATA = {
    "good": 4,
    "faulty": 12,
    "inTransit": 0,
-   "acct": 3,
-   "holders": 5,
+   "acct": 2,
+   "holders": 6,
    "cover": 120.0,
    "price": 0.57
   },
@@ -815,12 +815,12 @@ const WAREHOUSE_DATA = {
    "name": "DCMeter",
    "month": 26,
    "week": 0,
-   "good": 264,
-   "faulty": 326,
+   "good": 263,
+   "faulty": 327,
    "inTransit": 0,
-   "acct": 149,
-   "holders": 112,
-   "cover": 304.6,
+   "acct": 150,
+   "holders": 113,
+   "cover": 303.5,
    "price": 30.39
   },
   {
@@ -828,12 +828,12 @@ const WAREHOUSE_DATA = {
    "name": "Battery compartment | BSS",
    "month": 6,
    "week": 3,
-   "good": 62,
-   "faulty": 63,
-   "inTransit": 3,
-   "acct": 21,
-   "holders": 32,
-   "cover": 310.0,
+   "good": 63,
+   "faulty": 64,
+   "inTransit": 2,
+   "acct": 25,
+   "holders": 34,
+   "cover": 315.0,
    "price": 22.06
   },
   {
@@ -841,12 +841,12 @@ const WAREHOUSE_DATA = {
    "name": "DC Cooling Fan - Core 120/150Kw",
    "month": 23,
    "week": 7,
-   "good": 293,
-   "faulty": 130,
+   "good": 292,
+   "faulty": 132,
    "inTransit": 0,
-   "acct": 154,
-   "holders": 73,
-   "cover": 382.2,
+   "acct": 153,
+   "holders": 74,
+   "cover": 380.9,
    "price": 26.61
   },
   {
@@ -854,12 +854,12 @@ const WAREHOUSE_DATA = {
    "name": "DC Charging Cable - Core mini 60/80Kw",
    "month": 14,
    "week": 9,
-   "good": 189,
-   "faulty": 88,
+   "good": 187,
+   "faulty": 87,
    "inTransit": 4,
-   "acct": 133,
-   "holders": 82,
-   "cover": 405.0,
+   "acct": 132,
+   "holders": 81,
+   "cover": 400.7,
    "price": 221.43
   },
   {
@@ -867,12 +867,12 @@ const WAREHOUSE_DATA = {
    "name": "QT Display Screen (include PCBA) - BSS 6 Slot",
    "month": 4,
    "week": 2,
-   "good": 55,
-   "faulty": 53,
+   "good": 54,
+   "faulty": 54,
    "inTransit": 0,
-   "acct": 50,
+   "acct": 49,
    "holders": 54,
-   "cover": 412.5,
+   "cover": 405.0,
    "price": 110
   },
   {
@@ -884,7 +884,7 @@ const WAREHOUSE_DATA = {
    "faulty": 1173,
    "inTransit": 2,
    "acct": 1151,
-   "holders": 147,
+   "holders": 148,
    "cover": 412.9,
    "price": 25.63
   },
@@ -922,8 +922,8 @@ const WAREHOUSE_DATA = {
    "good": 181,
    "faulty": 8,
    "inTransit": 0,
-   "acct": 63,
-   "holders": 33,
+   "acct": 65,
+   "holders": 34,
    "cover": 2715.0,
    "price": 6.9
   },
@@ -936,7 +936,7 @@ const WAREHOUSE_DATA = {
    "faulty": 43,
    "inTransit": 0,
    "acct": 107,
-   "holders": 51,
+   "holders": 52,
    "cover": 3690.0,
    "price": 42.57
   },
@@ -945,12 +945,12 @@ const WAREHOUSE_DATA = {
    "name": "Slot Control Board - BSS 6/12 Slot",
    "month": 9,
    "week": 5,
-   "good": 1445,
-   "faulty": 161,
+   "good": 1441,
+   "faulty": 163,
    "inTransit": 0,
-   "acct": 649,
-   "holders": 130,
-   "cover": 4816.7,
+   "acct": 654,
+   "holders": 131,
+   "cover": 4803.3,
    "price": 11.27
   },
   {
@@ -984,12 +984,12 @@ const WAREHOUSE_DATA = {
    "name": "Degson connector",
    "month": 2,
    "week": 1,
-   "good": 1245,
-   "faulty": 161,
-   "inTransit": 5,
-   "acct": 735,
+   "good": 1244,
+   "faulty": 155,
+   "inTransit": 6,
+   "acct": 734,
    "holders": 104,
-   "cover": 18675.0,
+   "cover": 18660.0,
    "price": 10.82
   },
   {
@@ -1024,9 +1024,9 @@ const WAREHOUSE_DATA = {
    "month": 1,
    "week": 1,
    "good": 1153,
-   "faulty": 60,
+   "faulty": 59,
    "inTransit": 0,
-   "acct": 1101,
+   "acct": 1107,
    "holders": 14,
    "cover": 34590.0,
    "price": 0
@@ -1036,9 +1036,9 @@ const WAREHOUSE_DATA = {
   {
    "code": "14020100114",
    "name": "SK-Lock",
-   "total": 7974,
+   "total": 8196,
    "good": 0,
-   "faulty": 7974,
+   "faulty": 8196,
    "rate": 1.0,
    "value": null
   },
@@ -1052,22 +1052,22 @@ const WAREHOUSE_DATA = {
    "value": 3822.0
   },
   {
-   "code": "14060701674",
-   "name": "Back plate - Shengjiu lock",
-   "total": 7748,
-   "good": 2153,
-   "faulty": 5595,
-   "rate": 0.7221,
-   "value": null
-  },
-  {
    "code": "14020100103",
    "name": "Battery Compartment Lock - SJ gen3 | BSS",
-   "total": 5184,
-   "good": 770,
-   "faulty": 4414,
+   "total": 5199,
+   "good": 772,
+   "faulty": 4427,
    "rate": 0.8515,
-   "value": 42248.29
+   "value": 42372.72
+  },
+  {
+   "code": "14060701674",
+   "name": "Back plate - Shengjiu lock",
+   "total": 5340,
+   "good": 2153,
+   "faulty": 3187,
+   "rate": 0.5968,
+   "value": null
   },
   {
    "code": "13010001103",
@@ -1081,38 +1081,38 @@ const WAREHOUSE_DATA = {
   {
    "code": "12010000091",
    "name": "AC PCBA - AC 22Kw",
-   "total": 1257,
+   "total": 1258,
    "good": 233,
-   "faulty": 1024,
-   "rate": 0.8146,
-   "value": 33894.4
+   "faulty": 1025,
+   "rate": 0.8148,
+   "value": 33927.5
   },
   {
    "code": "13010000793",
    "name": "AD-DC Power Module - Core 60/120/150 Kw",
-   "total": 981,
+   "total": 995,
    "good": 8,
-   "faulty": 973,
-   "rate": 0.9918,
-   "value": 527185.3
+   "faulty": 987,
+   "rate": 0.992,
+   "value": 534770.7
   },
   {
    "code": "19140000023",
    "name": "BSS E Lock Module ZZ - BSS Gen 1",
-   "total": 4954,
-   "good": 4037,
-   "faulty": 917,
-   "rate": 0.1851,
+   "total": 4664,
+   "good": 3710,
+   "faulty": 954,
+   "rate": 0.2045,
    "value": null
   },
   {
    "code": "12010000086",
    "name": "OCPP AC 7kw and AC 22Kw (New Version)",
-   "total": 1179,
-   "good": 327,
-   "faulty": 852,
-   "rate": 0.7226,
-   "value": 15344.52
+   "total": 1178,
+   "good": 323,
+   "faulty": 855,
+   "rate": 0.7258,
+   "value": 15398.55
   },
   {
    "code": "14020100141",
@@ -1126,9 +1126,9 @@ const WAREHOUSE_DATA = {
   {
    "code": "12010000066",
    "name": "AC PCBA - AC 22Kw (Old Version)",
-   "total": 612,
+   "total": 614,
    "good": 1,
-   "faulty": 611,
+   "faulty": 613,
    "rate": 0.9984,
    "value": null
   },
@@ -1153,11 +1153,11 @@ const WAREHOUSE_DATA = {
   {
    "code": "12070000153",
    "name": "HV Core V2.8 - Core 60/80/120/150Kw",
-   "total": 541,
+   "total": 540,
    "good": 60,
-   "faulty": 481,
-   "rate": 0.8891,
-   "value": 18759.69
+   "faulty": 480,
+   "rate": 0.8889,
+   "value": 18720.69
   },
   {
    "code": "12010000076",
@@ -1189,38 +1189,38 @@ const WAREHOUSE_DATA = {
   {
    "code": "12030000025",
    "name": "HV Core V2.7 - Core 60/80/120/150Kw",
-   "total": 363,
+   "total": 367,
    "good": 4,
-   "faulty": 359,
-   "rate": 0.989,
+   "faulty": 363,
+   "rate": 0.9891,
    "value": null
   },
   {
    "code": "13010000473",
    "name": "Aux Power Supply",
    "total": 432,
-   "good": 94,
-   "faulty": 338,
-   "rate": 0.7824,
+   "good": 93,
+   "faulty": 339,
+   "rate": 0.7847,
    "value": null
   },
   {
    "code": "13030000288",
    "name": "DC Charging Cable - Core mini 60/80Kw",
-   "total": 344,
-   "good": 17,
-   "faulty": 327,
-   "rate": 0.9506,
-   "value": 95297.14
+   "total": 348,
+   "good": 16,
+   "faulty": 332,
+   "rate": 0.954,
+   "value": 96754.29
   },
   {
    "code": "13010000357",
    "name": "DCMeter",
    "total": 590,
-   "good": 264,
-   "faulty": 326,
-   "rate": 0.5525,
-   "value": 9908.07
+   "good": 263,
+   "faulty": 327,
+   "rate": 0.5542,
+   "value": 9938.46
   },
   {
    "code": "13010000941",
@@ -1234,35 +1234,35 @@ const WAREHOUSE_DATA = {
   {
    "code": "12050000012",
    "name": "WIFI ETH V1.0",
-   "total": 475,
-   "good": 210,
+   "total": 474,
+   "good": 209,
    "faulty": 265,
-   "rate": 0.5579,
+   "rate": 0.5591,
+   "value": null
+  },
+  {
+   "code": "13010001423",
+   "name": "AD-DC Power Module - Core 60/120/150 Kw",
+   "total": 292,
+   "good": 28,
+   "faulty": 264,
+   "rate": 0.9041,
    "value": null
   },
   {
    "code": "12010000075",
    "name": "OCPP AC 7kw and AC 22Kw",
-   "total": 282,
+   "total": 283,
    "good": 20,
-   "faulty": 262,
-   "rate": 0.9291,
-   "value": null
-  },
-  {
-   "code": "10010400466",
-   "name": "AC006 Charger-7KW",
-   "total": 512,
-   "good": 266,
-   "faulty": 246,
-   "rate": 0.4805,
+   "faulty": 263,
+   "rate": 0.9293,
    "value": null
   }
  ],
  "faultyValue": {
-  "all": 1114807,
-  "acct": 989836,
-  "units": 21224,
+  "all": 1125711,
+  "acct": 998540,
+  "units": 21272,
   "codes": 41
  },
  "errParts": [
